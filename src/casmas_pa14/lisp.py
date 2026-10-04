@@ -239,7 +239,7 @@ def dibujo_seccion(sec: dict) -> Dibujo:
         _linea(x_eje, -0.8, x_eje, h + 0.6, "PA14-EJE"),
         _linea(0, hw, b, hw, "PA14-EJE"),
         # 5. Cotas inferiores (parciales y total)
-        _cota(0.0, 0.0, v, 0.0, v / 2, -0.65, f"{v:.2f} m"),
+        _cota(0.0, 0.0, v, 0.0, v / 2, -1.15, f"{v:.2f} m"),
         _cota(
             v,
             0.0,
@@ -267,7 +267,7 @@ def dibujo_seccion(sec: dict) -> Dibujo:
             -0.65,
             f"{separador:.2f} m",
         ),
-        _cota(0.0, 0.0, b, 0.0, x_eje, -1.35, f"{b:.2f} m"),
+        _cota(0.0, 0.0, b, 0.0, x_eje, -1.75, f"{b:.2f} m"),
         # 6. Cotas de detalle (cuneta, subrasante y bombeo)
         _cota(
             v,
@@ -308,7 +308,7 @@ def dibujo_seccion(sec: dict) -> Dibujo:
         _texto(0.0, h + 0.80, 0.35, f"SECCION TIPICA - {h:.2f} m x {b:.2f} m"),
         _texto(
             0.0,
-            -2.10,
+            -2.40,
             0.20,
             f"A = {sec['area_m2']:.2f} m2   R = {sec['radio_m']:.2f} m   "
             f"Galibo = {wg:.2f} x {hg:.2f} m",
