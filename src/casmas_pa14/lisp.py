@@ -25,11 +25,12 @@ CAPAS = {
     "PA14-CONTORNO": 7,
     "PA14-EJE": 1,
     "PA14-TEXTO": 2,
-    "PA14-COTA": 3,
+    "PA14-COTA": 1,
     "PA14-EDIFICACION": 4,
     "PA14-CERCO": 6,
     "PA14-RUMAS": 30,
     "PA14-GALIBO": 5,
+    "PA14-OBRAS-ARTE": 8,
 }
 
 _LIBRERIA = r"""
@@ -57,18 +58,30 @@ _LIBRERIA = r"""
   (entmake (list '(0 . "LINE") (cons 8 capa) (cons 10 (pa14:p x1 y1)) (cons 11 (pa14:p x2 y2)))))
 (defun pa14:texto (x y alt txt capa)
   (entmake (list '(0 . "TEXT") (cons 8 capa) (cons 10 (pa14:p x y)) (cons 40 alt) (cons 1 txt))))
-(defun pa14:cota (x1 y1 x2 y2 x3 y3 / capa)
+(defun pa14:cota (x1 y1 x2 y2 x3 y3 txt / capa)
   (setq capa (getvar "CLAYER"))
   (setvar "CLAYER" "PA14-COTA")
-  (command "_.DIMLINEAR" "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_non" (pa14:p x3 y3))
+  (if (and txt (/= txt ""))
+    (command "_.DIMLINEAR" "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_T" txt "_non" (pa14:p x3 y3))
+    (command "_.DIMLINEAR" "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_non" (pa14:p x3 y3)))
   (setvar "CLAYER" capa))
+(defun pa14:dim-estilo (esc txt-alt asz)
+  (setvar "DIMSCALE" esc)
+  (setvar "DIMTXT" txt-alt)
+  (setvar "DIMASZ" asz)
+  (setvar "DIMEXE" (* txt-alt 0.5))
+  (setvar "DIMEXO" (* txt-alt 0.3))
+  (setvar "DIMGAP" (* txt-alt 0.3))
+  (setvar "DIMDEC" 2)
+  (setvar "DIMTAD" 1))
 (defun pa14:unidades ()
   (setvar "INSUNITS" 4)   ; metros
   (setvar "LUNITS" 2)     ; decimal
   (setvar "LUPREC" 3)     ; 0.000
   (setvar "AUNITS" 0)     ; grados decimales
   (setvar "ANGBASE" 0.0)  ; 0 grados = Este
-  (setvar "ANGDIR" 0))    ; antihorario
+  (setvar "ANGDIR" 0)     ; antihorario
+  (pa14:dim-estilo 1.0 0.22 0.18))
 (defun pa14:origen (x y) (setq *ox* x *oy* y))
 (defun pa14:inicio ()
   (setq *pa14-eco* (getvar "CMDECHO"))
@@ -115,43 +128,165 @@ def _linea(x1, y1, x2, y2, capa) -> str:
     return f'(pa14:linea {_n(x1)} {_n(y1)} {_n(x2)} {_n(y2)} "{capa}")'
 
 
-def _cota(x1, y1, x2, y2, x3, y3) -> str:
-    return f"(pa14:cota {' '.join(_n(v) for v in (x1, y1, x2, y2, x3, y3))})"
+def _cota(x1, y1, x2, y2, x3, y3, txt="") -> str:
+    txt_lisp = _txt(txt) if txt else '""'
+    return f"(pa14:cota {' '.join(_n(v) for v in (x1, y1, x2, y2, x3, y3))} {txt_lisp})"
+
+
+def _hatch_cunetas(v: float, e: float, ac: float, hc: float, b: float) -> list[str]:
+    """Rayado a 45° para las cunetas izquierda y derecha (capa PA14-OBRAS-ARTE)."""
+    x0, y0, w, h = v, e - hc, ac, hc
+    c_min = y0 - x0 - w
+    c_max = (y0 + h) - x0
+    paso = (c_max - c_min) / 11
+    lineas = []
+    for i in range(1, 11):
+        c = c_min + i * paso
+        x_top = (y0 + h) - c
+        y_vert = x0 + c
+        x_hyp = (y0 - (h / w) * x0 - c) / (1.0 - h / w)
+        y_hyp = x_hyp + c
+        pts = []
+        if x0 <= x_top <= x0 + w:
+            pts.append((x_top, y0 + h))
+        if y0 <= y_vert <= y0 + h:
+            pts.append((x0, y_vert))
+        if x0 <= x_hyp <= x0 + w and y0 <= y_hyp <= y0 + h:
+            pts.append((x_hyp, y_hyp))
+        if len(pts) == 2:
+            (x1, y1), (x2, y2) = pts[0], pts[1]
+            lineas.append(_linea(x1, y1, x2, y2, "PA14-OBRAS-ARTE"))
+            lineas.append(_linea(b - x1, y1, b - x2, y2, "PA14-OBRAS-ARTE"))
+    return lineas
 
 
 # ---------------------------------------------------------------- dibujos
 def dibujo_seccion(sec: dict) -> Dibujo:
-    """Sección típica: origen en el fondo izquierdo de la excavación."""
+    """Sección típica con veredas, cunetas, calzada con bombeo y cotas normalizadas."""
     b, h, hw = sec["ancho_m"], sec["altura_m"], sec["hastial_m"]
-    e, v = sec["espesor_rasante_m"], sec["vereda_m"]
+    e = sec["espesor_rasante_m"]
+    hr = sec.get("altura_rasante_m", h - e)
+    v = sec["vereda_m"]
+    berma = sec["berma_m"]
+    carril = sec["ancho_carril_m"]
+    separador = sec["separador_m"]
     wg, hg = sec["ancho_galibo_m"], sec["altura_galibo_m"]
-    eje = b / 2
-    pts = f"'((0.0 0.0) ({_n(b)} 0.0) ({_n(b)} {_n(hw)}) (0.0 {_n(hw)}))"
+    ac = sec.get("cuneta_ancho_m", 1.20)
+    hc = sec.get("cuneta_prof_m", 0.40)
+    bombeo = sec.get("bombeo_pct", 2.0) / 100.0
+
+    x_eje = b / 2
+    x_cuneta_izq = v + ac  # 1.95
+    x_berma_izq = v + berma  # 2.55
+    x_carril_izq = x_berma_izq + carril  # 6.15
+    x_separador_der = x_carril_izq + separador  # 7.15
+    x_carril_der = x_separador_der + carril  # 10.75
+    x_cuneta_der = b - (v + ac)  # 11.35
+    x_vereda_der = b - v  # 12.55
+
+    # Bombeo sobre calzada desde cuneta hasta separador
+    dy_bombeo = (x_carril_izq - x_cuneta_izq) * bombeo
+    y_calzada_eje = e + dy_bombeo
+
+    pts_contorno = f"'((0.0 0.0) ({_n(b)} 0.0) ({_n(b)} {_n(hw)}) (0.0 {_n(hw)}))"
+    pts_cuneta_izq = (
+        f"'(({_n(v)} {_n(e)}) ({_n(v)} {_n(e - hc)}) ({_n(x_cuneta_izq)} {_n(e)}))"
+    )
+    pts_cuneta_der = f"'(({_n(x_cuneta_der)} {_n(e)}) ({_n(x_vereda_der)} {_n(e - hc)}) ({_n(x_vereda_der)} {_n(e)}))"
+
     cuerpo = [
-        f'(pa14:pline {pts} \'(0.0 0.0 1.0 0.0) T "PA14-CONTORNO")',
-        _linea(0, e, b, e, "PA14-CONTORNO"),  # rasante
+        # 1. Contorno de excavación
+        f'(pa14:pline {pts_contorno} \'(0.0 0.0 1.0 0.0) T "PA14-CONTORNO")',
+        # 2. Rasante de fondo y divisiones de subbase (y=0 a y=e)
+        _linea(0, e, b, e, "PA14-CONTORNO"),
+        _linea(v, 0, v, e, "PA14-CONTORNO"),
+        _linea(x_berma_izq, 0, x_berma_izq, e, "PA14-CONTORNO"),
+        _linea(x_carril_izq, 0, x_carril_izq, e, "PA14-CONTORNO"),
+        _linea(x_separador_der, 0, x_separador_der, e, "PA14-CONTORNO"),
+        _linea(x_carril_der, 0, x_carril_der, e, "PA14-CONTORNO"),
+        _linea(x_vereda_der, 0, x_vereda_der, e, "PA14-CONTORNO"),
+        # Galería / ducto en subbase derecha
+        _rect(x_carril_der + 0.60, 0.0, 1.20, e, "PA14-CONTORNO"),
+        # 3. Veredas y cunetas
+        _linea(0, e, v, e, "PA14-OBRAS-ARTE"),
+        f'(pa14:pline {pts_cuneta_izq} \'(0.0 0.0 0.0) T "PA14-OBRAS-ARTE")',
+        _linea(
+            x_cuneta_izq, e, x_carril_izq, y_calzada_eje, "PA14-CONTORNO"
+        ),  # calzada izq
+        _rect(
+            x_carril_izq, y_calzada_eje, separador, 0.20, "PA14-CONTORNO"
+        ),  # separador central
+        _linea(
+            x_separador_der, y_calzada_eje, x_cuneta_der, e, "PA14-CONTORNO"
+        ),  # calzada der
+        f'(pa14:pline {pts_cuneta_der} \'(0.0 0.0 0.0) T "PA14-OBRAS-ARTE")',
+        *_hatch_cunetas(v, e, ac, hc, b),
+        _linea(x_vereda_der, e, b, e, "PA14-OBRAS-ARTE"),
+        # 4. Gálibo y ejes
         _rect(v, e, wg, hg, "PA14-GALIBO"),
-        _linea(eje, -0.5, eje, h + 0.5, "PA14-EJE"),
-        _linea(0, hw, b, hw, "PA14-EJE"),  # arranque de bóveda
-    ]
-    # bordes de carril y berma sobre la rasante (a ambos lados del separador)
-    x = sec["separador_m"] / 2
-    for ancho in [sec["ancho_carril_m"]] * (sec["carriles"] // 2) + [sec["berma_m"]]:
-        for signo in (-1, 1):
-            cuerpo.append(
-                _linea(eje + signo * x, e, eje + signo * x, e + 0.3, "PA14-EJE")
-            )
-        x += ancho
-    cuerpo += [
-        _cota(0, 0, b, 0, eje, -1.2),
-        _cota(v, e + hg, b - v, e + hg, eje, e + hg + 0.8),
-        _cota(0, 0, eje, h, -1.5, h / 2),
-        _cota(b, e, b - v, e + hg, b + 1.2, e + hg / 2),
-        _texto(0, h + 1.2, 0.45, f"SECCION TIPICA - {h:.2f} m x {b:.2f} m"),
+        _linea(x_eje, -0.8, x_eje, h + 0.6, "PA14-EJE"),
+        _linea(0, hw, b, hw, "PA14-EJE"),
+        # 5. Cotas inferiores (parciales y total)
+        _cota(0.0, 0.0, v, 0.0, v / 2, -0.65, f"{v:.2f} m"),
+        _cota(
+            v,
+            0.0,
+            x_berma_izq,
+            0.0,
+            (v + x_berma_izq) / 2,
+            -0.65,
+            f"{berma:.2f} m",
+        ),
+        _cota(
+            x_berma_izq,
+            0.0,
+            x_carril_izq,
+            0.0,
+            (x_berma_izq + x_carril_izq) / 2,
+            -0.65,
+            f"{carril:.2f} m",
+        ),
+        _cota(
+            x_carril_izq,
+            0.0,
+            x_separador_der,
+            0.0,
+            x_eje,
+            -0.65,
+            f"{separador:.2f} m",
+        ),
+        _cota(0.0, 0.0, b, 0.0, x_eje, -1.35, f"{b:.2f} m"),
+        # 6. Cotas de detalle (cuneta y subrasante)
+        _cota(
+            v,
+            e,
+            x_cuneta_izq,
+            e,
+            (v + x_cuneta_izq) / 2,
+            e + 0.40,
+            f"{ac:.2f} m",
+        ),
+        _cota(v, e - hc, v, e, v - 0.40, e - hc / 2, f"{hc:.2f} m"),
+        _cota(x_eje, 0.0, x_eje, e, x_eje - 0.75, e / 2, f"{e:.2f} m"),
+        # 7. Cotas verticales (alturas y gálibo a la izquierda)
+        _cota(v, e, v, e + hg, -0.65, e + hg / 2, f"{hg:.2f} m"),
+        _cota(
+            v,
+            e + hg,
+            v,
+            h,
+            -0.65,
+            (e + hg + h) / 2,
+            f"{h - (e + hg):.2f} m",
+        ),
+        _cota(0.0, e, 0.0, h, -1.25, (e + h) / 2, f"{hr:.2f} m"),
+        _cota(0.0, 0.0, 0.0, h, -1.85, h / 2, f"{h:.2f} m"),
+        # 8. Textos
+        _texto(0.0, h + 0.80, 0.35, f"SECCION TIPICA - {h:.2f} m x {b:.2f} m"),
         _texto(
-            0,
-            -2.4,
-            0.3,
+            0.0,
+            -2.10,
+            0.20,
             f"A = {sec['area_m2']:.2f} m2   R = {sec['radio_m']:.2f} m   "
             f"Galibo = {wg:.2f} x {hg:.2f} m",
         ),
@@ -257,8 +392,10 @@ def dibujo_saneamiento(agua: dict) -> Dibujo:
 def dibujo_botadero(maq: dict) -> Dibujo:
     lado = maq["lado_botadero_m"]
     cuerpo = [
+        '(setvar "DIMSCALE" 10.0)',
         _rect(0, 0, lado, lado, "PA14-CERCO"),
         _cota(0, 0, lado, 0, lado / 2, -5.0),
+        '(setvar "DIMSCALE" 1.0)',
         _texto(0, lado + 3.0, 3.0, "BOTADERO (DME)"),
         _texto(0, -12.0, 2.0, f"Area = {maq['area_botadero_m2']:.0f} m2"),
     ]

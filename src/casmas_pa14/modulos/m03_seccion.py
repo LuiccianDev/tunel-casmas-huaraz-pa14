@@ -69,6 +69,9 @@ def _galibo(g: dict, geo: dict) -> dict:
         "altura_borde_galibo_m": h_borde,
         "holgura_galibo_m": h_borde - g["altura_m"],
         "altura_vereda_m": geo["hastial_rasante_m"],
+        "cuneta_ancho_m": g.get("cuneta_ancho_m", 1.20),
+        "cuneta_prof_m": g.get("cuneta_prof_m", 0.40),
+        "bombeo_pct": g.get("bombeo_pct", 2.0),
     }
 
 
