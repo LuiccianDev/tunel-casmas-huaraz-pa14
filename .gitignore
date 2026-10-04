@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------- Python / uv
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.env
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---------------------------------------------------------------- Salidas generadas
+# Se regeneran con `uv run pa14`. Quita esta línea si debes subir los entregables.
+salidas/
+
+# ---------------------------------------------------------------- Office
+~$*.xlsx
+~$*.xls
+~$*.docx
+*.tmp
+
+# ---------------------------------------------------------------- AutoCAD
+*.bak
+*.dwl
+*.dwl2
+*.err
+*.sv$
+*.ac$
+plot.log
+
+# ---------------------------------------------------------------- Editores / SO
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

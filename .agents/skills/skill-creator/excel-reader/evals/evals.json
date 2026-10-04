@@ -1,0 +1,23 @@
+{
+  "skill_name": "excel-reader",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Read the Excel file data/sales.xlsx and extract all sheet names and row data from each sheet",
+      "expected_output": "A JSON output containing sheet names, row counts, and cell data for each sheet in the workbook",
+      "files": ["data/sales.xlsx"]
+    },
+    {
+      "id": 2,
+      "prompt": "Extract the header row and first 5 rows of data from the 'Q4 Summary' sheet in file reports/q4-2023.xlsx",
+      "expected_output": "Column headers and the first 5 rows of numeric and text values from the Q4 Summary sheet",
+      "files": ["reports/q4-2023.xlsx"]
+    },
+    {
+      "id": 3,
+      "prompt": "Read the Excel file metrics.xlsx and return the data as CSV format, with the first row as headers",
+      "expected_output": "CSV text output with column headers from the first sheet of metrics.xlsx",
+      "files": ["metrics.xlsx"]
+    }
+  ]
+}

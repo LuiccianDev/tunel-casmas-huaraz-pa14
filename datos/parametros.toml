@@ -1,0 +1,835 @@
+# =============================================================================
+#  PARÁMETROS DEL PROYECTO — TÚNEL CASMAS HUARAZ PA14
+# -----------------------------------------------------------------------------
+#  Única fuente de datos de entrada. Ningún número de diseño va "a mano" en el
+#  código Python: se cambia aquí y se vuelve a ejecutar `uv run pa14`.
+#
+#  (S) = SUPUESTO / valor típico. Debe verificarse o reemplazarse con datos
+#        reales del proyecto, del docente o de la norma indicada.
+#  Unidades SI (m, m², m³, kg, t, kW, L, días) salvo que el nombre diga otra.
+# =============================================================================
+
+[proyecto]
+nombre = "Túnel Casmas Huaraz PA14"
+curso = "Túneles"
+fecha_inicio = 2026-11-02 # (S) inicio de obra
+altitud_msnm = 3850.0     # Altitud media real entre entrada (3900) y salida (3800)
+
+# =============================================================================
+#  01 · UBICACIÓN — coordenadas UTM oficiales del proyecto
+# =============================================================================
+[ubicacion]
+datum = "WGS84"
+zona_utm = "18 L"
+portal_entrada = "PE" # id del punto que es portal de entrada
+portal_salida = "PS"  # id del punto que es portal de salida
+
+[[ubicacion.puntos]]
+id = "BOT1"
+nombre = "BOTADERO 1"
+zona = "18 L"
+este = 214687.13
+norte = 8942926.18
+cota = 3860.0
+
+[[ubicacion.puntos]]
+id = "BOT2"
+nombre = "BOTADERO 2"
+zona = "18 L"
+este = 208582.25
+norte = 8942242.82
+cota = 3810.0
+
+[[ubicacion.puntos]]
+id = "CAM2"
+nombre = "CAMPAMENTO 2"
+zona = "18 L"
+este = 208309.54
+norte = 8942152.25
+cota = 3810.0
+
+[[ubicacion.puntos]]
+id = "CAM1"
+nombre = "CAMPAMENTO PRINCIPAL"
+zona = "18 L"
+este = 216495.92
+norte = 8942234.47
+cota = 3930.0
+
+[[ubicacion.puntos]]
+id = "PE"
+nombre = "ENTRADA TUNEL"
+zona = "18 L"
+este = 214435.96
+norte = 8942843.19
+cota = 3900.0
+
+[[ubicacion.puntos]]
+id = "PS"
+nombre = "SALIDA DEL TUNEL"
+zona = "18 L"
+este = 208898.27
+norte = 8942757.03
+cota = 3800.0
+
+# Distancias calculadas entre componentes del proyecto
+[[ubicacion.restricciones]]
+desde = "PE"
+hasta = "BOT1"
+minimo_m = 100.0
+fuente = "Distancia portal Entrada a Botadero 1"
+
+[[ubicacion.restricciones]]
+desde = "PS"
+hasta = "BOT2"
+minimo_m = 100.0
+fuente = "Distancia portal Salida a Botadero 2"
+
+[[ubicacion.restricciones]]
+desde = "PE"
+hasta = "CAM1"
+minimo_m = 100.0
+fuente = "Distancia portal Entrada a Campamento Principal"
+
+[[ubicacion.restricciones]]
+desde = "PS"
+hasta = "CAM2"
+minimo_m = 100.0
+fuente = "Distancia portal Salida a Campamento 2"
+
+[[ubicacion.restricciones]]
+desde = "CAM2"
+hasta = "BOT2"
+minimo_m = 100.0
+fuente = "Distancia Campamento 2 a Botadero 2"
+
+[[ubicacion.restricciones]]
+desde = "CAM1"
+hasta = "BOT1"
+minimo_m = 100.0
+fuente = "Distancia Campamento Principal a Botadero 1"
+
+# =============================================================================
+#  02 · GEOLOGÍA — pendiente: el usuario entregará los datos estructurados.
+#  Mientras tanto, los parámetros dependientes de la roca están marcados (S)
+#  en [seccion] y [perforacion].
+# =============================================================================
+
+# =============================================================================
+#  03 · SECCIÓN, PERFORACIÓN Y AVANCE
+# =============================================================================
+[seccion]
+tipo = "Herradura: hastiales rectos + bóveda semicircular (R = B/2)"
+ancho_m = 13.30                # B, ancho total de excavación (plano CAD del proyecto)
+altura_m = 9.58                # H, fondo de excavación → clave (plano CAD)
+altura_sobre_rasante_m = 9.08  # rasante → clave (plano CAD); H − esto = espesor bajo rasante
+sobreexcavacion = 0.10      # (S) 10 % sobre el volumen teórico
+factor_esponjamiento = 1.50 # (S) roca → ajustar con geología
+densidad_roca_t_m3 = 2.60   # (S) ajustar con geología
+
+# Gálibo y plataforma (rectángulo de gálibo del plano CAD, medidas en m)
+[seccion.galibo]
+carriles = 2           # und, vía de dos carriles (plano CAD)
+ancho_carril_m = 3.60  # plano CAD
+berma_m = 1.80         # cada lado (plano CAD)
+separador_m = 1.00     # separador central en el eje (plano CAD)
+vereda_m = 0.75        # cada lado, entre gálibo y hastial (plano CAD)
+altura_m = 5.50        # altura del rectángulo de gálibo sobre la rasante (plano CAD)
+cuneta_ancho_m = 1.20  # cuneta lateral (plano CAD)
+cuneta_prof_m = 0.40   # cuneta lateral (plano CAD)
+bombeo_pct = 2.0       # bombeo transversal (plano CAD)
+tolerancia_m = 0.01    # redondeo de las cotas del plano CAD (comprobaciones geométricas)
+
+# Mínimos normativos (Perú). Ver docs/memoria/03_Seccion.md
+[seccion.norma]
+# MTC, Manual de Carreteras: Túneles, Muros y Obras Complementarias (RD 036-2016-MTC/14)
+galibo_vertical_m = 5.50    # gálibo vertical mínimo sobre la plataforma
+vereda_m = 0.75             # vereda mínima a cada lado (mantenimiento / auxilio)
+altura_vereda_m = 2.40      # (S) altura libre mínima sobre vereda → verificar en el manual
+longitud_emergencia_m = 500 # (S) túnel > 500 m: prever zonas de emergencia → verificar
+# MTC, Manual de Carreteras: Diseño Geométrico DG-2018, Sección 304
+ancho_carril_m = 3.60       # carril para carretera de 1.ª clase / autopista
+berma_m = 1.20              # (S) berma mínima de referencia → verificar Tabla 304.02
+
+[perforacion]
+frentes = 2                     # frentes de ataque (1 = un solo portal)
+disparos_por_dia_frente = 2     # (S) 1 por guardia
+dias_trabajo_mes = 30           # trabajo continuo
+longitud_barreno_m = 3.66       # (S) barra de 12 pies
+eficiencia_avance = 0.90        # (S)
+espaciamiento_periferico_m = 0.60 # (S) E, fórmula N = P/E + K·A
+coeficiente_roca_k = 1.5        # (S) K: 2.0 dura · 1.5 intermedia · 1.0 suave
+factor_carga_kg_m3 = 1.60       # (S) kg explosivo / m³ roca
+
+# =============================================================================
+#  04 · PERSONAL  (por_frente = true → se multiplica por el número de frentes)
+#  categoria: "staff" o "obrero" (define el tipo de dormitorio)
+# =============================================================================
+[regimen]
+dias_trabajo = 14 # (S) régimen 14x7
+dias_descanso = 7
+
+[[personal]]
+area = "Dirección"
+cargo = "Residente de obra"
+categoria = "staff"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Dirección"
+cargo = "Ingeniero de producción (jefe de guardia)"
+categoria = "staff"
+por_guardia = 1
+guardias = 2
+
+[[personal]]
+area = "Dirección"
+cargo = "Ingeniero de seguridad"
+categoria = "staff"
+por_guardia = 1
+guardias = 2
+
+[[personal]]
+area = "Dirección"
+cargo = "Ingeniero geomecánico"
+categoria = "staff"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Dirección"
+cargo = "Topógrafo"
+categoria = "staff"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Dirección"
+cargo = "Administrador"
+categoria = "staff"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Dirección"
+cargo = "Médico / paramédico"
+categoria = "staff"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Frente"
+cargo = "Capataz de frente"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Operador de jumbo"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Ayudante de jumbo"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Cargador de explosivos"
+categoria = "obrero"
+por_guardia = 2
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Operador de scoop"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Conductor de dumper"
+categoria = "obrero"
+por_guardia = 2
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Operador de scaler"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Operador de robot de shotcrete"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Conductor de mixer"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Ayudante de sostenimiento"
+categoria = "obrero"
+por_guardia = 3
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Electricista"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Mecánico"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+por_frente = true
+
+[[personal]]
+area = "Frente"
+cargo = "Ayudante de topografía"
+categoria = "obrero"
+por_guardia = 1
+guardias = 1
+por_frente = true
+
+[[personal]]
+area = "Botadero"
+cargo = "Operador de tractor"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+
+[[personal]]
+area = "Botadero"
+cargo = "Vigía / controlador"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+
+[[personal]]
+area = "Campamento"
+cargo = "Cocinero"
+categoria = "obrero"
+por_guardia = 2
+guardias = 1
+
+[[personal]]
+area = "Campamento"
+cargo = "Ayudante de cocina"
+categoria = "obrero"
+por_guardia = 3
+guardias = 1
+
+[[personal]]
+area = "Campamento"
+cargo = "Personal de limpieza"
+categoria = "obrero"
+por_guardia = 2
+guardias = 1
+
+[[personal]]
+area = "Campamento"
+cargo = "Almacenero"
+categoria = "obrero"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Campamento"
+cargo = "Vigilante"
+categoria = "obrero"
+por_guardia = 1
+guardias = 2
+
+[[personal]]
+area = "Campamento"
+cargo = "Operador de plantas (PETAP/PETAR)"
+categoria = "obrero"
+por_guardia = 1
+guardias = 1
+
+[[personal]]
+area = "Campamento"
+cargo = "Conductor de vehículos"
+categoria = "obrero"
+por_guardia = 2
+guardias = 1
+
+# =============================================================================
+#  05 · CAMPAMENTO
+#  base: "staff" | "obrero" | "total" → módulos = ⌈personas / turnos / personas_por_modulo⌉
+#        "fijo"                        → área fija (area_m2)
+# =============================================================================
+[campamento]
+ancho_edificio_m = 6.0 # ancho típico de módulo; largo = área / ancho
+factor_terreno = 2.0   # (S) área de terreno = área construida × factor (vías, retiros)
+
+[[campamento.edificaciones]]
+nombre = "Dormitorios staff"
+base = "staff"
+personas_por_modulo = 1
+area_modulo_m2 = 12.0
+
+[[campamento.edificaciones]]
+nombre = "Dormitorios obreros"
+base = "obrero"
+personas_por_modulo = 4
+area_modulo_m2 = 24.0
+
+[[campamento.edificaciones]]
+nombre = "Comedor"
+base = "total"
+personas_por_modulo = 1
+area_modulo_m2 = 1.5 # (S) m² por comensal
+turnos = 2
+
+[[campamento.edificaciones]]
+nombre = "SS.HH. y duchas"
+base = "total"
+personas_por_modulo = 10 # (S) 1 batería (inodoro+ducha+lavatorio) cada 10 personas
+area_modulo_m2 = 6.0
+
+[[campamento.edificaciones]]
+nombre = "Cocina y despensa"
+base = "fijo"
+area_m2 = 60.0
+
+[[campamento.edificaciones]]
+nombre = "Oficinas"
+base = "fijo"
+area_m2 = 60.0
+
+[[campamento.edificaciones]]
+nombre = "Tópico"
+base = "fijo"
+area_m2 = 24.0
+ancho_m = 4.0
+
+[[campamento.edificaciones]]
+nombre = "Almacén general"
+base = "fijo"
+area_m2 = 120.0
+
+[[campamento.edificaciones]]
+nombre = "Taller de mantenimiento"
+base = "fijo"
+area_m2 = 200.0
+ancho_m = 10.0
+
+[[campamento.edificaciones]]
+nombre = "Laboratorio de concreto"
+base = "fijo"
+area_m2 = 30.0
+ancho_m = 5.0
+
+[[campamento.edificaciones]]
+nombre = "Lavandería"
+base = "fijo"
+area_m2 = 24.0
+ancho_m = 4.0
+
+[[campamento.edificaciones]]
+nombre = "Caseta de grupo electrógeno"
+base = "fijo"
+area_m2 = 30.0
+ancho_m = 5.0
+
+[[campamento.edificaciones]]
+nombre = "Caseta de vigilancia"
+base = "fijo"
+area_m2 = 9.0
+ancho_m = 3.0
+
+[[campamento.edificaciones]]
+nombre = "Patio de máquinas"
+base = "fijo"
+area_m2 = 600.0
+ancho_m = 20.0
+
+# =============================================================================
+#  06 · MAQUINARIA
+# =============================================================================
+[maquinaria]
+ventana_limpieza_h = 4.0 # (S) tiempo disponible para limpiar cada disparo
+eficiencia = 0.83        # (S) 50 min efectivos / hora
+
+[maquinaria.jumbo]
+brazos = 2
+velocidad_perforacion_m_min = 1.5 # (S)
+ventana_perforacion_h = 3.0       # (S) tiempo máximo para perforar un disparo
+potencia_hp = 100
+
+[maquinaria.scoop]
+capacidad_m3 = 3.1   # (S) 4.1 yd³
+factor_llenado = 0.85
+tiempo_ciclo_min = 4.0
+potencia_hp = 215
+
+[maquinaria.dumper]
+capacidad_m3 = 10.0
+factor_llenado = 0.90
+velocidad_cargado_kmh = 10.0
+velocidad_vacio_kmh = 15.0
+tiempo_fijo_min = 8.0           # carga + descarga + maniobras
+distancia_portal_botadero_m = 500.0 # (S)
+potencia_hp = 270
+
+[maquinaria.botadero]
+altura_m = 10.0                 # (S) altura de apilamiento
+factor_taludes = 1.30           # (S) área adicional por taludes y bermas
+tractor_productividad_m3_h = 150.0 # (S)
+horas_operacion_dia = 16.0
+potencia_hp_tractor = 200
+
+# Equipos asignados (no calculados). en_tunel = true → cuenta para ventilación.
+[[maquinaria.equipos]]
+zona = "Frente"
+equipo = "Scaler (desatador mecánico)"
+cantidad = 1
+por_frente = true
+potencia_hp = 110
+en_tunel = true
+
+[[maquinaria.equipos]]
+zona = "Frente"
+equipo = "Robot de shotcrete"
+cantidad = 1
+por_frente = true
+potencia_hp = 100
+en_tunel = true
+
+[[maquinaria.equipos]]
+zona = "Frente"
+equipo = "Mixer 4 m³"
+cantidad = 1
+por_frente = true
+potencia_hp = 150
+en_tunel = true
+
+[[maquinaria.equipos]]
+zona = "Frente"
+equipo = "Utilitario de servicios / explosivos"
+cantidad = 1
+por_frente = true
+potencia_hp = 100
+en_tunel = true
+
+[[maquinaria.equipos]]
+zona = "Botadero"
+equipo = "Motoniveladora"
+cantidad = 1
+potencia_hp = 150
+
+[[maquinaria.equipos]]
+zona = "Botadero"
+equipo = "Cisterna de riego"
+cantidad = 1
+potencia_hp = 250
+
+[[maquinaria.equipos]]
+zona = "Campamento"
+equipo = "Camioneta 4x4"
+cantidad = 3
+potencia_hp = 150
+
+[[maquinaria.equipos]]
+zona = "Campamento"
+equipo = "Minibús de personal"
+cantidad = 2
+potencia_hp = 150
+
+[[maquinaria.equipos]]
+zona = "Campamento"
+equipo = "Camión de combustible"
+cantidad = 1
+potencia_hp = 250
+
+# =============================================================================
+#  07 · POLVORÍN
+# =============================================================================
+[polvorin]
+dias_stock = 15 # (S) días de consumo almacenados
+
+[polvorin.explosivos]
+unidades_por_caja = 25.0 # kg por caja
+caja_largo_m = 0.50
+caja_ancho_m = 0.30
+caja_alto_m = 0.25
+altura_max_ruma_m = 1.50  # (S) verificar Reglamento SUCAMEC
+filas = 2                 # filas de rumas (pasillo central)
+pasillo_m = 1.20
+separacion_rumas_m = 0.10
+separacion_pared_m = 0.30
+altura_libre_m = 1.00
+espesor_muro_m = 0.30
+
+[polvorin.accesorios]
+detonadores_por_taladro = 1
+unidades_por_caja = 200.0 # (S) detonadores por caja
+caja_largo_m = 0.50
+caja_ancho_m = 0.35
+caja_alto_m = 0.30
+altura_max_ruma_m = 1.50
+filas = 1
+pasillo_m = 1.00
+separacion_rumas_m = 0.10
+separacion_pared_m = 0.30
+altura_libre_m = 1.00
+espesor_muro_m = 0.30
+
+# =============================================================================
+#  08 · AGUA: consumo, PETAP, PETAR y pozo
+# =============================================================================
+[agua]
+dotacion_l_hab_dia = 150.0 # (S) verificar RNE IS.010
+k1 = 1.3                   # coef. máximo diario (RNE OS.100)
+k2 = 2.0                   # coef. máximo horario (RNE OS.100)
+perforacion_l_min_brazo = 80.0 # (S) agua de barrido del jumbo
+riego_m3_dia = 20.0            # (S) riego de vías y botadero
+otros_industrial_m3_dia = 10.0 # (S) shotcrete, lavado de equipos
+
+[petap]
+fraccion_regulacion = 0.25 # 25 % del consumo diario (RNE)
+reserva_m3 = 10.0          # (S) reserva contra incendio
+altura_tanque_m = 2.0
+tasa_filtracion_m_h = 0.20 # (S) filtro lento 0.1–0.2 m/h
+dosis_cloro_mg_l = 1.5
+pureza_hipoclorito = 0.70
+
+[petar]
+coef_retorno = 0.80             # 80 % del agua consumida llega al desagüe
+tasa_lodos_l_hab_anio = 70.0    # (S) verificar RNE IS.020
+intervalo_limpieza_anios = 1.0
+volumen_natas_m3 = 0.70         # mínimo RNE IS.020
+altura_util_m = 1.80
+relacion_largo_ancho = 2.0
+
+[pozo]
+horas_bombeo = 12.0        # (S)
+nivel_dinamico_m = 40.0    # (S) ajustar con hidrogeología
+altura_elevacion_m = 10.0  # (S) pozo → tanque
+perdidas_m = 5.0           # (S)
+eficiencia_bomba = 0.65
+
+# =============================================================================
+#  09 · ELECTRICIDAD Y VENTILACIÓN
+# =============================================================================
+[ventilacion]
+# Caudal por persona según altitud (DS 024-2016-EM): ≤1500: 3 · ≤3000: 4 · ≤4000: 5 · >4000: 6 m³/min
+caudal_por_hp_m3_min = 3.0      # DS 024-2016-EM, equipos diésel
+simultaneidad_equipos = 0.50    # (S) fracción de equipos operando a la vez
+factor_fugas = 1.15             # (S)
+velocidad_min_m_min = 20.0      # DS 024-2016-EM
+velocidad_max_m_min = 250.0     # DS 024-2016-EM
+presion_total_pa = 2500.0       # (S) depende de longitud y diámetro de manga
+eficiencia_ventilador = 0.70
+
+[electricidad]
+factor_potencia = 0.80
+reserva = 0.25                    # 25 % de reserva
+consumo_combustible_l_kwh = 0.30  # (S) grupo electrógeno diésel
+
+# por_frente = true → la cantidad se multiplica por el número de frentes.
+[[electricidad.cargas]]
+zona = "Frente"
+equipo = "Jumbo electrohidráulico (perforación)"
+cantidad = 1
+por_frente = true
+potencia_kw = 110.0
+horas_dia = 3.0
+factor_demanda = 0.80
+
+[[electricidad.cargas]]
+zona = "Frente"
+equipo = "Compresora eléctrica"
+cantidad = 1
+por_frente = true
+potencia_kw = 75.0
+horas_dia = 8.0
+factor_demanda = 0.70
+
+[[electricidad.cargas]]
+zona = "Frente"
+equipo = "Bomba de drenaje"
+cantidad = 1
+por_frente = true
+potencia_kw = 15.0
+horas_dia = 12.0
+factor_demanda = 0.80
+
+[[electricidad.cargas]]
+zona = "Frente"
+equipo = "Iluminación del túnel"
+cantidad = 1
+por_frente = true
+potencia_kw = 8.0
+horas_dia = 24.0
+factor_demanda = 1.00
+
+[[electricidad.cargas]]
+zona = "Botadero"
+equipo = "Torre de iluminación"
+cantidad = 2
+potencia_kw = 6.0
+horas_dia = 12.0
+factor_demanda = 1.00
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Alumbrado y tomacorrientes de edificaciones"
+cantidad = 1
+potencia_kw = 30.0
+horas_dia = 14.0
+factor_demanda = 0.60
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Equipos de cocina"
+cantidad = 1
+potencia_kw = 20.0
+horas_dia = 6.0
+factor_demanda = 0.80
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Lavandería"
+cantidad = 1
+potencia_kw = 10.0
+horas_dia = 6.0
+factor_demanda = 0.70
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Taller de mantenimiento"
+cantidad = 1
+potencia_kw = 40.0
+horas_dia = 8.0
+factor_demanda = 0.50
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Oficinas"
+cantidad = 1
+potencia_kw = 10.0
+horas_dia = 10.0
+factor_demanda = 0.70
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Equipos PETAP"
+cantidad = 1
+potencia_kw = 5.0
+horas_dia = 24.0
+factor_demanda = 0.80
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Equipos PETAR"
+cantidad = 1
+potencia_kw = 3.0
+horas_dia = 24.0
+factor_demanda = 0.80
+
+[[electricidad.cargas]]
+zona = "Campamento"
+equipo = "Alumbrado exterior"
+cantidad = 1
+potencia_kw = 10.0
+horas_dia = 12.0
+factor_demanda = 1.00
+
+# =============================================================================
+#  10 · CRONOGRAMA
+#  Duración: duracion_dias = N | rendimiento = "excavacion" | rendimiento_m_dia = R (L/R)
+#  tipo: "FC" fin-comienzo (defecto) | "CC" comienzo-comienzo; desfase_dias puede ser negativo
+# =============================================================================
+[[cronograma.actividades]]
+id = "A"
+nombre = "Movilización de equipos y personal"
+duracion_dias = 15
+
+[[cronograma.actividades]]
+id = "B"
+nombre = "Construcción del campamento"
+duracion_dias = 30
+predecesoras = ["A"]
+
+[[cronograma.actividades]]
+id = "C"
+nombre = "Polvorín, PETAP, PETAR y pozo de agua"
+duracion_dias = 25
+predecesoras = ["A"]
+
+[[cronograma.actividades]]
+id = "D"
+nombre = "Accesos, botadero y emboquillado de portales"
+duracion_dias = 20
+predecesoras = ["B", "C"]
+
+[[cronograma.actividades]]
+id = "E"
+nombre = "Excavación y sostenimiento"
+rendimiento = "excavacion"
+predecesoras = ["D"]
+
+[[cronograma.actividades]]
+id = "F"
+nombre = "Revestimiento de concreto"
+rendimiento_m_dia = 12.0 # (S)
+predecesoras = ["E"]
+tipo = "CC"
+desfase_dias = 45
+
+[[cronograma.actividades]]
+id = "G"
+nombre = "Instalaciones electromecánicas definitivas"
+duracion_dias = 40
+predecesoras = ["E", "F"]
+
+[[cronograma.actividades]]
+id = "H"
+nombre = "Pavimentación y drenaje"
+duracion_dias = 30
+predecesoras = ["E", "F"]
+
+[[cronograma.actividades]]
+id = "I"
+nombre = "Pruebas, señalización y entrega"
+duracion_dias = 10
+predecesoras = ["G", "H"]
+
+[[cronograma.actividades]]
+id = "J"
+nombre = "Desmovilización y cierre"
+duracion_dias = 15
+predecesoras = ["I"]
