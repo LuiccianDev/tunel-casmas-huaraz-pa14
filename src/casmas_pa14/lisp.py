@@ -65,6 +65,13 @@ _LIBRERIA = r"""
     (command "_.DIMLINEAR" "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_T" txt "_non" (pa14:p x3 y3))
     (command "_.DIMLINEAR" "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_non" (pa14:p x3 y3)))
   (setvar "CLAYER" capa))
+(defun pa14:cota-ang (vx vy x1 y1 x2 y2 x3 y3 txt / capa)
+  (setq capa (getvar "CLAYER"))
+  (setvar "CLAYER" "PA14-COTA")
+  (if (and txt (/= txt ""))
+    (command "_.DIMANGULAR" "" "_non" (pa14:p vx vy) "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_T" txt "_non" (pa14:p x3 y3))
+    (command "_.DIMANGULAR" "" "_non" (pa14:p vx vy) "_non" (pa14:p x1 y1) "_non" (pa14:p x2 y2) "_non" (pa14:p x3 y3)))
+  (setvar "CLAYER" capa))
 (defun pa14:dim-estilo (esc txt-alt asz)
   (setvar "DIMSCALE" esc)
   (setvar "DIMTXT" txt-alt)
@@ -131,6 +138,11 @@ def _linea(x1, y1, x2, y2, capa) -> str:
 def _cota(x1, y1, x2, y2, x3, y3, txt="") -> str:
     txt_lisp = _txt(txt) if txt else '""'
     return f"(pa14:cota {' '.join(_n(v) for v in (x1, y1, x2, y2, x3, y3))} {txt_lisp})"
+
+
+def _cota_angular(vx, vy, x1, y1, x2, y2, x3, y3, txt="") -> str:
+    txt_lisp = _txt(txt) if txt else '""'
+    return f"(pa14:cota-ang {' '.join(_n(v) for v in (vx, vy, x1, y1, x2, y2, x3, y3))} {txt_lisp})"
 
 
 def _hatch_cunetas(v: float, e: float, ac: float, hc: float, b: float) -> list[str]:
@@ -256,7 +268,7 @@ def dibujo_seccion(sec: dict) -> Dibujo:
             f"{separador:.2f} m",
         ),
         _cota(0.0, 0.0, b, 0.0, x_eje, -1.35, f"{b:.2f} m"),
-        # 6. Cotas de detalle (cuneta y subrasante)
+        # 6. Cotas de detalle (cuneta, subrasante y bombeo)
         _cota(
             v,
             e,
@@ -268,6 +280,17 @@ def dibujo_seccion(sec: dict) -> Dibujo:
         ),
         _cota(v, e - hc, v, e, v - 0.40, e - hc / 2, f"{hc:.2f} m"),
         _cota(x_eje, 0.0, x_eje, e, x_eje - 0.75, e / 2, f"{e:.2f} m"),
+        _cota_angular(
+            x_cuneta_der,
+            e,
+            x_separador_der,
+            e,
+            x_separador_der,
+            y_calzada_eje,
+            x_separador_der + 1.20,
+            e + dy_bombeo * 0.70,
+            f"{sec.get('bombeo_pct', 2.0):.0f}%%d",
+        ),
         # 7. Cotas verticales (alturas y gálibo a la izquierda)
         _cota(v, e, v, e + hg, -0.65, e + hg / 2, f"{hg:.2f} m"),
         _cota(
