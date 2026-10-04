@@ -23,7 +23,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 | 01 | Ubicación y coordenadas | `m01_ubicacion` | `01_Ubicacion.xlsx` | [x] oficial |
 | 02 | Geología | `m02_geologia` | `02_Geologia.xlsx` | [ ] espera datos |
 | 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [ ] espera datos |
-| 04 | Personal | `m04_personal` | `04_Personal.xlsx` | [x] base |
+| 04 | Personal | `m04_personal` | `04_Personal.xlsx` | [x] oficial (346 pax, MOD/MOI, memoria) |
 | 05 | Campamento y edificaciones | `m05_campamento` | `05_Campamento.xlsx` | [x] base |
 | 06 | Maquinaria (frente, botadero, campamento) | `m06_maquinaria` | `06_Maquinaria.xlsx` | [x] base |
 | 07 | Polvorín | `m07_polvorin` | `07_Polvorin.xlsx` | [x] base |

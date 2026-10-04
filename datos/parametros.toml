@@ -162,228 +162,1719 @@ coeficiente_roca_k = 1.5        # (S) K: 2.0 dura · 1.5 intermedia · 1.0 suave
 factor_carga_kg_m3 = 1.60       # (S) kg explosivo / m³ roca
 
 # =============================================================================
-#  04 · PERSONAL  (por_frente = true → se multiplica por el número de frentes)
-#  categoria: "staff" o "obrero" (define el tipo de dormitorio)
+#  04 · PERSONAL (Organización oficial: 346 pax en campamento, régimen 14x7)
+#  Macro-Áreas: Campamento (155 pax) · Frente (110 pax) · Servicio (81 pax)
+#  Campamentos: CAMP1 (Portal A: 248 pax) · CAMP2 (Portal B: 98 pax)
+#  Guardias: Guardia Día (231 pax) · Guardia Noche (115 pax)
+#  Mano de obra: Directa (110 pax) · Indirecta (236 pax)
 # =============================================================================
 [regimen]
-dias_trabajo = 14 # (S) régimen 14x7
+dias_trabajo = 14 # D.S. 024-2016-EM Art. 201 (régimen atípico 14x7)
 dias_descanso = 7
 
+# --- MACRO-ÁREA 1: PERSONAL DE CAMPAMENTO (155 pax) ---
+# Alta Dirección (3 pax)
 [[personal]]
-area = "Dirección"
-cargo = "Residente de obra"
+macro_area = "Personal de Campamento"
+sub_area = "Alta Dirección"
+cargo = "Gerente General"
 categoria = "staff"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
 [[personal]]
-area = "Dirección"
-cargo = "Ingeniero de producción (jefe de guardia)"
+macro_area = "Personal de Campamento"
+sub_area = "Alta Dirección"
+cargo = "Residente de Obra"
 categoria = "staff"
-por_guardia = 1
-guardias = 2
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
 [[personal]]
-area = "Dirección"
-cargo = "Ingeniero de seguridad"
+macro_area = "Personal de Campamento"
+sub_area = "Alta Dirección"
+cargo = "Administrador General"
 categoria = "staff"
-por_guardia = 1
-guardias = 2
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
+# Finanzas y Administración (9 pax)
 [[personal]]
-area = "Dirección"
-cargo = "Ingeniero geomecánico"
+macro_area = "Personal de Campamento"
+sub_area = "Finanzas y Adm."
+cargo = "Contador General"
 categoria = "staff"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
 [[personal]]
-area = "Dirección"
-cargo = "Topógrafo"
+macro_area = "Personal de Campamento"
+sub_area = "Finanzas y Adm."
+cargo = "Contador de Costos"
 categoria = "staff"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
 
 [[personal]]
-area = "Dirección"
-cargo = "Administrador"
+macro_area = "Personal de Campamento"
+sub_area = "Finanzas y Adm."
+cargo = "Asistente Contable"
 categoria = "staff"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
 
 [[personal]]
-area = "Dirección"
-cargo = "Médico / paramédico"
+macro_area = "Personal de Campamento"
+sub_area = "Finanzas y Adm."
+cargo = "Abogado Laboral"
 categoria = "staff"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+# RR.HH. y Relaciones Comunitarias (11 pax)
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "RR.HH. y Social"
+cargo = "Jefe de RRHH"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
 [[personal]]
-area = "Frente"
-cargo = "Capataz de frente"
-categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "RR.HH. y Social"
+cargo = "Especialista de Planillas"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 3
 
 [[personal]]
-area = "Frente"
-cargo = "Operador de jumbo"
-categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "RR.HH. y Social"
+cargo = "Especialista de Bienestar Social"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 3
 
 [[personal]]
-area = "Frente"
-cargo = "Ayudante de jumbo"
-categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "RR.HH. y Social"
+cargo = "Especialista de Relaciones Comunitarias"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
+
+# Servicios Administrativos (30 pax)
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Servicios Adm."
+cargo = "Secretaria Ejecutiva"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
 
 [[personal]]
-area = "Frente"
-cargo = "Cargador de explosivos"
-categoria = "obrero"
-por_guardia = 2
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "Servicios Adm."
+cargo = "Asistente de Ingeniería / SSOMA"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 8
 
 [[personal]]
-area = "Frente"
-cargo = "Operador de scoop"
-categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "Servicios Adm."
+cargo = "Recepcionista"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
 
 [[personal]]
-area = "Frente"
-cargo = "Conductor de dumper"
-categoria = "obrero"
-por_guardia = 2
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "Servicios Adm."
+cargo = "Especialista TI / Redes"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
 
 [[personal]]
-area = "Frente"
-cargo = "Operador de scaler"
-categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "Servicios Adm."
+cargo = "Asistente de Control Documentario"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 10
+
+# Salud Ocupacional (3 pax)
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Salud Ocupacional"
+cargo = "Médico Ocupacional"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
 [[personal]]
-area = "Frente"
-cargo = "Operador de robot de shotcrete"
-categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+macro_area = "Personal de Campamento"
+sub_area = "Salud Ocupacional"
+cargo = "Paramédico Tópico 24h CAMP1"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
 
 [[personal]]
-area = "Frente"
-cargo = "Conductor de mixer"
+macro_area = "Personal de Campamento"
+sub_area = "Salud Ocupacional"
+cargo = "Paramédico Tópico 24h CAMP2"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+# Catering y Habitabilidad - CAMP1 (75 pax)
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Chef Jefe CAMP1"
 categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
 
 [[personal]]
-area = "Frente"
-cargo = "Ayudante de sostenimiento"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cocinero de Guardia CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 3
-guardias = 2
-por_frente = true
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
 
 [[personal]]
-area = "Frente"
-cargo = "Electricista"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cocinero de Guardia CAMP1 (Noche)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 4
 
 [[personal]]
-area = "Frente"
-cargo = "Mecánico"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Ayudante de Cocina CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 2
-por_frente = true
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 10
 
 [[personal]]
-area = "Frente"
-cargo = "Ayudante de topografía"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Ayudante de Cocina CAMP1 (Noche)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 1
-por_frente = true
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 6
 
 [[personal]]
-area = "Botadero"
-cargo = "Operador de tractor"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Steward / Vajillero CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 2
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 8
 
 [[personal]]
-area = "Botadero"
-cargo = "Vigía / controlador"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Steward / Vajillero CAMP1 (Noche)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 2
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 4
 
 [[personal]]
-area = "Campamento"
-cargo = "Cocinero"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cuartelero de Dormitorios CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 2
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 10
 
 [[personal]]
-area = "Campamento"
-cargo = "Ayudante de cocina"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cuartelero de Dormitorios CAMP1 (Noche)"
 categoria = "obrero"
-por_guardia = 3
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 6
 
 [[personal]]
-area = "Campamento"
-cargo = "Personal de limpieza"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador de Lavandería CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 2
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 6
 
 [[personal]]
-area = "Campamento"
-cargo = "Almacenero"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador de Lavandería CAMP1 (Noche)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 4
 
 [[personal]]
-area = "Campamento"
-cargo = "Vigilante"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Personal de Limpieza Áreas Comunes CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 2
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 5
 
 [[personal]]
-area = "Campamento"
-cargo = "Operador de plantas (PETAP/PETAR)"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Personal de Limpieza Áreas Comunes CAMP1 (Noche)"
 categoria = "obrero"
-por_guardia = 1
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 3
 
 [[personal]]
-area = "Campamento"
-cargo = "Conductor de vehículos"
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador PTAP y PTAR CAMP1 (Día)"
 categoria = "obrero"
-por_guardia = 2
-guardias = 1
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador PTAP y PTAR CAMP1 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 2
+
+# Catering y Habitabilidad - CAMP2 (24 pax)
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cocinero de Guardia CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cocinero de Guardia CAMP2 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Ayudante de Cocina CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Ayudante de Cocina CAMP2 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Steward / Vajillero CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Steward / Vajillero CAMP2 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cuartelero de Dormitorios CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Cuartelero de Dormitorios CAMP2 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador de Lavandería CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador de Lavandería CAMP2 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Personal de Limpieza CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador PTAP y PTAR CAMP2 (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Campamento"
+sub_area = "Catering y Habitabilidad"
+cargo = "Operador PTAP y PTAR CAMP2 (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+# --- MACRO-ÁREA 2: PERSONAL DE FRENTE (TÚNEL Y BOTADEROS) (110 pax) ---
+# Ingeniería y Geología Subterránea (21 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Jefe de Frente 1"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Geólogo de Mina / RMR (F1)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Ingeniero Geomecánico (F1)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Jefe de Topografía Láser"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Técnico de Topografía Láser (F1)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Ingeniero de Planeamiento / Dispatch (F1)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Dibujante CAD / BIM (F1)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Asistente de Calidad de Concreto (F1)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Jefe de Frente 2"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Geólogo de Mina / RMR (F2)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Ingeniero Geomecánico (F2)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Técnico de Topografía Láser (F2)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Ingeniero de Planeamiento (F2)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Ingeniería y Subt."
+cargo = "Asistente de Calidad de Concreto (F2)"
+categoria = "staff"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+# Operaciones Subterráneas: Perforación y Voladura (38 pax)
+# Frente 1 (19 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Titular (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Titular (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Relevo (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Relevo (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Perforista de Apoyo y Emboquillado (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Perforista de Apoyo y Emboquillado (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Blaster Certificado SUCAMEC (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Blaster Certificado SUCAMEC (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Voladura y Cargado (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Voladura y Cargado (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 4
+
+# Frente 2 (19 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Titular (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Titular (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Relevo (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Jumbo Relevo (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Perforista de Apoyo y Emboquillado (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Perforista de Apoyo y Emboquillado (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Blaster Certificado SUCAMEC (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Blaster Certificado SUCAMEC (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Voladura y Cargado (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 4
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Voladura y Cargado (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 4
+
+# Operaciones Subterráneas: Sostenimiento Mecanizado (12 pax)
+# Frente 1 (6 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Robot Lanzador de Shotcrete (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Robot Lanzador de Shotcrete (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Sostenimiento Malla/Pernos (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Sostenimiento Malla/Pernos (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 2
+
+# Frente 2 (6 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Robot Lanzador de Shotcrete (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Robot Lanzador de Shotcrete (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Sostenimiento Malla/Pernos (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Ayudante de Sostenimiento Malla/Pernos (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+# Operaciones Subterráneas: Carguío y Acarreo a DME (24 pax)
+# Frente 1 (12 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Scooptram LHD (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Scooptram LHD (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Volquete Minero Acarreo DME (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Volquete Minero Acarreo DME (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 4
+
+# Frente 2 (12 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Scooptram LHD (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Scooptram LHD (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Volquete Minero Acarreo DME (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 4
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Volquete Minero Acarreo DME (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 4
+
+# Operaciones Subterráneas: Plantas y Servicios Mina (15 pax)
+# Frente 1 (9 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Planta Shotcrete (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Planta Shotcrete (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Mixer Dosificador (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Mixer Dosificador (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Ventiladores Principales (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Ventiladores Principales (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Bombas de Achique / Drenaje (F1 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Bombas de Achique / Drenaje (F1 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+# Frente 2 (6 pax)
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Planta Shotcrete (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Planta Shotcrete (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Mixer Dosificador (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Chofer Mixer Dosificador (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Bombas de Achique / Drenaje (F2 Día)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Frente"
+sub_area = "Operaciones Subt."
+cargo = "Operador Bombas de Achique / Drenaje (F2 Noche)"
+categoria = "obrero"
+tipo_labor = "directa"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+# --- MACRO-ÁREA 3: PERSONAL DE SERVICIO Y SOPORTE A LA PRODUCCIÓN (81 pax) ---
+# SSOMA y Medio Ambiente (12 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Jefe SSOMA"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Supervisor de Seguridad Subterránea (CAMP1 Día)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Supervisor de Seguridad Subterránea (CAMP1 Noche)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Especialista en Ventilación y Gases (CAMP1)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Ingeniero Ambiental y Residuos (CAMP1)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Supervisor de Seguridad Subterránea (CAMP2 Día)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Supervisor de Seguridad Subterránea (CAMP2 Noche)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Especialista en Ventilación y Gases (CAMP2)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "SSOMA y Medio Amb."
+cargo = "Asistente Ambiental (CAMP2)"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+# Logística y Compras (10 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Logística y Compras"
+cargo = "Jefe de Logística"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Logística y Compras"
+cargo = "Comprador / Analista de Adquisiciones"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Logística y Compras"
+cargo = "Encargado de Almacén General"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Logística y Compras"
+cargo = "Despachador de Almacén y Repuestos"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
+
+# Mantenimiento y Talleres (26 pax)
+# CAMP1 (17 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Jefe de Mantenimiento"
+categoria = "staff"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Mecánico Jumbos / Scooptrams (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Mecánico Jumbos / Scooptrams (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Mecánico Volquetes / Línea Amarilla (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 3
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Mecánico Volquetes / Línea Amarilla (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Electricista Mina MT/BT (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Electricista Mina MT/BT (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Electricista Campamento e Instalaciones"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Lubricador de Equipos (CAMP1)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Chofer Cisterna Diésel (CAMP1)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Técnico de Tuberías Aire / Agua (CAMP1)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+# CAMP2 (9 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Mecánico de Equipos (CAMP2 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Mecánico de Equipos (CAMP2 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Electricista de Mina (CAMP2 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Electricista de Mina (CAMP2 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Lubricador de Equipos (CAMP2)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Chofer Cisterna Diésel (CAMP2)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Mantenimiento"
+cargo = "Técnico de Tuberías Aire / Agua (CAMP2)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+# Polvorín y Vigilancia (8 pax)
+# CAMP1 (4 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Supervisor de Polvorín SUCAMEC (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Supervisor de Polvorín SUCAMEC (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Agente de Vigilancia Garita Portal A (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Agente de Vigilancia Garita Portal A (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+# CAMP2 (4 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Despachador de Explosivos SUCAMEC (CAMP2 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Despachador de Explosivos SUCAMEC (CAMP2 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Agente de Vigilancia Garita Portal B (Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Polvorín y Vigilancia"
+cargo = "Agente de Vigilancia Garita Portal B (Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+# Transporte Personal y Movilidad (25 pax)
+# CAMP1 (18 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Ómnibus Interprovincial 14x7"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 4
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Minibús Campamento-Portal (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Minibús Campamento-Portal (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Combi Auxiliar (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Combi Auxiliar (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Conductor Camioneta 4x4 Supervisión (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Conductor Camioneta 4x4 Supervisión (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 2
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Ambulancia Tipo II 24h (CAMP1 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Ambulancia Tipo II 24h (CAMP1 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Cisterna Supresión Polvo (CAMP1)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP1"
+turno = "Noche"
+cantidad = 1
+
+# CAMP2 (7 pax)
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Minibús Campamento-Portal (CAMP2 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Minibús Campamento-Portal (CAMP2 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Conductor Camioneta 4x4 Supervisión (CAMP2 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Conductor Camioneta 4x4 Supervisión (CAMP2 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Ambulancia Tipo II 24h (CAMP2 Día)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Ambulancia Tipo II 24h (CAMP2 Noche)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Noche"
+cantidad = 1
+
+[[personal]]
+macro_area = "Personal de Servicio"
+sub_area = "Transporte Personal"
+cargo = "Chofer Cisterna Supresión Polvo (CAMP2)"
+categoria = "obrero"
+tipo_labor = "indirecta"
+campamento = "CAMP2"
+turno = "Dia"
+cantidad = 1
 
 # =============================================================================
 #  05 · CAMPAMENTO
