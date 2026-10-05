@@ -129,6 +129,11 @@ def _celda(celda, valor, es_total: bool = False) -> None:
         celda.number_format = "#,##0"
     elif isinstance(valor, date):
         celda.number_format = "dd/mm/yyyy"
+    elif isinstance(valor, str) and (
+        valor.startswith("http://") or valor.startswith("https://")
+    ):
+        celda.hyperlink = valor
+        celda.font = Font(name="Calibri", size=11, color="0563C1", underline="single")
 
 
 def _ajustar_anchos(ws: Worksheet) -> None:

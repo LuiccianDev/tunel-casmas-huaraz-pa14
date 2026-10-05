@@ -25,7 +25,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 | 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [ ] espera datos |
 | 04 | Personal | `m04_personal` | `04_Personal.xlsx` | [x] oficial (346 pax, MOD/MOI, memoria) |
 | 05 | Campamento y edificaciones | `m05_campamento` | `05_Campamento.xlsx` | [x] base |
-| 06 | Maquinaria (frente, botadero, campamento) | `m06_maquinaria` | `06_Maquinaria.xlsx` | [x] base |
+| 06 | Maquinaria (frente, botadero, campamento) | `m06_maquinaria` | `06_Maquinaria.xlsx` | [x] oficial (fichas técnicas, enlaces, individual + consolidado) |
 | 07 | Polvorín | `m07_polvorin` | `07_Polvorin.xlsx` | [x] base |
 | 08 | PETAP, PETAR, pozo y consumo de agua | `m08_agua` | `08_Agua.xlsx` | [x] base |
 | 09 | Ventilación y consumo eléctrico | `m09_electricidad` | `09_Electricidad.xlsx` | [x] base |

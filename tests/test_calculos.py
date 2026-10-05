@@ -84,6 +84,18 @@ def test_flujo_completo(tmp_path):
         "Perforacion y avance",
         "Volumenes",
     ]
+    hojas_maq = load_workbook(tmp_path / "excel" / "06_Maquinaria.xlsx").sheetnames
+    assert hojas_maq[0:5] == [
+        "Frente",
+        "Accesos",
+        "Banquetas",
+        "Botadero",
+        "Campamento",
+    ]
+    assert "Resumen_Flota" in hojas_maq
+    assert "Sandvik DT820" in hojas_maq
+    assert "Volvo FMX 6x4" in hojas_maq
+    assert "Caterpillar D8" in hojas_maq
     memoria = (tmp_path / "memoria" / "03_Seccion.md").read_text(encoding="utf-8")
     assert "Verificación normativa" in memoria
     lsp = (tmp_path / "lisp" / "PA14_dibujos.lsp").read_text(encoding="ascii")

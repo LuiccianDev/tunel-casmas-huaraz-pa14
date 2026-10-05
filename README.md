@@ -13,7 +13,7 @@ instalaciones, exportados a **Excel** (un libro por entregable) y a
 | 03 | `03_Seccion.xlsx` | Geometria · Perforacion y avance · Volumenes | ✅ |
 | 04 | `04_Personal.xlsx` | Relacion de personal · Resumen | ✅ |
 | 05 | `05_Campamento.xlsx` | Edificaciones · Resumen | ✅ |
-| 06 | `06_Maquinaria.xlsx` | Frente · Botadero · Campamento | ✅ |
+| 06 | `06_Maquinaria.xlsx` | Frente · Botadero · Campamento · 26 Fichas técnicas individuales · Resumen_Flota | ✅ |
 | 07 | `07_Polvorin.xlsx` | Consumo · Dimensiones | ✅ |
 | 08 | `08_Agua.xlsx` | Consumo · PETAP · PETAR · Pozo | ✅ |
 | 09 | `09_Electricidad.xlsx` | Ventilacion · Cargas · Resumen | ✅ |

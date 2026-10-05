@@ -2287,27 +2287,40 @@ velocidad_perforacion_m_min = 1.5 # (S)
 ventana_perforacion_h = 3.0       # (S) tiempo máximo para perforar un disparo
 potencia_hp = 100
 
-[maquinaria.scoop]
-capacidad_m3 = 3.1   # (S) 4.1 yd³
+[maquinaria.cargador_frente]
+capacidad_m3 = 4.0   # Cat 966H
 factor_llenado = 0.85
 tiempo_ciclo_min = 4.0
-potencia_hp = 215
+potencia_hp = 260
 
-[maquinaria.dumper]
-capacidad_m3 = 10.0
+[maquinaria.volquete_frente]
+capacidad_m3 = 16.0  # Volvo FMX 6x4
 factor_llenado = 0.90
 velocidad_cargado_kmh = 10.0
 velocidad_vacio_kmh = 15.0
 tiempo_fijo_min = 8.0           # carga + descarga + maniobras
 distancia_portal_botadero_m = 500.0 # (S)
-potencia_hp = 270
+potencia_hp = 460
 
 [maquinaria.botadero]
 altura_m = 10.0                 # (S) altura de apilamiento
 factor_taludes = 1.30           # (S) área adicional por taludes y bermas
 tractor_productividad_m3_h = 150.0 # (S)
 horas_operacion_dia = 16.0
-potencia_hp_tractor = 200
+potencia_hp_tractor = 354       # Cat D8T
+
+[maquinaria.banquetas]
+volumen_movimiento_m3_dia = 500.0 # (S)
+rendimiento_perforadora_m_h = 25.0 # (S) PowerROC T25
+rendimiento_excavadora_m3_h = 120.0 # (S) Cat 336
+rendimiento_volquete_m3_h = 80.0   # (S) Volvo FMX 8x4
+
+[maquinaria.accesos]
+longitud_km = 2.5 # (S)
+rendimiento_tractor_d8_m3_h = 150.0 # (S) Empuje masivo
+rendimiento_tractor_d6_m_h = 50.0   # (S) Perfilado fino
+rendimiento_motoniveladora_km_dia = 1.5 # (S)
+
 
 # Equipos asignados (no calculados). en_tunel = true → cuenta para ventilación.
 [[maquinaria.equipos]]
