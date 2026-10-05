@@ -10,6 +10,7 @@ from .lisp import generar_lisp
 from .memoria import escribir_memoria
 from .modulos import (
     m01_ubicacion,
+    m02_geologia,
     m03_seccion,
     m04_personal,
     m05_campamento,
@@ -18,13 +19,18 @@ from .modulos import (
     m08_agua,
     m09_electricidad,
     m10_cronograma,
+    m11_portales,
+    m12_voladura,
 )
 
 # Orden = dependencias (cada módulo usa resultados de los anteriores).
 # m02_geologia se agregará aquí cuando estén los datos.
 MODULOS = [
     m01_ubicacion,
+    m02_geologia,
+    m11_portales,
     m03_seccion,
+    m12_voladura,
     m04_personal,
     m05_campamento,
     m06_maquinaria,

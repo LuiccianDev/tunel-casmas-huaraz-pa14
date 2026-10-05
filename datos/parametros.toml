@@ -2761,3 +2761,149 @@ id = "J"
 nombre = "Desmovilización y cierre"
 duracion_dias = 15
 predecesoras = ["I"]
+
+
+# =============================================================================
+#  11 - PORTALES / BANQUETAS
+# =============================================================================
+[portales]
+factor_esponjamiento = 1.3 # (S)
+
+[[portales.banquetas]]
+id = "Banqueta 01 - Tramo I"
+largo_banco_m = 6.9806
+altura_banco_m = 2.5
+angulo_perfil_deg = 22.0
+lado_mayor_m = 7.2266
+angulo_talud_deg = 65.0
+lado_menor_m = 5.0
+
+[[portales.banquetas]]
+id = "Banqueta 01 - Tramo II"
+largo_banco_m = 6.0037
+altura_banco_m = 5.0
+angulo_perfil_deg = 22.0
+lado_mayor_m = 6.2115
+angulo_talud_deg = 70.0
+lado_menor_m = 2.5
+
+[[portales.banquetas]]
+id = "Banqueta 02 - Tramo I"
+largo_banco_m = 18.7927
+altura_banco_m = 5.0
+angulo_perfil_deg = 27.0
+lado_mayor_m = 13.9212
+angulo_talud_deg = 70.0
+lado_menor_m = 2.749
+
+[[portales.banquetas]]
+id = "Banqueta 02 - Tramo II"
+largo_banco_m = 31.7661
+altura_banco_m = 5.0
+angulo_perfil_deg = 27.0
+lado_mayor_m = 13.9109
+angulo_talud_deg = 70.0
+lado_menor_m = 5.0
+
+[[portales.banquetas]]
+id = "Banqueta 02 - Portal Tramo III"
+largo_banco_m = 44.0
+altura_banco_m = 5.0
+angulo_perfil_deg = 27.0
+lado_mayor_m = 13.2162
+angulo_talud_deg = 70.0
+lado_menor_m = 5.0
+
+# =============================================================================
+#  12 - VOLADURA KONYA
+# =============================================================================
+[voladura]
+# Parametros segun formulario C. Konya
+densidad_explosivo_g_cm3 = 1.2
+densidad_roca_g_cm3 = 2.5     # Reemplazado luego por geologia si se integra
+diametro_explosivo_mm = 45.0
+altura_banco_m = 3.0          # H
+angulo_taladro_deg = 0.0      # vertical por defecto
+constante_retardo_ms_m = 4.5  # Th (roca media-dura)
+factor_tiempo_filas_ms_m = 11.5 # TR (promedio)
+
+# =============================================================================
+#  02 - GEOLOGIA Y Q-SLOPE (S) - SUPUESTOS TEMPORALES (5.6 km)
+# =============================================================================
+# Formula: Q_slope = (RQD / Jn) * (Jr / Ja) * (Jw / SRF)
+# Barrenard et al. (2015) para evaluacion de estabilidad en taludes y portales
+[[geologia.tramos]]
+progresiva_inicio = 0.0
+progresiva_fin = 50.0
+tipo_roca = "Roca muy fracturada o bastante alterada (D)"
+densidad_t_m3 = 2.4
+esponjamiento = 1.30
+rmr = 25
+rqd = 20.0
+jn = 12.0
+jr = 1.0
+ja = 4.0
+jw = 1.0
+srf = 5.0
+descripcion = "Portal de entrada, muy meteorizado"
+
+[[geologia.tramos]]
+progresiva_inicio = 50.0
+progresiva_fin = 2000.0
+tipo_roca = "Roca bastante fracturada o algo alterada (C)"
+densidad_t_m3 = 2.5
+esponjamiento = 1.30
+rmr = 45
+rqd = 55.0
+jn = 9.0
+jr = 1.5
+ja = 3.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca de calidad media"
+
+[[geologia.tramos]]
+progresiva_inicio = 2000.0
+progresiva_fin = 4000.0
+tipo_roca = "Roca sana, compacta pero fracturada (B)"
+densidad_t_m3 = 2.6
+esponjamiento = 1.35
+rmr = 65
+rqd = 85.0
+jn = 4.0
+jr = 2.0
+ja = 1.0
+jw = 1.0
+srf = 1.0
+descripcion = "Roca de buena calidad"
+
+[[geologia.tramos]]
+progresiva_inicio = 4000.0
+progresiva_fin = 5550.0
+tipo_roca = "Roca bastante fracturada o algo alterada (C)"
+densidad_t_m3 = 2.5
+esponjamiento = 1.30
+rmr = 40
+rqd = 50.0
+jn = 9.0
+jr = 1.5
+ja = 3.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca de calidad media a mala"
+
+[[geologia.tramos]]
+progresiva_inicio = 5550.0
+progresiva_fin = 5600.0
+tipo_roca = "Roca muy fracturada o bastante alterada (D)"
+densidad_t_m3 = 2.4
+esponjamiento = 1.30
+rmr = 25
+rqd = 20.0
+jn = 12.0
+jr = 1.0
+ja = 4.0
+jw = 1.0
+srf = 5.0
+descripcion = "Portal de salida, muy meteorizado"
+

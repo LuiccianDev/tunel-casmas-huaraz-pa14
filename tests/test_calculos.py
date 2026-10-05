@@ -60,6 +60,7 @@ def test_flujo_completo(tmp_path):
     excels = sorted(a.name for a in archivos if a.suffix == ".xlsx")
     assert excels == [
         "01_Ubicacion.xlsx",
+        "02_Geologia.xlsx",
         "03_Seccion.xlsx",
         "04_Personal.xlsx",
         "05_Campamento.xlsx",
@@ -68,6 +69,8 @@ def test_flujo_completo(tmp_path):
         "08_Agua.xlsx",
         "09_Electricidad.xlsx",
         "10_Cronograma.xlsx",
+        "11_Portales.xlsx",
+        "12_Voladura.xlsx",
     ]
     for a in archivos:
         assert a.exists() and a.stat().st_size > 0
