@@ -145,26 +145,32 @@ def _tabla_macro_areas(r: dict, para_excel: bool = False) -> Tabla:
         ("3. Personal de Servicio y Soporte", "Personal de Servicio", "{P_Serv}"),
     ]
     for etiqueta, clave, sim in macros:
-        c1 = sum(
-            x["cantidad"]
-            for x in r["filas"]
-            if x["macro_area"] == clave and x["campamento"] == "CAMP1"
-        )
-        c2 = sum(
-            x["cantidad"]
-            for x in r["filas"]
-            if x["macro_area"] == clave and x["campamento"] == "CAMP2"
-        )
-        dia = sum(
-            x["cantidad"]
-            for x in r["filas"]
-            if x["macro_area"] == clave and x["turno"] == "Dia"
-        )
-        noche = sum(
-            x["cantidad"]
-            for x in r["filas"]
-            if x["macro_area"] == clave and x["turno"] == "Noche"
-        )
+        if para_excel:
+            c1 = f'=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "{clave}", Relacion_Completa!$F:$F, "CAMP1")'
+            c2 = f'=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "{clave}", Relacion_Completa!$F:$F, "CAMP2")'
+            dia = f'=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "{clave}", Relacion_Completa!$G:$G, "Dia")'
+            noche = f'=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "{clave}", Relacion_Completa!$G:$G, "Noche")'
+        else:
+            c1 = sum(
+                x["cantidad"]
+                for x in r["filas"]
+                if x["macro_area"] == clave and x["campamento"] == "CAMP1"
+            )
+            c2 = sum(
+                x["cantidad"]
+                for x in r["filas"]
+                if x["macro_area"] == clave and x["campamento"] == "CAMP2"
+            )
+            dia = sum(
+                x["cantidad"]
+                for x in r["filas"]
+                if x["macro_area"] == clave and x["turno"] == "Dia"
+            )
+            noche = sum(
+                x["cantidad"]
+                for x in r["filas"]
+                if x["macro_area"] == clave and x["turno"] == "Noche"
+            )
         tot = f"={sim}" if para_excel else r["por_macro_area"][clave]
         pct = (
             f"={sim}/{{Pob}}"
@@ -200,17 +206,28 @@ def _tabla_macro_areas(r: dict, para_excel: bool = False) -> Tabla:
 
 
 def _tabla_cruce_campamentos(r: dict, para_excel: bool = False) -> Tabla:
+    if para_excel:
+        c1_dia = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$F:$F, "CAMP1", Relacion_Completa!$G:$G, "Dia")'
+        c1_noc = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$F:$F, "CAMP1", Relacion_Completa!$G:$G, "Noche")'
+        c2_dia = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$F:$F, "CAMP2", Relacion_Completa!$G:$G, "Dia")'
+        c2_noc = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$F:$F, "CAMP2", Relacion_Completa!$G:$G, "Noche")'
+    else:
+        c1_dia = r["camp1_dia"]
+        c1_noc = r["camp1_noche"]
+        c2_dia = r["camp2_dia"]
+        c2_noc = r["camp2_noche"]
+
     filas = [
         [
             "Campamento 1 — Principal (Portal A)",
-            r["camp1_dia"],
-            r["camp1_noche"],
+            c1_dia,
+            c1_noc,
             "={Pob_C1}" if para_excel else r["camp1_total"],
         ],
         [
             "Campamento 2 — Satélite (Portal B)",
-            r["camp2_dia"],
-            r["camp2_noche"],
+            c2_dia,
+            c2_noc,
             "={Pob_C2}" if para_excel else r["camp2_total"],
         ],
         [
@@ -233,26 +250,32 @@ def _tabla_cruce_campamentos(r: dict, para_excel: bool = False) -> Tabla:
 
 
 def _tabla_mano_obra(r: dict, para_excel: bool = False) -> Tabla:
-    staff_dir = sum(
-        x["cantidad"]
-        for x in r["filas"]
-        if x["tipo_labor"] == "Directa" and x["categoria"] == "staff"
-    )
-    obr_dir = sum(
-        x["cantidad"]
-        for x in r["filas"]
-        if x["tipo_labor"] == "Directa" and x["categoria"] == "obrero"
-    )
-    staff_ind = sum(
-        x["cantidad"]
-        for x in r["filas"]
-        if x["tipo_labor"] == "Indirecta" and x["categoria"] == "staff"
-    )
-    obr_ind = sum(
-        x["cantidad"]
-        for x in r["filas"]
-        if x["tipo_labor"] == "Indirecta" and x["categoria"] == "obrero"
-    )
+    if para_excel:
+        staff_dir = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$E:$E, "Directa", Relacion_Completa!$D:$D, "staff")'
+        obr_dir = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$E:$E, "Directa", Relacion_Completa!$D:$D, "obrero")'
+        staff_ind = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$E:$E, "Indirecta", Relacion_Completa!$D:$D, "staff")'
+        obr_ind = '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$E:$E, "Indirecta", Relacion_Completa!$D:$D, "obrero")'
+    else:
+        staff_dir = sum(
+            x["cantidad"]
+            for x in r["filas"]
+            if x["tipo_labor"] == "Directa" and x["categoria"] == "staff"
+        )
+        obr_dir = sum(
+            x["cantidad"]
+            for x in r["filas"]
+            if x["tipo_labor"] == "Directa" and x["categoria"] == "obrero"
+        )
+        staff_ind = sum(
+            x["cantidad"]
+            for x in r["filas"]
+            if x["tipo_labor"] == "Indirecta" and x["categoria"] == "staff"
+        )
+        obr_ind = sum(
+            x["cantidad"]
+            for x in r["filas"]
+            if x["tipo_labor"] == "Indirecta" and x["categoria"] == "obrero"
+        )
 
     filas = [
         [
@@ -361,70 +384,88 @@ def libro(r: dict, p: dict) -> Libro:
 
     resumen = tabla_parametros(
         [
-            ("Población en campamento", "Pob", r["total"], "personas", "Σ Total"),
+            (
+                "Población en campamento",
+                "Pob",
+                "={P_Camp}+{P_Fren}+{P_Serv}",
+                "personas",
+                "P_Camp + P_Fren + P_Serv",
+            ),
             (
                 "Personal de Campamento",
                 "P_Camp",
-                r["por_macro_area"]["Personal de Campamento"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "Personal de Campamento")',
                 "personas",
                 "Área Administrativa",
             ),
             (
                 "Personal de Frente",
                 "P_Fren",
-                r["por_macro_area"]["Personal de Frente"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "Personal de Frente")',
                 "personas",
                 "Área Operativa",
             ),
             (
                 "Personal de Servicio",
                 "P_Serv",
-                r["por_macro_area"]["Personal de Servicio"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "Personal de Servicio")',
                 "personas",
                 "Área de Soporte",
             ),
             (
                 "Campamento 1 (Portal A)",
                 "Pob_C1",
-                r["camp1_total"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$F:$F, "CAMP1")',
                 "personas",
                 "Portal Entrada",
             ),
             (
                 "Campamento 2 (Portal B)",
                 "Pob_C2",
-                r["camp2_total"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$F:$F, "CAMP2")',
                 "personas",
                 "Portal Salida",
             ),
-            ("Guardia Día (12h)", "G_Dia", r["dia_total"], "personas", "07:00–19:00 h"),
+            (
+                "Guardia Día (12h)",
+                "G_Dia",
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$G:$G, "Dia")',
+                "personas",
+                "07:00–19:00 h",
+            ),
             (
                 "Guardia Noche (12h)",
                 "G_Noc",
-                r["noche_total"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$G:$G, "Noche")',
                 "personas",
                 "19:00–07:00 h",
             ),
             (
                 "Mano de Obra Directa (MOD)",
                 "MOD",
-                r["directa"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$E:$E, "Directa")',
                 "personas",
                 "Frente y avances",
             ),
             (
                 "Mano de Obra Indirecta (MOI)",
                 "MOI",
-                r["indirecta"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$E:$E, "Indirecta")',
                 "personas",
                 "Soporte y campamento",
             ),
-            ("Staff", "Ps", r["staff"], "personas", "Σ categoría staff"),
+            (
+                "Staff",
+                "Ps",
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$D:$D, "staff")',
+                "personas",
+                "Σ categoría staff",
+            ),
             ("Obreros", "Po", "={Pob}-{Ps}", "personas", "Pob − Ps"),
             (
                 "Personal de frente por guardia (1 frente)",
                 "Pf",
-                r["frente_por_guardia"],
+                '=SUMIFS(Relacion_Completa!$H:$H, Relacion_Completa!$A:$A, "Personal de Frente", Relacion_Completa!$F:$F, "CAMP1", Relacion_Completa!$G:$G, "Dia")',
                 "personas",
                 "Para ventilación",
             ),

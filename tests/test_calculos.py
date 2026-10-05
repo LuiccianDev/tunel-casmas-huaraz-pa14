@@ -114,7 +114,17 @@ def test_personal_formulas_dinamicas(tmp_path):
     wb = load_workbook(tmp_path / "excel" / "04_Personal.xlsx", data_only=False)
     ws = wb["Resumen"]
 
-    # Fila 6: Personal de Campamento (F6 total, G6 pct)
+    # Fila 6: Personal de Campamento (B6 CAMP1, C6 CAMP2, D6 Dia, E6 Noc, F6 total, G6 pct)
+    assert str(ws["B6"].value).startswith("=SUMIFS"), (
+        "B6 desglose CAMP1 debe ser SUMIFS"
+    )
+    assert str(ws["C6"].value).startswith("=SUMIFS"), (
+        "C6 desglose CAMP2 debe ser SUMIFS"
+    )
+    assert str(ws["D6"].value).startswith("=SUMIFS"), "D6 desglose Día debe ser SUMIFS"
+    assert str(ws["E6"].value).startswith("=SUMIFS"), (
+        "E6 desglose Noche debe ser SUMIFS"
+    )
     assert str(ws["F6"].value).startswith("="), "F6 debe ser fórmula"
     assert str(ws["G6"].value).startswith("="), "G6 porcentaje debe ser fórmula"
     assert ws["G6"].number_format == "0.0%", "G6 debe tener formato de porcentaje"
@@ -124,11 +134,21 @@ def test_personal_formulas_dinamicas(tmp_path):
     assert str(ws["F9"].value).startswith("="), "F9 debe ser fórmula"
     assert str(ws["G9"].value).startswith("="), "G9 debe ser fórmula"
 
-    # Fila 13: Mano de Obra Directa (D13 total, E13 pct)
+    # Fila 13: Mano de Obra Directa (B13 Staff, C13 Obreros, D13 total, E13 pct)
+    assert str(ws["B13"].value).startswith("=SUMIFS"), "B13 Staff debe ser SUMIFS"
+    assert str(ws["C13"].value).startswith("=SUMIFS"), "C13 Obreros debe ser SUMIFS"
     assert str(ws["D13"].value).startswith("="), "D13 debe ser fórmula"
     assert str(ws["E13"].value).startswith("="), "E13 porcentaje debe ser fórmula"
     assert ws["E13"].number_format == "0.0%", "E13 debe tener formato de porcentaje"
 
-    # Fila 36 y 40: Parámetros calculados
+    # Fila 19: Matriz Campamento x Turno (B19 C1 Día, C19 C1 Noche)
+    assert str(ws["B19"].value).startswith("=SUMIFS"), "B19 C1 Día debe ser SUMIFS"
+    assert str(ws["C19"].value).startswith("=SUMIFS"), "C19 C1 Noche debe ser SUMIFS"
+
+    # Parámetros consolidados: Población (C25), Campamento (C26), Obreros (C36), Planilla (C40)
+    assert str(ws["C25"].value).startswith("="), (
+        "C25 Pob debe ser fórmula de suma de macro-áreas"
+    )
+    assert str(ws["C26"].value).startswith("=SUMIFS"), "C26 P_Camp debe ser SUMIFS"
     assert str(ws["C36"].value).startswith("="), "C36 Obreros debe ser fórmula"
     assert str(ws["C40"].value).startswith("="), "C40 Planilla debe ser fórmula"
