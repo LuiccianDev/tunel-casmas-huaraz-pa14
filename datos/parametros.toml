@@ -2321,6 +2321,42 @@ rendimiento_tractor_d8_m3_h = 150.0 # (S) Empuje masivo
 rendimiento_tractor_d6_m_h = 50.0   # (S) Perfilado fino
 rendimiento_motoniveladora_km_dia = 1.5 # (S)
 
+# Parámetros universales para cálculo de rendimiento teórico y real (Caterpillar & Epiroc)
+[maquinaria.rendimientos]
+factor_altitud = 0.930            # Falt a 3850 msnm (motores turbo y compensados)
+eficiencia_operativa = 0.800       # E (50 min/hora de trabajo efectivo)
+coeficiente_carga_k = 0.800        # K para roca fracturada o dinamitada
+factor_abundamiento = 1.500        # Fv de roca natural a suelta
+factor_llenado_balde = 0.750       # F_ll factor de llenado efectivo del cucharón/tolva
+porcentaje_perdidas_reales = 0.873 # P factor de pérdidas por maniobras/condiciones de obra
+
+# Parámetros específicos para motoniveladora (Cat 140G)
+[maquinaria.rendimientos.motoniveladora]
+velocidad_trabajo_kmh = 6.5        # V velocidad media en perfilado/nivelación
+ancho_hoja_m = 3.66                # H longitud total de la vertedera (12 pies)
+ancho_efectivo_m = 2.60            # Ancho barrido con vertedera inclinada
+espesor_capa_m = 0.15              # A espesor medio de capa a conformar
+numero_pasadas = 4                 # P pasadas requeridas para rasante final
+eficiencia_operativa = 0.850       # E eficiencia de motoniveladora
+
+# Parámetros específicos para rodillo compactador (Cat CS11 / CS533E)
+[maquinaria.rendimientos.rodillo]
+velocidad_trabajo_kmh = 5.0        # V velocidad de compactación con vibración
+ancho_tambor_m = 2.13              # A ancho del tambor (84'')
+traslape_m = 0.20                  # Traslape entre franjas adyacentes
+ancho_efectivo_m = 1.93            # Ancho neto útil de pasada
+espesor_capa_compactada_m = 0.20   # C espesor de capa de afirmado/base compactada
+numero_pasadas = 6                 # P pasadas recomendadas según suelo
+perdidas_reales = 0.850            # %P pérdidas por giros, aceleración y sobrepaso
+
+# Parámetros específicos para perforadoras (Jumbos y Rockdrill)
+[maquinaria.rendimientos.perforacion]
+velocidad_penetracion_m_min = 1.50 # Vp en roca andesítica/granodiorítica media
+disponibilidad_mecanica = 0.850    # Dmec disponibilidad del equipo hidráulico
+factor_utilizacion = 0.750         # U utilización en ciclo de disparo
+tiempo_posicionamiento_min = 0.50  # t de emboquille y cambio de barreno
+
+
 
 # Equipos asignados (no calculados). en_tunel = true → cuenta para ventilación.
 [[maquinaria.equipos]]

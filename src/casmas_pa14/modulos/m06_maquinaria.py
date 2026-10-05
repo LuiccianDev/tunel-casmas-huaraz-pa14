@@ -4,6 +4,7 @@ import math
 
 from ..fichas_maquinaria import FICHAS_TECNICAS
 from ..modelo import Hoja, Libro, Memoria, Tabla, tabla_parametros
+from ..rendimientos_tablas import generar_tablas_rendimiento_equipo
 
 CLAVE = "maquinaria"
 
@@ -453,15 +454,17 @@ def libro(r: dict, p: dict) -> Libro:
         ),
     ]
 
-    # 2. Hojas individuales por cada maquinaria
+    # 2. Hojas individuales por cada maquinaria (Ficha técnica + Cálculos de rendimiento + Tablas de referencia)
     fichas = r.get("fichas", FICHAS_TECNICAS)
     for ficha in fichas:
         nombre_hoja = ficha["hoja"][:31]
+        tablas_hoja = [_tabla_ficha_individual(ficha)]
+        tablas_hoja.extend(generar_tablas_rendimiento_equipo(ficha, p))
         hojas.append(
             Hoja(
                 nombre_hoja,
-                f"Ficha Técnica: {ficha['marca_modelo']} ({ficha['equipo']})",
-                [_tabla_ficha_individual(ficha)],
+                f"Ficha Técnica y Rendimiento: {ficha['marca_modelo']} ({ficha['equipo']})",
+                tablas_hoja,
             )
         )
 
