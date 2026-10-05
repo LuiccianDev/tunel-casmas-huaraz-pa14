@@ -317,36 +317,213 @@ def dibujo_seccion(sec: dict) -> Dibujo:
     return Dibujo("PA14_SECCION", "Sección típica del túnel", cuerpo, b + 4)
 
 
-def dibujo_campamento(camp: dict) -> Dibujo:
-    cuerpo, x, y, alto_fila, ancho_usado = [], 0.0, 0.0, 0.0, 0.0
-    for e in camp["edificaciones"]:
+def _dibujar_recinto(
+    edifs: list[dict],
+    x_ini: float,
+    y_ini: float,
+    max_ancho: float,
+    titulo: str,
+    subtitulo: str,
+    tipo_cerco: str = "PA14-CERCO",
+    con_flecha_acceso: bool = False,
+    es_polvorin: bool = False,
+) -> tuple[list[str], float, float]:
+    cuerpo, x, y, alto_fila, ancho_usado = [], x_ini, y_ini, 0.0, 0.0
+    for e in edifs:
         largo, ancho = e["largo_m"], e["ancho_m"]
-        if x > 0 and x + largo > ANCHO_MAX_FILA_CAMP:
-            x, y, alto_fila = 0.0, y + alto_fila + CALLE_CAMP, 0.0
-        alt = min(0.8, ancho / 5)
+        if (x - x_ini) > 0 and (x - x_ini) + largo > max_ancho:
+            x, y, alto_fila = x_ini, y + alto_fila + CALLE_CAMP, 0.0
+        alt = min(0.65, max(0.25, ancho / 6))
         cuerpo += [
             _rect(x, y, largo, ancho, "PA14-EDIFICACION"),
-            _texto(x + 0.3, y + ancho / 2 + 0.1, alt, e["nombre"]),
+            _texto(x + 0.3, y + ancho - alt - 0.2, alt, f"{e['id']}: {e['nombre']}"),
             _texto(
                 x + 0.3,
-                y + ancho / 2 - alt - 0.1,
-                alt * 0.8,
-                f"{largo:.1f} x {ancho:.1f} m",
+                y + ancho - 2 * alt - 0.3,
+                alt * 0.75,
+                f"[{e.get('grupo', 'Area')}]",
+            ),
+            _texto(
+                x + 0.3,
+                y + 0.3,
+                alt * 0.75,
+                f"{largo:.1f} x {ancho:.1f} m  ({e['area_m2']:.0f} m2)",
             ),
         ]
+        if es_polvorin and "Polvorin" in e["nombre"]:
+            # Dibujar parapeto perimetral de tierra a 4.0 m
+            cuerpo.append(
+                _rect(x - 4.0, y - 4.0, largo + 8.0, ancho + 8.0, "PA14-RUMAS")
+            )
+            cuerpo.append(
+                _texto(
+                    x - 4.0,
+                    y - 5.5,
+                    0.4,
+                    "[Parapeto de tierra e=2.5m s/SUCAMEC]",
+                )
+            )
         x += largo + CALLE_CAMP
         alto_fila = max(alto_fila, ancho)
-        ancho_usado = max(ancho_usado, x - CALLE_CAMP)
-    alto_total = y + alto_fila
+        ancho_usado = max(ancho_usado, (x - x_ini) - CALLE_CAMP)
+
+    alto_total = (y - y_ini) + alto_fila
     m = CALLE_CAMP
+    w_rec = max(ancho_usado, 25.0) + 2 * m
+    h_rec = alto_total + 2 * m
+
+    # Cerco perimetral
+    cuerpo.append(_rect(x_ini - m, y_ini - m, w_rec, h_rec, tipo_cerco))
+    cuerpo.append(_texto(x_ini - m, y_ini + alto_total + m + 1.8, 1.3, titulo))
+    cuerpo.append(_texto(x_ini - m, y_ini + alto_total + m + 0.5, 0.75, subtitulo))
+
+    # Indicador de acceso principal
+    if con_flecha_acceso:
+        x_acc = x_ini + 10.0
+        y_acc = y_ini - m
+        cuerpo += [
+            _linea(x_acc, y_acc - 8.0, x_acc, y_acc, "PA14-EJE"),
+            _linea(x_acc - 1.5, y_acc - 2.5, x_acc, y_acc, "PA14-EJE"),
+            _linea(x_acc + 1.5, y_acc - 2.5, x_acc, y_acc, "PA14-EJE"),
+            _texto(
+                x_acc + 2.0,
+                y_acc - 5.0,
+                0.9,
+                "===> INGRESO PRINCIPAL Y CONTROL VEHICULAR",
+            ),
+        ]
+
+    return cuerpo, w_rec, h_rec
+
+
+def _dibujar_campamento_organizado(
+    edifs: list[dict], x_base: float, y_base: float, nombre_camp: str, desc_camp: str
+) -> tuple[list[str], float, float]:
+    """Distribuye un campamento en 3 sectores funcionales con zonificación lógica."""
+    cuerpo = []
+
+    # 1. Separación por sectores
+    ids_polv = {"EDIF-23", "EDIF-28", "EDIF-37", "EDIF-38"}
+    ids_san = {
+        "EDIF-14",
+        "EDIF-15",
+        "EDIF-16",
+        "EDIF-17",
+        "EDIF-18",
+        "EDIF-19",
+        "EDIF-32",
+    }
+
+    edifs_polv = [e for e in edifs if e["id"] in ids_polv]
+    edifs_san = [e for e in edifs if e["id"] in ids_san]
+    edifs_princ = [
+        e for e in edifs if e["id"] not in ids_polv and e["id"] not in ids_san
+    ]
+
+    # Ordenamiento por zonificación funcional dentro del sector principal:
+    # 1. Acceso y Garitas -> 2. Oficinas y Salud -> 3. Comedor/SUM/Dormitorios -> 4. Talleres/Patio Maquinaria
+    orden_prioridad = {
+        "Vigilancia y Transporte": 1,
+        "Salud y Bienestar": 2,
+        "Administración y Documentos": 3,
+        "Comedor y Alimentación": 4,
+        "Residencia y Habitabilidad": 5,
+        "Operación y Portales": 6,
+        "Maquinaria y Mantenimiento": 7,
+        "Energía y Combustible": 8,
+        "Almacenes y Logística": 9,
+    }
+    edifs_princ_ord = sorted(
+        edifs_princ, key=lambda e: orden_prioridad.get(e.get("grupo", ""), 99)
+    )
+
+    # 2. Sector Principal (Vida, Administración y Talleres)
+    c_princ, w_princ, h_princ = _dibujar_recinto(
+        edifs_princ_ord,
+        x_base,
+        y_base,
+        max_ancho=85.0,
+        titulo=f"{nombre_camp} — PLATAFORMA OPERATIVA Y RESIDENCIAL",
+        subtitulo=f"{desc_camp} · Vida, Oficinas, Talleres y Estacionamientos",
+        tipo_cerco="PA14-CERCO",
+        con_flecha_acceso=True,
+    )
+    cuerpo += c_princ
+
+    # 3. Sector Saneamiento y Ambiental (Fuera del campamento con retiro sanitario)
+    x_san = x_base + w_princ + 12.0
+    c_san, w_san, h_san = _dibujar_recinto(
+        edifs_san,
+        x_san,
+        y_base,
+        max_ancho=50.0,
+        titulo="SECTOR SANEAMIENTO Y AMBIENTE",
+        subtitulo="Retiro Sanitario RNE OS.090 / D.Leg. 1278 (PTAP, PTAR, Lodos)",
+        tipo_cerco="PA14-CERCO",
+        con_flecha_acceso=False,
+    )
+    cuerpo += c_san
+
+    # 4. Sector Polvorín de Superficie (Aislado a Distancia de Seguridad SUCAMEC)
+    y_polv = y_base + max(h_princ, h_san) + 22.0
+    c_polv, w_polv, h_polv = _dibujar_recinto(
+        edifs_polv,
+        x_base,
+        y_polv,
+        max_ancho=60.0,
+        titulo="ZONA RESTRINGIDA — POLVORIN DE SUPERFICIE SUCAMEC",
+        subtitulo="Distancia de Seguridad D >= 300 m (Ley N° 30299 / D.S. 024-2016-EM)",
+        tipo_cerco="PA14-CERCO",
+        con_flecha_acceso=False,
+        es_polvorin=True,
+    )
+    cuerpo += c_polv
+
+    # Línea de separación y cota de distancia de seguridad del polvorín
     cuerpo += [
-        _rect(-m, -m, ancho_usado + 2 * m, alto_total + 2 * m, "PA14-CERCO"),
+        _linea(
+            x_base, y_base + h_princ + 2.0, x_base, y_polv - CALLE_CAMP, "PA14-COTA"
+        ),
         _texto(
-            -m, alto_total + m + 1.5, 2.0, "CAMPAMENTO - DISTRIBUCION DE EDIFICACIONES"
+            x_base + 1.0,
+            (y_base + h_princ + y_polv) / 2,
+            0.8,
+            "<--- RETIRO NORMATIVO DE SEGURIDAD SUCAMEC (D >= 300 m) --->",
         ),
     ]
+
+    ancho_total_camp = w_princ + 12.0 + w_san
+    alto_total_camp = y_polv + h_polv - y_base
+    return cuerpo, ancho_total_camp, alto_total_camp
+
+
+def dibujo_campamento(camp: dict) -> Dibujo:
+    edifs_c1 = [e for e in camp["edificaciones"] if e.get("campamento") == "CAMP1"]
+    edifs_c2 = [e for e in camp["edificaciones"] if e.get("campamento") == "CAMP2"]
+
+    cuerpo_1, ancho_1, _ = _dibujar_campamento_organizado(
+        edifs_c1,
+        0.0,
+        0.0,
+        "CAMPAMENTO 1 (PORTAL A - 248 PAX)",
+        "Base Principal Casmas",
+    )
+
+    x2_ini = ancho_1 + 25.0
+    cuerpo_2, ancho_2, _ = _dibujar_campamento_organizado(
+        edifs_c2,
+        x2_ini,
+        0.0,
+        "CAMPAMENTO 2 (PORTAL B - 98 PAX)",
+        "Satélite Autónomo Huaraz",
+    )
+
+    ancho_total = x2_ini + ancho_2
     return Dibujo(
-        "PA14_CAMPAMENTO", "Distribución del campamento", cuerpo, ancho_usado + 2 * m
+        "PA14_CAMPAMENTO",
+        "Distribución de Campamentos 1 y 2 (38 Edificaciones EDIF-01 a EDIF-38)",
+        cuerpo_1 + cuerpo_2,
+        ancho_total,
     )
 
 

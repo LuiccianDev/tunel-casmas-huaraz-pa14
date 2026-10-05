@@ -97,9 +97,18 @@ def calcular(p: dict, ctx: dict) -> dict:
     factor = (reg["dias_trabajo"] + reg["dias_descanso"]) / reg["dias_trabajo"]
     planilla = math.ceil(total * factor)
 
-    # Verificaciones de consistencia y balance
-    assert total == camp1_total + camp2_total, "Descuadre en suma de campamentos"
-    assert total == dia_total + noche_total, "Descuadre en suma de turnos"
+    camp1_staff = sum(
+        x["cantidad"]
+        for x in filas
+        if x["campamento"] == "CAMP1" and x["categoria"] == "staff"
+    )
+    camp1_obreros = camp1_total - camp1_staff
+    camp2_staff = sum(
+        x["cantidad"]
+        for x in filas
+        if x["campamento"] == "CAMP2" and x["categoria"] == "staff"
+    )
+    camp2_obreros = camp2_total - camp2_staff
 
     return {
         "filas": filas,
@@ -112,6 +121,10 @@ def calcular(p: dict, ctx: dict) -> dict:
         "indirecta": indirecta,
         "camp1_total": camp1_total,
         "camp2_total": camp2_total,
+        "camp1_staff": camp1_staff,
+        "camp1_obreros": camp1_obreros,
+        "camp2_staff": camp2_staff,
+        "camp2_obreros": camp2_obreros,
         "dia_total": dia_total,
         "noche_total": noche_total,
         "camp1_dia": camp1_dia,

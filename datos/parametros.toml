@@ -1877,95 +1877,402 @@ turno = "Dia"
 cantidad = 1
 
 # =============================================================================
-#  05 · CAMPAMENTO
-#  base: "staff" | "obrero" | "total" → módulos = ⌈personas / turnos / personas_por_modulo⌉
-#        "fijo"                        → área fija (area_m2)
+#  05 · CAMPAMENTO (38 EDIFICACIONES ESPECIALIZADAS - EDIF-01 A EDIF-38)
+#  Normativas: RNE (G.050, A.010, A.060, A.070, A.080, IS.010, EM.010),
+#              D.S. 024-2016-EM / D.S. 023-2017-EM (Seguridad Minera a 3,850 msnm),
+#              MTC EG-2013 (Sección 104 - Campamentos y Patios de Maquinaria),
+#              Ley N° 30299 (SUCAMEC - Polvorines Principales y Satélites)
 # =============================================================================
 [campamento]
-ancho_edificio_m = 6.0 # ancho típico de módulo; largo = área / ancho
-factor_terreno = 2.0   # (S) área de terreno = área construida × factor (vías, retiros)
+ancho_edificio_m = 6.0
+factor_terreno = 1.5 # Relación área total terreno / área edificada (vías, retiros, accesos)
 
 [[campamento.edificaciones]]
-nombre = "Dormitorios staff"
+id = "EDIF-01"
+nombre = "Pabellón de Dormitorios Staff e Ingeniería"
+grupo = "Residencia y Habitabilidad"
+campamento = "CAMP1"
 base = "staff"
 personas_por_modulo = 1
 area_modulo_m2 = 12.0
+ancho_m = 18.0
+norma = "RNE A.070 / D.S. 024-2016-EM (Módulos apareados térmicos a 3,850 msnm)"
 
 [[campamento.edificaciones]]
-nombre = "Dormitorios obreros"
+id = "EDIF-02"
+nombre = "Pabellón de Dormitorios Obreros A y B"
+grupo = "Residencia y Habitabilidad"
+campamento = "CAMP1"
 base = "obrero"
 personas_por_modulo = 4
 area_modulo_m2 = 24.0
+ancho_m = 22.0
+norma = "RNE A.070 / RNE A.130 (2 pabellones paralelos, evacuación máx. 45m)"
 
 [[campamento.edificaciones]]
-nombre = "Comedor"
+id = "EDIF-03"
+nombre = "Pabellón de Dormitorios Satélite (Frente 2)"
+grupo = "Residencia y Habitabilidad"
+campamento = "CAMP2"
+base = "total"
+personas_por_modulo = 4
+area_modulo_m2 = 24.0
+ancho_m = 16.0
+norma = "RNE A.070 / D.S. 024-2016-EM (Pabellón térmico con duchas integradas)"
+
+[[campamento.edificaciones]]
+id = "EDIF-04"
+nombre = "Comedor Principal y Cocina Central"
+grupo = "Comedor y Alimentación"
+campamento = "CAMP1"
 base = "total"
 personas_por_modulo = 1
-area_modulo_m2 = 1.5 # (S) m² por comensal
+area_modulo_m2 = 1.5
 turnos = 2
+ancho_m = 12.0
+norma = "RNE A.070 (1.50 m²/comensal pico) / NTS N° 142-MINSA"
 
 [[campamento.edificaciones]]
-nombre = "SS.HH. y duchas"
+id = "EDIF-05"
+nombre = "Comedor y Cocina Satélite"
+grupo = "Comedor y Alimentación"
+campamento = "CAMP2"
 base = "total"
-personas_por_modulo = 10 # (S) 1 batería (inodoro+ducha+lavatorio) cada 10 personas
-area_modulo_m2 = 6.0
+personas_por_modulo = 1
+area_modulo_m2 = 1.5
+turnos = 2
+ancho_m = 8.0
+norma = "RNE A.070 / NTS N° 142-MINSA"
 
 [[campamento.edificaciones]]
-nombre = "Cocina y despensa"
+id = "EDIF-06"
+nombre = "Edificio de Oficinas Administrativas y Gerencia"
+grupo = "Administración y Documentos"
+campamento = "CAMP1"
 base = "fijo"
-area_m2 = 60.0
+area_m2 = 600.0
+ancho_m = 15.0
+norma = "RNE A.080 (8.0 m²/puesto) / RM 375-2008-TR Ergonomía"
 
 [[campamento.edificaciones]]
-nombre = "Oficinas"
+id = "EDIF-07"
+nombre = "Oficinas Técnicas de Frente y Supervisión"
+grupo = "Administración y Documentos"
+campamento = "CAMP2"
 base = "fijo"
-area_m2 = 60.0
+area_m2 = 300.0
+ancho_m = 10.0
+norma = "RNE A.080 (8.0 m²/puesto de trabajo)"
 
 [[campamento.edificaciones]]
-nombre = "Tópico"
-base = "fijo"
-area_m2 = 24.0
-ancho_m = 4.0
-
-[[campamento.edificaciones]]
-nombre = "Almacén general"
+id = "EDIF-08"
+nombre = "Tópico Médico Central y Sala de Reposo"
+grupo = "Salud y Bienestar"
+campamento = "CAMP1"
 base = "fijo"
 area_m2 = 120.0
+ancho_m = 8.0
+norma = "D.S. 024-2016-EM Art. 157 (Tópico 24/7 y Ambulancia Tipo II)"
 
 [[campamento.edificaciones]]
-nombre = "Taller de mantenimiento"
+id = "EDIF-09"
+nombre = "Puesto de Primeros Auxilios Satélite"
+grupo = "Salud y Bienestar"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 56.0
+ancho_m = 7.0
+norma = "D.S. 024-2016-EM Art. 157 (Respuesta a emergencias 24h)"
+
+[[campamento.edificaciones]]
+id = "EDIF-10"
+nombre = "Nave de Taller Mecánico Principal"
+grupo = "Maquinaria y Mantenimiento"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 375.0
+ancho_m = 15.0
+norma = "RNE A.060 (H=7.0 m libres, tecle 15 Tn, extracción gases)"
+
+[[campamento.edificaciones]]
+id = "EDIF-11"
+nombre = "Almacén Central de Repuestos e Insumos"
+grupo = "Almacenes y Logística"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 150.0
+ancho_m = 10.0
+norma = "RNE A.060 / NFPA 30 (Almacenamiento seguro de lubricantes)"
+
+[[campamento.edificaciones]]
+id = "EDIF-12"
+nombre = "Lavandería Industrial y Ropería"
+grupo = "Residencia y Habitabilidad"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 80.0
+ancho_m = 8.0
+norma = "RNE G.050 (Higiene y lavado de ropa de trabajo térmica)"
+
+[[campamento.edificaciones]]
+id = "EDIF-13"
+nombre = "Módulo Recreativo, SUM y Gimnasio"
+grupo = "Salud y Bienestar"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 400.0
+ancho_m = 16.0
+norma = "D.S. 024-2016-EM (Bienestar social y salud ocupacional)"
+
+[[campamento.edificaciones]]
+id = "EDIF-14"
+nombre = "Caseta de Pozo Profundo y Bombeo"
+grupo = "Agua y Saneamiento"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 40.0
+ancho_m = 5.0
+norma = "RNE OS.010 / RNE IS.010 (Captación subterránea 5.0 L/s)"
+
+[[campamento.edificaciones]]
+id = "EDIF-15"
+nombre = "Planta PTAP y Reservorio Regulador (120 m³)"
+grupo = "Agua y Saneamiento"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 360.0
+ancho_m = 15.0
+norma = "RNE OS.020 / DS 031-2010-SA (Calidad de agua para consumo humano)"
+
+[[campamento.edificaciones]]
+id = "EDIF-16"
+nombre = "Planta PTAR MBBR y Tratamiento de Aguas Residuales"
+grupo = "Agua y Saneamiento"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 360.0
+ancho_m = 15.0
+norma = "RNE OS.090 / D.S. 004-2017-MINAM (LMP efluentes tratados)"
+
+[[campamento.edificaciones]]
+id = "EDIF-17"
+nombre = "Trampas de Grasa Industriales pre-PTAR"
+grupo = "Comedor y Alimentación"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 20.0
+ancho_m = 4.0
+norma = "RNE IS.010 (Pretratamiento físico de efluentes de cocina)"
+
+[[campamento.edificaciones]]
+id = "EDIF-18"
+nombre = "Centro de Acopio Temporal de Residuos Sólidos (CAT)"
+grupo = "Residuos y Ambiente"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 496.0
+ancho_m = 16.0
+norma = "D.Leg. 1278 (Ley de Gestión Integral de Residuos Sólidos)"
+
+[[campamento.edificaciones]]
+id = "EDIF-19"
+nombre = "Área de Compostaje y Manejo de Lodos"
+grupo = "Residuos y Ambiente"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 150.0
+ancho_m = 10.0
+norma = "D.Leg. 1278 / RNE OS.090 (Trincheras de estabilización)"
+
+[[campamento.edificaciones]]
+id = "EDIF-20"
+nombre = "Casa de Fuerza y Generadores Diésel (2500 kVA)"
+grupo = "Energía y Combustible"
+campamento = "CAMP1"
 base = "fijo"
 area_m2 = 200.0
 ancho_m = 10.0
+norma = "RNE EM.010 / CNE Suministro (Grupos insonorizados 24/7)"
 
 [[campamento.edificaciones]]
-nombre = "Laboratorio de concreto"
+id = "EDIF-21"
+nombre = "Estación de Combustible Diésel (2x10,000 gal)"
+grupo = "Energía y Combustible"
+campamento = "CAMP1"
 base = "fijo"
-area_m2 = 30.0
-ancho_m = 5.0
+area_m2 = 400.0
+ancho_m = 16.0
+norma = "D.S. 052-93-EM (Reglamento de Seguridad en Hidrocarburos)"
 
 [[campamento.edificaciones]]
-nombre = "Lavandería"
+id = "EDIF-22"
+nombre = "Casa de Cambio (Change-House) y Lampistería"
+grupo = "Operación y Portales"
+campamento = "CAMP1"
 base = "fijo"
-area_m2 = 24.0
-ancho_m = 4.0
+area_m2 = 468.0
+ancho_m = 13.0
+norma = "D.S. 024-2016-EM Art. 97 / NFPA 701 (100 lámparas mineras y duchas)"
 
 [[campamento.edificaciones]]
-nombre = "Caseta de grupo electrógeno"
+id = "EDIF-23"
+nombre = "Polvorín de Superficie Certificado SUCAMEC"
+grupo = "Seguridad y Explosivos"
+campamento = "CAMP1"
 base = "fijo"
-area_m2 = 30.0
-ancho_m = 5.0
+area_m2 = 150.0
+ancho_m = 10.0
+norma = "Ley N° 30299 (SUCAMEC - Polvorín de dinamita y accesorios)"
 
 [[campamento.edificaciones]]
-nombre = "Caseta de vigilancia"
+id = "EDIF-24"
+nombre = "Garitas de Vigilancia y Balanza de Pesaje 80 t"
+grupo = "Vigilancia y Transporte"
+campamento = "CAMP1"
 base = "fijo"
-area_m2 = 9.0
-ancho_m = 3.0
+area_m2 = 60.0
+ancho_m = 6.0
+norma = "RNE G.050 (Control patrimonial y pesaje vehicular)"
 
 [[campamento.edificaciones]]
-nombre = "Patio de máquinas"
+id = "EDIF-25"
+nombre = "Playa de Estacionamiento de Vehículos Livianos y Buses"
+grupo = "Vigilancia y Transporte"
+campamento = "CAMP1"
 base = "fijo"
-area_m2 = 600.0
+area_m2 = 800.0
 ancho_m = 20.0
+norma = "RNE A.010 Cap. X (20 camionetas + 4 buses de personal, radio de giro)"
+
+[[campamento.edificaciones]]
+id = "EDIF-26"
+nombre = "Patio de Parqueo y Maniobras de Maquinaria Pesada"
+grupo = "Maquinaria y Mantenimiento"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 1500.0
+ancho_m = 30.0
+norma = "MTC EG-2013 Sec. 104 / RNE A.060 (Jumbos, Scooptrams, Volquetes, radio giro 15 m)"
+
+[[campamento.edificaciones]]
+id = "EDIF-27"
+nombre = "Playa de Estacionamiento y Parqueo Auxiliar"
+grupo = "Vigilancia y Transporte"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 400.0
+ancho_m = 20.0
+norma = "RNE A.010 (Camionetas de supervisión técnica y minibuses de guardia)"
+
+[[campamento.edificaciones]]
+id = "EDIF-28"
+nombre = "Polvorín Satélite Certificado SUCAMEC"
+grupo = "Seguridad y Explosivos"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 100.0
+ancho_m = 10.0
+norma = "Ley N° 30299 (SUCAMEC - Polvorín auxiliar Frente 2 con parapeto)"
+
+[[campamento.edificaciones]]
+id = "EDIF-29"
+nombre = "Nave Taller Mecánico Auxiliar y Lubricación"
+grupo = "Maquinaria y Mantenimiento"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 200.0
+ancho_m = 10.0
+norma = "RNE A.060 (Mantenimiento preventivo y correctivo rápido Portal B)"
+
+[[campamento.edificaciones]]
+id = "EDIF-30"
+nombre = "Estación de Combustible Satélite (1x10,000 gal)"
+grupo = "Energía y Combustible"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 200.0
+ancho_m = 10.0
+norma = "D.S. 052-93-EM (Almacenamiento y despacho seguro diésel Portal B)"
+
+[[campamento.edificaciones]]
+id = "EDIF-31"
+nombre = "Casa de Fuerza Satélite y Generadores (1000 kVA)"
+grupo = "Energía y Combustible"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 120.0
+ancho_m = 8.0
+norma = "RNE EM.010 / CNE Suministro (Respaldo eléctrico continuo Frente 2)"
+
+[[campamento.edificaciones]]
+id = "EDIF-32"
+nombre = "Planta Compacta de Saneamiento (PTAP / PTAR Modulares)"
+grupo = "Agua y Saneamiento"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 180.0
+ancho_m = 10.0
+norma = "RNE OS.020 / RNE OS.090 (Tratamiento agua potable y residuales 98 pax)"
+
+[[campamento.edificaciones]]
+id = "EDIF-33"
+nombre = "Bodega de Insumos Críticos y Acopio de Residuos"
+grupo = "Almacenes y Logística"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 120.0
+ancho_m = 8.0
+norma = "RNE A.060 / D.Leg. 1278 (Gestión integral residuos y bodega Portal B)"
+
+[[campamento.edificaciones]]
+id = "EDIF-34"
+nombre = "Lavandería Satélite y Ropería"
+grupo = "Residencia y Habitabilidad"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 40.0
+ancho_m = 6.0
+norma = "RNE G.050 (Lavado higiénico de ropa de trabajo y ropa de cama 98 pax)"
+
+[[campamento.edificaciones]]
+id = "EDIF-35"
+nombre = "Módulo Recreativo y Sala de Usos Múltiples (SUM)"
+grupo = "Salud y Bienestar"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 120.0
+ancho_m = 8.0
+norma = "D.S. 024-2016-EM (Salud mental, bienestar ocupacional y recreación 98 pax)"
+
+[[campamento.edificaciones]]
+id = "EDIF-36"
+nombre = "Garita de Control de Acceso y Lampistería Satélite"
+grupo = "Vigilancia y Transporte"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 30.0
+ancho_m = 5.0
+norma = "RNE G.050 / D.S. 024-2016-EM Art. 97 (Control patrimonial y 40 lámparas mineras)"
+
+[[campamento.edificaciones]]
+id = "EDIF-37"
+nombre = "Caseta de Seguridad y Custodia de Polvorín Principal"
+grupo = "Vigilancia y Transporte"
+campamento = "CAMP1"
+base = "fijo"
+area_m2 = 12.0
+ancho_m = 3.0
+norma = "Ley N° 30299 SUCAMEC / D.S. 024-2016-EM (Custodia armada 24/7 a 300 m)"
+
+[[campamento.edificaciones]]
+id = "EDIF-38"
+nombre = "Caseta de Seguridad y Custodia de Polvorín Satélite"
+grupo = "Vigilancia y Transporte"
+campamento = "CAMP2"
+base = "fijo"
+area_m2 = 12.0
+ancho_m = 3.0
+norma = "Ley N° 30299 SUCAMEC / D.S. 024-2016-EM (Custodia armada 24/7 a 300 m Portal B)"
 
 # =============================================================================
 #  06 · MAQUINARIA
