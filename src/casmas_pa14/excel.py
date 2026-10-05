@@ -129,6 +129,8 @@ def _celda(celda, valor, es_total: bool = False) -> None:
         celda.number_format = "#,##0"
     elif isinstance(valor, date):
         celda.number_format = "dd/mm/yyyy"
+    elif isinstance(valor, str) and valor.startswith("="):
+        celda.number_format = "#,##0.00"
     elif isinstance(valor, str) and (
         valor.startswith("http://") or valor.startswith("https://")
     ):

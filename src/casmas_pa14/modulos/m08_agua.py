@@ -18,7 +18,7 @@ def calcular(p: dict, ctx: dict) -> dict:
     qp = pob * a["dotacion_l_hab_dia"] / 86400  # L/s
     qmd, qmh = a["k1"] * qp, a["k2"] * qp
 
-    # Consumo industrial
+    # Consumo industrial dinámico
     horas_perf = (
         ctx["maquinaria"]["t_perforacion_h"]
         * f["disparos_por_dia_frente"]
@@ -31,10 +31,27 @@ def calcular(p: dict, ctx: dict) -> dict:
         * horas_perf
         / 1000
     )
-    q_industrial = q_perforacion + a["riego_m3_dia"] + a["otros_industrial_m3_dia"]
+
+    # Agua para shotcrete de sostenimiento primario (según avance diario del túnel)
+    avance_dia = (
+        f["disparos_por_dia_frente"]
+        * f["frentes"]
+        * f["longitud_barreno_m"]
+        * f["eficiencia_avance"]
+    )
+    ancho_sec, alt_sec = p["seccion"]["ancho_m"], p["seccion"]["altura_m"]
+    perim_sec = math.pi * (ancho_sec / 2) + 2 * (alt_sec - ancho_sec / 2)
+    vol_shotcrete = avance_dia * perim_sec * a["espesor_shotcrete_m"]
+    q_shotcrete = vol_shotcrete * a["agua_shotcrete_l_m3"] / 1000
+
+    # Agua para lavado de maquinaria pesada y mitigación de polvo
+    q_lavado = a["equipos_lavado_und"] * a["lavado_equipo_l_dia"] / 1000
+    q_riego = a["area_riego_m2"] * a["tasa_riego_l_m2_dia"] / 1000
+
+    q_industrial = q_perforacion + q_shotcrete + q_lavado + q_riego
     q_total = q_humano_dia + q_industrial
 
-    # PETAP (solo consumo humano)
+    # PTAP (solo consumo humano)
     t = p["petap"]
     v_reservorio = t["fraccion_regulacion"] * qmd * 86.4 + t["reserva_m3"]
     lado_reservorio = redondear_arriba(
@@ -42,10 +59,12 @@ def calcular(p: dict, ctx: dict) -> dict:
     )
     area_filtro = qmd * 3.6 / t["tasa_filtracion_m_h"]
     cloro_kg_dia = qmd * 86.4 * t["dosis_cloro_mg_l"] / 1000 / t["pureza_hipoclorito"]
+    p_ptap = qmd * 86.4 * t.get("kw_especifico_por_m3_dia", 0.06)
 
     # PETAR — tanque séptico (RNE IS.020)
     r = p["petar"]
     q_aporte = a["dotacion_l_hab_dia"] * r["coef_retorno"]  # L/hab/día
+    v_residual_dia = pob * q_aporte / 1000  # m³/día
     pr = max(1.5 - 0.3 * math.log10(pob * q_aporte), 0.25)  # días
     v_sed = pob * q_aporte * pr / 1000
     v_lodos = r["tasa_lodos_l_hab_anio"] * pob * r["intervalo_limpieza_anios"] / 1000
@@ -54,6 +73,7 @@ def calcular(p: dict, ctx: dict) -> dict:
         math.sqrt(v_tanque / (r["altura_util_m"] * r["relacion_largo_ancho"])), 0.1
     )
     largo_ts = redondear_arriba(ancho_ts * r["relacion_largo_ancho"], 0.1)
+    p_ptar = v_residual_dia * r.get("kw_especifico_por_m3_dia", 0.05)
 
     # Pozo (abastece consumo total)
     z = p["pozo"]
@@ -68,19 +88,27 @@ def calcular(p: dict, ctx: dict) -> dict:
         "qmh_l_s": qmh,
         "horas_perforacion": horas_perf,
         "q_perforacion_m3": q_perforacion,
+        "avance_dia_m": avance_dia,
+        "vol_shotcrete_m3": vol_shotcrete,
+        "q_shotcrete_m3": q_shotcrete,
+        "q_lavado_m3": q_lavado,
+        "q_riego_m3": q_riego,
         "q_industrial_m3": q_industrial,
         "q_total_m3": q_total,
         "v_reservorio_m3": v_reservorio,
         "lado_reservorio_m": lado_reservorio,
         "area_filtro_m2": area_filtro,
         "cloro_kg_dia": cloro_kg_dia,
+        "p_ptap_kw": p_ptap,
         "q_aporte_l_hab": q_aporte,
+        "v_residual_dia_m3": v_residual_dia,
         "pr_dias": pr,
         "v_sed_m3": v_sed,
         "v_lodos_m3": v_lodos,
         "v_tanque_m3": v_tanque,
         "ancho_ts_m": ancho_ts,
         "largo_ts_m": largo_ts,
+        "p_ptar_kw": p_ptar,
         "q_bombeo_l_s": q_bombeo * 1000,
         "altura_dinamica_m": altura_din,
         "p_bomba_kw": p_bomba,
@@ -103,18 +131,30 @@ def libro(r: dict, p: dict) -> Libro:
                 "Dot",
                 a["dotacion_l_hab_dia"],
                 "L/hab/día",
-                "Dato (RNE IS.010)",
+                "RNE IS.010 Art. 2.2 / DS 024-2016-EM",
             ),
             (
                 "Consumo humano diario",
                 "Vh",
-                r["q_humano_dia_m3"],
+                "=C5*C6/1000",
                 "m³/día",
                 "Pob · Dot / 1000",
             ),
-            ("Caudal promedio", "Qp", r["qp_l_s"], "L/s", "Pob · Dot / 86400"),
-            ("Caudal máximo diario", "Qmd", r["qmd_l_s"], "L/s", "k1 · Qp"),
-            ("Caudal máximo horario", "Qmh", r["qmh_l_s"], "L/s", "k2 · Qp"),
+            ("Caudal promedio", "Qp", "=C5*C6/86400", "L/s", "Pob · Dot / 86400"),
+            (
+                "Caudal máximo diario",
+                "Qmd",
+                f"={a['k1']}*C8",
+                "L/s",
+                "k1 · Qp (RNE OS.100)",
+            ),
+            (
+                "Caudal máximo horario",
+                "Qmh",
+                f"={a['k2']}*C8",
+                "L/s",
+                "k2 · Qp (RNE OS.100)",
+            ),
             (
                 "Horas de perforación por día",
                 "hp",
@@ -123,32 +163,58 @@ def libro(r: dict, p: dict) -> Libro:
                 "tp · disparos/día",
             ),
             (
-                "Agua de perforación",
+                "Agua de perforación (Jumbo)",
                 "Vp",
-                r["q_perforacion_m3"],
+                f"={a['perforacion_l_min_brazo']}*{p['maquinaria']['jumbo']['brazos']}*60*C11/1000",
                 "m³/día",
                 "q · brazos · 60 · hp / 1000",
             ),
             (
-                "Riego + otros usos",
-                "Vo",
-                a["riego_m3_dia"] + a["otros_industrial_m3_dia"],
+                "Agua de shotcrete (Sostenimiento)",
+                "Vs",
+                r["q_shotcrete_m3"],
                 "m³/día",
-                "Dato",
+                f"Avance ({r['avance_dia_m']:.1f} m) · Perim · Espesor · Ratio",
             ),
-            ("Consumo industrial", "Vi", r["q_industrial_m3"], "m³/día", "Vp + Vo"),
-            ("CONSUMO TOTAL DE AGUA", "VT", r["q_total_m3"], "m³/día", "Vh + Vi"),
+            (
+                "Agua de lavado de flota minera",
+                "Vl",
+                f"={a['equipos_lavado_und']}*{a['lavado_equipo_l_dia']}/1000",
+                "m³/día",
+                f"{a['equipos_lavado_und']} equipos · {a['lavado_equipo_l_dia']} L/día",
+            ),
+            (
+                "Riego y mitigación de polvo",
+                "Vr",
+                f"={a['area_riego_m2']}*{a['tasa_riego_l_m2_dia']}/1000",
+                "m³/día",
+                f"{a['area_riego_m2']} m² · {a['tasa_riego_l_m2_dia']} L/m²/día",
+            ),
+            (
+                "Consumo industrial total",
+                "Vi",
+                "=SUM(C12:C15)",
+                "m³/día",
+                "Vp + Vs + Vl + Vr",
+            ),
+            ("CONSUMO TOTAL DE AGUA", "VT", "=C7+C16", "m³/día", "Vh + Vi"),
         ]
     )
     petap = tabla_parametros(
         [
-            ("Caudal de diseño", "Qmd", r["qmd_l_s"], "L/s", "Consumo humano"),
+            (
+                "Caudal de diseño",
+                "Qmd",
+                "='Consumo'!C9",
+                "L/s",
+                "Consumo humano (RNE OS.100)",
+            ),
             (
                 "Volumen de reservorio",
                 "Vr",
-                r["v_reservorio_m3"],
+                f"={t['fraccion_regulacion']}*C6*86.4+{t['reserva_m3']}",
                 "m³",
-                f"{t['fraccion_regulacion']}·Qmd·86.4 + reserva",
+                f"{t['fraccion_regulacion']}·Qmd·86.4 + reserva (RNE OS.030)",
             ),
             (
                 "Reservorio (lado × lado × altura)",
@@ -160,57 +226,91 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Área de filtro lento",
                 "Af",
-                r["area_filtro_m2"],
+                f"=C6*3.6/{t['tasa_filtracion_m_h']}",
                 "m²",
-                "Qmd · 3.6 / tasa de filtración",
+                "Qmd · 3.6 / tasa filtración (RNE OS.020)",
             ),
             (
                 "Hipoclorito de calcio",
                 "Cl",
-                r["cloro_kg_dia"],
+                f"=C6*86.4*{t['dosis_cloro_mg_l']}/1000/{t['pureza_hipoclorito']}",
                 "kg/día",
-                "Q · dosis / pureza",
+                "Q · dosis / pureza (DS 031-2010-SA)",
             ),
-        ]
+            (
+                "Potencia eléctrica de dosificación y bombas",
+                "P_ptap",
+                f"=C6*86.4*{t.get('kw_especifico_por_m3_dia', 0.06)}",
+                "kW",
+                f"Qmd · 86.4 · {t.get('kw_especifico_por_m3_dia', 0.06)} kW/(m³/día)",
+            ),
+        ],
+        "Planta de Tratamiento de Agua Potable (RNE OS.020 / OS.030)",
     )
     petar = tabla_parametros(
         [
             (
                 "Aporte unitario",
                 "q",
-                r["q_aporte_l_hab"],
+                f"='Consumo'!C6*{s['coef_retorno']}",
                 "L/hab/día",
-                "Dot · coef. retorno",
+                "Dot · coef. retorno (RNE IS.020 Art. 4.1)",
+            ),
+            (
+                "Volumen diario de aguas residuales",
+                "Vr",
+                "='Consumo'!C5*C6/1000",
+                "m³/día",
+                "Pob · q / 1000",
             ),
             (
                 "Periodo de retención",
                 "PR",
-                r["pr_dias"],
+                "=MAX(1.5-0.3*LOG10('Consumo'!C5*C6), 0.25)",
                 "días",
-                "1.5 − 0.3·log(Pob·q) ≥ 0.25 (IS.020)",
+                "1.5 − 0.3·log(Pob·q) ≥ 0.25 (RNE IS.020 Art. 4.2)",
             ),
             (
                 "Volumen de sedimentación",
                 "Vs",
-                r["v_sed_m3"],
+                "='Consumo'!C5*C6*C8/1000",
                 "m³",
-                "Pob · q · PR / 1000",
+                "Pob · q · PR / 1000 (RNE IS.020)",
             ),
-            ("Volumen de lodos", "Vd", r["v_lodos_m3"], "m³", "ta · Pob · N / 1000"),
-            ("Volumen de natas", "Vn", s["volumen_natas_m3"], "m³", "Mínimo IS.020"),
+            (
+                "Volumen de lodos",
+                "Vd",
+                f"={s['tasa_lodos_l_hab_anio']}*'Consumo'!C5*{s['intervalo_limpieza_anios']}/1000",
+                "m³",
+                "ta · Pob · N / 1000 (RNE IS.020 Tabla 1)",
+            ),
+            (
+                "Volumen de natas",
+                "Vn",
+                s["volumen_natas_m3"],
+                "m³",
+                "Mínimo RNE IS.020 Art. 4.4",
+            ),
             (
                 "Volumen útil del tanque séptico",
                 "Vt",
-                r["v_tanque_m3"],
+                "=C9+C10+C11",
                 "m³",
-                "Vs + Vd + Vn",
+                "Vs + Vd + Vn (RNE IS.020)",
             ),
             (
                 "Tanque (largo × ancho × altura útil)",
                 "",
                 f"{r['largo_ts_m']:.1f} × {r['ancho_ts_m']:.1f} × {s['altura_util_m']}",
                 "m",
-                f"L = {s['relacion_largo_ancho']}·A",
+                f"L = {s['relacion_largo_ancho']}·A (RNE IS.020)",
+            ),
+            (
+                "Potencia eléctrica de aireación y bombeo",
+                "P_ptar",
+                f"=C7*{s.get('kw_especifico_por_m3_dia', 0.05)}",
+                "kW",
+                f"Vr · {s.get('kw_especifico_por_m3_dia', 0.05)} kW/(m³/día)",
             ),
         ],
         "Tanque séptico (RNE IS.020)",
@@ -227,21 +327,28 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Volumen diario a bombear",
                 "VT",
-                r["q_total_m3"],
+                "='Consumo'!C17",
                 "m³/día",
-                "Consumo total",
+                "Consumo total diario",
             ),
-            ("Horas de bombeo", "hb", z["horas_bombeo"], "h", "Dato"),
-            ("Caudal de bombeo", "Qb", r["q_bombeo_l_s"], "L/s", "VT / (hb · 3600)"),
+            ("Horas de bombeo", "hb", z["horas_bombeo"], "h", "Régimen de operación"),
+            ("Caudal de bombeo", "Qb", "=C7/(C8*3600)*1000", "L/s", "VT / (hb · 3600)"),
             (
                 "Altura dinámica total",
                 "HDT",
-                r["altura_dinamica_m"],
+                f"={z['nivel_dinamico_m']}+{z['altura_elevacion_m']}+{z['perdidas_m']}",
                 "m",
                 "Nivel dinámico + elevación + pérdidas",
             ),
-            ("Potencia de la bomba", "Pb", r["p_bomba_kw"], "kW", "ρ·g·Qb·HDT / η"),
-        ]
+            (
+                "Potencia de la bomba",
+                "Pb",
+                f"=1000*9.81*(C9/1000)*C10/{z['eficiencia_bomba']}/1000",
+                "kW",
+                "ρ·g·Qb·HDT / η (RNE OS.010)",
+            ),
+        ],
+        "Sistema de captación por pozo profundo (RNE OS.010)",
     )
     return Libro(
         "08_Agua.xlsx",
