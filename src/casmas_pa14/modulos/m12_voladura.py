@@ -85,8 +85,8 @@ def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
 def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
     inp = resultados["inputs"]
 
-    # Generamos la tabla estandar con formulas vivas de Excel (Columna C)
-    # Fila 4 = encabezado de la tabla. Filas de datos inician en fila 5.
+    # Generamos la tabla estandar con formulas vivas de Excel usando simbolos {Simbolo}
+    # excel.py se encarga de resolver automaticamente {Simbolo} a su celda real (ej. C6, C10, etc.)
     filas = [
         ("Densidad del explosivo", "Sge", inp["sge"], "g/cm³", "TOML [voladura]"),
         ("Densidad de la roca", "Sgr", inp["sgr"], "g/cm³", "02_Geologia / TOML"),
@@ -95,55 +95,55 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
         (
             "Burden de diseño",
             "B",
-            "=0.012*((2*(C5/C6))+1.5)*C7",
+            "=0.012*((2*({Sge}/{Sgr}))+1.5)*{De}",
             "m",
             "B = 0.012 * [(2 * (Sge / Sgr)) + 1.5] * De",
         ),
-        ("Espaciamiento", "S", "=1.4*C9", "m", "S = 1.4 * B"),
-        ("Sobreperforación (Pasadura)", "J", "=0.3*C9", "m", "J = 0.3 * B"),
-        ("Taco o retacado", "T", "=0.7*C9", "m", "T = 0.7 * B"),
-        ("Relación de rigidez", "H/B", "=C8/C9", "-", "H / B (>= 4 óptimo)"),
-        ("Longitud de taladro", "L", "=C8+C11", "m", "L = H + J"),
+        ("Espaciamiento", "S", "=1.4*{B}", "m", "S = 1.4 * B"),
+        ("Sobreperforación (Pasadura)", "J", "=0.3*{B}", "m", "J = 0.3 * B"),
+        ("Taco o retacado", "T", "=0.7*{B}", "m", "T = 0.7 * B"),
+        ("Relación de rigidez", "H/B", "={H}/{B}", "-", "H / B (>= 4 óptimo)"),
+        ("Longitud de taladro", "L", "={H}+{J}", "m", "L = H + J"),
         (
             "Volumen a romper por taladro",
             "V",
-            "=C9*C10*C8",
+            "={B}*{S}*{H}",
             "m³/tal",
             "V = B * S * H",
         ),
         (
             "Concentración lineal de carga",
             "Qbk",
-            "=0.078539*C5*(C7/10)^2",
+            "=0.078539*{Sge}*({De}/10)^2",
             "kg/m",
             "Qbk = 0.078539 * Sge * (De/10)²",
         ),
-        ("Longitud carga de fondo", "Cf", "=1.3*C9", "m", "Cf = 1.3 * B"),
+        ("Longitud carga de fondo", "Cf", "=1.3*{B}", "m", "Cf = 1.3 * B"),
         (
             "Longitud carga de columna",
             "Cc",
-            "=MAX(0, C14-(C17+C12))",
+            "=MAX(0, {L}-({Cf}+{T}))",
             "m",
             "Cc = L - (Cf + T)",
         ),
         (
             "Carga total por taladro",
             "Qt",
-            "=(C17+C18)*C16",
+            "=({Cf}+{Cc})*{Qbk}",
             "kg/tal",
             "Qt = (Cf + Cc) * Qbk",
         ),
         (
             "Factor de Carga",
             "FC",
-            "=C19/C15",
+            "={Qt}/{V}",
             "kg/m³",
             "FC = Qt / V",
         ),
         (
             "Factor de Potencia",
             "FP",
-            "=C19/(C15*C6)",
+            "={Qt}/({V}*{Sgr})",
             "kg/TM",
             "FP = Qt / (V * Sgr)",
         ),
@@ -154,7 +154,7 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
             "ms/m",
             "López Jimeno / Konya (Tabla Roca)",
         ),
-        ("Retardo barreno a barreno", "th", "=C22*C10", "ms", "th = Th * S"),
+        ("Retardo barreno a barreno", "th", "={Th}*{S}", "ms", "th = Th * S"),
         (
             "Factor tiempo entre filas",
             "TR",
@@ -162,8 +162,8 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
             "ms/m",
             "Konya (Pila promedio)",
         ),
-        ("Retardo entre filas", "tR", "=C24*C9", "ms", "tR = TR * B"),
-        ("Perforación específica", "PE", "=C14/C15", "m/m³", "PE = L / V"),
+        ("Retardo entre filas", "tR", "={TR}*{B}", "ms", "tR = TR * B"),
+        ("Perforación específica", "PE", "={L}/{V}", "m/m³", "PE = L / V"),
     ]
 
     return Libro(

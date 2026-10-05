@@ -33,6 +33,13 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 - Formato estándar: `Descripción | Símbolo | Valor | Unidad | Fórmula / Fuente`
   (`tabla_parametros`). La columna Fórmula muestra la expresión o el libro de origen.
 - **Sin repeticiones**: si un valor viene de otro libro, se cita (p. ej. "03_Seccion").
+- **Dinamismo obligatorio (sin hardcoding)**: Los valores calculados en las hojas de
+  Excel NUNCA deben ser números estáticos o hardcodeados. Deben escribirse como fórmulas
+  nativas de Excel referenciando a los símbolos de los parámetros (p. ej.
+  `={Q}*{E}/({T}*{Fv})`). El motor central en `excel.py` resuelve automáticamente los
+  símbolos entre llaves `{Simbolo}` a sus coordenadas de celda reales (p. ej. `C15`),
+  garantizando que el usuario pueda alterar cualquier dato en Excel y ver el recálculo
+  inmediato.
 
 ## AutoLISP
 

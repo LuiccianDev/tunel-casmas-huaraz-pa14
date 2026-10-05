@@ -245,16 +245,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     # 1. TRACTORES DE ORUGAS (CAT D8, CAT D6)
     if eq_id in ("CAT_D8", "CAT_D6"):
         cap_hoja = 8.7 if eq_id == "CAT_D8" else 4.2
-        t_corte = 15.0 / 60.0
-        t_empuje = 18.0 / 60.0
-        t_descarga = 10.0 / 60.0
-        t_retorno = 14.0 / 60.0
-        t_giro = 10.0 / 60.0
-        t_ciclo_min = round(t_corte + t_empuje + t_descarga + t_retorno + t_giro, 3)
-
-        r_teorico = round((60.0 * eff * cap_hoja * k_carga) / (t_ciclo_min * fv), 2)
-        r_real = round(r_teorico * falt * p_perdidas * f_ll, 2)
-
         calculo = tabla_parametros(
             [
                 (
@@ -273,7 +263,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Tiempo total del ciclo de empuje",
                     "T",
-                    t_ciclo_min,
+                    "=({t1}+{t2}+{t3}+{t4}+{t5})/60",
                     "min",
                     "Σ(t1..t5) / 60",
                 ),
@@ -295,7 +285,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
-                    r_teorico,
+                    "=60*{E}*{Q}*{K}/({T}*{Fv})",
                     "m³/h",
                     "60 · E · Q · K / (T · Fv)",
                 ),
@@ -323,12 +313,12 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EFECTIVO",
                     "R_real",
-                    r_real,
+                    "={R_teo}*{Falt}*{P}*{F_ll}",
                     "m³/h",
                     "R_teo · Falt · P · F_ll",
                 ),
             ],
-            "Cálculo de Rendimiento: R = (60 · E · Q · K) / (T · Fv)",
+            "Cálculo Dinámico de Rendimiento: R = (60 · E · Q · K) / (T · Fv)",
         )
         tablas.extend(
             [calculo, tabla_conversion_volumetrica(), tabla_coeficientes_carga_k()]
@@ -337,18 +327,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     # 2. CARGADORES FRONTALES (CAT 966H, CAT 966GC)
     elif eq_id in ("CAT_966H", "CAT_966GC"):
         cap_cucharon = 4.0 if eq_id == "CAT_966H" else 3.8
-        t_llenado = 12.0 / 60.0
-        t_desp_cargado = 12.0 / 60.0
-        t_descarga = 10.0 / 60.0
-        t_desp_vacio = 10.0 / 60.0
-        t_giro = 8.0 / 60.0
-        t_ciclo_min = round(
-            t_llenado + t_desp_cargado + t_descarga + t_desp_vacio + t_giro, 3
-        )
-
-        r_teorico = round((60.0 * eff * cap_cucharon * k_carga) / (t_ciclo_min * fv), 2)
-        r_real = round(r_teorico * falt * p_perdidas * f_ll, 2)
-
         calculo = tabla_parametros(
             [
                 (
@@ -385,7 +363,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Tiempo total del ciclo de carguío",
                     "T",
-                    t_ciclo_min,
+                    "=({t1}+{t2}+{t3}+{t4}+{t5})/60",
                     "min",
                     "Σ(t1..t5) / 60",
                 ),
@@ -401,7 +379,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
-                    r_teorico,
+                    "=60*{E}*{Q}*{K}/({T}*{Fv})",
                     "m³/h",
                     "60 · E · Q · K / (T · Fv)",
                 ),
@@ -429,12 +407,12 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EFECTIVO",
                     "R_real",
-                    r_real,
+                    "={R_teo}*{Falt}*{P}*{F_ll}",
                     "m³/h",
                     "R_teo · Falt · P · F_ll",
                 ),
             ],
-            "Cálculo de Rendimiento: R = (60 · E · Q · K) / (T · Fv)",
+            "Cálculo Dinámico de Rendimiento: R = (60 · E · Q · K) / (T · Fv)",
         )
         tablas.extend(
             [calculo, tabla_conversion_volumetrica(), tabla_coeficientes_carga_k()]
@@ -443,10 +421,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     # 3. EXCAVADORA HIDRÁULICA (CAT 336)
     elif eq_id == "CAT_336":
         cap_balde = 2.10
-        t_ciclo_min = 0.40  # 24 segundos ciclo excavación 90°
-        r_teorico = round((60.0 * eff * cap_balde * k_carga) / (t_ciclo_min * fv), 2)
-        r_real = round(r_teorico * falt * p_perdidas * f_ll, 2)
-
         calculo = tabla_parametros(
             [
                 (
@@ -466,9 +440,9 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Tiempo del ciclo de excavación y giro",
                     "T",
-                    t_ciclo_min,
+                    0.40,
                     "min",
-                    "24 seg / ciclo",
+                    "24 seg / ciclo (Manual Cat)",
                 ),
                 ("Factor de eficiencia operativa", "E", eff, "", "50 min / hora"),
                 (
@@ -482,7 +456,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
-                    r_teorico,
+                    "=60*{E}*{Q}*{K}/({T}*{Fv})",
                     "m³/h",
                     "60 · E · Q · K / (T · Fv)",
                 ),
@@ -498,12 +472,12 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EFECTIVO",
                     "R_real",
-                    r_real,
+                    "={R_teo}*{Falt}*{P}*{F_ll}",
                     "m³/h",
                     "R_teo · Falt · P · F_ll",
                 ),
             ],
-            "Cálculo de Rendimiento de Excavadora: R = (60 · E · Q · K) / (T · Fv)",
+            "Cálculo Dinámico de Rendimiento: R = (60 · E · Q · K) / (T · Fv)",
         )
         tablas.extend(
             [calculo, tabla_conversion_volumetrica(), tabla_coeficientes_carga_k()]
@@ -517,15 +491,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
         v_vacio = 35.0
         t_carga = 3.0
         t_descarga = 1.5
-        t_viaje_cargado = round((dist_km / v_cargado) * 60.0, 2)
-        t_viaje_vacio = round((dist_km / v_vacio) * 60.0, 2)
         t_maniobras = 1.5
-        t_ciclo_min = round(
-            t_carga + t_viaje_cargado + t_descarga + t_viaje_vacio + t_maniobras, 2
-        )
-
-        r_teorico = round((60.0 * eff * cap_tolva * k_carga) / (t_ciclo_min * fv), 2)
-        r_real = round(r_teorico * falt * p_perdidas * f_ll, 2)
 
         calculo = tabla_parametros(
             [
@@ -538,6 +504,20 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 ),
                 ("Distancia media a botadero", "d", dist_km, "km", "Ruta de acarreo"),
                 (
+                    "Velocidad cargado en pendiente",
+                    "vc",
+                    v_cargado,
+                    "km/h",
+                    "Manual de operación",
+                ),
+                (
+                    "Velocidad de retorno vacío",
+                    "vv",
+                    v_vacio,
+                    "km/h",
+                    "Manual de operación",
+                ),
+                (
                     "Tiempo de carga con cargador/excavadora",
                     "tc",
                     t_carga,
@@ -547,9 +527,9 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Tiempo de viaje cargado",
                     "tida",
-                    t_viaje_cargado,
+                    "=({d}/{vc})*60",
                     "min",
-                    f"d / {v_cargado} km/h",
+                    "d / vc · 60",
                 ),
                 (
                     "Tiempo de basculamiento y descarga",
@@ -561,9 +541,9 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Tiempo de retorno vacío",
                     "tret",
-                    t_viaje_vacio,
+                    "=({d}/{vv})*60",
                     "min",
-                    f"d / {v_vacio} km/h",
+                    "d / vv · 60",
                 ),
                 (
                     "Tiempo de maniobras y pesaje",
@@ -572,14 +552,20 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                     "min",
                     "Alineación en frente y botadero",
                 ),
-                ("Tiempo total del ciclo de acarreo", "T", t_ciclo_min, "min", "Σ(ti)"),
+                (
+                    "Tiempo total del ciclo de acarreo",
+                    "T",
+                    "={tc}+{tida}+{td}+{tret}+{tm}",
+                    "min",
+                    "Σ(tc + tida + td + tret + tm)",
+                ),
                 ("Factor de eficiencia", "E", eff, "", "50 min / hora"),
                 ("Coeficiente de carga", "K", k_carga, "", "Tabla 2"),
                 ("Factor de abundamiento", "Fv", fv, "", "Tabla 1"),
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
-                    r_teorico,
+                    "=60*{E}*{Q}*{K}/({T}*{Fv})",
                     "m³/h",
                     "60 · E · Q · K / (T · Fv)",
                 ),
@@ -595,12 +581,12 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EFECTIVO",
                     "R_real",
-                    r_real,
+                    "={R_teo}*{Falt}*{P}*{F_ll}",
                     "m³/h",
                     "R_teo · Falt · P · F_ll",
                 ),
             ],
-            "Cálculo de Rendimiento de Volquete: R = (60 · E · Q · K) / (T · Fv)",
+            "Cálculo Dinámico de Rendimiento: R = (60 · E · Q · K) / (T · Fv)",
         )
         tablas.extend(
             [calculo, tabla_conversion_volumetrica(), tabla_coeficientes_carga_k()]
@@ -615,11 +601,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
         esp_capa = moto["espesor_capa_m"]
         n_pasadas = moto["numero_pasadas"]
         eff_moto = moto["eficiencia_operativa"]
-
-        r_teorico_area = round((1000.0 * v_moto * ancho_ef * eff_moto) / n_pasadas, 2)
-        r_teorico_vol = round(r_teorico_area * esp_capa, 2)
-        r_real_vol = round(r_teorico_vol * falt * eff_moto, 2)
-        r_real_area = round(r_teorico_area * falt * eff_moto, 2)
 
         calculo = tabla_parametros(
             [
@@ -662,14 +643,14 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO TEÓRICO EN ÁREA",
                     "R_teo_A",
-                    r_teorico_area,
+                    "=(1000*{V}*{A}*{E})/{P}",
                     "m²/h",
                     "(1000 · V · A · E) / P",
                 ),
                 (
                     "RENDIMIENTO TEÓRICO EN VOLUMEN",
                     "R_teo_V",
-                    r_teorico_vol,
+                    "={R_teo_A}*{E_capa}",
                     "m³/h",
                     "R_teo_A · E_capa",
                 ),
@@ -677,19 +658,19 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EN ÁREA",
                     "R_real_A",
-                    r_real_area,
+                    "={R_teo_A}*{Falt}*{E}",
                     "m²/h",
                     "R_teo_A · Falt · E",
                 ),
                 (
                     "RENDIMIENTO REAL EN VOLUMEN",
                     "R_real_V",
-                    r_real_vol,
+                    "={R_teo_V}*{Falt}*{E}",
                     "m³/h",
                     "R_teo_V · Falt · E",
                 ),
             ],
-            "Cálculo de Rendimiento: R = (1000 · V · A · E_capa · E) / P",
+            "Cálculo Dinámico de Rendimiento: R = (1000 · V · A · E_capa · E) / P",
         )
         tablas.extend(
             [calculo, tabla_motoniveladora_trabajo(), tabla_capas_estructurales()]
@@ -699,13 +680,11 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     elif eq_id == "CAT_CS11":
         rod = rnd["rodillo"]
         v_rod = rod["velocidad_trabajo_kmh"]
-        w_rod = rod["ancho_efectivo_m"]
+        w_tamb = rod["ancho_tambor_m"]
+        trasl = rod["traslape_m"]
         esp_comp = rod["espesor_capa_compactada_m"]
         n_pasadas_rod = rod["numero_pasadas"]
         perd_rod = rod["perdidas_reales"]
-
-        r_teorico = round((1000.0 * v_rod * w_rod * esp_comp * eff) / n_pasadas_rod, 2)
-        r_real = round(r_teorico * falt * perd_rod, 2)
 
         calculo = tabla_parametros(
             [
@@ -719,18 +698,24 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Ancho del tambor vibratorio",
                     "W_tamb",
-                    rod["ancho_tambor_m"],
+                    w_tamb,
                     "m",
                     "Ficha técnica (84'')",
                 ),
                 (
                     "Traslape entre pasadas adyacentes",
                     "trasl",
-                    rod["traslape_m"],
+                    trasl,
                     "m",
                     "Criterio de compactación",
                 ),
-                ("Ancho efectivo de pasada", "A", w_rod, "m", "W_tamb - traslape"),
+                (
+                    "Ancho efectivo de pasada",
+                    "A",
+                    "={W_tamb}-{trasl}",
+                    "m",
+                    "W_tamb - traslape",
+                ),
                 (
                     "Espesor de capa compactada",
                     "C",
@@ -749,14 +734,14 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO TEÓRICO DE COMPACTACIÓN",
                     "R_teo",
-                    r_teorico,
+                    "=(1000*{V}*{A}*{C}*{E})/{P}",
                     "m³/h",
                     "(1000 · V · A · C · E) / P",
                 ),
                 ("Factor de corrección por altitud", "Falt", falt, "", "3850 msnm"),
                 (
-                    "Pérdidas reales por giros y desaceleración",
-                    "%P",
+                    "Factor de pérdidas reales por maniobras",
+                    "Floss",
                     perd_rod,
                     "",
                     "Pérdidas operativas",
@@ -764,12 +749,12 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EFECTIVO",
                     "R_real",
-                    r_real,
+                    "={R_teo}*{Falt}*{Floss}",
                     "m³/h",
-                    "R_teo · Falt · %P",
+                    "R_teo · Falt · Floss",
                 ),
             ],
-            "Cálculo de Rendimiento: R = (1000 · V · A · C · E) / P",
+            "Cálculo Dinámico de Rendimiento: R = (1000 · V · A · C · E) / P",
         )
         tablas.extend(
             [calculo, tabla_compactacion_suelos(), tabla_capas_estructurales()]
@@ -782,10 +767,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
         vp = perf["velocidad_penetracion_m_min"]
         dmec = perf["disponibilidad_mecanica"]
         u_turno = perf["factor_utilizacion"]
-
-        r_teorico_m_h = round(vp * 60.0 * n_brazos, 2)
-        r_real_m_h = round(r_teorico_m_h * eff * falt * dmec * u_turno, 2)
-        taladros_h = round(r_real_m_h / 3.66, 1)
 
         calculo = tabla_parametros(
             [
@@ -807,7 +788,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO TEÓRICO EN PERFORACIÓN",
                     "R_teo",
-                    r_teorico_m_h,
+                    "={Vp}*60*{N_brazos}",
                     "m/h",
                     "Vp · 60 · N_brazos",
                 ),
@@ -836,19 +817,19 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL EN METROS LINEALES",
                     "R_real",
-                    r_real_m_h,
+                    "={R_teo}*{E}*{Falt}*{Dmec}*{U}",
                     "m/h",
                     "R_teo · E · Falt · Dmec · U",
                 ),
                 (
                     "Rendimiento equivalente en taladros perforados",
                     "N_tal_h",
-                    taladros_h,
+                    "={R_real}/{Lb}",
                     "taladros/h",
                     "R_real / Lb",
                 ),
             ],
-            "Cálculo de Rendimiento de Perforación: R = Vp · 60 · N_brazos · Factores",
+            "Cálculo Dinámico de Rendimiento: R = Vp · 60 · N_brazos · Factores",
         )
         tablas.extend([calculo, tabla_penetracion_rocas()])
 
@@ -856,8 +837,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     elif eq_id in ("SPRAYMEC_8100", "UTIMEC_MF500"):
         es_robot = eq_id == "SPRAYMEC_8100"
         cap_nom = 30.0 if es_robot else 4.4  # m3/h o m3/viaje
-        r_teorico = cap_nom
-        r_real = round(r_teorico * 0.75 * falt, 2)
 
         calculo = tabla_parametros(
             [
@@ -880,12 +859,12 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "RENDIMIENTO REAL PROYECTADO",
                     "R_real",
-                    r_real,
+                    "={Q_nom}*(1-{f_reb})*{E}*{Falt}",
                     "m³/h" if es_robot else "m³/viaje efectivo",
                     "Q_nom · (1 - f_reb) · E · Falt",
                 ),
             ],
-            "Cálculo de Rendimiento Operativo de Hormigón / Shotcrete",
+            "Cálculo Dinámico de Rendimiento Operativo de Hormigón / Shotcrete",
         )
         tablas.append(calculo)
 

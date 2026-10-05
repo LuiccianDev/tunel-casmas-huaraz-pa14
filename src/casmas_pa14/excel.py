@@ -2,6 +2,7 @@
 
 from datetime import date, timedelta
 from pathlib import Path
+from typing import Any
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -33,10 +34,27 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
         ws["A2"].font = Font(name="Calibri", bold=True, size=11, color="1F4E78")
         fila = _FILA_INICIAL
         rangos_tablas = []
+        mapa_simbolos: dict[str, str] = {}
+        celdas_formulas: list[tuple[Any, str]] = []
         for tabla in hoja.tablas:
-            fila, rango = _escribir_tabla(ws, tabla, fila)
+            fila, rango = _escribir_tabla(
+                ws, tabla, fila, mapa_simbolos, celdas_formulas
+            )
             fila += 1
             rangos_tablas.append(rango)
+
+        # Resolver fórmulas dinámicas referenciadas por {Símbolo}
+        for celda, formula_plantilla in celdas_formulas:
+            formula_resuelta = formula_plantilla
+            # Ordenar símbolos por longitud decreciente para evitar reemplazos erróneos
+            for sim in sorted(mapa_simbolos.keys(), key=len, reverse=True):
+                token = f"{{{sim}}}"
+                if token in formula_resuelta:
+                    formula_resuelta = formula_resuelta.replace(
+                        token, mapa_simbolos[sim]
+                    )
+            celda.value = formula_resuelta
+            celda.number_format = "#,##0.00"
 
         # Activar filtro automático si la hoja contiene una sola tabla principal
         if len(hoja.tablas) == 1 and rangos_tablas:
@@ -52,7 +70,13 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
     return ruta
 
 
-def _escribir_tabla(ws: Worksheet, tabla: Tabla, fila: int) -> tuple[int, str]:
+def _escribir_tabla(
+    ws: Worksheet,
+    tabla: Tabla,
+    fila: int,
+    mapa_simbolos: dict[str, str] | None = None,
+    celdas_formulas: list[tuple[Any, str]] | None = None,
+) -> tuple[int, str]:
     if tabla.titulo:
         ws.cell(fila, 1, tabla.titulo).font = Font(
             name="Calibri", size=11, bold=True, color="1F4E78"
@@ -63,11 +87,37 @@ def _escribir_tabla(ws: Worksheet, tabla: Tabla, fila: int) -> tuple[int, str]:
     for col, nombre in enumerate(tabla.columnas, start=1):
         _encabezado(ws.cell(fila, col, nombre))
 
+    # Detectar si la tabla tiene estructura estándar con columna 'Símbolo'
+    es_tabla_param = (
+        len(tabla.columnas) >= 3
+        and tabla.columnas[1] == "Símbolo"
+        and tabla.columnas[2] == "Valor"
+    )
+
     for datos in tabla.filas:
         fila += 1
+        if (
+            es_tabla_param
+            and mapa_simbolos is not None
+            and len(datos) >= 2
+            and datos[1] is not None
+        ):
+            simbolo = str(datos[1]).strip()
+            if simbolo:
+                mapa_simbolos[simbolo] = f"C{fila}"
+
         es_total = bool(datos and str(datos[0]).strip().upper().startswith("TOTAL"))
         for col, valor in enumerate(datos, start=1):
-            _celda(ws.cell(fila, col), valor, es_total=es_total)
+            celda = ws.cell(fila, col)
+            _celda(celda, valor, es_total=es_total)
+            if (
+                celdas_formulas is not None
+                and isinstance(valor, str)
+                and valor.startswith("=")
+                and "{" in valor
+                and "}" in valor
+            ):
+                celdas_formulas.append((celda, valor))
 
     letra_fin = get_column_letter(len(tabla.columnas))
     rango = f"A{fila_encabezado}:{letra_fin}{fila}"
