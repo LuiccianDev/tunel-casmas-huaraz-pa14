@@ -9,10 +9,22 @@ COLUMNAS_PARAMETRO = ["Descripción", "Símbolo", "Valor", "Unidad", "Fórmula /
 
 
 @dataclass
+class OpcionLista:
+    """Representa una celda que debe tener una lista desplegable (Data Validation)."""
+
+    valor_inicial: str
+    id_rango_ref: str  # ID del rango de la tabla de referencia
+
+    def __str__(self) -> str:
+        return self.valor_inicial
+
+
+@dataclass
 class Tabla:
     columnas: list[str]
     filas: list[list[Any]]
     titulo: str = ""
+    id_rango: str = ""
 
 
 @dataclass

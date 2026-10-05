@@ -35,18 +35,33 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
         fila = _FILA_INICIAL
         rangos_tablas = []
         mapa_simbolos: dict[str, str] = {}
+        mapa_rangos: dict[str, str] = {}
         celdas_formulas: list[tuple[Any, str]] = []
+        celdas_validacion: list[tuple[Any, str]] = []
         for tabla in hoja.tablas:
             fila, rango = _escribir_tabla(
-                ws, tabla, fila, mapa_simbolos, celdas_formulas
+                ws,
+                tabla,
+                fila,
+                mapa_simbolos,
+                mapa_rangos,
+                celdas_formulas,
+                celdas_validacion,
             )
             fila += 1
             rangos_tablas.append(rango)
 
-        # Resolver fórmulas dinámicas referenciadas por {Símbolo}
+        # Resolver fórmulas dinámicas referenciadas por {Símbolo} y {RANGO_TABLA}
         for celda, formula_plantilla in celdas_formulas:
             formula_resuelta = formula_plantilla
-            # Ordenar símbolos por longitud decreciente para evitar reemplazos erróneos
+            # 1. Reemplazar rangos de tablas (ordenados por longitud decreciente)
+            for r_id in sorted(mapa_rangos.keys(), key=len, reverse=True):
+                token = f"{{{r_id}}}"
+                if token in formula_resuelta:
+                    formula_resuelta = formula_resuelta.replace(
+                        token, mapa_rangos[r_id]
+                    )
+            # 2. Reemplazar símbolos de celdas (ordenados por longitud decreciente)
             for sim in sorted(mapa_simbolos.keys(), key=len, reverse=True):
                 token = f"{{{sim}}}"
                 if token in formula_resuelta:
@@ -54,7 +69,33 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
                         token, mapa_simbolos[sim]
                     )
             celda.value = formula_resuelta
-            celda.number_format = "#,##0.00"
+            if celda.number_format not in ("0.0%", "#,##0"):
+                celda.number_format = "#,##0.00"
+
+        # Aplicar validaciones de datos (Listas desplegables)
+        if celdas_validacion:
+            from openpyxl.worksheet.datavalidation import DataValidation
+
+            validaciones: dict[str, DataValidation] = {}
+            for celda, id_rango in celdas_validacion:
+                if id_rango in mapa_rangos:
+                    rango_tabla = mapa_rangos[id_rango]  # Ej. "A45:E50"
+                    # Extraer fila inicio y fin para tomar solo la primera columna
+                    partes = rango_tabla.split(":")
+                    col_ini = partes[0][0]
+                    fila_ini = partes[0][1:]
+                    fila_fin = partes[1][1:]
+                    # Rango absoluto de la primera columna: =$A$45:$A$50
+                    rango_lista = f"=${col_ini}${fila_ini}:${col_ini}${fila_fin}"
+
+                    if rango_lista not in validaciones:
+                        dv = DataValidation(
+                            type="list", formula1=rango_lista, allow_blank=True
+                        )
+                        ws.add_data_validation(dv)
+                        validaciones[rango_lista] = dv
+
+                    validaciones[rango_lista].add(celda)
 
         # Activar filtro automático si la hoja contiene una sola tabla principal
         if len(hoja.tablas) == 1 and rangos_tablas:
@@ -75,7 +116,9 @@ def _escribir_tabla(
     tabla: Tabla,
     fila: int,
     mapa_simbolos: dict[str, str] | None = None,
+    mapa_rangos: dict[str, str] | None = None,
     celdas_formulas: list[tuple[Any, str]] | None = None,
+    celdas_validacion: list[tuple[Any, str]] | None = None,
 ) -> tuple[int, str]:
     if tabla.titulo:
         ws.cell(fila, 1, tabla.titulo).font = Font(
@@ -94,6 +137,27 @@ def _escribir_tabla(
         and tabla.columnas[2] == "Valor"
     )
 
+    # Detectar formatos por columna (porcentaje o enteros)
+    formatos_col: dict[int, str] = {}
+    for col, nombre in enumerate(tabla.columnas, start=1):
+        nom_low = nombre.lower()
+        if nombre.strip().startswith("%"):
+            formatos_col[col] = "0.0%"
+        elif any(
+            k in nom_low
+            for k in [
+                "(pax)",
+                "pax",
+                "guardia",
+                "portal",
+                "trabajadores",
+                "obreros",
+                "staff",
+            ]
+        ):
+            formatos_col[col] = "#,##0"
+
+    fila_datos_inicio = fila + 1
     for datos in tabla.filas:
         fila += 1
         if (
@@ -107,20 +171,44 @@ def _escribir_tabla(
                 mapa_simbolos[simbolo] = f"C{fila}"
 
         es_total = bool(datos and str(datos[0]).strip().upper().startswith("TOTAL"))
+        unidad_param = (
+            str(datos[3]).strip().lower() if es_tabla_param and len(datos) >= 4 else ""
+        )
         for col, valor in enumerate(datos, start=1):
             celda = ws.cell(fila, col)
-            _celda(celda, valor, es_total=es_total)
+
+            valor_real = valor
+            if type(valor).__name__ == "OpcionLista":
+                valor_real = valor.valor_inicial
+                if celdas_validacion is not None:
+                    celdas_validacion.append((celda, valor.id_rango_ref))
+
+            formato_sugerido = formatos_col.get(col)
+            if es_tabla_param and col == 3:
+                if unidad_param in ("personas", "días", "dias", "und", "taladros"):
+                    formato_sugerido = "#,##0"
+                elif unidad_param == "%":
+                    formato_sugerido = "0.0%"
+
+            _celda(
+                celda,
+                valor_real,
+                es_total=es_total,
+                formato_sugerido=formato_sugerido,
+            )
             if (
                 celdas_formulas is not None
-                and isinstance(valor, str)
-                and valor.startswith("=")
-                and "{" in valor
-                and "}" in valor
+                and isinstance(valor_real, str)
+                and valor_real.startswith("=")
+                and "{" in valor_real
+                and "}" in valor_real
             ):
-                celdas_formulas.append((celda, valor))
+                celdas_formulas.append((celda, valor_real))
 
     letra_fin = get_column_letter(len(tabla.columnas))
     rango = f"A{fila_encabezado}:{letra_fin}{fila}"
+    if tabla.id_rango and mapa_rangos is not None:
+        mapa_rangos[tabla.id_rango] = f"A{fila_datos_inicio}:{letra_fin}{fila}"
     return fila + 1, rango
 
 
@@ -150,12 +238,21 @@ def _encabezado(celda) -> None:
     celda.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
 
-def _celda(celda, valor, es_total: bool = False) -> None:
+def _celda(
+    celda,
+    valor,
+    es_total: bool = False,
+    formato_sugerido: str | None = None,
+) -> None:
     if isinstance(valor, bool):
         valor = "Sí" if valor else "No"
 
     es_porcentaje = False
-    if isinstance(valor, str) and valor.strip().endswith("%"):
+    if (
+        isinstance(valor, str)
+        and valor.strip().endswith("%")
+        and not valor.startswith("=")
+    ):
         try:
             num_str = valor.replace("%", "").strip()
             valor = float(num_str) / 100.0
@@ -171,7 +268,9 @@ def _celda(celda, valor, es_total: bool = False) -> None:
     else:
         celda.font = _FUENTE_NORMAL
 
-    if es_porcentaje:
+    if formato_sugerido:
+        celda.number_format = formato_sugerido
+    elif es_porcentaje:
         celda.number_format = "0.0%"
     elif isinstance(valor, float):
         celda.number_format = "#,##0.00"

@@ -137,14 +137,14 @@ def calcular(p: dict, ctx: dict) -> dict:
     }
 
 
-def _tabla_macro_areas(r: dict) -> Tabla:
+def _tabla_macro_areas(r: dict, para_excel: bool = False) -> Tabla:
     filas = []
     macros = [
-        ("1. Personal de Campamento", "Personal de Campamento"),
-        ("2. Personal de Frente (Túnel + Botaderos)", "Personal de Frente"),
-        ("3. Personal de Servicio y Soporte", "Personal de Servicio"),
+        ("1. Personal de Campamento", "Personal de Campamento", "{P_Camp}"),
+        ("2. Personal de Frente (Túnel + Botaderos)", "Personal de Frente", "{P_Fren}"),
+        ("3. Personal de Servicio y Soporte", "Personal de Servicio", "{P_Serv}"),
     ]
-    for etiqueta, clave in macros:
+    for etiqueta, clave, sim in macros:
         c1 = sum(
             x["cantidad"]
             for x in r["filas"]
@@ -165,19 +165,23 @@ def _tabla_macro_areas(r: dict) -> Tabla:
             for x in r["filas"]
             if x["macro_area"] == clave and x["turno"] == "Noche"
         )
-        tot = r["por_macro_area"][clave]
-        pct = f"{(tot / r['total'] * 100):.1f} %"
+        tot = f"={sim}" if para_excel else r["por_macro_area"][clave]
+        pct = (
+            f"={sim}/{{Pob}}"
+            if para_excel
+            else f"{(r['por_macro_area'][clave] / r['total'] * 100):.1f} %"
+        )
         filas.append([etiqueta, c1, c2, dia, noche, tot, pct])
 
     filas.append(
         [
             "TOTAL PROYECTO",
-            r["camp1_total"],
-            r["camp2_total"],
-            r["dia_total"],
-            r["noche_total"],
-            r["total"],
-            "100.0 %",
+            "={Pob_C1}" if para_excel else r["camp1_total"],
+            "={Pob_C2}" if para_excel else r["camp2_total"],
+            "={G_Dia}" if para_excel else r["dia_total"],
+            "={G_Noc}" if para_excel else r["noche_total"],
+            "={Pob}" if para_excel else r["total"],
+            "={Pob}/{Pob}" if para_excel else "100.0 %",
         ]
     )
     return Tabla(
@@ -195,25 +199,25 @@ def _tabla_macro_areas(r: dict) -> Tabla:
     )
 
 
-def _tabla_cruce_campamentos(r: dict) -> Tabla:
+def _tabla_cruce_campamentos(r: dict, para_excel: bool = False) -> Tabla:
     filas = [
         [
             "Campamento 1 — Principal (Portal A)",
             r["camp1_dia"],
             r["camp1_noche"],
-            r["camp1_total"],
+            "={Pob_C1}" if para_excel else r["camp1_total"],
         ],
         [
             "Campamento 2 — Satélite (Portal B)",
             r["camp2_dia"],
             r["camp2_noche"],
-            r["camp2_total"],
+            "={Pob_C2}" if para_excel else r["camp2_total"],
         ],
         [
             "TOTAL GENERAL DEL PROYECTO",
-            r["dia_total"],
-            r["noche_total"],
-            r["total"],
+            "={G_Dia}" if para_excel else r["dia_total"],
+            "={G_Noc}" if para_excel else r["noche_total"],
+            "={Pob}" if para_excel else r["total"],
         ],
     ]
     return Tabla(
@@ -228,7 +232,7 @@ def _tabla_cruce_campamentos(r: dict) -> Tabla:
     )
 
 
-def _tabla_mano_obra(r: dict) -> Tabla:
+def _tabla_mano_obra(r: dict, para_excel: bool = False) -> Tabla:
     staff_dir = sum(
         x["cantidad"]
         for x in r["filas"]
@@ -255,24 +259,32 @@ def _tabla_mano_obra(r: dict) -> Tabla:
             "Mano de Obra Directa (MOD)",
             staff_dir,
             obr_dir,
-            r["directa"],
-            f"{(r['directa'] / r['total'] * 100):.1f} %",
+            "={MOD}" if para_excel else r["directa"],
+            (
+                "={MOD}/{Pob}"
+                if para_excel
+                else f"{(r['directa'] / r['total'] * 100):.1f} %"
+            ),
             "Excavación subterránea, perforación, voladura, sostenimiento y topografía",
         ],
         [
             "Mano de Obra Indirecta (MOI)",
             staff_ind,
             obr_ind,
-            r["indirecta"],
-            f"{(r['indirecta'] / r['total'] * 100):.1f} %",
+            "={MOI}" if para_excel else r["indirecta"],
+            (
+                "={MOI}/{Pob}"
+                if para_excel
+                else f"{(r['indirecta'] / r['total'] * 100):.1f} %"
+            ),
             "Dirección, SSOMA, talleres, transporte, catering, logística y habitabilidad",
         ],
         [
             "TOTAL",
-            r["staff"],
-            r["obreros"],
-            r["total"],
-            "100.0 %",
+            "={Ps}" if para_excel else r["staff"],
+            "={Po}" if para_excel else r["obreros"],
+            "={Pob}" if para_excel else r["total"],
+            "={Pob}/{Pob}" if para_excel else "100.0 %",
             "Población activa total en campamentos",
         ],
     ]
@@ -351,6 +363,27 @@ def libro(r: dict, p: dict) -> Libro:
         [
             ("Población en campamento", "Pob", r["total"], "personas", "Σ Total"),
             (
+                "Personal de Campamento",
+                "P_Camp",
+                r["por_macro_area"]["Personal de Campamento"],
+                "personas",
+                "Área Administrativa",
+            ),
+            (
+                "Personal de Frente",
+                "P_Fren",
+                r["por_macro_area"]["Personal de Frente"],
+                "personas",
+                "Área Operativa",
+            ),
+            (
+                "Personal de Servicio",
+                "P_Serv",
+                r["por_macro_area"]["Personal de Servicio"],
+                "personas",
+                "Área de Soporte",
+            ),
+            (
                 "Campamento 1 (Portal A)",
                 "Pob_C1",
                 r["camp1_total"],
@@ -387,7 +420,7 @@ def libro(r: dict, p: dict) -> Libro:
                 "Soporte y campamento",
             ),
             ("Staff", "Ps", r["staff"], "personas", "Σ categoría staff"),
-            ("Obreros", "Po", r["obreros"], "personas", "Pob − Ps"),
+            ("Obreros", "Po", "={Pob}-{Ps}", "personas", "Pob − Ps"),
             (
                 "Personal de frente por guardia (1 frente)",
                 "Pf",
@@ -412,7 +445,7 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Personal total en planilla",
                 "Pl",
-                r["planilla"],
+                "=ROUNDUP({Pob}*{fr}, 0)",
                 "personas",
                 "⌈Pob · (t + d) / t⌉",
             ),
@@ -427,9 +460,9 @@ def libro(r: dict, p: dict) -> Libro:
                 "Resumen",
                 "Resumen de personal y cuadres",
                 [
-                    _tabla_macro_areas(r),
-                    _tabla_mano_obra(r),
-                    _tabla_cruce_campamentos(r),
+                    _tabla_macro_areas(r, para_excel=True),
+                    _tabla_mano_obra(r, para_excel=True),
+                    _tabla_cruce_campamentos(r, para_excel=True),
                     resumen,
                 ],
             ),

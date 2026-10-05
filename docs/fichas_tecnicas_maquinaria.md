@@ -65,10 +65,10 @@ La flota de maquinaria pesada ha sido dimensionada y seleccionada específicamen
 * **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1raUUt_Znx8_d1AMDlH95LXy7lLPkiA9U/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1raUUt_Znx8_d1AMDlH95LXy7lLPkiA9U)
 
 ### Carguío y Remanipulación en Botadero
-* **Marca y Modelo:** Caterpillar 966 GC
+* **Marca y Modelo:** Caterpillar 966H
 * **Función:** Limpieza de plataforma de descarga, remanipulación de desmonte y carguío auxiliar.
-* **Especificaciones Técnicas:** Motor Cat C9.3B (267 hp / 199 kW), cucharón de 3.8 a 4.2 m³, cinemática en Z de fuerza de desprendimiento elevada, transmisión Powershift planetaria. Peso operativo 21.6 t. Dimensiones aprox. 8.65 m × 3.00 m × 3.50 m. Consumo promedio 20-25 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1AKjLq2VbRkVqcvwuBRm_JgdOTclJAb7G/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1AKjLq2VbRkVqcvwuBRm_JgdOTclJAb7G)
+* **Especificaciones Técnicas:** Motor Cat C11 ACERT (260 hp / 194 kW), cucharón roquero de 4.0 m³, cinemática en Z de fuerza de desprendimiento elevada. Peso operativo 23.1 t. Dimensiones aprox. 8.86 m × 3.22 m × 3.58 m. Consumo promedio 22-28 L/h.
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o)
 
 ### Extendido y Empuje Pesado en Cresta de Botadero
 * **Marca y Modelo:** Caterpillar D8 (D8T)

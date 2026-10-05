@@ -113,6 +113,7 @@ def calcular(p: dict, ctx: dict) -> dict:
         "area_terreno_m2": area_terreno,
         "lado_terreno_m": math.sqrt(area_terreno),
         "total_edificaciones": len(edificaciones),
+        "edif01_detalle": c.get("edif01_detalle", {}),
     }
 
 

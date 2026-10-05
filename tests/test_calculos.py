@@ -104,4 +104,31 @@ def test_flujo_completo(tmp_path):
     lsp = (tmp_path / "lisp" / "PA14_dibujos.lsp").read_text(encoding="ascii")
     assert lsp.count("(") == lsp.count(")"), "paréntesis LISP desbalanceados"
     assert "defun c:PA14_TODO" in lsp
+    assert "defun c:PA14_CAMP1_EDIF01_DORMITORIO" in lsp
+    assert "defun c:PA14_CAMP1_DORMITORIO" in lsp
     assert ctx["cronograma"]["plazo_dias"] > ctx["seccion"]["dias_excavacion"]
+
+
+def test_personal_formulas_dinamicas(tmp_path):
+    ejecutar(PARAMETROS, tmp_path, tmp_path / "memoria")
+    wb = load_workbook(tmp_path / "excel" / "04_Personal.xlsx", data_only=False)
+    ws = wb["Resumen"]
+
+    # Fila 6: Personal de Campamento (F6 total, G6 pct)
+    assert str(ws["F6"].value).startswith("="), "F6 debe ser fórmula"
+    assert str(ws["G6"].value).startswith("="), "G6 porcentaje debe ser fórmula"
+    assert ws["G6"].number_format == "0.0%", "G6 debe tener formato de porcentaje"
+
+    # Fila 9: Total Proyecto
+    assert str(ws["B9"].value).startswith("="), "B9 debe ser fórmula"
+    assert str(ws["F9"].value).startswith("="), "F9 debe ser fórmula"
+    assert str(ws["G9"].value).startswith("="), "G9 debe ser fórmula"
+
+    # Fila 13: Mano de Obra Directa (D13 total, E13 pct)
+    assert str(ws["D13"].value).startswith("="), "D13 debe ser fórmula"
+    assert str(ws["E13"].value).startswith("="), "E13 porcentaje debe ser fórmula"
+    assert ws["E13"].number_format == "0.0%", "E13 debe tener formato de porcentaje"
+
+    # Fila 36 y 40: Parámetros calculados
+    assert str(ws["C36"].value).startswith("="), "C36 Obreros debe ser fórmula"
+    assert str(ws["C40"].value).startswith("="), "C40 Planilla debe ser fórmula"

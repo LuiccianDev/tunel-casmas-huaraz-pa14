@@ -6,7 +6,7 @@ y las tablas de referencia y justificación empírica (conversión volumétrica,
 coeficientes de llenado, velocidades de pasada, dureza de roca, etc.).
 """
 
-from .modelo import Tabla, tabla_parametros
+from .modelo import OpcionLista, Tabla, tabla_parametros
 
 # =============================================================================
 #  TABLAS DE REFERENCIA ESTÁNDAR (CATERPILLAR & EPIROC)
@@ -18,61 +18,77 @@ def tabla_conversion_volumetrica() -> Tabla:
     columnas = [
         "Clase de Material",
         "Estado Inicial",
-        "Natural (Banco)",
-        "Suelto",
+        "En Banco",
+        "Suelto (Fv)",
         "Compactado",
     ]
     filas = [
-        ["Arcilla", "Natural (1)", 1.00, 1.43, 0.90],
-        ["Arcilla", "Suelto (1)", 0.70, 1.00, 0.64],
-        ["Arcilla", "Compactado (1)", 1.11, 1.59, 1.00],
-        ["Tierra Común", "Natural (2)", 1.00, 1.25, 0.90],
-        ["Tierra Común", "Suelto (2)", 0.80, 1.00, 0.72],
-        ["Tierra Común", "Compactado (2)", 1.11, 1.39, 1.00],
-        ["Arena", "Natural (3)", 1.00, 1.11, 0.95],
-        ["Arena", "Suelto (3)", 0.90, 1.00, 0.86],
-        ["Arena", "Compactado (3)", 1.05, 1.17, 1.00],
-        ["Grava", "Natural (4)", 1.00, 1.12, 0.95],
-        ["Grava", "Suelto (4)", 0.89, 1.00, 0.84],
-        ["Grava", "Compactado (4)", 1.05, 1.18, 1.00],
-        ["Roca Dinamitada (Túnel)", "Natural (5)", 1.00, 1.50, 1.30],
-        ["Roca Dinamitada (Túnel)", "Suelto (5)", 0.67, 1.00, 0.87],
-        ["Roca Dinamitada (Túnel)", "Compactado (5)", 0.77, 1.15, 1.00],
+        ["Roca Dinamitada (Túnel)", "Banco a Suelto", 1.00, 1.50, 1.30],
+        ["Tierra Común", "Banco a Suelto", 1.00, 1.25, 0.90],
+        ["Arcilla", "Banco a Suelto", 1.00, 1.43, 0.90],
+        ["Arena", "Banco a Suelto", 1.00, 1.11, 0.95],
+        ["Grava", "Banco a Suelto", 1.00, 1.12, 0.95],
+        ["Roca Fracturada / Desmonte", "Banco a Suelto", 1.00, 1.40, 1.25],
     ]
     return Tabla(
         columnas,
         filas,
         "Tabla de Referencia 1: Factores de Conversión Volumétrica (Caterpillar)",
+        id_rango="REF_CONVERSION",
     )
 
 
 def tabla_coeficientes_carga_k() -> Tabla:
     """Tabla de coeficientes de carga (K) y llenado según material."""
-    columnas = ["Tipo de Material", "Coeficiente de Carga (k)", "Observación Operativa"]
+    columnas = [
+        "Tipo de Material / Fragmentación",
+        "K de Diseño",
+        "Rango Típico",
+        "Observación Operativa",
+    ]
     filas = [
-        ["Tierra suelta o común", "0.80 – 1.00", "Llenado fácil sin sobrecarga"],
-        ["Arena seca o limpia", "0.80 – 0.90", "Escurrimiento en bordes"],
-        ["Grava o material denso", "0.70 – 0.85", "Resistencia a la penetración"],
-        [
-            "Roca fracturada o suelo húmedo",
-            "0.65 – 0.80",
-            "Huecos intergranulares mayores",
-        ],
         [
             "Roca dinamitada de túnel (PA14)",
+            0.80,
             "0.75 – 0.80",
             "Fragmentación controlada con precorte",
         ],
         [
+            "Roca fracturada o suelo húmedo",
+            0.75,
+            "0.65 – 0.80",
+            "Huecos intergranulares mayores",
+        ],
+        [
+            "Grava o material denso",
+            0.80,
+            "0.70 – 0.85",
+            "Resistencia media a penetración",
+        ],
+        [
+            "Tierra suelta o común",
+            0.90,
+            "0.80 – 1.00",
+            "Llenado fácil sin sobrecarga",
+        ],
+        [
+            "Arena seca o limpia",
+            0.85,
+            "0.80 – 0.90",
+            "Escurrimiento leve en bordes",
+        ],
+        [
             "Material fácilmente empujable (blando)",
+            1.05,
             "1.00 – 1.10",
-            "Corona abombada sobre la hoja/cucharón",
+            "Corona abombada sobre cuchilla",
         ],
     ]
     return Tabla(
         columnas,
         filas,
         "Tabla de Referencia 2: Coeficiente de Carga K (Caterpillar Handbook)",
+        id_rango="REF_CARGA_K",
     )
 
 
@@ -80,74 +96,107 @@ def tabla_motoniveladora_trabajo() -> Tabla:
     """Tabla de velocidades y pasadas de motoniveladora según tipo de labor."""
     columnas = [
         "Tipo de Trabajo",
-        "Velocidad Típica (km/h)",
-        "Espesor de Corte/Capa (cm)",
-        "N° Pasadas Típicas",
+        "Velocidad (km/h)",
+        "Espesor Capa (m)",
+        "N° Pasadas",
+        "Rango Operativo",
     ]
     filas = [
-        ["Desbaste grueso (corte o extendido rápido)", "3.0 – 5.0", "15 – 25", "3 – 4"],
-        ["Nivelación intermedia o extendido de base", "5.0 – 8.0", "10 – 15", "4 – 6"],
-        ["Perfilado fino y bombeo de calzada", "4.0 – 6.0", "5 – 10", "4 – 6"],
-        ["Conformado de talud y cunetas", "2.0 – 4.0", "Variable", "6 – 8"],
-        ["Escarificado de afirmado existente", "2.0 – 3.5", "10 – 20", "2 – 3"],
+        [
+            "Nivelación intermedia o extendido de base",
+            6.5,
+            0.15,
+            5,
+            "5.0 – 8.0 km/h | 10 – 15 cm | 4 – 6 pasadas",
+        ],
+        [
+            "Desbaste grueso (corte o extendido rápido)",
+            4.0,
+            0.20,
+            3,
+            "3.0 – 5.0 km/h | 15 – 25 cm | 3 – 4 pasadas",
+        ],
+        [
+            "Perfilado fino y bombeo de calzada",
+            5.0,
+            0.08,
+            5,
+            "4.0 – 6.0 km/h | 5 – 10 cm | 4 – 6 pasadas",
+        ],
+        [
+            "Conformado de talud y cunetas",
+            3.0,
+            0.12,
+            7,
+            "2.0 – 4.0 km/h | Variable | 6 – 8 pasadas",
+        ],
+        [
+            "Escarificado de afirmado existente",
+            2.5,
+            0.15,
+            3,
+            "2.0 – 3.5 km/h | 10 – 20 cm | 2 – 3 pasadas",
+        ],
     ]
     return Tabla(
         columnas,
         filas,
         "Tabla de Referencia 3: Modos de Trabajo y Pasadas de Motoniveladora (Cat 140G)",
+        id_rango="REF_MOTO",
     )
 
 
 def tabla_compactacion_suelos() -> Tabla:
     """Tabla de compactación por tipo de suelo y modo de vibración para rodillo."""
     columnas = [
-        "Tipo de Material",
-        "Condición del Material",
+        "Tipo de Material a Compactar",
         "Espesor Compactado (m)",
         "N° Pasadas",
         "Modo de Vibración",
+        "Condición Óptima",
     ]
     filas = [
         [
+            "Subbase estabilizada / afirmado",
+            0.22,
+            8,
+            "Vibración media frecuencia",
+            "Ligera humedad",
+        ],
+        [
             "Arena, grava, afirmado granular",
-            "Seca o con humedad óptima",
-            "0.20 – 0.30",
-            "4 – 6",
+            0.25,
+            5,
             "Frecuencia alta / baja amplitud",
+            "Seca o con humedad óptima",
         ],
         [
             "Toba lítica / roca alterada",
-            "Seca / semicompacta",
-            "0.15 – 0.25",
-            "6 – 8",
+            0.20,
+            7,
             "Vibración alta amplitud",
+            "Seca / semicompacta",
         ],
         [
             "Arcilla, limo (cohesivos)",
-            "Humedad óptima ±2%",
-            "0.15 – 0.20",
-            "8 – 12",
+            0.18,
+            10,
             "Vibración intermitente / pata de cabra",
-        ],
-        [
-            "Subbase estabilizada / afirmado",
-            "Ligera humedad",
-            "0.20 – 0.25",
-            "6 – 10",
-            "Vibración media frecuencia",
+            "Humedad óptima ±2%",
         ],
         [
             "Relleno rocoso o pedraplén",
-            "Seco / con bloques",
-            "0.25 – 0.35",
-            "3 – 5",
+            0.30,
+            4,
             "Vibración alta amplitud",
+            "Seco / con bloques",
         ],
     ]
     return Tabla(
         columnas,
         filas,
         "Tabla de Referencia 4: Parámetros de Compactación por Tipo de Suelo (Cat CS11)",
+        id_rango="REF_RODILLO",
     )
 
 
@@ -195,32 +244,54 @@ def tabla_capas_estructurales() -> Tabla:
 def tabla_penetracion_rocas() -> Tabla:
     """Tabla Epiroc/Sandvik de velocidad de penetración según calidad geomecánica."""
     columnas = [
-        "Tipo de Roca / Calidad",
+        "Calidad Geomecánica de Roca",
         "RMR Estimado",
-        "Velocidad Penetración Vp (m/min)",
-        "Desgaste de Broca (m/afilado)",
+        "Vp Diseño (m/min)",
+        "Rango Vp",
+        "Desgaste de Broca",
     ]
     filas = [
-        ["Roca Muy Buena (Granito masivo)", "> 80", "1.10 – 1.30", "120 – 160 m"],
-        ["Roca Buena (Andesita/Granodiorita)", "61 – 80", "1.40 – 1.60", "160 – 220 m"],
         [
-            "Roca Regular (Diorita fracturada - PA14)",
+            "Roca Regular (Diorita PA14)",
             "41 – 60",
+            1.60,
             "1.50 – 1.80",
             "220 – 300 m",
         ],
         [
-            "Roca Mala (Pizarras/Esquistos cizallados)",
+            "Roca Buena (Andesita/Granodiorita)",
+            "61 – 80",
+            1.50,
+            "1.40 – 1.60",
+            "160 – 220 m",
+        ],
+        [
+            "Roca Muy Buena (Granito masivo)",
+            "> 80",
+            1.20,
+            "1.10 – 1.30",
+            "120 – 160 m",
+        ],
+        [
+            "Roca Mala (Pizarras/Esquistos)",
             "21 – 40",
+            2.00,
             "1.80 – 2.20",
             "300 – 400 m",
         ],
-        ["Roca Muy Mala (Fallas y brechas)", "< 20", "2.20 – 2.60", "400 – 500 m"],
+        [
+            "Roca Muy Mala (Fallas y brechas)",
+            "< 20",
+            2.40,
+            "2.20 – 2.60",
+            "400 – 500 m",
+        ],
     ]
     return Tabla(
         columnas,
         filas,
         "Tabla de Referencia 6: Velocidad de Penetración según Geomecánica (Sandvik / Epiroc)",
+        id_rango="REF_PERFORACION",
     )
 
 
@@ -235,8 +306,6 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     rnd = p["maquinaria"]["rendimientos"]
     falt = rnd["factor_altitud"]
     eff = rnd["eficiencia_operativa"]
-    fv = rnd["factor_abundamiento"]
-    k_carga = rnd["coeficiente_carga_k"]
     p_perdidas = rnd["porcentaje_perdidas_reales"]
     f_ll = rnd["factor_llenado_balde"]
 
@@ -269,18 +338,32 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 ),
                 ("Factor de eficiencia operativa", "E", eff, "", "50 min / hora"),
                 (
+                    "Tipo de material para factor K",
+                    "Mat_K",
+                    OpcionLista("Roca dinamitada de túnel (PA14)", "REF_CARGA_K"),
+                    "",
+                    "Selección de fragmentación",
+                ),
+                (
                     "Coeficiente de carga de la hoja",
                     "K",
-                    k_carga,
+                    "=VLOOKUP({Mat_K},{REF_CARGA_K},2,FALSE)",
                     "",
-                    "Tabla 2 (Roca fragmentada)",
+                    "Tabla 2 (Caterpillar)",
+                ),
+                (
+                    "Clase de material en banco",
+                    "Mat_Fv",
+                    OpcionLista("Roca Dinamitada (Túnel)", "REF_CONVERSION"),
+                    "",
+                    "Selección geológica banco",
                 ),
                 (
                     "Factor de abundamiento de roca",
                     "Fv",
-                    fv,
+                    "=VLOOKUP({Mat_Fv},{REF_CONVERSION},4,FALSE)",
                     "",
-                    "Tabla 1 (Roca dinamitada natural a suelto)",
+                    "Tabla 1 (Banco a Suelto)",
                 ),
                 (
                     "RENDIMIENTO TEÓRICO",
@@ -324,9 +407,9 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
             [calculo, tabla_conversion_volumetrica(), tabla_coeficientes_carga_k()]
         )
 
-    # 2. CARGADORES FRONTALES (CAT 966H, CAT 966GC)
-    elif eq_id in ("CAT_966H", "CAT_966GC"):
-        cap_cucharon = 4.0 if eq_id == "CAT_966H" else 3.8
+    # 2. CARGADOR FRONTAL (CAT 966H)
+    elif eq_id == "CAT_966H":
+        cap_cucharon = 4.0
         calculo = tabla_parametros(
             [
                 (
@@ -334,7 +417,7 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                     "Q",
                     cap_cucharon,
                     "m³",
-                    "Ficha técnica fabricante",
+                    "Ficha técnica Caterpillar",
                 ),
                 (
                     "Distancia media de acarreo en 'V'",
@@ -369,13 +452,33 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 ),
                 ("Eficiencia de operación", "E", eff, "", "50 min / hora"),
                 (
+                    "Tipo de material para factor K",
+                    "Mat_K",
+                    OpcionLista("Roca dinamitada de túnel (PA14)", "REF_CARGA_K"),
+                    "",
+                    "Selección de fragmentación",
+                ),
+                (
                     "Coeficiente de carga",
                     "K",
-                    k_carga,
+                    "=VLOOKUP({Mat_K},{REF_CARGA_K},2,FALSE)",
                     "",
-                    "Tabla 2 (Roca fragmentada)",
+                    "Tabla 2 (Caterpillar)",
                 ),
-                ("Factor de abundamiento", "Fv", fv, "", "Tabla 1 (Roca dinamitada)"),
+                (
+                    "Clase de material en banco",
+                    "Mat_Fv",
+                    OpcionLista("Roca Dinamitada (Túnel)", "REF_CONVERSION"),
+                    "",
+                    "Selección geológica banco",
+                ),
+                (
+                    "Factor de abundamiento",
+                    "Fv",
+                    "=VLOOKUP({Mat_Fv},{REF_CONVERSION},4,FALSE)",
+                    "",
+                    "Tabla 1 (Banco a Suelto)",
+                ),
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
@@ -446,13 +549,33 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 ),
                 ("Factor de eficiencia operativa", "E", eff, "", "50 min / hora"),
                 (
+                    "Tipo de material para factor K",
+                    "Mat_K",
+                    OpcionLista("Roca dinamitada de túnel (PA14)", "REF_CARGA_K"),
+                    "",
+                    "Selección de fragmentación",
+                ),
+                (
                     "Coeficiente de carga",
                     "K",
-                    k_carga,
+                    "=VLOOKUP({Mat_K},{REF_CARGA_K},2,FALSE)",
                     "",
-                    "Tabla 2 (Material granular/roca)",
+                    "Tabla 2 (Caterpillar)",
                 ),
-                ("Factor de abundamiento", "Fv", fv, "", "Tabla 1 (Roca dinamitada)"),
+                (
+                    "Clase de material en banco",
+                    "Mat_Fv",
+                    OpcionLista("Roca Dinamitada (Túnel)", "REF_CONVERSION"),
+                    "",
+                    "Selección geológica banco",
+                ),
+                (
+                    "Factor de abundamiento",
+                    "Fv",
+                    "=VLOOKUP({Mat_Fv},{REF_CONVERSION},4,FALSE)",
+                    "",
+                    "Tabla 1 (Banco a Suelto)",
+                ),
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
@@ -560,8 +683,34 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                     "Σ(tc + tida + td + tret + tm)",
                 ),
                 ("Factor de eficiencia", "E", eff, "", "50 min / hora"),
-                ("Coeficiente de carga", "K", k_carga, "", "Tabla 2"),
-                ("Factor de abundamiento", "Fv", fv, "", "Tabla 1"),
+                (
+                    "Tipo de material para factor K",
+                    "Mat_K",
+                    OpcionLista("Roca dinamitada de túnel (PA14)", "REF_CARGA_K"),
+                    "",
+                    "Selección de fragmentación",
+                ),
+                (
+                    "Coeficiente de carga",
+                    "K",
+                    "=VLOOKUP({Mat_K},{REF_CARGA_K},2,FALSE)",
+                    "",
+                    "Tabla 2 (Caterpillar)",
+                ),
+                (
+                    "Clase de material en banco",
+                    "Mat_Fv",
+                    OpcionLista("Roca Dinamitada (Túnel)", "REF_CONVERSION"),
+                    "",
+                    "Selección geológica banco",
+                ),
+                (
+                    "Factor de abundamiento",
+                    "Fv",
+                    "=VLOOKUP({Mat_Fv},{REF_CONVERSION},4,FALSE)",
+                    "",
+                    "Tabla 1 (Banco a Suelto)",
+                ),
                 (
                     "RENDIMIENTO TEÓRICO",
                     "R_teo",
@@ -595,21 +744,27 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     # 5. MOTONIVELADORA (CAT 140G)
     elif eq_id == "CAT_140G":
         moto = rnd["motoniveladora"]
-        v_moto = moto["velocidad_trabajo_kmh"]
         h_hoja = moto["ancho_hoja_m"]
         ancho_ef = moto["ancho_efectivo_m"]
-        esp_capa = moto["espesor_capa_m"]
-        n_pasadas = moto["numero_pasadas"]
         eff_moto = moto["eficiencia_operativa"]
 
         calculo = tabla_parametros(
             [
                 (
+                    "Modo de trabajo asignado",
+                    "Modo",
+                    OpcionLista(
+                        "Nivelación intermedia o extendido de base", "REF_MOTO"
+                    ),
+                    "",
+                    "Selección de modo de trabajo",
+                ),
+                (
                     "Velocidad media de trabajo",
                     "V",
-                    v_moto,
+                    "=VLOOKUP({Modo},{REF_MOTO},2,FALSE)",
                     "km/h",
-                    "Tabla 3 (Nivelación intermedia)",
+                    "Tabla 3",
                 ),
                 (
                     "Longitud total de vertedera",
@@ -628,11 +783,17 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Espesor de capa de nivelación",
                     "E_capa",
-                    esp_capa,
+                    "=VLOOKUP({Modo},{REF_MOTO},3,FALSE)",
                     "m",
-                    "Tabla 5 (Subbase/base)",
+                    "Tabla 3",
                 ),
-                ("Número de pasadas requeridas", "P", n_pasadas, "und", "Tabla 3"),
+                (
+                    "Número de pasadas requeridas",
+                    "P",
+                    "=VLOOKUP({Modo},{REF_MOTO},4,FALSE)",
+                    "und",
+                    "Tabla 3",
+                ),
                 (
                     "Eficiencia de motoniveladora",
                     "E",
@@ -682,12 +843,17 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
         v_rod = rod["velocidad_trabajo_kmh"]
         w_tamb = rod["ancho_tambor_m"]
         trasl = rod["traslape_m"]
-        esp_comp = rod["espesor_capa_compactada_m"]
-        n_pasadas_rod = rod["numero_pasadas"]
         perd_rod = rod["perdidas_reales"]
 
         calculo = tabla_parametros(
             [
+                (
+                    "Tipo de material a compactar",
+                    "Mat_Rod",
+                    OpcionLista("Subbase estabilizada / afirmado", "REF_RODILLO"),
+                    "",
+                    "Selección de material",
+                ),
                 (
                     "Velocidad de avance con vibración",
                     "V",
@@ -719,14 +885,14 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Espesor de capa compactada",
                     "C",
-                    esp_comp,
+                    "=VLOOKUP({Mat_Rod},{REF_RODILLO},2,FALSE)",
                     "m",
-                    "Tabla 4 (Afirmado granular)",
+                    "Tabla 4",
                 ),
                 (
                     "Número de pasadas recomendadas",
                     "P",
-                    n_pasadas_rod,
+                    "=VLOOKUP({Mat_Rod},{REF_RODILLO},3,FALSE)",
                     "und",
                     "Tabla 4",
                 ),
@@ -764,12 +930,18 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
     elif eq_id in ("JUMBO_DT820", "JUMBO_DT1131", "POWERROC_T25", "BOLTEC_M"):
         perf = rnd["perforacion"]
         n_brazos = 3 if "DT1131" in eq_id else (2 if "DT820" in eq_id else 1)
-        vp = perf["velocidad_penetracion_m_min"]
         dmec = perf["disponibilidad_mecanica"]
         u_turno = perf["factor_utilizacion"]
 
         calculo = tabla_parametros(
             [
+                (
+                    "Calidad geomecánica de roca",
+                    "Cal_Roca",
+                    OpcionLista("Roca Regular (Diorita PA14)", "REF_PERFORACION"),
+                    "",
+                    "Selección de calidad de roca",
+                ),
                 (
                     "Número de brazos / martillos hidráulicos",
                     "N_brazos",
@@ -780,9 +952,9 @@ def generar_tablas_rendimiento_equipo(ficha: dict, p: dict) -> list[Tabla]:
                 (
                     "Velocidad de penetración neta",
                     "Vp",
-                    vp,
+                    "=VLOOKUP({Cal_Roca},{REF_PERFORACION},3,FALSE)",
                     "m/min",
-                    "Tabla 6 (Roca Regular PA14)",
+                    "Tabla 6",
                 ),
                 ("Longitud estándar de barreno", "Lb", 3.66, "m", "Barra de 12 pies"),
                 (

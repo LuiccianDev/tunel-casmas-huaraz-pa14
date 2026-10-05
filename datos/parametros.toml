@@ -1895,6 +1895,30 @@ cantidad = 1
 ancho_edificio_m = 6.0
 factor_terreno = 1.5 # Relación área total terreno / área edificada (vías, retiros, accesos)
 
+# Parámetros arquitectónicos de detalle para EDIF-01 (Modular Dormitorio - Plano AR-DM-001)
+[campamento.edif01_detalle]
+largo_total_m = 48.70           # m, largo total del pabellón modular (plano AR-DM-001)
+ancho_cuerpo_m = 12.00          # m, ancho de crujía habitable (5m + 2m + 5m)
+ancho_total_m = 18.00           # m, ancho total incluyendo voladizos y escaleras exteriores
+ancho_modulo_m = 3.50           # m, ancho modular típico de habitación (S)
+profundidad_habitacion_m = 5.00  # m, profundidad de habitación unipersonal (S)
+ancho_pasadizo_m = 2.00         # m, ancho pasadizo central térmico (RNE A.070 / A.130)
+ancho_modulo_central_m = 4.50   # m, ancho módulo central de escalera y vestíbulo (S)
+espesor_muro_ext_m = 0.15       # m, espesor muro panel sándwich 100mm + fijaciones (S)
+espesor_tabique_m = 0.10        # m, espesor tabique interior (S)
+altura_planta_baja_m = 2.50     # m, altura libre nivel PB (plano AR-DM-001)
+altura_primer_piso_m = 2.60     # m, altura libre nivel P1 (plano AR-DM-001)
+altura_techo_cercha_m = 1.50    # m, flecha de cercha techo dos aguas (S)
+ancho_cama_m = 1.00             # m, ancho cama individual (S)
+largo_cama_m = 2.00             # m, largo cama individual (S)
+ancho_bano_m = 1.50             # m, ancho recinto baño privado (S)
+largo_bano_m = 1.80             # m, largo recinto baño privado (S)
+ancho_closet_m = 0.60           # m, profundidad clóset (S)
+largo_closet_m = 1.20           # m, frente clóset (S)
+codigo_plano = "AR-DM-001"      # código de plano según catálogo de edificaciones
+revision_plano = "REV B"        # revisión del entregable
+escala_plano = "1:100"          # escala normalizada de presentación
+
 [[campamento.edificaciones]]
 id = "EDIF-01"
 nombre = "Pabellón de Dormitorios Staff e Ingeniería"
