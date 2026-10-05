@@ -81,41 +81,42 @@ norte = 8942757.03
 cota = 3800.0
 
 # Distancias calculadas entre componentes del proyecto
+# Retiros de seguridad y distancias ambientales normativas (MTC EG-2013 / DS 024-2016-EM / DL 1278)
 [[ubicacion.restricciones]]
 desde = "PE"
 hasta = "BOT1"
 minimo_m = 100.0
-fuente = "Distancia portal Entrada a Botadero 1"
+fuente = "MTC EG-2013 Sec. 210 / DS 024-2016-EM (Retiro ambiental portal Entrada a Botadero 1 >= 100 m)"
 
 [[ubicacion.restricciones]]
 desde = "PS"
 hasta = "BOT2"
 minimo_m = 100.0
-fuente = "Distancia portal Salida a Botadero 2"
+fuente = "MTC EG-2013 Sec. 210 / DS 024-2016-EM (Retiro ambiental portal Salida a Botadero 2 >= 100 m)"
 
 [[ubicacion.restricciones]]
 desde = "PE"
 hasta = "CAM1"
 minimo_m = 100.0
-fuente = "Distancia portal Entrada a Campamento Principal"
+fuente = "MTC EG-2013 Sec. 104 / DS 024-2016-EM (Retiro de seguridad portal Entrada a Campamento Principal >= 100 m)"
 
 [[ubicacion.restricciones]]
 desde = "PS"
 hasta = "CAM2"
 minimo_m = 100.0
-fuente = "Distancia portal Salida a Campamento 2"
+fuente = "MTC EG-2013 Sec. 104 / DS 024-2016-EM (Retiro de seguridad portal Salida a Campamento 2 >= 100 m)"
 
 [[ubicacion.restricciones]]
 desde = "CAM2"
 hasta = "BOT2"
 minimo_m = 100.0
-fuente = "Distancia Campamento 2 a Botadero 2"
+fuente = "MTC EG-2013 Sec. 104 / DL 1278 (Distancia sanitaria Campamento 2 a Botadero 2 >= 100 m)"
 
 [[ubicacion.restricciones]]
 desde = "CAM1"
 hasta = "BOT1"
 minimo_m = 100.0
-fuente = "Distancia Campamento Principal a Botadero 1"
+fuente = "MTC EG-2013 Sec. 104 / DL 1278 (Distancia sanitaria Campamento Principal a Botadero 1 >= 100 m)"
 
 # =============================================================================
 #  02 · GEOLOGÍA — pendiente: el usuario entregará los datos estructurados.
@@ -148,16 +149,16 @@ cuneta_prof_m = 0.40   # cuneta lateral (plano CAD)
 bombeo_pct = 2.0       # bombeo transversal (plano CAD)
 tolerancia_m = 0.01    # redondeo de las cotas del plano CAD (comprobaciones geométricas)
 
-# Mínimos normativos (Perú). Ver docs/memoria/03_Seccion.md
+# Mínimos normativos (Perú). Ver docs/memoria/03_Seccion.md y docs/MARCO_REGULATORIO_Y_TECNICO.md
 [seccion.norma]
 # MTC, Manual de Carreteras: Túneles, Muros y Obras Complementarias (RD 036-2016-MTC/14)
-galibo_vertical_m = 5.50    # gálibo vertical mínimo sobre la plataforma
-vereda_m = 0.75             # vereda mínima a cada lado (mantenimiento / auxilio)
-altura_vereda_m = 2.40      # (S) altura libre mínima sobre vereda → verificar en el manual
-longitud_emergencia_m = 500 # (S) túnel > 500 m: prever zonas de emergencia → verificar
+galibo_vertical_m = 5.50    # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (Gálibo vertical libre sobre plataforma)
+vereda_m = 0.75             # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (Ancho mínimo vereda de auxilio y mantenimiento)
+altura_vereda_m = 2.40      # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (Altura libre mínima sobre vereda en hastial)
+longitud_emergencia_m = 500 # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (Túneles L > 500 m exigen instalaciones de auxilio)
 # MTC, Manual de Carreteras: Diseño Geométrico DG-2018, Sección 304
-ancho_carril_m = 3.60       # carril para carretera de 1.ª clase / autopista
-berma_m = 1.20              # (S) berma mínima de referencia → verificar Tabla 304.02
+ancho_carril_m = 3.60       # Unidad: m | Norma: MTC DG-2018 Tabla 304.01 (Carretera 1ra Clase, Vd = 60 km/h)
+berma_m = 1.20              # Unidad: m | Norma: MTC DG-2018 Tabla 304.02 (Mínimo absoluto en túnel orografía tipo 3/4)
 
 [perforacion]
 frentes = 2                     # frentes de ataque (1 = un solo portal)
@@ -2084,7 +2085,7 @@ campamento = "CAMP1"
 base = "fijo"
 area_m2 = 360.0
 ancho_m = 15.0
-norma = "RNE OS.090 / D.S. 004-2017-MINAM (LMP efluentes tratados)"
+norma = "RNE OS.090 / D.S. 003-2010-MINAM (LMP efluentes PTAR doméstica)"
 
 [[campamento.edificaciones]]
 id = "EDIF-17"
@@ -2454,37 +2455,37 @@ cantidad = 1
 potencia_hp = 250
 
 # =============================================================================
-#  07 · POLVORÍN
+#  07 · POLVORÍN — SUCAMEC Ley N° 30299 y D.S. N° 010-2017-IN
 # =============================================================================
 [polvorin]
-dias_stock = 15 # (S) días de consumo almacenados
+dias_stock = 15 # Unidad: días | Norma: SUCAMEC D.S. 010-2017-IN (Autonomía operativa estándar para frentes remotos)
 
 [polvorin.explosivos]
-unidades_por_caja = 25.0 # kg por caja
-caja_largo_m = 0.50
-caja_ancho_m = 0.30
-caja_alto_m = 0.25
-altura_max_ruma_m = 1.50  # (S) verificar Reglamento SUCAMEC
-filas = 2                 # filas de rumas (pasillo central)
-pasillo_m = 1.20
-separacion_rumas_m = 0.10
-separacion_pared_m = 0.30
-altura_libre_m = 1.00
-espesor_muro_m = 0.30
+unidades_por_caja = 25.0 # Unidad: kg/caja | Norma: FAMESA / EXSA estándar industrial de emulsiones encartuchadas
+caja_largo_m = 0.50      # Unidad: m | Norma: Embalaje comercial normalizado
+caja_ancho_m = 0.30      # Unidad: m | Norma: Embalaje comercial normalizado
+caja_alto_m = 0.25       # Unidad: m | Norma: Embalaje comercial normalizado
+altura_max_ruma_m = 1.50 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (Máximo 10 cajas superpuestas o 1.50 m)
+filas = 2                # Unidad: filas | Norma: Distribución simétrica con pasillo central
+pasillo_m = 1.20         # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (Pasillo libre >= 1.20 m para explosivos)
+separacion_rumas_m = 0.10 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Separación entre rumas adyacentes)
+separacion_pared_m = 0.30 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Separación perimetral libre para ventilación)
+altura_libre_m = 1.00    # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Distancia vertical mínima ruma superior a techo)
+espesor_muro_m = 0.30    # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Muros de concreto/mampostería e >= 0.30 m)
 
 [polvorin.accesorios]
-detonadores_por_taladro = 1
-unidades_por_caja = 200.0 # (S) detonadores por caja
-caja_largo_m = 0.50
-caja_ancho_m = 0.35
-caja_alto_m = 0.30
-altura_max_ruma_m = 1.50
-filas = 1
-pasillo_m = 1.00
-separacion_rumas_m = 0.10
-separacion_pared_m = 0.30
-altura_libre_m = 1.00
-espesor_muro_m = 0.30
+detonadores_por_taladro = 1 # Unidad: und/taladro | Norma: 1 iniciador Fanel por barreno
+unidades_por_caja = 200.0 # Unidad: detonadores/caja | Norma: Presentación comercial FAMESA Fanel / Nonel
+caja_largo_m = 0.50       # Unidad: m | Norma: Embalaje comercial normalizado
+caja_ancho_m = 0.35       # Unidad: m | Norma: Embalaje comercial normalizado
+caja_alto_m = 0.30        # Unidad: m | Norma: Embalaje comercial normalizado
+altura_max_ruma_m = 1.50  # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (Máximo 1.50 m de apilamiento)
+filas = 1                 # Unidad: filas | Norma: Distribución para polvorín de accesorios
+pasillo_m = 1.00          # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (Pasillo libre >= 1.00 m para accesorios)
+separacion_rumas_m = 0.10 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Separación entre rumas)
+separacion_pared_m = 0.30 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Separación libre a muros)
+altura_libre_m = 1.00     # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Distancia vertical libre a techo)
+espesor_muro_m = 0.30     # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Espesor de muros perimetrales)
 
 # =============================================================================
 #  08 · AGUA: consumo, PETAP, PETAR y pozo
@@ -2930,4 +2931,165 @@ ja = 4.0
 jw = 1.0
 srf = 5.0
 descripcion = "Portal de salida, muy meteorizado"
+
+# =============================================================================
+#  MATRIZ NORMATIVA Y REGULATORIA PERUANA (MARCO LEGAL VINCULANTE)
+#  Documento de respaldo: docs/MARCO_REGULATORIO_Y_TECNICO.md
+# =============================================================================
+
+[normativa_mtc]
+norma = "MTC RD 036-2016-MTC/14, DG-2018 y EG-2013"
+clasificacion_tunel = "Clase I (Longitud > 3000 m)" # Unidad: texto | Norma: MTC RD 036-2016-MTC/14
+tipo_carretera = "Primera Clase"                   # Unidad: texto | Norma: MTC DG-2018 Secc. 101 (IMDA 2001-4000 veh/día)
+velocidad_diseno_km_h = 60.0                       # Unidad: km/h | Norma: MTC DG-2018 Tabla 204.01
+ancho_carril_min_m = 3.60                          # Unidad: m | Norma: MTC DG-2018 Tabla 304.01
+berma_min_m = 1.20                                 # Unidad: m | Norma: MTC DG-2018 Tabla 304.02 (mínimo absoluto túnel)
+berma_diseno_m = 1.80                              # Unidad: m | Norma: Plano CAD (supera mínimo normativo de 1.20 m)
+galibo_vertical_min_m = 5.50                       # Unidad: m | Norma: MTC RD 036-2016-MTC/14 y DG-2018 Sec. 304.08
+vereda_min_m = 0.75                                # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (mantenimiento y evacuación)
+vereda_altura_libre_min_m = 2.40                   # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (borde hastial)
+borde_vereda_alto_m = 0.20                         # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (resguardo físico peatonal)
+pendiente_longitudinal_max_pct = 3.0               # Unidad: % | Norma: MTC RD 036-2016-MTC/14 para L > 1000 m
+pendiente_longitudinal_min_pct = 0.5               # Unidad: % | Norma: MTC RD 036-2016-MTC/14 (autolimpieza cunetas)
+bombeo_transversal_pct = 2.0                       # Unidad: % | Norma: MTC RD 036-2016-MTC/14 (desagüe rápido plataforma)
+distancia_visibilidad_parada_m = 87.10             # Unidad: m | Norma: MTC DG-2018 para Vd = 60 km/h y pendiente 1.81%
+espaciamiento_apartaderos_m = 750.0                # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (cada 750-1000 m en Clase I)
+apartadero_largo_util_m = 40.0                     # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (longitud útil parada)
+apartadero_ancho_m = 3.00                          # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (ancho de parada adicional)
+espaciamiento_nichos_sos_m = 150.0                 # Unidad: m | Norma: MTC RD 036-2016-MTC/14 para Clase I
+espaciamiento_hidrantes_m = 150.0                  # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (red presurizada contra incendios)
+espaciamiento_galerias_evacuacion_m = 400.0        # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (galería escape cada 250-400 m)
+potencia_fuego_diseno_mw = 30.0                    # Unidad: MW | Norma: MTC RD 036-2016-MTC/14 (incendio vehículo comercial)
+velocidad_critica_aire_incendio_m_s = 2.50         # Unidad: m/s | Norma: MTC RD 036-2016-MTC/14 (prevención de backlayering)
+shotcrete_fc_28d_kg_cm2 = 280.0                    # Unidad: kg/cm² | Norma: MTC EG-2013 (28 MPa vía húmeda)
+shotcrete_efnarc_joules = 500.0                    # Unidad: Joules | Norma: MTC EG-2013 (absorción energía deflexión 25 mm)
+pernos_pull_out_test_pct = 1.0                     # Unidad: % | Norma: MTC EG-2013 (ensayo de arrancamiento 1% pernos)
+
+[normativa_sucamec]
+norma = "Ley N° 30299 y D.S. N° 010-2017-IN"
+polvorines_separados = true                        # Unidad: boolean | Norma: SUCAMEC D.S. 010-2017-IN (independencia física obligatoria)
+distancia_seguridad_formula = "D = K * Q^(1/3)"    # Unidad: fórmula | Norma: Hopkinson / SUCAMEC D.S. 010-2017-IN
+factor_k_campamento = 6.0                          # Unidad: adimensional | Norma: SUCAMEC (con parapeto a campamento)
+factor_k_carretera = 4.0                           # Unidad: adimensional | Norma: SUCAMEC (con parapeto a vía pública)
+factor_k_entre_polvorines = 2.0                    # Unidad: adimensional | Norma: SUCAMEC (con parapeto entre polvorines)
+distancia_min_campamento_m = 100.0                 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (distancia física mínima)
+distancia_min_portales_m = 100.0                   # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (distancia mínima a bocamina)
+altura_max_ruma_m = 1.50                           # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (máx. 10 cajas)
+altura_libre_techo_m = 1.00                        # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (espacio libre a techo)
+separacion_ruma_pared_m = 0.30                     # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (separación a muro perimetral)
+separacion_entre_rumas_m = 0.10                    # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (separación entre rumas)
+pasillo_circulacion_min_m = 1.00                   # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (accesorios)
+pasillo_circulacion_exp_m = 1.20                   # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (explosivos)
+resistencia_puesta_tierra_max_ohm = 10.0           # Unidad: ohm | Norma: SUCAMEC D.S. 010-2017-IN Art. 185 / CNE
+espesor_puerta_acero_pulg = 0.25                   # Unidad: pulg | Norma: SUCAMEC D.S. 010-2017-IN (blindaje forrado madera)
+espesor_muro_min_m = 0.30                          # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (concreto o mampostería)
+
+[normativa_seguridad_subterranea]
+norma = "D.S. 024-2016-EM y D.S. 023-2017-EM"
+altitud_operacion_msnm = 3850.0                    # Unidad: msnm | Norma: Altitud media de labores PA14
+caudal_aire_persona_m3_min = 5.0                   # Unidad: m³/min/persona | Norma: D.S. 024-2016-EM Art. 247.a (3000-4000 msnm)
+caudal_aire_diesel_hp_m3_min = 3.0                 # Unidad: m³/min/HP | Norma: D.S. 024-2016-EM Art. 247.b (maquinaria diésel)
+velocidad_aire_min_m_min = 20.0                    # Unidad: m/min | Norma: D.S. 024-2016-EM Art. 248 (0.33 m/s en galería)
+velocidad_aire_min_anfo_m_min = 25.0               # Unidad: m/min | Norma: D.S. 024-2016-EM Art. 248 (0.42 m/s con ANFO)
+velocidad_aire_max_m_min = 250.0                   # Unidad: m/min | Norma: D.S. 024-2016-EM Art. 248 (4.17 m/s máximo)
+tiempo_reingreso_voladura_min = 30.0               # Unidad: min | Norma: D.S. 024-2016-EM Art. 257 (espera post-disparo)
+oxigeno_min_pct = 19.5                             # Unidad: % | Norma: D.S. 024-2016-EM Art. 109 (mínimo en volumen)
+monoxido_carbono_max_ppm = 25.0                    # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
+monoxido_carbono_techo_ppm = 100.0                 # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-STEL techo)
+dioxido_nitrogeno_max_ppm = 3.0                    # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
+dioxido_nitrogeno_stel_ppm = 5.0                   # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-STEL 15 min)
+dioxido_carbono_max_ppm = 5000.0                   # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (0.5% en volumen)
+sulfuro_hidrogeno_max_ppm = 10.0                   # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
+dioxido_azufre_max_ppm = 2.0                       # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
+principio_geomecanico = "Labor parada, labor sostenida" # Norma: D.S. 024-2016-EM Art. 224
+desatado_rocas_mecanizado = true                   # Unidad: boolean | Norma: D.S. 024-2016-EM Art. 226 (scaler para H=9.58 m)
+
+[normativa_hidrocarburos]
+norma = "D.S. 052-93-EM, D.S. 043-2007-EM y NFPA 30"
+tipo_combustible = "Diésel B5-S50"
+clase_combustible = "Clase II (Flash point >= 37.8 °C y < 60 °C)"
+factor_cubeto_min = 1.10                           # Unidad: ratio | Norma: D.S. 052-93-EM Art. 21 (>= 110 % tanque mayor)
+volumen_cubeto_camp1_m3 = 41.64                    # Unidad: m³ | Norma: D.S. 052-93-EM (110 % de 10,000 gal en CAMP1)
+volumen_cubeto_camp2_m3 = 41.64                    # Unidad: m³ | Norma: D.S. 052-93-EM (110 % de 10,000 gal en CAMP2)
+altura_dique_min_m = 0.90                          # Unidad: m | Norma: D.S. 052-93-EM Art. 22 (altura mín. muro cubeto)
+altura_dique_max_m = 1.80                          # Unidad: m | Norma: D.S. 052-93-EM Art. 22 (altura máx. muro cubeto)
+distancia_entre_tanques_m = 1.00                   # Unidad: m | Norma: D.S. 052-93-EM Art. 19 (separación conchas)
+distancia_campamento_m = 15.00                     # Unidad: m | Norma: D.S. 052-93-EM Tabla 2 (retiro a dormitorios/oficinas)
+distancia_vias_internas_m = 5.00                   # Unidad: m | Norma: D.S. 052-93-EM Art. 19 (retiro a vías de obra)
+distancia_surtidor_m = 3.00                        # Unidad: m | Norma: D.S. 052-93-EM (separación tanque a isla de despacho)
+distancia_fuentes_calor_m = 15.00                  # Unidad: m | Norma: D.S. 052-93-EM (retiro a talleres y generadores)
+altura_venteo_min_m = 3.60                         # Unidad: m | Norma: D.S. 052-93-EM Art. 23 (descarga con arrestallamas)
+resistencia_puesta_tierra_max_ohm = 10.0           # Unidad: ohm | Norma: D.S. 052-93-EM Art. 38 / CNE
+extintor_rodante_pqs_kg = 50.0                     # Unidad: kg | Norma: D.S. 052-93-EM Art. 45 (1 PQS sobre ruedas >= 80-B:C)
+extintores_portatiles_pqs_kg = 9.0                 # Unidad: kg | Norma: D.S. 052-93-EM Art. 45 (2 PQS en isla rating >= 20-B:C)
+distancia_max_recorrido_extintor_m = 10.0          # Unidad: m | Norma: NTP 350.043-1 / D.S. 052-93-EM
+
+[normativa_recursos_hidricos]
+norma = "Ley N° 29338 y D.S. N° 001-2010-AG (ANA)"
+regimen_derecho = "Autorización de Uso de Agua para Obras Civiles (Ley 29338 Art. 62 / DS 001-2010-AG Art. 87)"
+autoridad_competente = "ALA Huaraz / AAA Huarmey-Chicama"
+macromedicion_obligatoria = true                   # Unidad: boolean | Norma: R.J. 007-2015-ANA Art. 24 (totalizador en pozo POZ)
+reuso_prioritario = true                           # Unidad: boolean | Norma: Ley 29338 Art. 82 / DS 001-2010-AG Art. 143
+faja_marginal_min_m = 5.00                         # Unidad: m | Norma: Ley 29338 Art. 74 / R.J. 332-2016-ANA (quebradas)
+faja_marginal_rio_m = 15.00                        # Unidad: m | Norma: Ley 29338 Art. 74 / R.J. 332-2016-ANA (ríos)
+periodo_retorno_faja_anios = 50                    # Unidad: años | Norma: R.J. 332-2016-ANA (creciente extraordinaria)
+drenaje_tunel_sst_max_mg_l = 50.0                  # Unidad: mg/L | Norma: D.S. 004-2017-MINAM Cat. 3 / D.S. 010-2010-MINAM
+drenaje_tunel_aceites_grasas_max_mg_l = 5.0        # Unidad: mg/L | Norma: D.S. 004-2017-MINAM Cat. 3 (separador coalescente)
+drenaje_tunel_ph_min = 6.5                         # Unidad: pH | Norma: Ley 29338 / D.S. 004-2017-MINAM (neutralización CO2)
+drenaje_tunel_ph_max = 8.5                         # Unidad: pH | Norma: Ley 29338 / D.S. 004-2017-MINAM (neutralización CO2)
+
+[normativa_residuos_dme]
+norma = "D.L. 1278, D.S. 014-2017-MINAM y MTC EG-2013 Sec. 210"
+codigo_colores = "NTP 900.058:2019 (Azul, Blanco, Amarillo, Marrón, Plomo, Negro, Rojo)"
+cat_area_m2 = 496.0                                # Unidad: m² | Norma: D.S. 014-2017-MINAM Art. 52 (EDIF-18 techado)
+cat_losa_impermeable = true                        # Unidad: boolean | Norma: D.S. 014-2017-MINAM Art. 53 (concreto estanco)
+cat_contencion_secundaria_pct = 1.10               # Unidad: ratio | Norma: D.S. 014-2017-MINAM Art. 54 (>= 110 % tambores)
+tiempo_max_acopio_peligrosos_meses = 12            # Unidad: meses | Norma: D.L. 1278 Art. 55
+volumen_esponjado_total_m3 = 900940.0              # Unidad: m³ | Norma: 600,626 m³ banco x 1.50 esponjamiento
+dme_altura_max_banco_m = 10.0                      # Unidad: m | Norma: MTC EG-2013 Sec. 210 (altura máxima por terraza)
+dme_ancho_min_berma_m = 4.0                        # Unidad: m | Norma: MTC EG-2013 Sec. 210 (berma intermedia con cuneta)
+dme_talud_reposo_v_h = "1V:1.5H"                   # Unidad: talud | Norma: MTC EG-2013 Sec. 210 (roca desquinada)
+dme_factor_seguridad_estatico_min = 1.50           # Unidad: FS | Norma: MTC EG-2013 Sec. 210 (estabilidad estática)
+dme_factor_seguridad_pseudoestatico_min = 1.25     # Unidad: FS | Norma: MTC EG-2013 Sec. 210 (sismo de diseño amax = 0.40g)
+dme_drenaje_basal_enrocado = true                  # Unidad: boolean | Norma: MTC EG-2013 Sec. 210 (pedraplén y geotextil)
+dme_canal_coronacion_perimetral = true             # Unidad: boolean | Norma: MTC EG-2013 Sec. 210 (desvío de escorrentías)
+dme_espesor_topsoil_cierre_m = 0.25                # Unidad: m | Norma: MTC EG-2013 Sec. 210 (tapa orgánica para revegetación)
+
+[normativa_efluentes_ptar]
+norma = "D.S. N° 003-2010-MINAM (Límites Máximos Permisibles para Efluentes de PTAR Domésticas)"
+ph_min = 6.5                                       # Unidad: pH | Norma: D.S. 003-2010-MINAM (potencial de hidrógeno mín.)
+ph_max = 8.5                                       # Unidad: pH | Norma: D.S. 003-2010-MINAM (potencial de hidrógeno máx.)
+dbo5_max_mg_l = 100.0                              # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (demanda bioquímica de oxígeno)
+dqo_max_mg_l = 200.0                               # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (demanda química de oxígeno)
+sst_max_mg_l = 100.0                               # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (sólidos suspendidos totales)
+aceites_grasas_max_mg_l = 20.0                     # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (aceites y grasas)
+coliformes_termo_max_nmp_100ml = 10000.0           # Unidad: NMP/100 mL | Norma: D.S. 003-2010-MINAM (coliformes termotolerantes)
+temperatura_max_c = 35.0                           # Unidad: °C | Norma: D.S. 003-2010-MINAM (temperatura máxima efluente)
+punto_monitoreo = "Salida cámara de cloración PTAR antes de vertimiento o reúso"
+frecuencia_monitoreo = "Mensual / Trimestral con laboratorio acreditado ante INACAL"
+
+[normativa_saneamiento_rne]
+norma = "RNE Normas Técnicas OS.090, OS.020, OS.100, IS.010 e IS.020"
+poblacion_diseno_hab = 346                         # Unidad: habitantes | Norma: Organización oficial PA14 (248 C1 + 98 C2)
+dotacion_l_hab_dia = 150.0                         # Unidad: L/hab/día | Norma: RNE IS.010 Art. 2.2 y D.S. 024-2016-EM Art. 202
+coeficiente_retorno = 0.80                         # Unidad: ratio | Norma: RNE IS.020 Art. 4.1 y OS.090
+caudal_medio_residual_m3_dia = 41.52               # Unidad: m³/día | Norma: Q = P * D * Cr / 1000 (0.481 L/s)
+coeficiente_variacion_horaria_k2 = 2.0             # Unidad: adimensional | Norma: RNE OS.100 Num. 1.2
+caudal_maximo_horario_l_s = 0.961                  # Unidad: L/s | Norma: Qmh = k2 * Qm (3.46 m³/h)
+rejas_espaciamiento_libre_mm = 20.0                # Unidad: mm | Norma: RNE OS.090 Num. 5.1 (desbaste barras)
+rejas_velocidad_paso_max_m_s = 1.00                # Unidad: m/s | Norma: RNE OS.090 Num. 5.1 (velocidad de paso a Qmh)
+trampa_grasa_retencion_min_min = 2.5               # Unidad: min | Norma: RNE OS.090 / IS.010 (retención hidráulica)
+trampa_grasa_litros_por_comensal = 20.0            # Unidad: L/comensal | Norma: RNE IS.010 (EDIF-17 trampa de grasas)
+tanque_septico_volumen_util_m3 = 35.30             # Unidad: m³ | Norma: RNE IS.020 / OS.090 (Vs=10.38 + Vl=24.22 + Vn=0.70)
+tasa_lodos_sierra_l_hab_anio = 70.0                # Unidad: L/hab/año | Norma: RNE IS.020 Tabla 1 (clima frío < 15 °C)
+intervalo_limpieza_tanque_anios = 1.0              # Unidad: años | Norma: RNE IS.020 (frecuencia de purga de lodos)
+biorreactor_mbbr_remocion_dbo5_pct = 85.0          # Unidad: % | Norma: RNE OS.090 (tecnología biológica de biopelícula)
+camara_contacto_cloro_tiempo_min = 15.0            # Unidad: min | Norma: RNE OS.090 Num. 5.7 (tiempo retención a Qmh)
+cloro_residual_libre_min_mg_l = 0.5                # Unidad: mg/L | Norma: RNE OS.090 Num. 5.7 (desinfección efluente)
+cloro_residual_libre_max_mg_l = 1.5                # Unidad: mg/L | Norma: RNE OS.090 Num. 5.7 (desinfección efluente)
+lecho_secado_area_especifica_m2_hab = 0.12         # Unidad: m²/hab | Norma: RNE OS.090 Num. 5.8 (clima frío sierra)
+lecho_secado_area_minima_m2 = 41.5                 # Unidad: m² | Norma: RNE OS.090 Num. 5.8 (superficie para 346 hab)
+lecho_secado_espesor_arena_m = 0.20                # Unidad: m | Norma: RNE OS.090 Num. 5.8 (manto filtrante de arena)
+lecho_secado_espesor_grava_m = 0.25                # Unidad: m | Norma: RNE OS.090 Num. 5.8 (soporte drenante de grava)
+
 

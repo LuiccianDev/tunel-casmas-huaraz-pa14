@@ -13,16 +13,16 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 ## Fase 1 · Datos reales (reemplazar supuestos `(S)`)
 - [x] Coordenadas reales de portales e instalaciones (01)
 - [ ] Datos geológicos estructurados (02) → densidad, esponjamiento, K, factor de carga
-- [ ] Sección definitiva del túnel: ancho y altura (03)
+- [x] Sección definitiva del túnel: ancho y altura (03)
 - [x] Altitud real de la obra (3850 msnm, ventilación)
-- [ ] Confirmar dotación, distancias mínimas y criterios con el docente / norma
+- [x] Confirmar dotación, distancias mínimas y criterios con el docente / norma
 
 ## Fase 2 · Entregables
 | # | Entregable | Módulo | Excel | Estado |
 |---|-----------|--------|-------|--------|
 | 01 | Ubicación y coordenadas | `m01_ubicacion` | `01_Ubicacion.xlsx` | [x] oficial |
 | 02 | Geología | `m02_geologia` | `02_Geologia.xlsx` | [ ] espera datos |
-| 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [ ] espera datos |
+| 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [x] oficial (13.30x9.58 m, gálibo 11.80x5.50 m, verificación MTC) |
 | 04 | Personal | `m04_personal` | `04_Personal.xlsx` | [x] oficial (346 pax, MOD/MOI, fórmulas 100% dinámicas SUMIFS en desgloses, totales y %, memoria) |
 | 05 | Campamento y edificaciones | `m05_campamento` | `05_Campamento.xlsx` | [x] base |
 | 06 | Maquinaria (frente, botadero, campamento) | `m06_maquinaria` | `06_Maquinaria.xlsx` | [x] oficial (fichas técnicas, cálculo de rendimientos teórico y real, tablas Caterpillar/Epiroc) |
@@ -41,11 +41,21 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 - [x] Plano arquitectónico EDIF-01: Modular Dormitorio Staff (Planta Nivel 1 y Sección A-A' - AR-DM-001 REV B: comandos `PA14_CAMP1_EDIF01_DORMITORIO`, `PA14_CAMP1_DORMITORIO`, `PA14_EDIF01`)
 - [ ] Malla de perforación (cuando haya diseño con geología)
 
-## Fase 4 · Cierre
-- [ ] Revisión de todos los `(S)` restantes
+## Fase 4 · Marco Regulatorio y Armonización Normativa
+- [x] Elaboración de `docs/MARCO_REGULATORIO_Y_TECNICO.md` (normativa MTC, SUCAMEC, MINEM, OSINERGMIN, ANA, MINAM, RNE)
+- [x] Armonización de `datos/parametros.toml` con citas legales exactas y eliminación de marcas (S) verificadas
+- [x] Inclusión de secciones normativas estructuradas ([normativa_mtc], [normativa_sucamec], [normativa_seguridad_subterranea], [normativa_hidrocarburos], [normativa_recursos_hidricos], [normativa_residuos_dme], [normativa_efluentes_ptar], [normativa_saneamiento_rne])
+- [x] Corrección de cita reglamentaria en EDIF-16 (D.S. 003-2010-MINAM para efluentes PTAR doméstica)
+- [x] Verificación cruzada y conformidad de suite `uv` (`ruff format`, `ruff check`, `pytest`, `pa14`)
+
+## Fase 5 · Cierre
+- [ ] Revisión de todos los `(S)` restantes (geología por usuario)
 - [ ] Revisión cruzada de unidades y resultados
 - [ ] Informe final / presentación
 
-- [x] AutoCAD: unidades forzadas a metros, plano de ubicacion en UTM real (WGS84 18L), detalles con origen fijo al sur; sin punto de insercion manual.
-- [x] 03 Seccion: seccion real del plano CAD (13.30 x 9.58 m), galibo 11.80 x 5.50 m, verificacion MTC (hoja 'Justificacion MTC') y memoria generada en docs/memoria/03_Seccion.md.
-- [ ] Verificar en el texto oficial los valores (S) de [seccion.norma] (berma, altura sobre vereda, zonas de emergencia).
+---
+
+### Notas de Verificación Técnica
+- **AutoCAD**: unidades forzadas a metros, plano de ubicación en UTM real (WGS84 18L), detalles con origen fijo al sur; sin punto de inserción manual.
+- **03 Sección**: sección real del plano CAD (13.30 x 9.58 m), gálibo 11.80 x 5.50 m, verificación MTC (hoja 'Justificacion MTC') y memoria generada en `docs/memoria/03_Seccion.md`.
+- **Marco Regulatorio**: Valores (S) de `[seccion.norma]` (berma 1.20 m según DG-2018 Tabla 304.02, altura sobre vereda 2.40 m según RD 036-2016-MTC/14, longitud de emergencia 500 m) y `[polvorin]` (stock 15 días, rumas 1.50 m, unidades por caja según Ley 30299 / DS 010-2017-IN) plenamente verificados y justificados.

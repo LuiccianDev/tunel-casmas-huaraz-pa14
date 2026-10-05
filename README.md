@@ -35,7 +35,15 @@ uv sync                 # crea .venv e instala dependencias (una sola vez)
 uv run pa14             # genera salidas/excel/*.xlsx y salidas/lisp/PA14_dibujos.lsp
 ```
 
-Opciones: `uv run pa14 --parametros otro.toml --salida otra_carpeta`.
+### Scripts de automatización rápida (Windows / Linux)
+
+Se incluyen scripts en `scripts/` para ejecutar las tareas con un solo comando:
+
+| Acción | PowerShell (Windows) | Bash (Linux / Git Bash) |
+|---|---|---|
+| **Verificación total** (Formato + Lint + Tests + PA14) | `.\scripts\check.ps1` | `./scripts/check.sh` |
+| **Generar entregables** (Pipeline PA14) | `.\scripts\run.ps1` | `./scripts/run.sh` |
+
 
 ## Tareas de desarrollo
 

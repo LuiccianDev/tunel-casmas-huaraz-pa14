@@ -12,6 +12,8 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 - Antes de dar una tarea por terminada:
   ```powershell
   uv run ruff format . ; uv run ruff check --fix . ; uv run pytest -q ; uv run pa14
+  # O simplemente ejecutar el script de verificación rápida:
+  .\scripts\check.ps1
   ```
 
 ## Arquitectura
