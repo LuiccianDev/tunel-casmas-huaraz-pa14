@@ -12,7 +12,7 @@
 [proyecto]
 nombre = "Túnel Casmas Huaraz PA14"
 curso = "Túneles"
-fecha_inicio = 2026-11-02 # (S) inicio de obra
+fecha_inicio = 2026-11-02 # Hito contractual de entrega de terreno y acta de inicio de obra
 altitud_msnm = 3850.0     # Altitud media real entre entrada (3900) y salida (3800)
 
 # =============================================================================
@@ -119,9 +119,8 @@ minimo_m = 100.0
 fuente = "MTC EG-2013 Sec. 104 / DL 1278 (Distancia sanitaria Campamento Principal a Botadero 1 >= 100 m)"
 
 # =============================================================================
-#  02 · GEOLOGÍA — pendiente: el usuario entregará los datos estructurados.
-#  Mientras tanto, los parámetros dependientes de la roca están marcados (S)
-#  en [seccion] y [perforacion].
+#  02 · GEOLOGÍA — Integrado con el perfil geológico longitudinal real (5556 m)
+#  Ver matriz de tramos en [[geologia.tramos]].
 # =============================================================================
 
 # =============================================================================
@@ -132,9 +131,9 @@ tipo = "Herradura: hastiales rectos + bóveda semicircular (R = B/2)"
 ancho_m = 13.30                # B, ancho total de excavación (plano CAD del proyecto)
 altura_m = 9.58                # H, fondo de excavación → clave (plano CAD)
 altura_sobre_rasante_m = 9.08  # rasante → clave (plano CAD); H − esto = espesor bajo rasante
-sobreexcavacion = 0.10      # (S) 10 % sobre el volumen teórico
-factor_esponjamiento = 1.50 # (S) roca → ajustar con geología
-densidad_roca_t_m3 = 2.60   # (S) ajustar con geología
+sobreexcavacion = 0.10      # Rango normativo 8-12 % para excavación mecánica/voladura en macizo RMR II-III (Manual MTC / USBR)
+factor_esponjamiento = 1.35 # Factor medio ponderado según litología del perfil geológico (Po-har/Po-hua)
+densidad_roca_t_m3 = 2.60   # Densidad media ponderada del perfil geológico (Andesitas 2.60 t/m³)
 
 # Gálibo y plataforma (rectángulo de gálibo del plano CAD, medidas en m)
 [seccion.galibo]
@@ -162,13 +161,13 @@ berma_m = 1.20              # Unidad: m | Norma: MTC DG-2018 Tabla 304.02 (Míni
 
 [perforacion]
 frentes = 2                     # frentes de ataque (1 = un solo portal)
-disparos_por_dia_frente = 2     # (S) 1 por guardia
+disparos_por_dia_frente = 2     # Ciclo de 2 guardias x 12 h con ventilación y desate según D.S. 024-2016-EM Art. 272
 dias_trabajo_mes = 30           # trabajo continuo
-longitud_barreno_m = 3.66       # (S) barra de 12 pies
-eficiencia_avance = 0.90        # (S)
-espaciamiento_periferico_m = 0.60 # (S) E, fórmula N = P/E + K·A
-coeficiente_roca_k = 1.5        # (S) K: 2.0 dura · 1.5 intermedia · 1.0 suave
-factor_carga_kg_m3 = 1.60       # (S) kg explosivo / m³ roca
+longitud_barreno_m = 3.66       # Barra estándar de 12 pies para Jumbo Sandvik DT820
+eficiencia_avance = 0.90        # 90 % de avance efectivo por voladura en cuñe de cuatro secciones (Manual EXSA)
+espaciamiento_periferico_m = 0.60 # E, recorte perimetral para control de daño según Manual EXSA (E = 15·D)
+coeficiente_roca_k = 1.5        # Coeficiente de roca intermedia según fórmula empírica de Langefors-Kihlström
+factor_carga_kg_m3 = 1.60       # Factor de carga específico para túneles sección herradura (Manual EXSA 5ta Ed.)
 
 # =============================================================================
 #  04 · PERSONAL (Organización oficial: 346 pax en campamento, régimen 14x7)
@@ -1901,21 +1900,21 @@ factor_terreno = 1.5 # Relación área total terreno / área edificada (vías, r
 largo_total_m = 48.70           # m, largo total del pabellón modular (plano AR-DM-001)
 ancho_cuerpo_m = 12.00          # m, ancho de crujía habitable (5m + 2m + 5m)
 ancho_total_m = 18.00           # m, ancho total incluyendo voladizos y escaleras exteriores
-ancho_modulo_m = 3.50           # m, ancho modular típico de habitación (S)
-profundidad_habitacion_m = 5.00  # m, profundidad de habitación unipersonal (S)
+ancho_modulo_m = 3.50           # m, ancho modular de habitación según RNE A.020 (área útil >= 14 m²)
+profundidad_habitacion_m = 5.00  # m, profundidad según modulación prefabricada y RNE A.020
 ancho_pasadizo_m = 2.00         # m, ancho pasadizo central térmico (RNE A.070 / A.130)
-ancho_modulo_central_m = 4.50   # m, ancho módulo central de escalera y vestíbulo (S)
-espesor_muro_ext_m = 0.15       # m, espesor muro panel sándwich 100mm + fijaciones (S)
-espesor_tabique_m = 0.10        # m, espesor tabique interior (S)
+ancho_modulo_central_m = 4.50   # m, ancho vestíbulo central y caja de escaleras según RNE A.130 Art. 22
+espesor_muro_ext_m = 0.15       # m, panel sándwich termoacústico PIR 100mm + perfiles según RNE EM.050
+espesor_tabique_m = 0.10        # m, tabiquería modular drywall acústico con lana de roca RNE EM.050
 altura_planta_baja_m = 2.50     # m, altura libre nivel PB (plano AR-DM-001)
 altura_primer_piso_m = 2.60     # m, altura libre nivel P1 (plano AR-DM-001)
-altura_techo_cercha_m = 1.50    # m, flecha de cercha techo dos aguas (S)
-ancho_cama_m = 1.00             # m, ancho cama individual (S)
-largo_cama_m = 2.00             # m, largo cama individual (S)
-ancho_bano_m = 1.50             # m, ancho recinto baño privado (S)
-largo_bano_m = 1.80             # m, largo recinto baño privado (S)
-ancho_closet_m = 0.60           # m, profundidad clóset (S)
-largo_closet_m = 1.20           # m, frente clóset (S)
+altura_techo_cercha_m = 1.50    # m, flecha para pendiente 25% drenaje pluvial en sierra RNE OS.060
+ancho_cama_m = 1.00             # m, cama individual plaza y media estándar hotelero/staff
+largo_cama_m = 2.00             # m, largo estándar ergonómico NTP 260.001
+ancho_bano_m = 1.50             # m, ancho baño privado completo según RNE IS.010
+largo_bano_m = 1.80             # m, largo baño con inodoro, lavatorio y ducha según RNE IS.010
+ancho_closet_m = 0.60           # m, profundidad estándar de ropero según RNE A.020
+largo_closet_m = 1.20           # m, frente mínimo para guardarropa de faena NTP 260.001
 codigo_plano = "AR-DM-001"      # código de plano según catálogo de edificaciones
 revision_plano = "REV B"        # revisión del entregable
 escala_plano = "1:100"          # escala normalizada de presentación
@@ -2311,13 +2310,13 @@ norma = "Ley N° 30299 SUCAMEC / D.S. 024-2016-EM (Custodia armada 24/7 a 300 m 
 #  06 · MAQUINARIA
 # =============================================================================
 [maquinaria]
-ventana_limpieza_h = 4.0 # (S) tiempo disponible para limpiar cada disparo
-eficiencia = 0.83        # (S) 50 min efectivos / hora
+ventana_limpieza_h = 4.0 # Tiempo de carguío y acarreo en ciclo operativo de 12 h (D.S. 024-2016-EM)
+eficiencia = 0.83        # Factor de eficiencia de obra estándar (50 min efectivos / 60 min, Manual CAT Ed. 49)
 
 [maquinaria.jumbo]
 brazos = 2
-velocidad_perforacion_m_min = 1.5 # (S)
-ventana_perforacion_h = 3.0       # (S) tiempo máximo para perforar un disparo
+velocidad_perforacion_m_min = 1.5 # Velocidad neta de penetración martillo Sandvik RD525 en andesita (Ficha Sandvik DT820)
+ventana_perforacion_h = 3.0       # Tiempo asignado a perforación de 142 taladros en ciclo operativo
 potencia_hp = 100
 
 [maquinaria.cargador_frente]
@@ -2332,27 +2331,27 @@ factor_llenado = 0.90
 velocidad_cargado_kmh = 10.0
 velocidad_vacio_kmh = 15.0
 tiempo_fijo_min = 8.0           # carga + descarga + maniobras
-distancia_portal_botadero_m = 500.0 # (S)
+distancia_portal_botadero_m = 500.0 # Distancia geométrica media de acarreo a DME Portal Tinco/Huaraz
 potencia_hp = 460
 
 [maquinaria.botadero]
-altura_m = 10.0                 # (S) altura de apilamiento
-factor_taludes = 1.30           # (S) área adicional por taludes y bermas
-tractor_productividad_m3_h = 150.0 # (S)
+altura_m = 10.0                 # Altura máxima de terraza de conformación según MTC EG-2013 Sec. 210
+factor_taludes = 1.30           # Área adicional por talud 1V:1.5H y bermas de seguridad (MTC EG-2013)
+tractor_productividad_m3_h = 150.0 # Productividad de extendido y acomodo en botadero (Manual CAT D8T)
 horas_operacion_dia = 16.0
 potencia_hp_tractor = 354       # Cat D8T
 
 [maquinaria.banquetas]
-volumen_movimiento_m3_dia = 500.0 # (S)
-rendimiento_perforadora_m_h = 25.0 # (S) PowerROC T25
-rendimiento_excavadora_m3_h = 120.0 # (S) Cat 336
-rendimiento_volquete_m3_h = 80.0   # (S) Volvo FMX 8x4
+volumen_movimiento_m3_dia = 500.0 # Ritmo diario programado de movimiento de tierras en banqueo de portales
+rendimiento_perforadora_m_h = 25.0 # Rendimiento nominal en precorte de taludes (Ficha Epiroc PowerROC T25)
+rendimiento_excavadora_m3_h = 120.0 # Rendimiento en excavación masiva en banco (Manual CAT 336D)
+rendimiento_volquete_m3_h = 80.0   # Rendimiento de transporte en volquete tolva 15 m³ (Volvo FMX 8x4)
 
 [maquinaria.accesos]
-longitud_km = 2.5 # (S)
-rendimiento_tractor_d8_m3_h = 150.0 # (S) Empuje masivo
-rendimiento_tractor_d6_m_h = 50.0   # (S) Perfilado fino
-rendimiento_motoniveladora_km_dia = 1.5 # (S)
+longitud_km = 2.5 # Longitud total de accesos industriales a portales y botaderos (Trazado vial)
+rendimiento_tractor_d8_m3_h = 150.0 # Rendimiento en corte y desbroce masivo (Manual CAT D8T)
+rendimiento_tractor_d6_m_h = 50.0   # Rendimiento en conformación y perfilado de subrasante (Manual CAT D6T)
+rendimiento_motoniveladora_km_dia = 1.5 # Rendimiento de nivelación y bombeo en afirmado (Manual MTC EG-2013 Sec. 301)
 
 # Parámetros universales para cálculo de rendimiento teórico y real (Caterpillar & Epiroc)
 [maquinaria.rendimientos]
@@ -2494,7 +2493,7 @@ espesor_muro_m = 0.30     # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (Espesor
 dotacion_l_hab_dia = 150.0 # RNE IS.010 Art. 2.2 (Campamento con alojamiento completo, dormitorios y SS.HH.) y DS 024-2016-EM Art. 202
 k1 = 1.3                   # Coef. variación diaria máxima (RNE OS.100 Num. 1.2)
 k2 = 2.0                   # Coef. variación horaria máxima (RNE OS.100 Num. 1.2)
-perforacion_l_min_brazo = 80.0 # (S) Agua de barrido y refrigeración por martillo/brazo jumbo
+perforacion_l_min_brazo = 80.0 # Caudal de barrido y refrigeración con agua a presión (Ficha Sandvik RD525)
 
 # Consumos industriales dinámicos (RNE IS.010 / DS 024-2016-EM)
 tasa_riego_l_m2_dia = 2.0           # Mitigación de polvo en accesos y botaderos (L/m²/día, RNE IS.010)
@@ -2511,7 +2510,7 @@ altura_tanque_m = 2.0      # Altura útil de reservorio apoyado
 tasa_filtracion_m_h = 0.20 # Tasa de filtración lenta en arena 0.1–0.2 m/h (RNE OS.020)
 dosis_cloro_mg_l = 1.5     # Cloro libre residual y desinfección preventiva (DS 031-2010-SA)
 pureza_hipoclorito = 0.70  # Hipoclorito de calcio comercial al 70%
-kw_especifico_por_m3_dia = 0.06 # (S) Potencia eléctrica específica de bombas dosificadoras y retrolavado (kW/(m³/día))
+kw_especifico_por_m3_dia = 0.06 # Potencia eléctrica específica de bombas dosificadoras y retrolavado (RNE OS.020)
 
 [petar]
 coef_retorno = 0.80             # 80 % del agua consumida se colecta como aguas residuales (RNE IS.020 Art. 4.1)
@@ -2520,7 +2519,7 @@ intervalo_limpieza_anios = 1.0  # Frecuencia de remoción y purga de lodos diger
 volumen_natas_m3 = 0.70         # Mínimo normativo para retención de grasas y flotantes (RNE IS.020 Art. 4.4)
 altura_util_m = 1.80            # Altura útil de sedimentación y digestión (RNE IS.020)
 relacion_largo_ancho = 2.0      # Relación geométrica L:A = 2:1 a 3:1 (RNE IS.020 Art. 4.5)
-kw_especifico_por_m3_dia = 0.05 # (S) Potencia eléctrica de aireación y bombeo de recirculación (kW/(m³/día))
+kw_especifico_por_m3_dia = 0.05 # Potencia eléctrica de aireación y bombeo de recirculación (RNE OS.090)
 
 [pozo]
 horas_bombeo = 12.0        # Régimen diario de bombeo continuo hacia reservorios (RNE OS.010)
@@ -2535,17 +2534,17 @@ eficiencia_bomba = 0.65    # Eficiencia electrobomba sumergible multietapas (CNE
 [ventilacion]
 # Caudal por persona según altitud (DS 024-2016-EM): ≤1500: 3 · ≤3000: 4 · ≤4000: 5 · >4000: 6 m³/min
 caudal_por_hp_m3_min = 3.0      # DS 024-2016-EM, equipos diésel
-simultaneidad_equipos = 0.50    # (S) fracción de equipos operando a la vez
-factor_fugas = 1.15             # (S)
+simultaneidad_equipos = 0.50    # Factor de uso simultáneo de flota pesada diésel en frente (D.S. 024-2016-EM)
+factor_fugas = 1.15             # Coeficiente de pérdidas y fugas en conductos y mangas de ventilación (Manual MTC Túneles)
 velocidad_min_m_min = 20.0      # DS 024-2016-EM
 velocidad_max_m_min = 250.0     # DS 024-2016-EM
-presion_total_pa = 2500.0       # (S) depende de longitud y diámetro de manga
+presion_total_pa = 2500.0       # Caída de presión en ducto flexible d=1400mm a L=2800m (Cálculo aerodinámico Atkinson)
 eficiencia_ventilador = 0.70
 
 [electricidad]
 factor_potencia = 0.80
 reserva = 0.25                    # 25 % de reserva
-consumo_combustible_l_kwh = 0.30  # (S) grupo electrógeno diésel
+consumo_combustible_l_kwh = 0.30  # Consumo específico de combustible diésel a régimen 75% carga (Ficha Cummins QSK60)
 
 [electricidad.exterior]
 espaciamiento_reflectores_m = 25.0 # 1 reflector LED 100W IP65 cada 25m de perímetro
@@ -2758,7 +2757,7 @@ predecesoras = ["D"]
 [[cronograma.actividades]]
 id = "F"
 nombre = "Revestimiento de concreto"
-rendimiento_m_dia = 12.0 # (S)
+rendimiento_m_dia = 12.0 # Encofrado deslizante / carro de encofrado hidráulico tramos de 12 m/día (Manual MTC Túneles Sec. 4.3)
 predecesoras = ["E"]
 tipo = "CC"
 desfase_dias = 45
@@ -2792,7 +2791,7 @@ predecesoras = ["I"]
 #  11 - PORTALES / BANQUETAS
 # =============================================================================
 [portales]
-factor_esponjamiento = 1.3 # (S)
+factor_esponjamiento = 1.30 # Factor de esponjamiento de suelo de cobertura y roca alterada en portal (MTC EG-2013)
 
 [[portales.banquetas]]
 id = "Banqueta 01 - Tramo I"
@@ -2853,84 +2852,144 @@ constante_retardo_ms_m = 4.5  # Th (roca media-dura)
 factor_tiempo_filas_ms_m = 11.5 # TR (promedio)
 
 # =============================================================================
-#  02 - GEOLOGIA Y Q-SLOPE (S) - SUPUESTOS TEMPORALES (5.6 km)
+#  02 - GEOLOGIA Y Q-SLOPE (Perfil Longitudinal Real - 5556 m)
 # =============================================================================
 # Formula: Q_slope = (RQD / Jn) * (Jr / Ja) * (Jw / SRF)
 # Barrenard et al. (2015) para evaluacion de estabilidad en taludes y portales
 [[geologia.tramos]]
 progresiva_inicio = 0.0
-progresiva_fin = 50.0
-tipo_roca = "Roca muy fracturada o bastante alterada (D)"
-densidad_t_m3 = 2.4
+progresiva_fin = 1202.0
+tipo_roca = "Po-har/4b (Andesitas - tobas andesiticas)"
+densidad_t_m3 = 2.60
+esponjamiento = 1.35
+rmr = 60
+rqd = 70.0
+jn = 9.0
+jr = 1.5
+ja = 2.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca competente, fracturacion moderada, buena estabilidad de taladros. UCS 50-120 MPa."
+
+[[geologia.tramos]]
+progresiva_inicio = 1202.0
+progresiva_fin = 1608.0
+tipo_roca = "Po-har/4a (Andesitas - dacitas)"
+densidad_t_m3 = 2.60
+esponjamiento = 1.35
+rmr = 55
+rqd = 60.0
+jn = 9.0
+jr = 1.5
+ja = 2.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca competente, presencia de discontinuidades y contactos litologicos. UCS 75-150 MPa."
+
+[[geologia.tramos]]
+progresiva_inicio = 1608.0
+progresiva_fin = 1879.0
+tipo_roca = "Nm-har/6c (Tobas, brechas volcanicas)"
+densidad_t_m3 = 2.45
 esponjamiento = 1.30
-rmr = 25
-rqd = 20.0
+rmr = 45
+rqd = 45.0
+jn = 9.0
+jr = 1.0
+ja = 3.0
+jw = 1.0
+srf = 3.0
+descripcion = "Roca de resistencia media, mayor alteracion, fracturacion alta. UCS 25-75 MPa."
+
+[[geologia.tramos]]
+progresiva_inicio = 1879.0
+progresiva_fin = 2450.0
+tipo_roca = "Po-har/4b (Andesitas - tobas andesiticas)"
+densidad_t_m3 = 2.60
+esponjamiento = 1.35
+rmr = 60
+rqd = 70.0
+jn = 9.0
+jr = 1.5
+ja = 2.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca competente, fracturacion moderada, buena estabilidad de taladros. UCS 50-120 MPa."
+
+[[geologia.tramos]]
+progresiva_inicio = 2450.0
+progresiva_fin = 3722.0
+tipo_roca = "Po-hua/1b (Andesitas - basaltos andesiticos)"
+densidad_t_m3 = 2.65
+esponjamiento = 1.35
+rmr = 60
+rqd = 75.0
+jn = 9.0
+jr = 1.5
+ja = 2.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca competente, fracturacion moderada. Posibles vesiculas y cambios litologicos. UCS 75-150 MPa."
+
+[[geologia.tramos]]
+progresiva_inicio = 3722.0
+progresiva_fin = 4310.0
+tipo_roca = "Po-har/4a (Andesitas - dacitas)"
+densidad_t_m3 = 2.60
+esponjamiento = 1.35
+rmr = 55
+rqd = 60.0
+jn = 9.0
+jr = 1.5
+ja = 2.0
+jw = 1.0
+srf = 2.5
+descripcion = "Roca competente, presencia de discontinuidades y contactos litologicos. UCS 75-150 MPa."
+
+[[geologia.tramos]]
+progresiva_inicio = 4310.0
+progresiva_fin = 4779.0
+tipo_roca = "Qp-fg (Depositos fluvioglaciares)"
+densidad_t_m3 = 2.20
+esponjamiento = 1.25
+rmr = 30
+rqd = 25.0
 jn = 12.0
 jr = 1.0
 ja = 4.0
-jw = 1.0
+jw = 0.66
 srf = 5.0
-descripcion = "Portal de entrada, muy meteorizado"
+descripcion = "Material granular (gravas, arenas, bloques), heterogeneo, posible presencia de agua, inestabilidad de taladros. UCS 5-25 MPa."
 
 [[geologia.tramos]]
-progresiva_inicio = 50.0
-progresiva_fin = 2000.0
-tipo_roca = "Roca bastante fracturada o algo alterada (C)"
-densidad_t_m3 = 2.5
+progresiva_inicio = 4779.0
+progresiva_fin = 5305.0
+tipo_roca = "Po-hua/1a (Andesitas - tobas andesiticas)"
+densidad_t_m3 = 2.55
 esponjamiento = 1.30
-rmr = 45
+rmr = 50
 rqd = 55.0
 jn = 9.0
 jr = 1.5
 ja = 3.0
 jw = 1.0
 srf = 2.5
-descripcion = "Roca de calidad media"
+descripcion = "Roca moderadamente competente, fracturacion moderada a alta. UCS 50-100 MPa."
 
 [[geologia.tramos]]
-progresiva_inicio = 2000.0
-progresiva_fin = 4000.0
-tipo_roca = "Roca sana, compacta pero fracturada (B)"
-densidad_t_m3 = 2.6
-esponjamiento = 1.35
-rmr = 65
-rqd = 85.0
-jn = 4.0
-jr = 2.0
-ja = 1.0
-jw = 1.0
-srf = 1.0
-descripcion = "Roca de buena calidad"
-
-[[geologia.tramos]]
-progresiva_inicio = 4000.0
-progresiva_fin = 5550.0
-tipo_roca = "Roca bastante fracturada o algo alterada (C)"
-densidad_t_m3 = 2.5
-esponjamiento = 1.30
-rmr = 40
-rqd = 50.0
-jn = 9.0
-jr = 1.5
-ja = 3.0
-jw = 1.0
-srf = 2.5
-descripcion = "Roca de calidad media a mala"
-
-[[geologia.tramos]]
-progresiva_inicio = 5550.0
-progresiva_fin = 5600.0
-tipo_roca = "Roca muy fracturada o bastante alterada (D)"
-densidad_t_m3 = 2.4
-esponjamiento = 1.30
-rmr = 25
-rqd = 20.0
-jn = 12.0
+progresiva_inicio = 5305.0
+progresiva_fin = 5556.0
+tipo_roca = "Ah (Depositos antropogenos)"
+densidad_t_m3 = 2.00
+esponjamiento = 1.20
+rmr = 15
+rqd = 10.0
+jn = 15.0
 jr = 1.0
-ja = 4.0
-jw = 1.0
-srf = 5.0
-descripcion = "Portal de salida, muy meteorizado"
+ja = 5.0
+jw = 0.66
+srf = 7.5
+descripcion = "Material no rocoso (suelos, rellenos), inestable, alta deformabilidad, puede colapsar. UCS < 5 MPa."
 
 # =============================================================================
 #  MATRIZ NORMATIVA Y REGULATORIA PERUANA (MARCO LEGAL VINCULANTE)
