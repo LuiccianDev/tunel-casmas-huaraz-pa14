@@ -52,11 +52,11 @@ Definir y justificar la sección transversal del túnel según la normativa peru
 | Elemento | Proyecto | Mínimo | Unidad | Cumple | Fuente |
 |---|---|---|---|---|---|
 | Ancho de carril | 3.6 | 3.6 | m | Sí | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 |
-| Berma (cada lado) | 1.8 | 1.2 | m | Sí | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 (S) |
+| Berma (cada lado) | 1.8 | 1.2 | m | Sí | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 |
 | Vereda (cada lado) | 0.75 | 0.75 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
 | Gálibo vertical | 5.5 | 5.5 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
 | Altura libre en borde del gálibo (bóveda) | 5.498 | 5.5 | m | Sí | Geometría: hw' + √(R² − (Wg/2)²), tolerancia 0.01 m |
-| Altura libre sobre vereda (junto al hastial) | 2.43 | 2.4 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) (S) |
+| Altura libre sobre vereda (junto al hastial) | 2.43 | 2.4 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
 | Gálibo + 2 veredas = ancho B | 13.3 | 13.3 | m | Sí | Geometría del plano CAD |
 
 Todas las comprobaciones **cumplen**.

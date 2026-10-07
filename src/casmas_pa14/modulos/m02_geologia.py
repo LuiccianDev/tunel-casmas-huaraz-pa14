@@ -12,16 +12,16 @@ CLAVE = "geologia"
 
 
 def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
-    tramos_raw = p.get("geologia", {}).get("tramos", [])
+    tramos_raw = p["geologia"]["tramos"]
     tramos_calculados = []
 
     for t in tramos_raw:
-        rqd = float(t.get("rqd", 50.0))
-        jn = float(t.get("jn", 9.0))
-        jr = float(t.get("jr", 1.5))
-        ja = float(t.get("ja", 3.0))
-        jw = float(t.get("jw", 1.0))
-        srf = float(t.get("srf", 2.5))
+        rqd = float(t["rqd"])
+        jn = float(t["jn"])
+        jr = float(t["jr"])
+        ja = float(t["ja"])
+        jw = float(t["jw"])
+        srf = float(t["srf"])
 
         q_slope = (
             (rqd / jn) * (jr / ja) * (jw / srf)
@@ -31,12 +31,12 @@ def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
 
         tramos_calculados.append(
             {
-                "progresiva_inicio": t.get("progresiva_inicio", 0.0),
-                "progresiva_fin": t.get("progresiva_fin", 0.0),
-                "tipo_roca": t.get("tipo_roca", ""),
-                "densidad_t_m3": t.get("densidad_t_m3", 2.5),
-                "esponjamiento": t.get("esponjamiento", 1.3),
-                "rmr": t.get("rmr", 50),
+                "progresiva_inicio": float(t["progresiva_inicio"]),
+                "progresiva_fin": float(t["progresiva_fin"]),
+                "tipo_roca": str(t["tipo_roca"]),
+                "densidad_t_m3": float(t["densidad_t_m3"]),
+                "esponjamiento": float(t["esponjamiento"]),
+                "rmr": int(t["rmr"]),
                 "rqd": rqd,
                 "jn": jn,
                 "jr": jr,
@@ -44,7 +44,7 @@ def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
                 "jw": jw,
                 "srf": srf,
                 "q_slope": round(q_slope, 4),
-                "descripcion": t.get("descripcion", ""),
+                "descripcion": str(t["descripcion"]),
             }
         )
 

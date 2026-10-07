@@ -12,7 +12,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 
 ## Fase 1 · Datos reales (reemplazar supuestos `(S)`)
 - [x] Coordenadas reales de portales e instalaciones (01)
-- [ ] Datos geológicos estructurados (02) → densidad, esponjamiento, K, factor de carga
+- [x] Datos geológicos estructurados (02) → densidad, esponjamiento, K, factor de carga
 - [x] Sección definitiva del túnel: ancho y altura (03)
 - [x] Altitud real de la obra (3850 msnm, ventilación)
 - [x] Confirmar dotación, distancias mínimas y criterios con el docente / norma
@@ -21,7 +21,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 | # | Entregable | Módulo | Excel | Estado |
 |---|-----------|--------|-------|--------|
 | 01 | Ubicación y coordenadas | `m01_ubicacion` | `01_Ubicacion.xlsx` | [x] oficial |
-| 02 | Geología | `m02_geologia` | `02_Geologia.xlsx` | [ ] espera datos |
+| 02 | Geología | `m02_geologia` | `02_Geologia.xlsx` | [x] oficial (perfil longitudinal 5,556 m, Q-Slope y zonificación) |
 | 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [x] oficial (13.30x9.58 m, gálibo 11.80x5.50 m, verificación MTC) |
 | 04 | Personal | `m04_personal` | `04_Personal.xlsx` | [x] oficial (346 pax, MOD/MOI, fórmulas 100% dinámicas SUMIFS en desgloses, totales y %, memoria) |
 | 05 | Campamento y edificaciones | `m05_campamento` | `05_Campamento.xlsx` | [x] base |
@@ -30,6 +30,8 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 | 08 | PETAP, PETAR, pozo y consumo de agua | `m08_agua` | `08_Agua.xlsx` | [x] base |
 | 09 | Ventilación y consumo eléctrico | `m09_electricidad` | `09_Electricidad.xlsx` | [x] base |
 | 10 | Cronograma | `m10_cronograma` | `10_Cronograma.xlsx` | [x] base |
+| 11 | Portales y Banquetas | `m11_portales` | `11_Portales.xlsx` | [x] base |
+| 12 | Voladura Konya | `m12_voladura` | `12_Voladura.xlsx` | [x] base |
 
 ## Fase 3 · Planos AutoCAD (`PA14_dibujos.lsp`)
 - [x] Plano de ubicación general (puntos UTM y traza del eje: `PA14_UBICACION`)
@@ -39,7 +41,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 - [x] PETAP (reservorio) y PETAR (tanque séptico)
 - [x] Huella del botadero
 - [x] Plano arquitectónico EDIF-01: Modular Dormitorio Staff (Planta Nivel 1 y Sección A-A' - AR-DM-001 REV B: comandos `PA14_CAMP1_EDIF01_DORMITORIO`, `PA14_CAMP1_DORMITORIO`, `PA14_EDIF01`)
-- [ ] Malla de perforación (cuando haya diseño con geología)
+- [x] Malla de perforación y disparo (`PA14_MALLA`: cuñe cilíndrico de 4 secciones, ayudas, zapateras, corona y cuadro de parámetros)
 
 ## Fase 4 · Marco Regulatorio y Armonización Normativa
 - [x] Elaboración de `docs/MARCO_REGULATORIO_Y_TECNICO.md` (normativa MTC, SUCAMEC, MINEM, OSINERGMIN, ANA, MINAM, RNE)
@@ -49,7 +51,8 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 - [x] Verificación cruzada y conformidad de suite `uv` (`ruff format`, `ruff check`, `pytest`, `pa14`)
 
 ## Fase 5 · Cierre
-- [ ] Revisión de todos los `(S)` restantes (geología por usuario)
+- [x] Revisión de todos los `(S)` restantes (geología por usuario)
+- [x] Eliminación de parámetros por defecto en código Python (auditoría arquitectónica TOML)
 - [ ] Revisión cruzada de unidades y resultados
 - [ ] Informe final / presentación
 

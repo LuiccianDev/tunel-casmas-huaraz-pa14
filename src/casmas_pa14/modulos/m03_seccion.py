@@ -69,9 +69,9 @@ def _galibo(g: dict, geo: dict) -> dict:
         "altura_borde_galibo_m": h_borde,
         "holgura_galibo_m": h_borde - g["altura_m"],
         "altura_vereda_m": geo["hastial_rasante_m"],
-        "cuneta_ancho_m": g.get("cuneta_ancho_m", 1.20),
-        "cuneta_prof_m": g.get("cuneta_prof_m", 0.40),
-        "bombeo_pct": g.get("bombeo_pct", 2.0),
+        "cuneta_ancho_m": g["cuneta_ancho_m"],
+        "cuneta_prof_m": g["cuneta_prof_m"],
+        "bombeo_pct": g["bombeo_pct"],
     }
 
 
@@ -80,7 +80,7 @@ def _verificacion(g: dict, n: dict, geo: dict, gal: dict) -> list[list]:
     tol = g["tolerancia_m"]
     filas = [
         ("Ancho de carril", g["ancho_carril_m"], n["ancho_carril_m"], DG_2018),
-        ("Berma (cada lado)", g["berma_m"], n["berma_m"], DG_2018 + " (S)"),
+        ("Berma (cada lado)", g["berma_m"], n["berma_m"], DG_2018),
         ("Vereda (cada lado)", g["vereda_m"], n["vereda_m"], MANUAL_TUNELES),
         ("Gálibo vertical", g["altura_m"], n["galibo_vertical_m"], MANUAL_TUNELES),
         (
@@ -93,7 +93,7 @@ def _verificacion(g: dict, n: dict, geo: dict, gal: dict) -> list[list]:
             "Altura libre sobre vereda (junto al hastial)",
             gal["altura_vereda_m"],
             n["altura_vereda_m"],
-            MANUAL_TUNELES + " (S)",
+            MANUAL_TUNELES,
         ),
         (
             "Gálibo + 2 veredas = ancho B",

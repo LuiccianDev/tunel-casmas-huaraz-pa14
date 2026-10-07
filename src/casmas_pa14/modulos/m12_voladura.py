@@ -11,18 +11,18 @@ CLAVE = "voladura"
 
 
 def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
-    vol = p.get("voladura", {})
-    sge = float(vol.get("densidad_explosivo_g_cm3", 1.20))
-    sgr = float(vol.get("densidad_roca_g_cm3", 2.50))
-    de_mm = float(vol.get("diametro_explosivo_mm", 45.0))
-    h = float(vol.get("altura_banco_m", 3.0))
-    th_factor = float(vol.get("constante_retardo_ms_m", 4.5))
-    tr_factor = float(vol.get("factor_tiempo_filas_ms_m", 11.5))
+    vol = p["voladura"]
+    sge = float(vol["densidad_explosivo_g_cm3"])
+    sgr = float(vol["densidad_roca_g_cm3"])
+    de_mm = float(vol["diametro_explosivo_mm"])
+    h = float(vol["altura_banco_m"])
+    th_factor = float(vol["constante_retardo_ms_m"])
+    tr_factor = float(vol["factor_tiempo_filas_ms_m"])
 
     if "geologia" in ctx and ctx["geologia"]["tramos"]:
         primer_tramo = ctx["geologia"]["tramos"][0]
-        if isinstance(primer_tramo, dict):
-            sgr = float(primer_tramo.get("densidad_t_m3", sgr))
+        if isinstance(primer_tramo, dict) and "densidad_t_m3" in primer_tramo:
+            sgr = float(primer_tramo["densidad_t_m3"])
 
     # Formulas Konya en Python
     burden_m = 0.012 * ((2.0 * (sge / sgr)) + 1.5) * de_mm

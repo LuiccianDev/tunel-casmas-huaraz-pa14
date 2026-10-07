@@ -59,7 +59,7 @@ def calcular(p: dict, ctx: dict) -> dict:
     )
     area_filtro = qmd * 3.6 / t["tasa_filtracion_m_h"]
     cloro_kg_dia = qmd * 86.4 * t["dosis_cloro_mg_l"] / 1000 / t["pureza_hipoclorito"]
-    p_ptap = qmd * 86.4 * t.get("kw_especifico_por_m3_dia", 0.06)
+    p_ptap = qmd * 86.4 * t["kw_especifico_por_m3_dia"]
 
     # PETAR — tanque séptico (RNE IS.020)
     r = p["petar"]
@@ -73,7 +73,7 @@ def calcular(p: dict, ctx: dict) -> dict:
         math.sqrt(v_tanque / (r["altura_util_m"] * r["relacion_largo_ancho"])), 0.1
     )
     largo_ts = redondear_arriba(ancho_ts * r["relacion_largo_ancho"], 0.1)
-    p_ptar = v_residual_dia * r.get("kw_especifico_por_m3_dia", 0.05)
+    p_ptar = v_residual_dia * r["kw_especifico_por_m3_dia"]
 
     # Pozo (abastece consumo total)
     z = p["pozo"]
@@ -240,9 +240,9 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Potencia eléctrica de dosificación y bombas",
                 "P_ptap",
-                f"=C6*86.4*{t.get('kw_especifico_por_m3_dia', 0.06)}",
+                f"=C6*86.4*{t['kw_especifico_por_m3_dia']}",
                 "kW",
-                f"Qmd · 86.4 · {t.get('kw_especifico_por_m3_dia', 0.06)} kW/(m³/día)",
+                f"Qmd · 86.4 · {t['kw_especifico_por_m3_dia']} kW/(m³/día)",
             ),
         ],
         "Planta de Tratamiento de Agua Potable (RNE OS.020 / OS.030)",
@@ -308,9 +308,9 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Potencia eléctrica de aireación y bombeo",
                 "P_ptar",
-                f"=C7*{s.get('kw_especifico_por_m3_dia', 0.05)}",
+                f"=C7*{s['kw_especifico_por_m3_dia']}",
                 "kW",
-                f"Vr · {s.get('kw_especifico_por_m3_dia', 0.05)} kW/(m³/día)",
+                f"Vr · {s['kw_especifico_por_m3_dia']} kW/(m³/día)",
             ),
         ],
         "Tanque séptico (RNE IS.020)",

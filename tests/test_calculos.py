@@ -104,8 +104,8 @@ def test_flujo_completo(tmp_path):
     lsp = (tmp_path / "lisp" / "PA14_dibujos.lsp").read_text(encoding="ascii")
     assert lsp.count("(") == lsp.count(")"), "paréntesis LISP desbalanceados"
     assert "defun c:PA14_TODO" in lsp
-    assert "defun c:PA14_CAMP1_EDIF01_DORMITORIO" in lsp
-    assert "defun c:PA14_CAMP1_DORMITORIO" in lsp
+    assert "defun c:PA14_GEOLOGIA" in lsp
+    assert "defun c:PA14_MALLA" in lsp
     assert ctx["cronograma"]["plazo_dias"] > ctx["seccion"]["dias_excavacion"]
 
 

@@ -8,7 +8,7 @@ CLAVE = "personal"
 
 
 def calcular(p: dict, ctx: dict) -> dict:
-    frentes = p.get("perforacion", {}).get("frentes", 2)
+    frentes = p["perforacion"]["frentes"]
     filas = []
     for x in p["personal"]:
         macro_area = x.get("macro_area", "Personal de Servicio")

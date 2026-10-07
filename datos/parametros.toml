@@ -1927,6 +1927,7 @@ campamento = "CAMP1"
 base = "staff"
 personas_por_modulo = 1
 area_modulo_m2 = 12.0
+turnos = 1
 ancho_m = 18.0
 norma = "RNE A.070 / D.S. 024-2016-EM (Módulos apareados térmicos a 3,850 msnm)"
 
@@ -1938,6 +1939,7 @@ campamento = "CAMP1"
 base = "obrero"
 personas_por_modulo = 4
 area_modulo_m2 = 24.0
+turnos = 1
 ancho_m = 22.0
 norma = "RNE A.070 / RNE A.130 (2 pabellones paralelos, evacuación máx. 45m)"
 
@@ -1949,6 +1951,7 @@ campamento = "CAMP2"
 base = "total"
 personas_por_modulo = 4
 area_modulo_m2 = 24.0
+turnos = 1
 ancho_m = 16.0
 norma = "RNE A.070 / D.S. 024-2016-EM (Pabellón térmico con duchas integradas)"
 
@@ -2729,30 +2732,35 @@ fd_jumbo = 0.80
 id = "A"
 nombre = "Movilización de equipos y personal"
 duracion_dias = 15
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "B"
 nombre = "Construcción del campamento"
 duracion_dias = 30
 predecesoras = ["A"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "C"
 nombre = "Polvorín, PETAP, PETAR y pozo de agua"
 duracion_dias = 25
 predecesoras = ["A"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "D"
 nombre = "Accesos, botadero y emboquillado de portales"
 duracion_dias = 20
 predecesoras = ["B", "C"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "E"
 nombre = "Excavación y sostenimiento"
 rendimiento = "excavacion"
 predecesoras = ["D"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "F"
@@ -2767,24 +2775,28 @@ id = "G"
 nombre = "Instalaciones electromecánicas definitivas"
 duracion_dias = 40
 predecesoras = ["E", "F"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "H"
 nombre = "Pavimentación y drenaje"
 duracion_dias = 30
 predecesoras = ["E", "F"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "I"
 nombre = "Pruebas, señalización y entrega"
 duracion_dias = 10
 predecesoras = ["G", "H"]
+desfase_dias = 0
 
 [[cronograma.actividades]]
 id = "J"
 nombre = "Desmovilización y cierre"
 duracion_dias = 15
 predecesoras = ["I"]
+desfase_dias = 0
 
 
 # =============================================================================

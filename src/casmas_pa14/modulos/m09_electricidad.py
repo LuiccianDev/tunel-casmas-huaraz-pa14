@@ -102,11 +102,11 @@ def calcular(p: dict, ctx: dict) -> dict:
         )
 
     # 2. Luces de afueras (iluminación perimetral y accesos de campamentos)
-    ext_cfg = e.get("exterior", {})
-    esp_ext = ext_cfg.get("espaciamiento_reflectores_m", 25.0)
-    pot_reflector = ext_cfg.get("potencia_reflector_kw", 0.100)
-    horas_ext = ext_cfg.get("horas_dia", 12.0)
-    fd_ext = ext_cfg.get("factor_demanda", 1.00)
+    ext_cfg = e["exterior"]
+    esp_ext = ext_cfg["espaciamiento_reflectores_m"]
+    pot_reflector = ext_cfg["potencia_reflector_kw"]
+    horas_ext = ext_cfg["horas_dia"]
+    fd_ext = ext_cfg["factor_demanda"]
 
     lado_terr = ctx["campamento"]["lado_terreno_m"]
     perim_terr = 4 * lado_terr
@@ -149,7 +149,7 @@ def calcular(p: dict, ctx: dict) -> dict:
         )
 
     # 3. Cargas de fuerza dinámicas calculadas por ratios y dimensiones
-    eq = e.get("ratios_equipos", {})
+    eq = e["ratios_equipos"]
     pob_total = ctx["personal"]["total"]
     area_techada_total = sum(edif.get("area_m2", 0.0) for edif in edifs)
 
@@ -177,36 +177,36 @@ def calcular(p: dict, ctx: dict) -> dict:
             "Jumbo electrohidráulico (perforación)",
             1,
             True,
-            eq.get("kw_jumbo_frente", 110.0),
-            eq.get("horas_jumbo", 3.0),
-            eq.get("fd_jumbo", 0.80),
+            eq["kw_jumbo_frente"],
+            eq["horas_jumbo"],
+            eq["fd_jumbo"],
         ),
         (
             "Frente",
             "Compresora eléctrica estacionaria",
             1,
             True,
-            eq.get("kw_compresora_frente", 75.0),
-            eq.get("horas_compresora", 8.0),
-            eq.get("fd_compresora", 0.70),
+            eq["kw_compresora_frente"],
+            eq["horas_compresora"],
+            eq["fd_compresora"],
         ),
         (
             "Frente",
             "Electrobomba de drenaje y achique",
             1,
             True,
-            eq.get("kw_bomba_drenaje_frente", 15.0),
-            eq.get("horas_drenaje", 12.0),
-            eq.get("fd_drenaje", 0.80),
+            eq["kw_bomba_drenaje_frente"],
+            eq["horas_drenaje"],
+            eq["fd_drenaje"],
         ),
         (
             "Frente",
             f"Iluminación continua túnel ({l_tunel:.0f} m)",
             1,
             False,
-            round(l_tunel * eq.get("kw_iluminacion_tunel_por_m", 0.003), 2),
-            eq.get("horas_ilum_tunel", 24.0),
-            eq.get("fd_ilum_tunel", 1.00),
+            round(l_tunel * eq["kw_iluminacion_tunel_por_m"], 2),
+            eq["horas_ilum_tunel"],
+            eq["fd_ilum_tunel"],
         ),
     ]
 
@@ -215,11 +215,11 @@ def calcular(p: dict, ctx: dict) -> dict:
         (
             "Botadero",
             "Torres móviles de iluminación LED en botadero",
-            eq.get("torres_botadero_cant", 2),
+            eq["torres_botadero_cant"],
             False,
-            eq.get("kw_torre_botadero", 2.0),
-            eq.get("horas_botadero", 12.0),
-            eq.get("fd_botadero", 1.00),
+            eq["kw_torre_botadero"],
+            eq["horas_botadero"],
+            eq["fd_botadero"],
         ),
         (
             "Campamento - Afueras",
@@ -270,54 +270,54 @@ def calcular(p: dict, ctx: dict) -> dict:
             f"Cocina industrial ({pob_total} personas)",
             1,
             False,
-            round(pob_total * eq.get("kw_cocina_por_persona", 0.08), 2),
-            eq.get("horas_cocina", 6.0),
-            eq.get("fd_cocina", 0.80),
+            round(pob_total * eq["kw_cocina_por_persona"], 2),
+            eq["horas_cocina"],
+            eq["fd_cocina"],
         ),
         (
             "Campamento - Equipos",
             f"Lavandería industrial ({pob_total} personas)",
             1,
             False,
-            round(pob_total * eq.get("kw_lavanderia_por_persona", 0.04), 2),
-            eq.get("horas_lavanderia", 6.0),
-            eq.get("fd_lavanderia", 0.70),
+            round(pob_total * eq["kw_lavanderia_por_persona"], 2),
+            eq["horas_lavanderia"],
+            eq["fd_lavanderia"],
         ),
         (
             "Campamento - Equipos",
             f"Fuerza menor y tomacorrientes ({area_techada_total:.0f} m² techados)",
             1,
             False,
-            round(area_techada_total * eq.get("kw_tomacorrientes_m2", 0.008), 2),
-            eq.get("horas_tomacorrientes", 12.0),
-            eq.get("fd_tomacorrientes", 0.60),
+            round(area_techada_total * eq["kw_tomacorrientes_m2"], 2),
+            eq["horas_tomacorrientes"],
+            eq["fd_tomacorrientes"],
         ),
         (
             "Campamento - Equipos",
             f"Taller de mantenimiento electromecánico ({area_taller:.0f} m²)",
             1,
             False,
-            round(area_taller * eq.get("kw_taller_por_m2", 0.12), 2),
-            eq.get("horas_taller", 8.0),
-            eq.get("fd_taller", 0.50),
+            round(area_taller * eq["kw_taller_por_m2"], 2),
+            eq["horas_taller"],
+            eq["fd_taller"],
         ),
         (
             "Campamento - Equipos",
             f"Oficinas técnicas y servidores ({area_oficinas:.0f} m²)",
             1,
             False,
-            round(area_oficinas * eq.get("kw_oficinas_por_m2", 0.035), 2),
-            eq.get("horas_oficinas", 10.0),
-            eq.get("fd_oficinas", 0.70),
+            round(area_oficinas * eq["kw_oficinas_por_m2"], 2),
+            eq["horas_oficinas"],
+            eq["fd_oficinas"],
         ),
         (
             "Campamento - Equipos",
             f"Tópico médico y salud ocupacional ({area_salud:.0f} m²)",
             1,
             False,
-            round(area_salud * eq.get("kw_topico_por_m2", 0.06), 2),
-            eq.get("horas_topico", 24.0),
-            eq.get("fd_topico", 0.60),
+            round(area_salud * eq["kw_topico_por_m2"], 2),
+            eq["horas_topico"],
+            eq["fd_topico"],
         ),
     ]
 
@@ -387,8 +387,8 @@ def calcular(p: dict, ctx: dict) -> dict:
 
 def libro(r: dict, p: dict) -> Libro:
     v, e = p["ventilacion"], p["electricidad"]
-    ext_cfg = e.get("exterior", {})
-    esp_ext = ext_cfg.get("espaciamiento_reflectores_m", 25.0)
+    ext_cfg = e["exterior"]
+    esp_ext = ext_cfg["espaciamiento_reflectores_m"]
 
     ventilacion = tabla_parametros(
         [

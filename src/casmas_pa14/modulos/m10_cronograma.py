@@ -24,7 +24,7 @@ def calcular(p: dict, ctx: dict) -> dict:
     for a in p["cronograma"]["actividades"]:
         duracion = _duracion(a, ctx)
         preds = a.get("predecesoras", [])
-        desfase = timedelta(days=a.get("desfase_dias", 0))
+        desfase = timedelta(days=a["desfase_dias"])
         faltantes = [x for x in preds if x not in actividades]
         if faltantes:
             raise ValueError(
@@ -44,7 +44,7 @@ def calcular(p: dict, ctx: dict) -> dict:
             "duracion": duracion,
             "predecesoras": preds,
             "tipo": a.get("tipo", "FC") if preds else "",
-            "desfase": a.get("desfase_dias", 0),
+            "desfase": a["desfase_dias"],
             "inicio": inicio,
             "fin": inicio + timedelta(days=duracion - 1),
         }

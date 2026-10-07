@@ -43,9 +43,7 @@ def calcular(p: dict, ctx: dict) -> dict:
             personas, modulos, area = None, 1, e["area_m2"]
         else:
             personas = pob_dict[e["base"]]
-            modulos = math.ceil(
-                personas / e.get("turnos", 1) / e["personas_por_modulo"]
-            )
+            modulos = math.ceil(personas / e["turnos"] / e["personas_por_modulo"])
             area = modulos * e["area_modulo_m2"]
 
         largo = redondear_arriba(area / ancho, 0.5)

@@ -12,19 +12,21 @@ CLAVE = "portales"
 
 
 def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
-    portales = p.get("portales", {})
-    banquetas = portales.get("banquetas", [])
-    factor_esponjamiento = portales.get("factor_esponjamiento", 1.30)
+    portales = p["portales"]
+    banquetas = portales["banquetas"]
+    factor_esponjamiento = float(portales["factor_esponjamiento"])
     resultados = []
     volumen_total_insitu = 0.0
     volumen_total_esponjado = 0.0
 
     for b in banquetas:
-        h = float(b.get("altura_banco_m", 0.0))
-        largo = float(b.get("largo_banco_m", 0.0))
-        alpha = float(b.get("angulo_talud_deg", 90.0))
-        beta = float(b.get("angulo_perfil_deg", 0.0))
-        w = float(b.get("ancho_plataforma_m", b.get("lado_mayor_m", 5.0)))
+        h = float(b["altura_banco_m"])
+        largo = float(b["largo_banco_m"])
+        alpha = float(b["angulo_talud_deg"])
+        beta = float(b["angulo_perfil_deg"])
+        w = float(
+            b["ancho_plataforma_m"] if "ancho_plataforma_m" in b else b["lado_mayor_m"]
+        )
 
         base_talud = (
             h / math.tan(math.radians(alpha)) if (alpha != 90 and alpha > 0) else 0.0
@@ -40,7 +42,7 @@ def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
 
         resultados.append(
             {
-                "id": b.get("id", "Banqueta"),
+                "id": str(b["id"]),
                 "largo": round(largo, 3),
                 "altura": round(h, 3),
                 "ancho": round(w, 3),

@@ -1,16 +1,16 @@
 """Generación de un archivo AutoLISP (.lsp) con los planos básicos del proyecto.
 
 Uso en AutoCAD: APPLOAD → cargar ``PA14_dibujos.lsp`` → escribir un comando:
-PA14_UBICACION, PA14_SECCION, PA14_CAMPAMENTO, PA14_POLVORIN, PA14_SANEAMIENTO,
-PA14_BOTADERO o PA14_TODO.
+PA14_UBICACION, PA14_SECCION, PA14_GEOLOGIA o PA14_TODO.
 
 Posicionamiento (sin configurar nada a mano):
 - Unidades forzadas: metros (INSUNITS=4), decimal (LUNITS=2), grados (AUNITS=0).
 - PA14_UBICACION dibuja en coordenadas UTM reales (WGS84 18L): X = Este, Y = Norte.
-- Los detalles (sección, campamento, ...) van en una franja fija al sur del plano
+- Los detalles (sección, perfil geológico) van en una franja fija al sur del plano
   de ubicación. No se pide punto de inserción; al final se hace ZOOM extensión.
 """
 
+import math
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,8 +18,6 @@ from pathlib import Path
 ARCHIVO = "PA14_dibujos.lsp"
 SEPARACION = 20.0  # m entre dibujos de detalle
 DESFASE_DETALLES = 1000.0  # m al sur del punto más bajo del plano de ubicación
-ANCHO_MAX_FILA_CAMP = 80.0  # m, distribución del campamento
-CALLE_CAMP = 6.0  # m entre edificaciones
 
 CAPAS = {
     "PA14-CONTORNO": 7,
@@ -42,6 +40,8 @@ CAPAS = {
     "PA14-MEMBRETE": 7,
     "PA14-SIMBOLOS": 1,
     "PA14-HATCH": 8,
+    "PA14-TALADROS": 1,
+    "PA14-ALIVIO": 2,
 }
 
 _LIBRERIA = r"""
@@ -349,1075 +349,153 @@ def dibujo_seccion(sec: dict) -> Dibujo:
     return Dibujo("PA14_SECCION", "Sección típica del túnel", cuerpo, b + 4)
 
 
-def _dibujar_recinto(
-    edifs: list[dict],
-    x_ini: float,
-    y_ini: float,
-    max_ancho: float,
-    titulo: str,
-    subtitulo: str,
-    tipo_cerco: str = "PA14-CERCO",
-    con_flecha_acceso: bool = False,
-    es_polvorin: bool = False,
-) -> tuple[list[str], float, float]:
-    cuerpo, x, y, alto_fila, ancho_usado = [], x_ini, y_ini, 0.0, 0.0
-    for e in edifs:
-        largo, ancho = e["largo_m"], e["ancho_m"]
-        if (x - x_ini) > 0 and (x - x_ini) + largo > max_ancho:
-            x, y, alto_fila = x_ini, y + alto_fila + CALLE_CAMP, 0.0
-        alt = min(0.65, max(0.25, ancho / 6))
-        cuerpo += [
-            _rect(x, y, largo, ancho, "PA14-EDIFICACION"),
-            _texto(x + 0.3, y + ancho - alt - 0.2, alt, f"{e['id']}: {e['nombre']}"),
-            _texto(
-                x + 0.3,
-                y + ancho - 2 * alt - 0.3,
-                alt * 0.75,
-                f"[{e.get('grupo', 'Area')}]",
-            ),
-            _texto(
-                x + 0.3,
-                y + 0.3,
-                alt * 0.75,
-                f"{largo:.1f} x {ancho:.1f} m  ({e['area_m2']:.0f} m2)",
-            ),
-        ]
-        if es_polvorin and "Polvorin" in e["nombre"]:
-            # Dibujar parapeto perimetral de tierra a 4.0 m
+# ---------------------------------------------------------------- 02 - Corte Geologico Longitudinal (5556 m)
+def dibujo_geologia(geo: dict) -> Dibujo:
+    """Corte geologico longitudinal del tunel (L = 5,556 m).
+
+    Dibuja el perfil esquematico del macizo rocoso, el eje y rasante de excavacion
+    del tunel, los contactos litologicos inclinados (buzamiento), las etiquetas
+    de tipo de roca, RMR, Q-Slope y las cotas de progresiva (Km 0+000 a Km 5+556).
+    """
+    cuerpo = []
+    tramos = geo.get("tramos", [])
+    if not tramos:
+        return Dibujo("PA14_GEOLOGIA", "Corte Geologico Longitudinal", [], 100.0)
+
+    prog_ini = min(t["progresiva_inicio"] for t in tramos)
+    prog_fin = max(t["progresiva_fin"] for t in tramos)
+    longitud = prog_fin - prog_ini
+
+    y_top = 220.0
+    y_bot = -60.0
+    y_tunel = 0.0
+    h_exc = 9.58  # altura de excavacion
+
+    # 1. Contorno general del macizo rocoso
+    cuerpo.append(_rect(prog_ini, y_bot, longitud, y_top - y_bot, "PA14-CONTORNO"))
+
+    # 2. Eje rasante y linea de clave del tunel
+    cuerpo.append(_linea(prog_ini, y_tunel, prog_fin, y_tunel, "PA14-EJE"))
+    cuerpo.append(
+        _linea(prog_ini, y_tunel + h_exc, prog_fin, y_tunel + h_exc, "PA14-GALIBO")
+    )
+    cuerpo.append(
+        _texto(
+            prog_ini - 240.0,
+            y_tunel + 2.0,
+            12.0,
+            "RASANTE DEL TUNEL",
+            "PA14-TEXTO",
+        )
+    )
+    cuerpo.append(
+        _texto(
+            prog_ini - 240.0,
+            y_tunel + h_exc,
+            10.0,
+            "CLAVE (EXCAVACION)",
+            "PA14-TEXTO",
+        )
+    )
+
+    # 3. Encabezado del plano longitudinal
+    cuerpo.append(
+        _texto(
+            prog_ini,
+            y_top + 25.0,
+            22.0,
+            "PERFIL GEOLOGICO LONGITUDINAL - TUNEL TRASANDINO PA14 (L = 5,556.00 m)",
+            "PA14-TEXTO",
+        )
+    )
+    cuerpo.append(
+        _texto(
+            prog_ini,
+            y_top + 8.0,
+            12.0,
+            "Escala Horizontal 1:1 (metros) | Contactos Litologicos, Buzamiento, RMR y Q-Slope",
+            "PA14-TEXTO",
+        )
+    )
+
+    # 4. Tramos litologicos y contactos geologicos
+    for t in tramos:
+        x_ini = t["progresiva_inicio"]
+        x_fin = t["progresiva_fin"]
+        l_tramo = x_fin - x_ini
+        x_mid = (x_ini + x_fin) / 2.0
+        tipo = t.get("tipo_roca", "")
+        rmr = t.get("rmr", 0)
+        q_slope = t.get("q_slope", 0.0)
+
+        # Contacto litologico inclinado (buzamiento aparente ~70 deg)
+        dx_buz = 45.0
+        if x_ini > prog_ini:
             cuerpo.append(
-                _rect(x - 4.0, y - 4.0, largo + 8.0, ancho + 8.0, "PA14-RUMAS")
-            )
-            cuerpo.append(
-                _texto(
-                    x - 4.0,
-                    y - 5.5,
-                    0.4,
-                    "[Parapeto de tierra e=2.5m s/SUCAMEC]",
+                _linea(
+                    x_ini - 10.0,
+                    y_bot,
+                    x_ini + dx_buz,
+                    y_top,
+                    "PA14-ESTRUCTURA",
                 )
             )
-        x += largo + CALLE_CAMP
-        alto_fila = max(alto_fila, ancho)
-        ancho_usado = max(ancho_usado, (x - x_ini) - CALLE_CAMP)
 
-    alto_total = (y - y_ini) + alto_fila
-    m = CALLE_CAMP
-    w_rec = max(ancho_usado, 25.0) + 2 * m
-    h_rec = alto_total + 2 * m
-
-    # Cerco perimetral
-    cuerpo.append(_rect(x_ini - m, y_ini - m, w_rec, h_rec, tipo_cerco))
-    cuerpo.append(_texto(x_ini - m, y_ini + alto_total + m + 1.8, 1.3, titulo))
-    cuerpo.append(_texto(x_ini - m, y_ini + alto_total + m + 0.5, 0.75, subtitulo))
-
-    # Indicador de acceso principal
-    if con_flecha_acceso:
-        x_acc = x_ini + 10.0
-        y_acc = y_ini - m
-        cuerpo += [
-            _linea(x_acc, y_acc - 8.0, x_acc, y_acc, "PA14-EJE"),
-            _linea(x_acc - 1.5, y_acc - 2.5, x_acc, y_acc, "PA14-EJE"),
-            _linea(x_acc + 1.5, y_acc - 2.5, x_acc, y_acc, "PA14-EJE"),
-            _texto(
-                x_acc + 2.0,
-                y_acc - 5.0,
-                0.9,
-                "===> INGRESO PRINCIPAL Y CONTROL VEHICULAR",
-            ),
-        ]
-
-    return cuerpo, w_rec, h_rec
-
-
-def _dibujar_campamento_organizado(
-    edifs: list[dict], x_base: float, y_base: float, nombre_camp: str, desc_camp: str
-) -> tuple[list[str], float, float]:
-    """Distribuye un campamento en 3 sectores funcionales con zonificación lógica."""
-    cuerpo = []
-
-    # 1. Separación por sectores
-    ids_polv = {"EDIF-23", "EDIF-28", "EDIF-37", "EDIF-38"}
-    ids_san = {
-        "EDIF-14",
-        "EDIF-15",
-        "EDIF-16",
-        "EDIF-17",
-        "EDIF-18",
-        "EDIF-19",
-        "EDIF-32",
-    }
-
-    edifs_polv = [e for e in edifs if e["id"] in ids_polv]
-    edifs_san = [e for e in edifs if e["id"] in ids_san]
-    edifs_princ = [
-        e for e in edifs if e["id"] not in ids_polv and e["id"] not in ids_san
-    ]
-
-    # Ordenamiento por zonificación funcional dentro del sector principal:
-    # 1. Acceso y Garitas -> 2. Oficinas y Salud -> 3. Comedor/SUM/Dormitorios -> 4. Talleres/Patio Maquinaria
-    orden_prioridad = {
-        "Vigilancia y Transporte": 1,
-        "Salud y Bienestar": 2,
-        "Administración y Documentos": 3,
-        "Comedor y Alimentación": 4,
-        "Residencia y Habitabilidad": 5,
-        "Operación y Portales": 6,
-        "Maquinaria y Mantenimiento": 7,
-        "Energía y Combustible": 8,
-        "Almacenes y Logística": 9,
-    }
-    edifs_princ_ord = sorted(
-        edifs_princ, key=lambda e: orden_prioridad.get(e.get("grupo", ""), 99)
-    )
-
-    # 2. Sector Principal (Vida, Administración y Talleres)
-    c_princ, w_princ, h_princ = _dibujar_recinto(
-        edifs_princ_ord,
-        x_base,
-        y_base,
-        max_ancho=85.0,
-        titulo=f"{nombre_camp} — PLATAFORMA OPERATIVA Y RESIDENCIAL",
-        subtitulo=f"{desc_camp} · Vida, Oficinas, Talleres y Estacionamientos",
-        tipo_cerco="PA14-CERCO",
-        con_flecha_acceso=True,
-    )
-    cuerpo += c_princ
-
-    # 3. Sector Saneamiento y Ambiental (Fuera del campamento con retiro sanitario)
-    x_san = x_base + w_princ + 12.0
-    c_san, w_san, h_san = _dibujar_recinto(
-        edifs_san,
-        x_san,
-        y_base,
-        max_ancho=50.0,
-        titulo="SECTOR SANEAMIENTO Y AMBIENTE",
-        subtitulo="Retiro Sanitario RNE OS.090 / D.Leg. 1278 (PTAP, PTAR, Lodos)",
-        tipo_cerco="PA14-CERCO",
-        con_flecha_acceso=False,
-    )
-    cuerpo += c_san
-
-    # 4. Sector Polvorín de Superficie (Aislado a Distancia de Seguridad SUCAMEC)
-    y_polv = y_base + max(h_princ, h_san) + 22.0
-    c_polv, w_polv, h_polv = _dibujar_recinto(
-        edifs_polv,
-        x_base,
-        y_polv,
-        max_ancho=60.0,
-        titulo="ZONA RESTRINGIDA — POLVORIN DE SUPERFICIE SUCAMEC",
-        subtitulo="Distancia de Seguridad D >= 300 m (Ley N° 30299 / D.S. 024-2016-EM)",
-        tipo_cerco="PA14-CERCO",
-        con_flecha_acceso=False,
-        es_polvorin=True,
-    )
-    cuerpo += c_polv
-
-    # Línea de separación y cota de distancia de seguridad del polvorín
-    cuerpo += [
-        _linea(
-            x_base, y_base + h_princ + 2.0, x_base, y_polv - CALLE_CAMP, "PA14-COTA"
-        ),
-        _texto(
-            x_base + 1.0,
-            (y_base + h_princ + y_polv) / 2,
-            0.8,
-            "<--- RETIRO NORMATIVO DE SEGURIDAD SUCAMEC (D >= 300 m) --->",
-        ),
-    ]
-
-    ancho_total_camp = w_princ + 12.0 + w_san
-    alto_total_camp = y_polv + h_polv - y_base
-    return cuerpo, ancho_total_camp, alto_total_camp
-
-
-def dibujo_campamento(camp: dict) -> Dibujo:
-    edifs_c1 = [e for e in camp["edificaciones"] if e.get("campamento") == "CAMP1"]
-    edifs_c2 = [e for e in camp["edificaciones"] if e.get("campamento") == "CAMP2"]
-
-    cuerpo_1, ancho_1, _ = _dibujar_campamento_organizado(
-        edifs_c1,
-        0.0,
-        0.0,
-        "CAMPAMENTO 1 (PORTAL A - 248 PAX)",
-        "Base Principal Casmas",
-    )
-
-    x2_ini = ancho_1 + 25.0
-    cuerpo_2, ancho_2, _ = _dibujar_campamento_organizado(
-        edifs_c2,
-        x2_ini,
-        0.0,
-        "CAMPAMENTO 2 (PORTAL B - 98 PAX)",
-        "Satélite Autónomo Huaraz",
-    )
-
-    ancho_total = x2_ini + ancho_2
-    return Dibujo(
-        "PA14_CAMPAMENTO",
-        "Distribución de Campamentos 1 y 2 (38 Edificaciones EDIF-01 a EDIF-38)",
-        cuerpo_1 + cuerpo_2,
-        ancho_total,
-    )
-
-
-# ---------------------------------------------------------------- EDIF-01: Modular Dormitorio Staff (Plano AR-DM-001)
-def _dibujar_cama(
-    x: float, y: float, w: float, largo: float, cabecera: str = "NORTE"
-) -> list[str]:
-    cuerpo = [_rect(x, y, w, largo, "PA14-MOBILIARIO")]
-    if cabecera == "NORTE":
-        cuerpo += [
-            _rect(x + 0.10, y + largo - 0.45, w - 0.20, 0.35, "PA14-MOBILIARIO"),
-            _linea(x, y + largo - 0.70, x + w, y + largo - 0.70, "PA14-MOBILIARIO"),
-            _texto_cen(x + w / 2, y + 0.50, 0.16, "CAMA", "PA14-TEXTO"),
-        ]
-    else:
-        cuerpo += [
-            _rect(x + 0.10, y + 0.10, w - 0.20, 0.35, "PA14-MOBILIARIO"),
-            _linea(x, y + 0.70, x + w, y + 0.70, "PA14-MOBILIARIO"),
-            _texto_cen(x + w / 2, y + largo - 0.50, 0.16, "CAMA", "PA14-TEXTO"),
-        ]
-    return cuerpo
-
-
-def _dibujar_bano(
-    x: float, y: float, w: float, largo: float, tipo: str = "TOP"
-) -> list[str]:
-    cuerpo = []
-    if tipo == "TOP":
-        cuerpo += [
-            _linea(x, y + largo, x + w, y + largo, "PA14-TABIQUES"),
-            _linea(x + w, y, x + w, y + largo, "PA14-TABIQUES"),
-            _linea(x + 0.75, y + largo, x + 0.75, y + largo - 0.65, "PA14-PUERTAS"),
-            _arco(x + 0.75, y + largo, 0.65, 270.0, 360.0, "PA14-PUERTAS"),
-            _rect(x + 0.05, y + 0.05, 0.75, 0.75, "PA14-APARATOS"),
-            _linea(x + 0.05, y + 0.05, x + 0.80, y + 0.80, "PA14-APARATOS"),
-            _linea(x + 0.05, y + 0.80, x + 0.80, y + 0.05, "PA14-APARATOS"),
-            _circulo(x + 0.425, y + 0.425, 0.04, "PA14-APARATOS"),
-            _rect(x + 0.10, y + largo - 0.25, 0.45, 0.18, "PA14-APARATOS"),
-            _circulo(x + 0.325, y + largo - 0.40, 0.14, "PA14-APARATOS"),
-            _texto_cen(x + 0.325, y + largo - 0.40, 0.11, "WC", "PA14-TEXTO"),
-            _rect(x + w - 0.35, y + 0.15, 0.30, 0.45, "PA14-APARATOS"),
-            _circulo(x + w - 0.20, y + 0.375, 0.11, "PA14-APARATOS"),
-            _texto_cen(x + w - 0.20, y + 0.375, 0.10, "LAV", "PA14-TEXTO"),
-            _texto_cen(x + 0.40, y + 1.05, 0.15, "BANO", "PA14-TEXTO"),
-        ]
-    else:
-        cuerpo += [
-            _linea(x, y, x + w, y, "PA14-TABIQUES"),
-            _linea(x + w, y, x + w, y + largo, "PA14-TABIQUES"),
-            _linea(x + 0.75, y, x + 0.75, y + 0.65, "PA14-PUERTAS"),
-            _arco(x + 0.75, y, 0.65, 0.0, 90.0, "PA14-PUERTAS"),
-            _rect(x + 0.05, y + largo - 0.80, 0.75, 0.75, "PA14-APARATOS"),
-            _linea(
-                x + 0.05, y + largo - 0.80, x + 0.80, y + largo - 0.05, "PA14-APARATOS"
-            ),
-            _linea(
-                x + 0.05, y + largo - 0.05, x + 0.80, y + largo - 0.80, "PA14-APARATOS"
-            ),
-            _circulo(x + 0.425, y + largo - 0.425, 0.04, "PA14-APARATOS"),
-            _rect(x + 0.10, y + 0.07, 0.45, 0.18, "PA14-APARATOS"),
-            _circulo(x + 0.325, y + 0.22, 0.14, "PA14-APARATOS"),
-            _texto_cen(x + 0.325, y + 0.22, 0.11, "WC", "PA14-TEXTO"),
-            _rect(x + w - 0.35, y + largo - 0.60, 0.30, 0.45, "PA14-APARATOS"),
-            _circulo(x + w - 0.20, y + largo - 0.375, 0.11, "PA14-APARATOS"),
-            _texto_cen(x + w - 0.20, y + largo - 0.375, 0.10, "LAV", "PA14-TEXTO"),
-            _texto_cen(x + 0.40, y + largo - 1.05, 0.15, "BANO", "PA14-TEXTO"),
-        ]
-    return cuerpo
-
-
-def _dibujar_ventana_horiz(
-    x1: float, x2: float, y: float, esp: float = 0.15
-) -> list[str]:
-    return [
-        _linea(x1, y - esp / 2, x2, y - esp / 2, "PA14-VENTANAS"),
-        _linea(x1, y - esp / 6, x2, y - esp / 6, "PA14-VENTANAS"),
-        _linea(x1, y + esp / 6, x2, y + esp / 6, "PA14-VENTANAS"),
-        _linea(x1, y + esp / 2, x2, y + esp / 2, "PA14-VENTANAS"),
-    ]
-
-
-def _dibujar_modulo_habitacion(
-    xm: float, ym: float, w: float, h: float, tipo: str, num: int, det: dict
-) -> list[str]:
-    w_cama = det.get("ancho_cama_m", 1.00)
-    l_cama = det.get("largo_cama_m", 2.00)
-    w_bano = det.get("ancho_bano_m", 1.50)
-    l_bano = det.get("largo_bano_m", 1.80)
-    w_closet = det.get("ancho_closet_m", 0.60)
-    l_closet = det.get("largo_closet_m", 1.20)
-    esp_m = det.get("espesor_muro_ext_m", 0.15)
-
-    cuerpo = []
-    if tipo == "TOP":
-        cuerpo.append(_linea(xm + w, ym, xm + w, ym + h, "PA14-TABIQUES"))
-        cuerpo += [
-            _linea(
-                xm + w_bano + 0.40, ym, xm + w_bano + 0.40, ym + 0.85, "PA14-PUERTAS"
-            ),
-            _arco(xm + w_bano + 0.40, ym, 0.85, 0.0, 90.0, "PA14-PUERTAS"),
-        ]
-        cuerpo += _dibujar_bano(xm, ym, w_bano, l_bano, "TOP")
-        cuerpo += _dibujar_cama(
-            xm + 0.25, ym + h - esp_m - l_cama, w_cama, l_cama, "NORTE"
-        )
-        cuerpo += [
-            _rect(
-                xm + w - l_closet - 0.20,
-                ym + h - esp_m - w_closet,
-                l_closet,
-                w_closet,
-                "PA14-MOBILIARIO",
-            ),
-            _linea(
-                xm + w - l_closet / 2 - 0.20,
-                ym + h - esp_m - w_closet,
-                xm + w - l_closet / 2 - 0.20,
-                ym + h - esp_m,
-                "PA14-MOBILIARIO",
-            ),
-            _texto_cen(
-                xm + w - l_closet / 2 - 0.20,
-                ym + h - esp_m - w_closet / 2,
-                0.15,
-                "CLOSET",
-                "PA14-TEXTO",
-            ),
-        ]
-        cuerpo += [
-            _rect(xm + w - 1.20, ym + 1.20, 1.00, 0.50, "PA14-MOBILIARIO"),
-            _circulo(xm + w - 0.70, ym + 1.85, 0.18, "PA14-MOBILIARIO"),
-            _texto_cen(xm + w - 0.70, ym + 1.45, 0.13, "MESA", "PA14-TEXTO"),
-        ]
-        cuerpo += _dibujar_ventana_horiz(xm + 1.00, xm + 2.50, ym + h, esp_m)
-        cuerpo += [
-            _texto_cen(
-                xm + w / 2, ym + h / 2 - 0.20, 0.20, f"HAB-{num:02d}", "PA14-TEXTO"
-            ),
-            _texto_cen(xm + w / 2, ym + h / 2 - 0.50, 0.14, "STAFF", "PA14-TEXTO"),
-        ]
-    else:
-        cuerpo.append(_linea(xm + w, ym, xm + w, ym + h, "PA14-TABIQUES"))
-        cuerpo += [
-            _linea(
-                xm + w_bano + 0.40,
-                ym + h,
-                xm + w_bano + 0.40,
-                ym + h - 0.85,
-                "PA14-PUERTAS",
-            ),
-            _arco(xm + w_bano + 0.40, ym + h, 0.85, 270.0, 360.0, "PA14-PUERTAS"),
-        ]
-        cuerpo += _dibujar_bano(xm, ym + h - l_bano, w_bano, l_bano, "BOTTOM")
-        cuerpo += _dibujar_cama(xm + 0.25, ym + esp_m, w_cama, l_cama, "SUR")
-        cuerpo += [
-            _rect(
-                xm + w - l_closet - 0.20,
-                ym + esp_m,
-                l_closet,
-                w_closet,
-                "PA14-MOBILIARIO",
-            ),
-            _linea(
-                xm + w - l_closet / 2 - 0.20,
-                ym + esp_m,
-                xm + w - l_closet / 2 - 0.20,
-                ym + esp_m + w_closet,
-                "PA14-MOBILIARIO",
-            ),
-            _texto_cen(
-                xm + w - l_closet / 2 - 0.20,
-                ym + esp_m + w_closet / 2,
-                0.15,
-                "CLOSET",
-                "PA14-TEXTO",
-            ),
-        ]
-        cuerpo += [
-            _rect(xm + w - 1.20, ym + h - 1.70, 1.00, 0.50, "PA14-MOBILIARIO"),
-            _circulo(xm + w - 0.70, ym + h - 1.85, 0.18, "PA14-MOBILIARIO"),
-            _texto_cen(xm + w - 0.70, ym + h - 1.45, 0.13, "MESA", "PA14-TEXTO"),
-        ]
-        cuerpo += _dibujar_ventana_horiz(xm + 1.00, xm + 2.50, ym, esp_m)
-        cuerpo += [
-            _texto_cen(
-                xm + w / 2, ym + h / 2 + 0.50, 0.20, f"HAB-{num:02d}", "PA14-TEXTO"
-            ),
-            _texto_cen(xm + w / 2, ym + h / 2 + 0.20, 0.14, "STAFF", "PA14-TEXTO"),
-        ]
-    return cuerpo
-
-
-def _dibujar_modulo_central(xm: float, ym: float, w: float, h_tot: float) -> list[str]:
-    cuerpo = []
-    cuerpo.append(_linea(xm + w, ym, xm + w, ym + h_tot, "PA14-MUROS"))
-
-    # Escalera A/B norte
-    x_esc, y_esc = xm + 0.15, ym + 7.20
-    w_esc, h_esc = 2.40, 4.50
-    cuerpo.append(_rect(x_esc, y_esc, w_esc, h_esc, "PA14-ESCALERAS"))
-    cuerpo.append(
-        _linea(
-            x_esc + w_esc / 2, y_esc, x_esc + w_esc / 2, y_esc + h_esc, "PA14-ESCALERAS"
-        )
-    )
-    for i in range(1, 12):
-        y_p = y_esc + i * (h_esc / 12)
+        # Marca de progresiva en la base
+        cuerpo.append(_linea(x_ini, y_bot, x_ini, y_bot - 15.0, "PA14-EJE"))
         cuerpo.append(
-            _linea(x_esc, y_p, x_esc + w_esc / 2 - 0.05, y_p, "PA14-ESCALERAS")
+            _texto_cen(
+                x_ini,
+                y_bot - 30.0,
+                10.0,
+                f"KM {x_ini / 1000.0:.3f}",
+                "PA14-TEXTO",
+            )
         )
+
+        # Litologia y geomecanica en la parte superior
+        cuerpo.append(_texto_cen(x_mid, y_top - 35.0, 14.0, tipo, "PA14-TEXTO"))
         cuerpo.append(
-            _linea(x_esc + w_esc / 2 + 0.05, y_p, x_esc + w_esc, y_p, "PA14-ESCALERAS")
-        )
-    cuerpo += [
-        _linea(x_esc + 0.60, y_esc + 0.50, x_esc + 0.60, y_esc + 3.80, "PA14-EJE"),
-        _linea(x_esc + 0.60, y_esc + 3.80, x_esc + 0.45, y_esc + 3.50, "PA14-EJE"),
-        _linea(x_esc + 0.60, y_esc + 3.80, x_esc + 0.75, y_esc + 3.50, "PA14-EJE"),
-        _texto_cen(x_esc + w_esc / 2, y_esc + 2.25, 0.22, "ESCALERA A/B", "PA14-TEXTO"),
-    ]
-
-    # Cuarto de Limpieza norte
-    x_cl = xm + 2.65
-    cuerpo += [
-        _linea(x_cl, ym + 7.0, x_cl, ym + 12.0, "PA14-TABIQUES"),
-        _linea(x_cl, ym + 7.0, x_cl, ym + 7.80, "PA14-PUERTAS"),
-        _arco(x_cl, ym + 7.0, 0.80, 0.0, 90.0, "PA14-PUERTAS"),
-        _rect(x_cl + 0.20, ym + 11.0, 0.80, 0.60, "PA14-APARATOS"),
-        _texto_cen(x_cl + 0.60, ym + 11.30, 0.12, "VERT", "PA14-TEXTO"),
-        _texto_cen(
-            x_cl + (w - 2.65) / 2, ym + 9.50, 0.20, "CUARTO LIMPIEZA", "PA14-TEXTO"
-        ),
-    ]
-
-    # Pasadizo central
-    cuerpo += [
-        _texto_cen(
-            xm + w / 2, ym + 6.0, 0.28, "PASADIZO CENTRAL TERMICO 2.0m", "PA14-TEXTO"
-        ),
-    ]
-
-    # Vestíbulo de Ingreso Principal sur
-    cuerpo += [
-        _linea(xm + 1.35, ym, xm + 1.35, ym + 0.90, "PA14-PUERTAS"),
-        _arco(xm + 1.35, ym, 0.90, 0.0, 90.0, "PA14-PUERTAS"),
-        _linea(xm + 3.15, ym, xm + 3.15, ym + 0.90, "PA14-PUERTAS"),
-        _arco(xm + 3.15, ym, 0.90, 90.0, 180.0, "PA14-PUERTAS"),
-        _linea(xm + 1.0, ym - 0.40, xm + 3.5, ym - 0.40, "PA14-CONTORNO"),
-        _linea(xm + 1.0, ym - 0.80, xm + 3.5, ym - 0.80, "PA14-CONTORNO"),
-        _texto_cen(xm + w / 2, ym + 2.80, 0.25, "ENTRANCE VESTIBULE", "PA14-TEXTO"),
-        _texto_cen(xm + w / 2, ym + 2.20, 0.20, "ACCESO PRINCIPAL", "PA14-TEXTO"),
-    ]
-    return cuerpo
-
-
-def _dibujar_planta_completa(xp0: float, yp0: float, det: dict) -> list[str]:
-    l_tot = det.get("largo_total_m", 48.70)
-    ancho_c = det.get("ancho_cuerpo_m", 12.00)
-    ancho_mod = det.get("ancho_modulo_m", 3.50)
-    ancho_cen = det.get("ancho_modulo_central_m", 4.50)
-    esp_m = det.get("espesor_muro_ext_m", 0.15)
-
-    cuerpo = [
-        # Título de Planta
-        _texto_cen(
-            xp0 + l_tot / 2,
-            yp0 + ancho_c + 11.5,
-            0.75,
-            "PLANTA NIVEL 1 - MODULAR DORMITORIO",
-            "PA14-TEXTO",
-        ),
-        _texto_cen(xp0 + l_tot / 2, yp0 + ancho_c + 10.3, 0.45, "1:100", "PA14-TEXTO"),
-        _linea(
-            xp0 + l_tot / 2 - 12.0,
-            yp0 + ancho_c + 9.8,
-            xp0 + l_tot / 2 + 12.0,
-            yp0 + ancho_c + 9.8,
-            "PA14-TEXTO",
-        ),
-        # Muros perimetrales (doble línea)
-        _rect(xp0, yp0, l_tot, ancho_c, "PA14-MUROS"),
-        _rect(
-            xp0 + esp_m,
-            yp0 + esp_m,
-            l_tot - 2 * esp_m,
-            ancho_c - 2 * esp_m,
-            "PA14-MUROS",
-        ),
-        # Pasadizo central longitudinal
-        _linea(xp0, yp0 + 5.0, xp0 + l_tot, yp0 + 5.0, "PA14-MUROS"),
-        _linea(xp0, yp0 + 7.0, xp0 + l_tot, yp0 + 7.0, "PA14-MUROS"),
-    ]
-
-    # Ala izquierda (6 habitaciones arriba, 6 abajo)
-    for i in range(6):
-        xm = xp0 + i * ancho_mod
-        cuerpo += _dibujar_modulo_habitacion(
-            xm, yp0 + 7.0, ancho_mod, 5.0, "TOP", i + 1, det
-        )
-        cuerpo += _dibujar_modulo_habitacion(
-            xm, yp0, ancho_mod, 5.0, "BOTTOM", i + 13, det
+            _texto_cen(
+                x_mid,
+                y_top - 60.0,
+                10.0,
+                f"RMR = {rmr} | Q-Slope = {q_slope:.3f}",
+                "PA14-TEXTO",
+            )
         )
 
-    # Módulo central (Escalera A/B + Cuarto Limpieza + Vestíbulo)
-    xm_cen = xp0 + 6 * ancho_mod
-    cuerpo += _dibujar_modulo_central(xm_cen, yp0, ancho_cen, ancho_c)
-
-    # Ala derecha (6 habitaciones arriba, 6 abajo)
-    for i in range(6):
-        xm = xm_cen + ancho_cen + i * ancho_mod
-        cuerpo += _dibujar_modulo_habitacion(
-            xm, yp0 + 7.0, ancho_mod, 5.0, "TOP", i + 7, det
-        )
-        cuerpo += _dibujar_modulo_habitacion(
-            xm, yp0, ancho_mod, 5.0, "BOTTOM", i + 19, det
-        )
-
-    # Módulo final de evacuación este
-    xm_fin = xm_cen + ancho_cen + 6 * ancho_mod
-    w_fin = l_tot - (xm_fin - xp0)
-    cuerpo += [
-        _linea(xp0 + l_tot, yp0 + 5.15, xp0 + l_tot + 0.90, yp0 + 5.15, "PA14-PUERTAS"),
-        _arco(xp0 + l_tot, yp0 + 5.15, 0.90, 0.0, 90.0, "PA14-PUERTAS"),
-        _rect(xp0 + l_tot + 0.20, yp0 + 4.50, 2.50, 3.00, "PA14-ESCALERAS"),
-        _linea(
-            xp0 + l_tot + 0.20,
-            yp0 + 6.00,
-            xp0 + l_tot + 2.70,
-            yp0 + 6.00,
-            "PA14-ESCALERAS",
-        ),
-        _texto_cen(
-            xp0 + l_tot + 1.45, yp0 + 3.80, 0.22, "ESCALERA EMERGENCIA", "PA14-TEXTO"
-        ),
-    ]
-
-    # Ejes estructurales y burbujas
-    ejes_x = [
-        (0.0, "A"),
-        (3.5, "B"),
-        (7.0, "C"),
-        (10.5, "D"),
-        (14.0, "E"),
-        (17.5, "F"),
-        (21.0, "G"),
-        (25.5, "H"),
-        (29.0, "J"),
-        (32.5, "K"),
-        (36.0, "L"),
-        (39.5, "M"),
-        (43.0, "N"),
-        (46.5, "P"),
-        (48.7, "Q"),
-    ]
-    for dx_eje, letra in ejes_x:
-        x_e = xp0 + dx_eje
-        cuerpo += [
-            _linea(x_e, yp0 - 2.5, x_e, yp0 + ancho_c + 2.5, "PA14-EJE"),
-            _circulo(x_e, yp0 + ancho_c + 3.5, 0.60, "PA14-EJE"),
-            _texto_cen(x_e, yp0 + ancho_c + 3.5, 0.40, letra, "PA14-EJE"),
-            _circulo(x_e, yp0 - 3.5, 0.60, "PA14-EJE"),
-            _texto_cen(x_e, yp0 - 3.5, 0.40, letra, "PA14-EJE"),
-        ]
-
-    # Ejes horizontales
-    ejes_y = [(0.0, "1"), (5.0, "2"), (7.0, "3"), (12.0, "4")]
-    for dy_eje, num_e in ejes_y:
-        y_e = yp0 + dy_eje
-        cuerpo += [
-            _linea(xp0 - 2.5, y_e, xp0 + l_tot + 2.5, y_e, "PA14-EJE"),
-            _circulo(xp0 - 3.5, y_e, 0.60, "PA14-EJE"),
-            _texto_cen(xp0 - 3.5, y_e, 0.40, num_e, "PA14-EJE"),
-            _circulo(xp0 + l_tot + 3.5, y_e, 0.60, "PA14-EJE"),
-            _texto_cen(xp0 + l_tot + 3.5, y_e, 0.40, num_e, "PA14-EJE"),
-        ]
-
-    # Cotas superiores
-    for i in range(6):
+        # Cota de longitud del tramo
         cuerpo.append(
             _cota(
-                xp0 + i * ancho_mod,
-                yp0 + ancho_c,
-                xp0 + (i + 1) * ancho_mod,
-                yp0 + ancho_c,
-                xp0 + (i + 0.5) * ancho_mod,
-                yp0 + ancho_c + 1.2,
-                f"{ancho_mod:.2f}",
+                x_ini,
+                y_bot - 55.0,
+                x_fin,
+                y_bot - 55.0,
+                x_mid,
+                y_bot - 70.0,
+                f"L={l_tramo:.1f}m",
             )
         )
+
+    # Cierre de la progresiva final
+    cuerpo.append(_linea(prog_fin, y_bot, prog_fin, y_bot - 15.0, "PA14-EJE"))
     cuerpo.append(
-        _cota(
-            xm_cen,
-            yp0 + ancho_c,
-            xm_cen + ancho_cen,
-            yp0 + ancho_c,
-            xm_cen + ancho_cen / 2,
-            yp0 + ancho_c + 1.2,
-            f"{ancho_cen:.2f}",
-        )
-    )
-    for i in range(6):
-        cuerpo.append(
-            _cota(
-                xm_cen + ancho_cen + i * ancho_mod,
-                yp0 + ancho_c,
-                xm_cen + ancho_cen + (i + 1) * ancho_mod,
-                yp0 + ancho_c,
-                xm_cen + ancho_cen + (i + 0.5) * ancho_mod,
-                yp0 + ancho_c + 1.2,
-                f"{ancho_mod:.2f}",
-            )
-        )
-    cuerpo.append(
-        _cota(
-            xm_fin,
-            yp0 + ancho_c,
-            xp0 + l_tot,
-            yp0 + ancho_c,
-            (xm_fin + xp0 + l_tot) / 2,
-            yp0 + ancho_c + 1.2,
-            f"{w_fin:.2f}",
-        )
-    )
-    cuerpo.append(
-        _cota(
-            xp0,
-            yp0 + ancho_c,
-            xp0 + l_tot,
-            yp0 + ancho_c,
-            xp0 + l_tot / 2,
-            yp0 + ancho_c + 6.0,
-            f"{l_tot:.2f} m",
-        )
-    )
-
-    # Cotas inferiores
-    cuerpo.append(
-        _cota(
-            xp0,
-            yp0,
-            xp0 + l_tot,
-            yp0,
-            xp0 + l_tot / 2,
-            yp0 - 6.0,
-            f"{l_tot:.2f} m",
-        )
-    )
-
-    # Cotas verticales a la izquierda
-    cuerpo += [
-        _cota(xp0, yp0, xp0, yp0 + 5.0, xp0 - 1.2, yp0 + 2.5, "5.00"),
-        _cota(xp0, yp0 + 5.0, xp0, yp0 + 7.0, xp0 - 1.2, yp0 + 6.0, "2.00"),
-        _cota(xp0, yp0 + 7.0, xp0, yp0 + 12.0, xp0 - 1.2, yp0 + 9.5, "5.00"),
-        _cota(xp0, yp0, xp0, yp0 + 12.0, xp0 - 6.0, yp0 + 6.0, f"{ancho_c:.2f} m"),
-    ]
-
-    return cuerpo
-
-
-def _dibujar_seccion_aa(xs0: float, ys0: float, det: dict) -> list[str]:
-    ancho_c = det.get("ancho_cuerpo_m", 12.00)
-    h_pb = det.get("altura_planta_baja_m", 2.50)
-    h_p1 = det.get("altura_primer_piso_m", 2.60)
-    h_cercha = det.get("altura_techo_cercha_m", 1.50)
-    h_tot = h_pb + h_p1 + h_cercha + 0.45  # incluye espesores de forjados
-
-    cuerpo = [
-        # Título de Sección
         _texto_cen(
-            xs0 + ancho_c / 2,
-            ys0 + h_tot + 6.5,
-            0.75,
-            "SECCION A-A'",
+            prog_fin,
+            y_bot - 30.0,
+            10.0,
+            f"KM {prog_fin / 1000.0:.3f}",
             "PA14-TEXTO",
-        ),
-        _texto_cen(xs0 + ancho_c / 2, ys0 + h_tot + 5.3, 0.45, "1:100", "PA14-TEXTO"),
-        _linea(
-            xs0 + ancho_c / 2 - 8.0,
-            ys0 + h_tot + 4.8,
-            xs0 + ancho_c / 2 + 8.0,
-            ys0 + h_tot + 4.8,
-            "PA14-TEXTO",
-        ),
-        # Terreno natural y relleno
-        _linea(xs0 - 4.0, ys0, xs0 + ancho_c + 5.0, ys0, "PA14-CONTORNO"),
-    ]
-
-    # Rayado de terreno
-    for i in range(20):
-        xt = xs0 - 3.5 + i * 1.0
-        cuerpo.append(_linea(xt, ys0, xt - 0.40, ys0 - 0.40, "PA14-HATCH"))
-
-    # Zapatas y cimentación
-    ejes_sec = [0.0, 5.0, 7.0, 12.0]
-    for xc in ejes_sec:
-        cuerpo += [
-            _rect(xs0 + xc - 0.60, ys0 - 0.80, 1.20, 0.80, "PA14-ESTRUCTURA"),
-            _rect(xs0 + xc - 0.20, ys0 - 0.30, 0.40, 0.30, "PA14-ESTRUCTURA"),
-            _rect(xs0 + xc - 0.10, ys0 + 0.20, 0.20, 5.35, "PA14-ESTRUCTURA"),
-        ]
-
-    # Forjado Planta Baja y Forjado Primer Piso
-    y_fpb = ys0 + 0.20
-    y_fp1 = y_fpb + h_pb
-    y_techo = y_fp1 + 0.25 + h_p1
-    cuerpo += [
-        _rect(xs0, ys0, ancho_c, 0.20, "PA14-ESTRUCTURA"),
-        _rect(xs0, y_fp1, ancho_c, 0.25, "PA14-ESTRUCTURA"),
-        _linea(xs0, y_fpb, xs0, y_fp1, "PA14-MUROS"),
-        _linea(xs0 + 0.10, y_fpb, xs0 + 0.10, y_fp1, "PA14-MUROS"),
-        _linea(xs0 + ancho_c, y_fpb, xs0 + ancho_c, y_fp1, "PA14-MUROS"),
-        _linea(xs0 + ancho_c - 0.10, y_fpb, xs0 + ancho_c - 0.10, y_fp1, "PA14-MUROS"),
-        _linea(xs0, y_fp1 + 0.25, xs0, y_techo, "PA14-MUROS"),
-        _linea(xs0 + 0.10, y_fp1 + 0.25, xs0 + 0.10, y_techo, "PA14-MUROS"),
-        _linea(xs0 + ancho_c, y_fp1 + 0.25, xs0 + ancho_c, y_techo, "PA14-MUROS"),
-        _linea(
-            xs0 + ancho_c - 0.10,
-            y_fp1 + 0.25,
-            xs0 + ancho_c - 0.10,
-            y_techo,
-            "PA14-MUROS",
-        ),
-    ]
-
-    # Ventanas en sección
-    cuerpo += [
-        _rect(xs0, y_fpb + 1.0, 0.10, 1.20, "PA14-VENTANAS"),
-        _rect(xs0, y_fp1 + 0.25 + 1.0, 0.10, 1.20, "PA14-VENTANAS"),
-        _rect(xs0 + ancho_c - 0.10, y_fpb + 1.0, 0.10, 1.20, "PA14-VENTANAS"),
-        _rect(xs0 + ancho_c - 0.10, y_fp1 + 0.25 + 1.0, 0.10, 1.20, "PA14-VENTANAS"),
-    ]
-
-    # Puertas interiores del pasadizo en elevación
-    cuerpo += [
-        _rect(xs0 + 5.0, y_fpb, 0.90, 2.10, "PA14-PUERTAS"),
-        _rect(xs0 + 6.1, y_fpb, 0.90, 2.10, "PA14-PUERTAS"),
-        _rect(xs0 + 5.0, y_fp1 + 0.25, 0.90, 2.10, "PA14-PUERTAS"),
-        _rect(xs0 + 6.1, y_fp1 + 0.25, 0.90, 2.10, "PA14-PUERTAS"),
-    ]
-
-    # Cercha metálica a dos aguas
-    y_cumbrera = y_techo + h_cercha
-    x_cumbrera = xs0 + ancho_c / 2
-    cuerpo += [
-        _linea(xs0 - 1.20, y_techo, xs0 + ancho_c + 1.20, y_techo, "PA14-ESTRUCTURA"),
-        _linea(xs0 - 1.20, y_techo - 0.20, x_cumbrera, y_cumbrera, "PA14-ESTRUCTURA"),
-        _linea(
-            x_cumbrera,
-            y_cumbrera,
-            xs0 + ancho_c + 1.20,
-            y_techo - 0.20,
-            "PA14-ESTRUCTURA",
-        ),
-        _linea(x_cumbrera, y_techo, x_cumbrera, y_cumbrera, "PA14-ESTRUCTURA"),
-        _linea(xs0 + 3.0, y_techo, x_cumbrera, y_cumbrera, "PA14-ESTRUCTURA"),
-        _linea(xs0 + 9.0, y_techo, x_cumbrera, y_cumbrera, "PA14-ESTRUCTURA"),
-        _linea(
-            xs0 + 3.0, y_techo, xs0 + 3.0, y_techo + h_cercha * 0.5, "PA14-ESTRUCTURA"
-        ),
-        _linea(
-            xs0 + 9.0, y_techo, xs0 + 9.0, y_techo + h_cercha * 0.5, "PA14-ESTRUCTURA"
-        ),
-        _rect(xs0 - 1.40, y_techo - 0.35, 0.25, 0.20, "PA14-OBRAS-ARTE"),
-        _rect(xs0 + ancho_c + 1.15, y_techo - 0.35, 0.25, 0.20, "PA14-OBRAS-ARTE"),
-    ]
-
-    # Escalera metálica de emergencia derecha
-    cuerpo += [
-        _rect(xs0 + ancho_c + 0.20, ys0, 2.50, y_fp1 + 0.25, "PA14-ESCALERAS"),
-        _linea(
-            xs0 + ancho_c + 0.20,
-            ys0,
-            xs0 + ancho_c + 2.70,
-            y_fp1 + 0.25,
-            "PA14-ESCALERAS",
-        ),
-        _linea(
-            xs0 + ancho_c + 0.20,
-            ys0 + 0.90,
-            xs0 + ancho_c + 2.70,
-            y_fp1 + 0.25 + 0.90,
-            "PA14-ESCALERAS",
-        ),
-        _linea(
-            xs0 + ancho_c + 2.70,
-            y_fp1 + 0.25,
-            xs0 + ancho_c + 2.70,
-            y_fp1 + 0.25 + 1.0,
-            "PA14-ESCALERAS",
-        ),
-    ]
-
-    # Balcón izquierdo de servicio
-    cuerpo += [
-        _rect(xs0 - 1.50, y_fp1, 1.50, 0.20, "PA14-ESTRUCTURA"),
-        _linea(xs0 - 1.50, y_fp1 + 0.20, xs0 - 1.50, y_fp1 + 1.10, "PA14-ESTRUCTURA"),
-        _linea(xs0 - 1.50, y_fp1 + 1.10, xs0, y_fp1 + 1.10, "PA14-ESTRUCTURA"),
-    ]
-
-    # Textos de detalle y especificación
-    cuerpo += [
-        _texto(
-            x_cumbrera + 0.50,
-            y_cumbrera + 0.50,
-            0.24,
-            "TECHO A DOS AGUAS",
-            "PA14-TEXTO",
-        ),
-        _texto(
-            x_cumbrera + 0.50,
-            y_cumbrera + 0.10,
-            0.22,
-            "CANALON ANTI-HIELO",
-            "PA14-TEXTO",
-        ),
-        _texto(
-            xs0 + ancho_c + 3.0,
-            y_fp1 + 1.5,
-            0.24,
-            "ESCALERA METALICA EMERGENCIA",
-            "PA14-TEXTO",
-        ),
-        _texto(xs0 + ancho_c + 3.0, y_fp1 + 0.25, 0.20, "FORJADO", "PA14-TEXTO"),
-        _texto(
-            xs0 + ancho_c + 3.0,
-            ys0 - 0.40,
-            0.20,
-            "CIMENTACION SUPERFICIAL",
-            "PA14-TEXTO",
-        ),
-        _texto(
-            xs0 - 4.5, y_fpb + 1.6, 0.20, "VENTANA DOBLE ACRISTALAMIENTO", "PA14-TEXTO"
-        ),
-        _texto(
-            xs0 + 1.0,
-            ys0 + h_tot + 2.5,
-            0.24,
-            "DETALLE MURO: Panel Sandwich 100mm Poliuretano",
-            "PA14-TEXTO",
-        ),
-    ]
-
-    # Cotas verticales a la izquierda
-    cuerpo += [
-        _cota(
-            xs0, y_fpb, xs0, y_fp1, xs0 - 1.2, (y_fpb + y_fp1) / 2, f"PB: {h_pb:.2f} m"
-        ),
-        _cota(
-            xs0,
-            y_fp1 + 0.25,
-            xs0,
-            y_techo,
-            xs0 - 1.2,
-            (y_fp1 + 0.25 + y_techo) / 2,
-            f"P1: {h_p1:.2f} m",
-        ),
-        _cota(
-            xs0,
-            y_techo,
-            xs0,
-            y_cumbrera,
-            xs0 - 1.2,
-            (y_techo + y_cumbrera) / 2,
-            f"{h_cercha:.2f} m",
-        ),
-        _cota(
-            xs0,
-            ys0,
-            xs0,
-            y_cumbrera,
-            xs0 - 2.8,
-            (ys0 + y_cumbrera) / 2,
-            f"Total H: {h_tot:.2f} m",
-        ),
-    ]
-
-    # Cotas horizontales inferiores
-    cuerpo += [
-        _cota(xs0, ys0, xs0 + 5.0, ys0, xs0 + 2.5, ys0 - 1.4, "5.00"),
-        _cota(xs0 + 5.0, ys0, xs0 + 7.0, ys0, xs0 + 6.0, ys0 - 1.4, "2.00"),
-        _cota(xs0 + 7.0, ys0, xs0 + 12.0, ys0, xs0 + 9.5, ys0 - 1.4, "5.00"),
-        _cota(xs0 + 12.0, ys0, xs0 + 14.5, ys0, xs0 + 13.25, ys0 - 1.4, "2.50"),
-        _cota(xs0, ys0, xs0 + 12.0, ys0, xs0 + 6.0, ys0 - 2.4, f"{ancho_c:.2f} m"),
-    ]
-
-    return cuerpo
-
-
-def _dibujar_lamina_y_membrete(w_sheet: float, h_sheet: float, det: dict) -> list[str]:
-    cuerpo = [
-        # Marco exterior de lámina
-        _rect(0.0, 0.0, w_sheet, h_sheet, "PA14-MEMBRETE"),
-        # Margen interior
-        _rect(1.5, 1.5, w_sheet - 3.0, h_sheet - 3.0, "PA14-MEMBRETE"),
-    ]
-
-    # Norte Magnético (esquina superior izquierda)
-    xn, yn = 8.0, h_sheet - 7.0
-    cuerpo += [
-        _circulo(xn, yn, 2.2, "PA14-SIMBOLOS"),
-        _circulo(xn, yn, 1.9, "PA14-SIMBOLOS"),
-        _linea(xn, yn - 2.1, xn, yn + 2.1, "PA14-SIMBOLOS"),
-        _linea(xn - 2.1, yn, xn + 2.1, yn, "PA14-SIMBOLOS"),
-        _linea(xn - 0.40, yn + 1.20, xn, yn + 2.10, "PA14-SIMBOLOS"),
-        _linea(xn + 0.40, yn + 1.20, xn, yn + 2.10, "PA14-SIMBOLOS"),
-        _linea(xn - 0.40, yn + 1.20, xn + 0.40, yn + 1.20, "PA14-SIMBOLOS"),
-        _texto_cen(xn, yn + 2.80, 0.60, "N", "PA14-SIMBOLOS"),
-    ]
-
-    # Sellos de Seguridad SSOMA (esquina superior derecha)
-    cuerpo += [
-        _circulo(w_sheet - 6.0, h_sheet - 6.0, 1.5, "PA14-SIMBOLOS"),
-        _texto_cen(w_sheet - 6.0, h_sheet - 6.0, 0.35, "EPP", "PA14-SIMBOLOS"),
-        _circulo(w_sheet - 6.0, h_sheet - 9.8, 1.5, "PA14-SIMBOLOS"),
-        _texto_cen(w_sheet - 6.0, h_sheet - 9.8, 0.35, "SSOMA", "PA14-SIMBOLOS"),
-    ]
-
-    # Membrete Técnico Profesional (esquina inferior derecha)
-    xm, ym, wm, hm = 38.5, 1.5, 26.0, 11.0
-    cuerpo += [
-        _rect(xm, ym, wm, hm, "PA14-MEMBRETE"),
-        _linea(xm, ym + 8.5, xm + wm, ym + 8.5, "PA14-MEMBRETE"),
-        _linea(xm, ym + 6.0, xm + wm, ym + 6.0, "PA14-MEMBRETE"),
-        _linea(xm, ym + 3.8, xm + wm, ym + 3.8, "PA14-MEMBRETE"),
-        _linea(xm, ym + 1.8, xm + wm, ym + 1.8, "PA14-MEMBRETE"),
-        _linea(xm + 13.0, ym + 1.8, xm + 13.0, ym + 3.8, "PA14-MEMBRETE"),
-        _linea(xm + 13.0, ym + 3.8, xm + 13.0, ym + 6.0, "PA14-MEMBRETE"),
-        _texto(xm + 0.5, ym + 10.2, 0.22, "PROYECTO", "PA14-TEXTO"),
-        _texto(
-            xm + 0.5,
-            ym + 9.2,
-            0.32,
-            "ALOJAMIENTO MODULAR MINA ALTITUD 3,850m",
-            "PA14-TEXTO",
-        ),
-        _texto(xm + 0.5, ym + 7.7, 0.20, "UBICACION", "PA14-TEXTO"),
-        _texto(
-            xm + 0.5,
-            ym + 6.8,
-            0.30,
-            "ANDES, PERU (TUNEL TRASANDINO CASMAS - HUARAZ PA14)",
-            "PA14-TEXTO",
-        ),
-        _texto(xm + 0.5, ym + 5.2, 0.20, "PLANO", "PA14-TEXTO"),
-        _texto(
-            xm + 0.5,
-            ym + 4.3,
-            0.30,
-            "PLANTA NIVEL 1 Y SECCION A-A'",
-            "PA14-TEXTO",
-        ),
-        _texto(xm + 0.5, ym + 2.8, 0.20, "ESCALA: 1:100", "PA14-TEXTO"),
-        _texto(xm + 13.5, ym + 2.8, 0.20, "FECHA: NOV 2026", "PA14-TEXTO"),
-        _texto(xm + 0.5, ym + 2.2, 0.18, "DIBUJADO: J. VARGAS", "PA14-TEXTO"),
-        _texto(xm + 13.5, ym + 2.2, 0.18, "APROBADO: M. RUIZ", "PA14-TEXTO"),
-        _texto(xm + 0.5, ym + 0.8, 0.22, "NO. PLANO:", "PA14-TEXTO"),
-        _texto(
-            xm + 8.5,
-            ym + 0.6,
-            0.45,
-            det.get("codigo_plano", "AR-DM-001")
-            + " "
-            + det.get("revision_plano", "REV B"),
-            "PA14-TEXTO",
-        ),
-    ]
-
-    return cuerpo
-
-
-def dibujo_camp1_edif01_dormitorio(camp: dict) -> Dibujo:
-    det = camp.get("edif01_detalle", {})
-    w_sheet, h_sheet = 66.0, 96.0
-
-    xp0, yp0 = 7.0, 52.0
-    xs0, ys0 = 24.0, 16.0
-
-    cuerpo_lamina = _dibujar_lamina_y_membrete(w_sheet, h_sheet, det)
-    cuerpo_planta = _dibujar_planta_completa(xp0, yp0, det)
-    cuerpo_seccion = _dibujar_seccion_aa(xs0, ys0, det)
-
-    cuerpo_total = cuerpo_lamina + cuerpo_planta + cuerpo_seccion
-    return Dibujo(
-        "PA14_CAMP1_EDIF01_DORMITORIO",
-        "Plano Arquitectonico Modular Dormitorio Staff (Planta Nivel 1 y Seccion A-A' - AR-DM-001 REV B)",
-        cuerpo_total,
-        w_sheet + 2.0,
+        )
     )
 
-
-def _planta_polvorin(d: dict, x0: float, titulo: str) -> tuple[list[str], float]:
-    c = d["config"]
-    muro, sp = c["espesor_muro_m"], c["separacion_pared_m"]
-    li, ai = d["largo_int_m"], d["ancho_int_m"]
-    cuerpo = [
-        _rect(x0, 0, li + 2 * muro, ai + 2 * muro, "PA14-CONTORNO"),
-        _rect(x0 + muro, muro, li, ai, "PA14-CONTORNO"),
-    ]
-    restantes = d["rumas"]
-    for fila in range(c["filas"]):
-        # fila 0 junto al muro inferior, fila 1 junto al muro superior
-        y = muro + sp if fila == 0 else muro + ai - sp - c["caja_ancho_m"]
-        for i in range(min(d["rumas_por_fila"], restantes)):
-            x = x0 + muro + sp + i * (c["caja_largo_m"] + c["separacion_rumas_m"])
-            cuerpo.append(
-                _rect(x, y, c["caja_largo_m"], c["caja_ancho_m"], "PA14-RUMAS")
-            )
-        restantes -= d["rumas_por_fila"]
-    cuerpo += [
-        _cota(x0, 0, x0 + li + 2 * muro, 0, x0 + li / 2, -1.0),
-        _cota(x0, 0, x0, ai + 2 * muro, x0 - 1.0, ai / 2),
-        _texto(x0, ai + 2 * muro + 1.0, 0.4, titulo),
-        _texto(
-            x0,
-            -2.2,
-            0.25,
-            f"{d['cajas']} cajas - {d['rumas']} rumas de {d['cajas_por_ruma']}",
-        ),
-    ]
-    return cuerpo, li + 2 * muro
-
-
-def dibujo_polvorin(pol: dict) -> Dibujo:
-    cuerpo, ancho = _planta_polvorin(pol["explosivos"], 2.0, "POLVORIN DE EXPLOSIVOS")
-    x1 = 2.0 + ancho + 8.0
-    cuerpo2, ancho2 = _planta_polvorin(pol["accesorios"], x1, "POLVORIN DE ACCESORIOS")
     return Dibujo(
-        "PA14_POLVORIN", "Plantas de polvorines", cuerpo + cuerpo2, x1 + ancho2
+        "PA14_GEOLOGIA",
+        "Corte Geologico Longitudinal del Tunel (0+000 a 5+556)",
+        cuerpo,
+        longitud + 400.0,
     )
-
-
-def dibujo_saneamiento(agua: dict) -> Dibujo:
-    lr, lt, at = agua["lado_reservorio_m"], agua["largo_ts_m"], agua["ancho_ts_m"]
-    xt = 2.0 + lr + 8.0
-    cuerpo = [
-        _rect(2.0, 0, lr, lr, "PA14-CONTORNO"),
-        _cota(2.0, 0, 2.0 + lr, 0, 2.0 + lr / 2, -1.0),
-        _cota(2.0, 0, 2.0, lr, 1.0, lr / 2),
-        _texto(2.0, lr + 1.0, 0.4, "PETAP - RESERVORIO"),
-        _texto(2.0, -2.2, 0.25, f"V = {agua['v_reservorio_m3']:.1f} m3"),
-        _rect(xt, 0, lt, at, "PA14-CONTORNO"),
-        _linea(xt + lt * 2 / 3, 0, xt + lt * 2 / 3, at, "PA14-CONTORNO"),
-        _cota(xt, 0, xt + lt, 0, xt + lt / 2, -1.0),
-        _cota(xt, 0, xt, at, xt - 1.0, at / 2),
-        _texto(xt, at + 1.0, 0.4, "PETAR - TANQUE SEPTICO"),
-        _texto(
-            xt, -2.2, 0.25, f"V = {agua['v_tanque_m3']:.1f} m3 (2 camaras 2/3 - 1/3)"
-        ),
-    ]
-    return Dibujo("PA14_SANEAMIENTO", "PETAP y PETAR", cuerpo, xt + lt)
-
-
-def dibujo_botadero(maq: dict) -> Dibujo:
-    lado = maq["lado_botadero_m"]
-    cuerpo = [
-        '(setvar "DIMSCALE" 10.0)',
-        _rect(0, 0, lado, lado, "PA14-CERCO"),
-        _cota(0, 0, lado, 0, lado / 2, -5.0),
-        '(setvar "DIMSCALE" 1.0)',
-        _texto(0, lado + 3.0, 3.0, "BOTADERO (DME)"),
-        _texto(0, -12.0, 2.0, f"Area = {maq['area_botadero_m2']:.0f} m2"),
-    ]
-    return Dibujo("PA14_BOTADERO", "Huella del botadero", cuerpo, lado)
 
 
 def dibujo_ubicacion(ub: dict) -> Dibujo:
@@ -1446,6 +524,182 @@ def dibujo_ubicacion(ub: dict) -> Dibujo:
     )
 
 
+def dibujo_malla(sec: dict, vol: dict | None = None) -> Dibujo:
+    """Malla de perforacion y voladura mecanizada (cuñe de 4 secciones, ayudas y periferia)."""
+    b, h, hw = sec["ancho_m"], sec["altura_m"], sec["hastial_m"]
+    radio = b / 2.0
+    xc = radio
+    yc = hw
+
+    cuerpo = []
+
+    # 1. Contorno de la excavacion (Herradura)
+    pts_contorno = f"'((0.0 0.0) ({_n(b)} 0.0) ({_n(b)} {_n(hw)}) (0.0 {_n(hw)}))"
+    cuerpo.append(f'(pa14:pline {pts_contorno} \'(0.0 0.0 1.0 0.0) T "PA14-CONTORNO")')
+
+    # 2. Eje vertical y nivel de hastiales
+    cuerpo.append(_linea(xc, -1.0, xc, h + 1.0, "PA14-EJE"))
+    cuerpo.append(_linea(-1.0, hw, b + 1.0, hw, "PA14-EJE"))
+
+    # 3. Arranque / Cuñe cilindrico de 4 secciones (Centro)
+    x_cune = xc
+    y_cune = hw + 0.60
+    r_alivio = 0.18
+    r_tal = 0.08
+
+    # Taladro de alivio central
+    cuerpo.append(_circulo(x_cune, y_cune, r_alivio, "PA14-ALIVIO"))
+    cuerpo.append(
+        _texto_cen(x_cune, y_cune - 0.40, 0.20, "ALIVIO D=102mm", "PA14-TEXTO")
+    )
+
+    # Cuadrante 1 (4 taladros a 0.25 m)
+    d1 = 0.25
+    for dx, dy in [(-d1, -d1), (-d1, d1), (d1, -d1), (d1, d1)]:
+        cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
+    cuerpo.append(_rect(x_cune - d1, y_cune - d1, 2 * d1, 2 * d1, "PA14-SIMBOLOS"))
+
+    # Cuadrante 2 (4 taladros en rombo a 0.50 m)
+    d2 = 0.50
+    for dx, dy in [(0, -d2), (0, d2), (-d2, 0), (d2, 0)]:
+        cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
+    cuerpo.append(_linea(x_cune, y_cune - d2, x_cune + d2, y_cune, "PA14-SIMBOLOS"))
+    cuerpo.append(_linea(x_cune + d2, y_cune, x_cune, y_cune + d2, "PA14-SIMBOLOS"))
+    cuerpo.append(_linea(x_cune, y_cune + d2, x_cune - d2, y_cune, "PA14-SIMBOLOS"))
+    cuerpo.append(_linea(x_cune - d2, y_cune, x_cune, y_cune - d2, "PA14-SIMBOLOS"))
+
+    # Cuadrante 3 (4 taladros en cuadrado a 0.90 m)
+    d3 = 0.90
+    for dx, dy in [(-d3, -d3), (-d3, d3), (d3, -d3), (d3, d3)]:
+        cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
+    cuerpo.append(_rect(x_cune - d3, y_cune - d3, 2 * d3, 2 * d3, "PA14-SIMBOLOS"))
+
+    # Cuadrante 4 (8 taladros a 1.45 m)
+    d4 = 1.45
+    for dx, dy in [
+        (-d4, -d4),
+        (-d4, 0),
+        (-d4, d4),
+        (0, -d4),
+        (0, d4),
+        (d4, -d4),
+        (d4, 0),
+        (d4, d4),
+    ]:
+        cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
+    cuerpo.append(_rect(x_cune - d4, y_cune - d4, 2 * d4, 2 * d4, "PA14-SIMBOLOS"))
+
+    # 4. Taladros de Periferia (Hastiales y Corona)
+    y_p = 0.40
+    while y_p <= hw:
+        cuerpo.append(_circulo(0.20, y_p, r_tal, "PA14-TALADROS"))
+        cuerpo.append(_circulo(b - 0.20, y_p, r_tal, "PA14-TALADROS"))
+        y_p += 0.60
+
+    r_perif = radio - 0.20
+    n_corona = 33
+    for i in range(1, n_corona):
+        ang_rad = math.pi * i / n_corona
+        xt = xc - r_perif * math.cos(ang_rad)
+        yt = yc + r_perif * math.sin(ang_rad)
+        cuerpo.append(_circulo(xt, yt, r_tal, "PA14-TALADROS"))
+
+    # 5. Taladros de Arrastre / Zapateras
+    n_zapateras = 17
+    dx_zap = (b - 0.80) / (n_zapateras - 1)
+    for i in range(n_zapateras):
+        xz = 0.40 + i * dx_zap
+        cuerpo.append(_circulo(xz, 0.20, r_tal, "PA14-TALADROS"))
+
+    # 6. Taladros de Ayuda / Destroza
+    for x_ay in [1.20, 2.30, 3.40, 4.50, 8.80, 9.90, 11.00, 12.10]:
+        cuerpo.append(_circulo(x_ay, 1.10, r_tal, "PA14-TALADROS"))
+        cuerpo.append(_circulo(x_ay, 2.10, r_tal, "PA14-TALADROS"))
+
+    for x_ay in [1.00, 2.20, 3.50, 4.80, 8.50, 9.80, 11.10, 12.30]:
+        cuerpo.append(_circulo(x_ay, 3.50, r_tal, "PA14-TALADROS"))
+
+    for r_int, n_int in [(radio - 1.50, 19), (radio - 2.80, 13)]:
+        for i in range(1, n_int):
+            ang_rad = math.pi * i / n_int
+            xt = xc - r_int * math.cos(ang_rad)
+            yt = yc + r_int * math.sin(ang_rad)
+            if abs(xt - x_cune) > 1.3 or abs(yt - y_cune) > 1.3:
+                cuerpo.append(_circulo(xt, yt, r_tal, "PA14-TALADROS"))
+
+    # 7. Cotas
+    cuerpo.append(_cota(0.0, 0.0, b, 0.0, xc, -1.80, f"B={b:.2f}m"))
+    cuerpo.append(_cota(0.0, 0.0, 0.0, hw, -1.80, hw / 2, f"hw={hw:.2f}m"))
+    cuerpo.append(_cota(0.0, 0.0, 0.0, h, -3.20, h / 2, f"H={h:.2f}m"))
+
+    # 8. Cuadro de Datos de Perforacion
+    x_cuadro = b + 3.0
+    y_cuadro = h
+    w_cuadro = 8.8
+    h_cuadro = 9.2
+    cuerpo.append(
+        _rect(x_cuadro, y_cuadro - h_cuadro, w_cuadro, h_cuadro, "PA14-CONTORNO")
+    )
+    cuerpo.append(
+        _texto(
+            x_cuadro + 0.5,
+            y_cuadro - 0.8,
+            0.32,
+            "PARAMETROS DE MALLA DE PERFORACION",
+            "PA14-TEXTO",
+        )
+    )
+    cuerpo.append(
+        _linea(
+            x_cuadro,
+            y_cuadro - 1.1,
+            x_cuadro + w_cuadro,
+            y_cuadro - 1.1,
+            "PA14-CONTORNO",
+        )
+    )
+
+    taladros_tot = sec["taladros"]
+    avance_disparo = sec["avance_disparo_m"]
+    area_exc = sec["area_m2"]
+    burden_val = vol.get("inputs", {}).get("burden_m", 1.25) if vol else 1.25
+    esp_val = vol.get("inputs", {}).get("espaciamiento_m", 1.75) if vol else 1.75
+
+    lineas_datos = [
+        f"Seccion tunel: Herradura ({b:.2f} x {h:.2f} m)",
+        f"Area de excavacion: {area_exc:.2f} m2",
+        f"Taladros de diseno: {taladros_tot} und",
+        "Arranque: Cune quemado cilindrico (4 secc.)",
+        "Alivio: 1 taladro D = 102 mm (4 pulg)",
+        "Produccion: D = 45 mm (broca integral)",
+        "Longitud barreno: 3.66 m (12 pies Sandvik)",
+        f"Avance efectivo: {avance_disparo:.2f} m/disparo (90%)",
+        f"Burden teorico Konya: B = {burden_val:.2f} m",
+        f"Espaciamiento Konya: S = {esp_val:.2f} m",
+        "Espaciamiento periferico: E = 0.60 m",
+        "Taco inerte: T = 0.80 m (detritus compactado)",
+        "Explosivo: Emulsion / ANFO (q=1.60 kg/m3)",
+    ]
+
+    for idx, linea_txt in enumerate(lineas_datos):
+        cuerpo.append(
+            _texto(
+                x_cuadro + 0.5,
+                y_cuadro - 1.7 - (idx * 0.52),
+                0.22,
+                linea_txt,
+                "PA14-TEXTO",
+            )
+        )
+
+    return Dibujo(
+        "PA14_MALLA",
+        "Malla de Perforacion y Disparo - Seccion Herradura (Drill & Blast)",
+        cuerpo,
+        b + w_cuadro + 8.0,
+    )
+
+
 # ---------------------------------------------------------------- archivo
 def _origenes(ub: dict, detalles: list[Dibujo]) -> list[tuple[float, float]]:
     """Origen fijo de cada detalle: franja al sur del plano de ubicación."""
@@ -1463,11 +717,8 @@ def generar_lisp(ctx: dict, carpeta: Path, proyecto: str) -> Path:
     ubicacion = dibujo_ubicacion(ctx["ubicacion"])
     detalles = [
         dibujo_seccion(ctx["seccion"]),
-        dibujo_campamento(ctx["campamento"]),
-        dibujo_camp1_edif01_dormitorio(ctx["campamento"]),
-        dibujo_polvorin(ctx["polvorin"]),
-        dibujo_saneamiento(ctx["agua"]),
-        dibujo_botadero(ctx["maquinaria"]),
+        dibujo_malla(ctx["seccion"], ctx.get("voladura")),
+        dibujo_geologia(ctx["geologia"]),
     ]
     dibujos = [ubicacion, *detalles]
     origenes = [(0.0, 0.0), *_origenes(ctx["ubicacion"], detalles)]
@@ -1475,7 +726,7 @@ def generar_lisp(ctx: dict, carpeta: Path, proyecto: str) -> Path:
         f";;; {_txt(proyecto)[1:-1]} - generado con `uv run pa14`. NO EDITAR A MANO.",
         ";;; APPLOAD -> cargar este archivo -> comandos: "
         + ", ".join(d.comando for d in dibujos)
-        + ", PA14_CAMP1_DORMITORIO, PA14_EDIF01, PA14_TODO",
+        + ", PA14_TODO",
         ";;; Unidades: metros. Coordenadas UTM WGS84 zona 18L (X = Este, Y = Norte).",
         _LIBRERIA,
         "(defun pa14:capas ()",
@@ -1492,15 +743,10 @@ def generar_lisp(ctx: dict, carpeta: Path, proyecto: str) -> Path:
             f"(defun c:{d.comando} () (pa14:inicio)"
             f" (pa14:origen {_n(ox)} {_n(oy)}) ({nombre}) (pa14:fin))",
         ]
-        if d.comando == "PA14_CAMP1_EDIF01_DORMITORIO":
-            lineas += [
-                "(defun c:PA14_CAMP1_DORMITORIO () (c:PA14_CAMP1_EDIF01_DORMITORIO))",
-                "(defun c:PA14_EDIF01 () (c:PA14_CAMP1_EDIF01_DORMITORIO))",
-            ]
         todo += [f"  (pa14:origen {_n(ox)} {_n(oy)})", f"  ({nombre})"]
     todo += [
         "  (pa14:fin))",
-        '(princ "\\nPA14 cargado. Escriba PA14_TODO o PA14_CAMP1_EDIF01_DORMITORIO.")',
+        '(princ "\\nPA14 cargado. Escriba PA14_TODO o PA14_GEOLOGIA.")',
         "(princ)",
     ]
     carpeta.mkdir(parents=True, exist_ok=True)
