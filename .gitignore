@@ -32,7 +32,7 @@ salidas/
 plot.log
 
 # ---------------------------------------------------------------- Editores / SO
-.vscode/
+
 .idea/
 Thumbs.db
 desktop.ini
