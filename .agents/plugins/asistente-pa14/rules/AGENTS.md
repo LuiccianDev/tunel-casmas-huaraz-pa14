@@ -23,3 +23,9 @@ Al trabajar en el proyecto **Túnel Casmas Huaraz PA14**, debes asegurar estrict
   Esto es vital para mantener determinista el grafo de conocimiento del proyecto.
 
 > Estas reglas complementan las normativas generales del proyecto para garantizar un trabajo impecable y adecuado.
+
+
+## 5. Organización de Documentación (Entradas vs Salidas)
+- **Cero desorden documental:** Si recibes contexto normativo o manuales del usuario, guárdalos en `docs/entradas/`.
+- Si generas una salida en formato texto/documento como entregable, DEBES guardarla en `salidas/documentos/`.
+- Todos los nombres de archivo de documentación deben mantener la convención `snake_case`.

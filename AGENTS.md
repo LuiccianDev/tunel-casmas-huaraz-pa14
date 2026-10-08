@@ -72,3 +72,10 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 - Ruff (config en `pyproject.toml`), línea 88, Python ≥ 3.11.
 - Nombres en español, `snake_case`, funciones cortas y con docstring breve.
 - Actualizar `docs/PLANIFICACION.md` al completar o agregar tareas.
+
+
+## Documentación (Entradas y Salidas)
+
+- **Entradas (Contexto/Base):** Todo documento de referencia aportado por el usuario (fichas técnicas, marco regulatorio, normativas) debe alojarse en `docs/entradas/`.
+- **Salidas (Generados):** Todo documento de texto o markdown generado como producto o entregable del proyecto (como prompts generados o reportes) debe guardarse en `salidas/documentos/`.
+- **Nomenclatura:** Todos los archivos documentales deben estar en minúsculas y usar `snake_case`.
