@@ -56,3 +56,12 @@ Cuando el asistente interactúa con AutoCAD a través del Gateway, debe apegarse
      $payload = @{ command = "_.RECTANG`n0,0`n10,10`n_.ZOOM`nE`n" } | ConvertTo-Json
      Invoke-RestMethod -Uri "http://localhost:8080/execute" -Method Post -ContentType "application/json" -Body $payload
      ```
+
+---
+
+## 3. Uso y Conocimiento de YQArch
+
+- **Base de Conocimiento Obligatoria:** Cuando el usuario solicite crear elementos arquitectónicos usando YQArch (muros, ventanas, grillas, ejes, acotaciones), la IA **DEBE** consultar primero el archivo `yqarch_commands.md` ubicado en este mismo directorio (`.agents/plugins/autocad-gateway/rules/yqarch_commands.md`).
+- **Prohibido Adivinar:** La IA no debe inventar comandos de YQArch. Siempre debe basarse en el diccionario oficial documentado.
+- **Flujo Híbrido:** Si el comando documentado abre una ventana emergente en AutoCAD (como `AD`, `WD`, `JJ`), la IA debe inyectar el comando sin escapes (`\x03\x03`) al final, pedir al usuario que interactúe con la ventana, y esperar confirmación antes de seguir inyectando coordenadas.
+- **Flujo de Trabajo (Fast Drafting):** Al iniciar el diseño de un proyecto o planta, la IA **DEBE** aplicar automáticamente el skill `yqarch-fast-drafting`. Esto obliga a seguir la secuencia estructural correcta: Ejes (`ZXW`/`AX`), Muros paramétricos (`WW`), Aberturas (`AD`/`WD`) y finalmente Anotaciones (`AZH`/`DD`), asegurando siempre la estricta separación por capas.
