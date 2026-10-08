@@ -1,0 +1,19 @@
+# Excluir configuraciones de asistentes y agentes de IA
+.agents/
+.gemini/
+
+# Excluir entornos virtuales y caché de Python
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Excluir configuraciones de editor
+.vscode/
+
+# Excluir herramientas/plugins externos al cálculo (como el gateway de AutoCAD)
+plugins/
+
+# Excluir las carpetas de resultados generados (no son código fuente, son outputs)
+salidas/
+graphify-out/
