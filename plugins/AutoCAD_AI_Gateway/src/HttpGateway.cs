@@ -130,9 +130,9 @@ namespace AutoCAD_AI_Gateway
                 {
                     // DIRECTIVA DE SEGURIDAD:
                     // 1. \x03\x03 al inicio para cancelar cualquier comando previo o pegado
-                    // 2. Ejecutar el comando de la IA
-                    // 3. \n al final para confirmar, y luego otro doble \x03\x03 para forzar la salida y no dejar trabado AutoCAD
-                    string safeCommand = "\x03\x03" + cmd + "\n\x03\x03";
+                    // 2. Ejecutar el comando de la IA con total control (la IA decide si manda \n o no al final)
+                    string safeCommand = "\x03\x03" + cmd;
+
                     
                     doc.SendStringToExecute(safeCommand, true, false, false);
                 }
