@@ -37,3 +37,6 @@ plot.log
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# ---------------------------------------------------------------- Tools / SO
+graphify-out/
