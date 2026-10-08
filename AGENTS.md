@@ -28,6 +28,12 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
   existe en otro módulo.
 - `excel.py` y `lisp.py` no contienen cálculos de ingeniería, solo presentación.
 
+## Navegación de Arquitectura (Graphify)
+
+- **Prioridad Estricta:** Este proyecto utiliza **Graphify** (`graphify-out/`). Para entender la arquitectura o buscar cómo se conectan los módulos, el asistente **DEBE** usar primero las herramientas del servidor MCP (`query_graph`, `get_node`, `shortest_path`).
+- Las búsquedas manuales ciegas (como `grep_search` o explorar archivos uno por uno) solo se permiten como último recurso.
+- *Nota:* Las reglas completas y comandos específicos están encapsulados en el plugin local (`.agents/plugins/graphify/rules/AGENTS.md`).
+
 ## Excel (criterio del usuario)
 
 - Simple, tajante y directo: pocos cálculos, los necesarios.
