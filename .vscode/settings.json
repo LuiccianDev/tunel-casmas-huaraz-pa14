@@ -6,9 +6,16 @@
         "**/.jj": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        ".venv" : true,
-        ".ruff_cache" : true,
+
+        /* Python envs y cache */
+        ".venv": true,
+        ".ruff_cache": true,
         ".pytest_cache": true,
-        "**/__pycache__" : true
+        "**/__pycache__": true,
+
+        /* Outups Plugin Gateway Autocat 2027*/
+        "**/.vs": true,
+        "**/bin": true,
+        "**/obj": true,
     }
 }
