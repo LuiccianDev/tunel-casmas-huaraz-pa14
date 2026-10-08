@@ -1,0 +1,8 @@
+{
+  "name": "asistente-pa14",
+  "description": "Asistente de Calidad para el proyecto Túnel Casmas Huaraz PA14. Asegura la correcta formulación de parámetros, archivos Excel, y la calidad del código.",
+  "suggestedPrompts": [
+    "Verifica la calidad del código y ejecuta los tests del proyecto",
+    "Ayúdame a generar un nuevo entregable y actualizar el grafo"
+  ]
+}
