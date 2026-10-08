@@ -21,6 +21,7 @@ from .modulos import (
     m10_cronograma,
     m11_portales,
     m12_voladura,
+    m13_sostenimiento,
 )
 
 # Orden = dependencias (cada módulo usa resultados de los anteriores).
@@ -38,6 +39,7 @@ MODULOS = [
     m08_agua,
     m09_electricidad,
     m10_cronograma,
+    m13_sostenimiento,
 ]
 
 

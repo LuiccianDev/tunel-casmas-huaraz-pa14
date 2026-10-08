@@ -32,6 +32,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 | 10 | Cronograma | `m10_cronograma` | `10_Cronograma.xlsx` | [x] base |
 | 11 | Portales y Banquetas | `m11_portales` | `11_Portales.xlsx` | [x] base |
 | 12 | Voladura Konya | `m12_voladura` | `12_Voladura.xlsx` | [x] base |
+| 13 | Sostenimiento (Bieniawski / Barton) | `m13_sostenimiento` | `13_Sostenimiento.xlsx` | [x] base |
 
 ## Fase 3 · Planos AutoCAD (`PA14_dibujos.lsp`)
 - [x] Plano de ubicación general (puntos UTM y traza del eje: `PA14_UBICACION`)

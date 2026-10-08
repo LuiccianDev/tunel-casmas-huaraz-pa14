@@ -3164,3 +3164,15 @@ lecho_secado_espesor_arena_m = 0.20                # Unidad: m | Norma: RNE OS.0
 lecho_secado_espesor_grava_m = 0.25                # Unidad: m | Norma: RNE OS.090 Num. 5.8 (soporte drenante de grava)
 
 
+
+# =============================================================================
+#  13 · SOSTENIMIENTO
+# =============================================================================
+[sostenimiento]
+esr = 1.0 # (S) Excavation Support Ratio (Túneles viales = 1.0 según Barton)
+peso_especifico_roca_t_m3 = 2.60 # (S) Peso específico
+esfuerzo_fluencia_acero_mpa = 420.0 # (S)
+capacidad_adherencia_mpa = 1.5 # (S)
+factor_seguridad_pernos = 1.5 # (S)
+perno_diametro_mm = 25.0 # (S)
+shotcrete_resistencia_mpa = 30.0 # (S)

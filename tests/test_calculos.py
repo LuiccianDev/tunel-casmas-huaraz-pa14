@@ -71,6 +71,7 @@ def test_flujo_completo(tmp_path):
         "10_Cronograma.xlsx",
         "11_Portales.xlsx",
         "12_Voladura.xlsx",
+        "13_Sostenimiento.xlsx",
     ]
     for a in archivos:
         assert a.exists() and a.stat().st_size > 0
