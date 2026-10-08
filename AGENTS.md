@@ -79,3 +79,10 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 - **Entradas (Contexto/Base):** Todo documento de referencia aportado por el usuario (fichas técnicas, marco regulatorio, normativas) debe alojarse en `docs/entradas/`.
 - **Salidas (Generados):** Todo documento de texto o markdown generado como producto o entregable del proyecto (como prompts generados o reportes) debe guardarse en `salidas/documentos/`.
 - **Nomenclatura:** Todos los archivos documentales deben estar en minúsculas y usar `snake_case`.
+
+
+## Revisión de Código y Arquitectura (Graphify-First)
+
+- **Cero Búsquedas a Ciegas:** Está PROHIBIDO hacer búsquedas de texto masivas o iterativas para entender la estructura. Debes usar obligatoriamente las herramientas del MCP de Graphify para ver las dependencias, "God Nodes" y rutas cortas.
+- **Creación de Grafo:** Si la base de datos o carpeta del grafo no existe al momento de iniciar la revisión, tu primer paso técnico DEBE ser ejecutar `uvx --from graphifyy graphify update .` para inicializar el mapa arquitectónico.
+- **Mantenimiento Estricto:** Cualquier refactorización debe aplicar modularidad (SRP) y, al finalizar, siempre se debe resincronizar el grafo.

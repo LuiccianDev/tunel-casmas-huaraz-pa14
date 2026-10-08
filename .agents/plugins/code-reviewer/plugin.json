@@ -1,0 +1,8 @@
+{
+  "name": "code-reviewer",
+  "description": "Revisor de código anti-espagueti y optimizador de tokens. Obliga al uso de Graphify (MCP) para entender la arquitectura en lugar de hacer búsquedas redundantes.",
+  "suggestedPrompts": [
+    "Revisa la arquitectura del último módulo usando Graphify e identifica nodos espagueti",
+    "Analiza las dependencias antes de refactorizar"
+  ]
+}
