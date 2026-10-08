@@ -1,0 +1,9 @@
+{
+  "name": "autocad-gateway",
+  "description": "Plugin para asistencia técnica, mantenimiento y comunicación segura con AutoCAD AI Gateway (.NET / C#). Agrupa principios de Clean Code, buenas prácticas de .NET y documentación C# junto a directivas de inyección a AutoCAD.",
+  "suggestedPrompts": [
+    "Audita el código C# del gateway para AutoCAD siguiendo Clean Code",
+    "Inyecta un comando en AutoCAD usando el endpoint seguro del Gateway",
+    "Verifica y compila el plugin AutoCAD_AI_Gateway en modo Release"
+  ]
+}
