@@ -1,4 +1,21 @@
-# Túnel Casmas Huaraz PA14
+
+<div align="center">
+
+
+ <h1>Túnel Casmas Huaraz PA14 </h1>
+
+<img src="assets/banner-readme.webp" alt="Túnel Vial Tinco - Banner" width="100%" >
+
+
+
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-311/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![UV](https://img.shields.io/badge/UV-Package%20Manager-purple.svg)](https://github.com/astral-sh/uv)
+[![QGIS](https://img.shields.io/badge/QGIS-3.40+-green.svg)](https://qgis.org/)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
+[![Academic](https://img.shields.io/badge/Academic-UNT%20Minas-red.svg)](https://www.unitru.edu.pe/)
+
+</div>
 
 Proyecto del curso de **Túneles**: cálculos de ingeniería del túnel y sus
 instalaciones, exportados a **Excel** (un libro por entregable), memorias técnicas
