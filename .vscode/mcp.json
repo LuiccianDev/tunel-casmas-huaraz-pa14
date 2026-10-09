@@ -20,6 +20,19 @@
                 "graphify.serve",
                 "${workspaceFolder}/graphify-out/graph.json"
             ]
+        },
+        "powerbi": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@microsoft/powerbi-modeling-mcp@latest",
+                "--start",
+                "--accept-eula"
+            ],
+            "env": {
+                "PBI_MODELING_MCP_ACCEPT_EULA": "true"
+            }
         }
     }
 }
