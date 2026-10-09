@@ -23,6 +23,7 @@ from .modulos import (
     m12_voladura,
     m13_sostenimiento,
 )
+from .prompts_cad import generar_prompts_cad
 
 # Orden = dependencias (cada módulo usa resultados de los anteriores).
 # m02_geologia se agregará aquí cuando estén los datos.
@@ -65,6 +66,7 @@ def ejecutar(
                 )
             )
     archivos.append(generar_lisp(ctx, salida / "lisp", proyecto))
+    archivos.append(generar_prompts_cad(ctx, salida / "documentos", proyecto))
     return ctx, archivos
 
 

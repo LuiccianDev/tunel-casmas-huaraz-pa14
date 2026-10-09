@@ -8,7 +8,8 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 README_ROOT = ROOT_DIR / "README.md"
 README_GATEWAY = ROOT_DIR / "plugins" / "AutoCAD_AI_Gateway" / "README.md"
 README_MCP = ROOT_DIR / "plugins" / "AutoCAD_MCP_Server" / "README.md"
-DOC_MCP = ROOT_DIR / "salidas" / "documentos" / "documentacion_mcp_autocad.md"
+DOC_MCP = ROOT_DIR / "docs" / "documentacion_mcp_autocad.md"
+DOC_PROMPTS = ROOT_DIR / "salidas" / "documentos" / "prompts_edificaciones_cad.md"
 VSCODE_MCP = ROOT_DIR / ".vscode" / "mcp.json"
 
 
@@ -112,3 +113,16 @@ def test_mcp_configuraciones_y_binarios_alineados():
     assert "AutoCAD_MCP_Server.dll" in texto_mcp, (
         "El README de AutoCAD_MCP_Server debe documentar el uso de AutoCAD_MCP_Server.dll."
     )
+
+
+def test_prompts_cad_autogenerados_con_38_edificaciones():
+    """Verifica que el catálogo de prompts CAD autogenerado contenga las 38 edificaciones (EDIF-01 a EDIF-38)."""
+    assert DOC_PROMPTS.exists(), (
+        f"El archivo '{DOC_PROMPTS}' no existe. Ejecuta 'uv run pa14' para generarlo."
+    )
+    texto = DOC_PROMPTS.read_text(encoding="utf-8")
+    for i in range(1, 39):
+        codigo = f"EDIF-{i:02d}"
+        assert codigo in texto, (
+            f"El código '{codigo}' no figura en el catálogo autogenerado de prompts CAD."
+        )
