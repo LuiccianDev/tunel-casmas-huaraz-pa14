@@ -33,3 +33,20 @@ Este plugin gobierna la interacción del asistente con modelos semánticos de **
    - Crear relaciones explícitas con cardinalidad y dirección de filtro correctas mediante `relationship_operations`.
    - Evitar relaciones bidireccionales innecesarias para preservar el rendimiento del motor tabular VertiPaq.
    - Aplicar el evaluador de mejores prácticas del modelo para detectar columnas no utilizadas o medidas redundantes.
+
+---
+
+## 3. Catálogo de Herramientas y Protocolo Multiplexor (Skill: powerbi-modeling-tools)
+
+1. **Catálogo Extendido (21 Herramientas Multiplexoras):**
+   - Para consultar el desglose exhaustivo de las 21 herramientas compuestas (`connection_operations`, `measure_operations`, `table_operations`, etc.), operaciones y esquemas de payload, consulta la skill oficial `powerbi-modeling-tools` ubicada en `skills/powerbi-modeling-tools/SKILL.md`.
+
+2. **Estructura de Llamadas Multiplexoras:**
+   - Toda llamada al servidor debe empaquetar los parámetros en un objeto `request` con el atributo obligatorio `operation`:
+     - Crear/Actualizar: `definitions: [...]`
+     - Eliminar/Consultar: `references: [...]`
+     - Mover medidas entre tablas: `moveDefinitions: [...]` (nunca usar `Update` para reasignar tabla).
+
+3. **Operaciones Transaccionales Seguras:**
+   - En cambios masivos de medidas, columnas o tablas, configurar siempre `options: { "useTransaction": true, "continueOnError": false }` para evitar que el modelo quede en un estado corrupto o inconsistente.
+

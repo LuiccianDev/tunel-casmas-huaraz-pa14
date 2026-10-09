@@ -28,3 +28,18 @@ Este plugin gobierna la interacción del asistente con el software SIG **QGIS De
 
 3. **Operaciones No Destructivas:**
    - Al realizar transformaciones, buffers, intersecciones o reclasificaciones, preferir siempre generar **nuevas capas vectoriales en memoria o archivos derivados**, evitando sobrescribir fuentes de datos originales (`.shp`, `.gpkg`, `.geojson`) sin confirmación explícita del usuario.
+
+---
+
+## 3. Catálogo de Herramientas y Patrones de Ejecución (Skill: qgis-mcp-tools)
+
+1. **Catálogo Extendido (125 Herramientas):**
+   - Para consultar el desglose exhaustivo de endpoints, recursos (`qgis://`) y prompts integrados, consulta la skill oficial `qgis-mcp-tools` ubicada en `skills/qgis-mcp-tools/SKILL.md`.
+
+2. **Edición Transaccional Vectorial:**
+   - Toda modificación de atributos o geometrías sobre capas existentes debe seguir la secuencia transaccional:
+     `start_editing` -> `add_features` / `update_features` / `update_feature_geometry` -> `commit_edits` (o `rollback_edits` si se detecta error).
+
+3. **Geoprocesamiento Pesado y Segundo Plano:**
+   - Algoritmos que tomen más de 55 segundos deben lanzarse mediante `start_processing_job` y monitorearse con `get_processing_job` para evitar desconexiones por tiempo de espera en el socket.
+
