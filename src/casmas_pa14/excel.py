@@ -11,12 +11,19 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 from .modelo import Gantt, Libro, Tabla
 
-_RELLENO_ENCABEZADO = PatternFill("solid", fgColor="1F4E78")
-_RELLENO_GANTT = PatternFill("solid", fgColor="2E75B6")
-_RELLENO_TOTAL = PatternFill("solid", fgColor="F2F4F8")  # Tono suave y sobrio
-_FUENTE_ENCABEZADO = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-_FUENTE_NORMAL = Font(name="Calibri", size=11)
-_FUENTE_TOTAL = Font(name="Calibri", size=11, bold=True)
+_COLOR_VERDE_PRIMARIO = "2E7D32"  # Verde técnico sobrio institucional
+_COLOR_VERDE_GANTT = "4CAF50"  # Verde para barras gantt
+_COLOR_VERDE_TOTAL = "E8F5E9"  # Fondo verde muy suave para filas de totales
+_TAMANO_FUENTE = 11  # Tamaño estricto e invariable para todo el documento
+
+_RELLENO_ENCABEZADO = PatternFill("solid", fgColor=_COLOR_VERDE_PRIMARIO)
+_RELLENO_GANTT = PatternFill("solid", fgColor=_COLOR_VERDE_GANTT)
+_RELLENO_TOTAL = PatternFill("solid", fgColor=_COLOR_VERDE_TOTAL)
+_FUENTE_ENCABEZADO = Font(
+    name="Calibri", size=_TAMANO_FUENTE, bold=True, color="FFFFFF"
+)
+_FUENTE_NORMAL = Font(name="Calibri", size=_TAMANO_FUENTE)
+_FUENTE_TOTAL = Font(name="Calibri", size=_TAMANO_FUENTE, bold=True, color="1B5E20")
 _LINEA = Side(style="thin", color="A6A6A6")
 _BORDE = Border(left=_LINEA, right=_LINEA, top=_LINEA, bottom=_LINEA)
 _FILA_INICIAL = 4
@@ -29,9 +36,13 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
     for hoja in libro.hojas:
         ws = wb.create_sheet(hoja.nombre[:31])
         ws["A1"] = proyecto
-        ws["A1"].font = Font(name="Calibri", bold=True, size=11)
+        ws["A1"].font = Font(
+            name="Calibri", bold=True, size=_TAMANO_FUENTE, color=_COLOR_VERDE_PRIMARIO
+        )
         ws["A2"] = hoja.titulo
-        ws["A2"].font = Font(name="Calibri", bold=True, size=11, color="1F4E78")
+        ws["A2"].font = Font(
+            name="Calibri", bold=True, size=_TAMANO_FUENTE, color="1B5E20"
+        )
         fila = _FILA_INICIAL
         rangos_tablas = []
         mapa_simbolos: dict[str, str] = {}
@@ -122,7 +133,7 @@ def _escribir_tabla(
 ) -> tuple[int, str]:
     if tabla.titulo:
         ws.cell(fila, 1, tabla.titulo).font = Font(
-            name="Calibri", size=11, bold=True, color="1F4E78"
+            name="Calibri", size=_TAMANO_FUENTE, bold=True, color=_COLOR_VERDE_PRIMARIO
         )
         fila += 1
 
