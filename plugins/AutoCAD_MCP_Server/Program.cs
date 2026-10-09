@@ -1,16 +1,26 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoCAD_MCP_Server.Services;
+using AutoCAD_MCP_Server.Tools;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 // Configuración obligatoria para servidores MCP STDIO:
-// Evitamos que los logs internos escriban en Console.Out (salida estándar),
-// ya que la salida estándar se usa exclusivamente para los mensajes JSON-RPC del MCP.
+// Se eliminan los proveedores de logging hacia Console.Out (salida estándar)
+// para proteger el flujo de tramas JSON-RPC del protocolo Model Context Protocol.
 builder.Logging.ClearProviders();
 
-// Registramos el servidor MCP
-builder.Services.AddMcpServer(options => 
+// Registro de servicios: Cliente HTTP tipado hacia el Gateway de AutoCAD en puerto 5055
+builder.Services.AddHttpClient<IAutoCADGatewayClient, AutoCADGatewayClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5055/");
+    client.Timeout = TimeSpan.FromSeconds(15);
+});
+
+// Registro del servidor MCP con sus clases modulares de herramientas
+builder.Services.AddMcpServer(options =>
 {
     options.ServerInfo = new()
     {
@@ -18,8 +28,9 @@ builder.Services.AddMcpServer(options =>
         Version = "1.0.0"
     };
 })
-.WithStdioServerTransport()        // Comunicación por STDIO (estándar para IA local)
-.WithTools<AutoCAD_MCP_Server.AutoCADTools>(); // Registramos la clase de herramientas
+.WithStdioServerTransport()
+.WithTools<ContextTools>()
+.WithTools<ExecutionTools>();
 
 var host = builder.Build();
 await host.RunAsync();
