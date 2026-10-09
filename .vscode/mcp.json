@@ -1,0 +1,25 @@
+{
+    "servers": {
+        "autocad-mcp": {
+            "type": "stdio",
+            "command": "dotnet",
+            "args": [
+                "${workspaceFolder}/plugins/AutoCAD_MCP_Server/bin/Release/net10.0/AutoCAD_MCP_Server.dll"
+            ]
+        },
+        "graphify": {
+            "type": "stdio",
+            "command": "uv",
+            "args": [
+                "run",
+                "--with",
+                "graphifyy",
+                "--with",
+                "mcp",
+                "-m",
+                "graphify.serve",
+                "${workspaceFolder}/graphify-out/graph.json"
+            ]
+        }
+    }
+}
