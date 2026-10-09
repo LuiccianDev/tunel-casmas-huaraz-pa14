@@ -19,6 +19,11 @@ Utiliza este skill cuando el usuario solicite crear planos, plantas arquitectón
 ## 2. Flujo de Trabajo Secuencial (Paso a Paso)
 Al diseñar una planta desde cero, **DEBES** seguir este orden para maximizar la velocidad y aprovechar la automatización paramétrica de YQArch:
 
+0. **Inicialización Métrica e Idioma (Configuración Obligatoria):**
+   - **Idioma Inglés:** Ejecuta `YQLANG` y selecciona `English` (evita diálogos y textos en chino).
+   - **Unidades en Metros:** Configura `YQUNITS` en metros y define la escala con `SD` (ej. 1:100 o 1:50).
+   - **Anotaciones Métricas:** Utiliza `configurar_entorno_dibujo` para asegurar que el tamaño de cotas y textos no aparezca desmedido en pantalla.
+
 1. **Grilla y Ejes (Skeleton):**
    - **Comando YQArch:** `ZXW` (Draw Grid Axis) o `AX`.
    - **Propósito:** Crea la cuadrícula estructural del proyecto de manera inmediata. Todo proyecto arquitectónico con YQArch debe empezar estableciendo los ejes, ya que los muros se adhieren magnéticamente a ellos.

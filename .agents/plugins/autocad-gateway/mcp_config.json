@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "autocad-mcp": {
+      "command": "dotnet",
+      "args": [
+        "plugins/AutoCAD_MCP_Server/bin/Release/net10.0/AutoCAD_MCP_Server.dll"
+      ]
+    }
+  }
+}

@@ -13,11 +13,23 @@
       "skillPath": "skills/csharp-docs/SKILL.md",
       "computedHash": "93da3063bb770f13feec581efa3ff232c69a5a94b75cddfc4ad6e82909835cfe"
     },
+    "dotnet-backend-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/dotnet-contribution/skills/dotnet-backend-patterns/SKILL.md",
+      "computedHash": "624af9f8faea713dadaa51fc2f2040a4b365b4e083b9b9f82d7e9df1f627ea79"
+    },
     "dotnet-best-practices": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
       "skillPath": "skills/dotnet-best-practices/SKILL.md",
       "computedHash": "9ef94db7f06c167d544369817e5a4415eeb7886dcff0d47026837a1aada260e3"
+    },
+    "dotnet-mcp-builder": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/dotnet-mcp-builder/SKILL.md",
+      "computedHash": "2c4cb34ded225061fe9fb78fdb6345586e7a7d14b6de072bb4a087b517eeaf63"
     }
   }
 }

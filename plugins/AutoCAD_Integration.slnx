@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AutoCAD_AI_Gateway/AutoCAD_AI_Gateway.csproj" />
+  <Project Path="AutoCAD_MCP_Server/AutoCAD_MCP_Server.csproj" />
+</Solution>

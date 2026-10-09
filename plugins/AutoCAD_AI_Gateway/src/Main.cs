@@ -34,8 +34,8 @@ namespace AutoCAD_AI_Gateway
             Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
             try
             {
-                HttpGateway.StartServer("http://localhost:8080/");
-                ed.WriteMessage("\n>>> [ON] AI Gateway Server escuchando en http://localhost:8080/\n");
+                HttpGateway.StartServer("http://localhost:5055/");
+                ed.WriteMessage("\n>>> [ON] AI Gateway Server escuchando en http://localhost:5055/\n");
             }
             catch (System.Exception ex)
             {

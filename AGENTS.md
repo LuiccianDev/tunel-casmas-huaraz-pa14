@@ -28,6 +28,17 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
   existe en otro módulo.
 - `excel.py` y `lisp.py` no contienen cálculos de ingeniería, solo presentación.
 
+### Reactividad en Cadena y Propagación Integral de Cambios (Efecto Dominó)
+
+- **Cero Datos Aislados:** Todo cambio o ajuste en un parámetro de diseño (geométrico, geológico, operativo, de maquinaria o normativo) debe nacer obligatoriamente en `datos/parametros.toml`.
+- **Propagación en Cascada (ctx):** El cambio debe repercutir de forma integral en toda la cadena de dependencias (Geometría → Voladura/Sostenimiento → Maquinaria/Campamento → Servicios → Cronograma). Queda **estrictamente prohibido** que un módulo retenga valores estáticos o copias huérfanas desalineadas del TOML.
+- **Fórmulas Dinámicas en Excel:** Las celdas calculadas en los libros de Excel (`NN_Nombre.xlsx`) deben generarse siempre mediante fórmulas nativas referenciadas (`={Simbolo1}*{Simbolo2}`) para que cualquier modificación manual posterior en Excel recalcule automáticamente todas las hojas vinculadas en tiempo real.
+- **Regeneración Total Obligatoria:** Toda modificación de parámetros o módulos exige ejecutar inmediatamente `.\scripts\check.ps1` para sincronizar y validar en bloque:
+  1. Todos los libros de cálculo (`salidas/excel/*.xlsx`).
+  2. Todas las memorias técnicas (`docs/memoria/*.md`).
+  3. Los planos y geometrías en AutoLISP (`salidas/lisp/PA14_dibujos.lsp`).
+  4. La suite completa de pruebas unitarias (`pytest -q`).
+
 ## Navegación de Arquitectura (Graphify)
 
 - **Prioridad Estricta:** Este proyecto utiliza **Graphify** (`graphify-out/`). Para entender la arquitectura o buscar cómo se conectan los módulos, el asistente **DEBE** usar primero las herramientas del servidor MCP (`query_graph`, `get_node`, `shortest_path`).
@@ -48,13 +59,38 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
   símbolos entre llaves `{Simbolo}` a sus coordenadas de celda reales (p. ej. `C15`),
   garantizando que el usuario pueda alterar cualquier dato en Excel y ver el recálculo
   inmediato.
+- **Tipografía y Colores Uniformes**:
+  - **Tamaño de fuente estricto e invariable (11 pt)**: Todos los textos (título del proyecto, títulos de hojas, nombres de tablas, encabezados, celdas de datos y totales) deben mantener el mismo tamaño (`11 pt`). No usar jerarquías con fuentes más grandes para títulos.
+  - **Encabezados de columnas y secciones**: Fondo verde técnico sobrio institucional (`#2E7D32`) con texto en color **blanco (`#FFFFFF`) y negrita**.
+  - **Totales y resúmenes**: Fondo verde suave (`#E8F5E9`) con texto en negrita y bordes finos estándar.
 
-## AutoLISP
+## Generación de Planos AutoLISP (.lsp) — Canal Archivo Batch
 
-- Generado por `lisp.py` → `salidas/lisp/PA14_dibujos.lsp`. No editar el `.lsp` a mano.
-- Usar `entmake` (no depende de OSNAP); en `command` anteponer `"_non"` a los puntos.
-- Texto en ASCII (sin tildes); unidades en metros; capas con prefijo `PA14-`.
+- Generado exclusivamente por `lisp.py` → `salidas/lisp/PA14_dibujos.lsp`. No editar el `.lsp` a mano.
+- **Propósito:** Entregable formal, reproducible y portable del proyecto (se carga en AutoCAD vía `APPLOAD`). No requiere tener AutoCAD abierto durante su generación con `uv run pa14`.
+- **Reglas de dibujo:** Usar `entmake` (independiente de OSNAP); unidades en metros; capas con prefijo `PA14-`; texto en ASCII (sin tildes).
 - Cada plano nuevo: función `dibujo_xxx(ctx) -> Dibujo` y añadirla en `generar_lisp`.
+
+## AutoCAD Gateway y MCP — Canal Interactivo en Vivo
+
+- **Propósito:** Ejecución directa en tiempo real sobre la ventana activa de AutoCAD del usuario (inspección de capas, dibujo inmediato en pantalla, navegación con zoom).
+- **Transporte Seguro:** Comunicación vía MCP o POST a `http://localhost:5055/execute` con prefijo `_.-` (comandos en modo texto no modales) y terminadores de línea adecuados.
+- **Criterio de Modo (Nativo vs YQArch):**
+  - **Modo Nativo (Predeterminado para Túneles e Infraestructura):**
+    - Se utiliza para la geometría del túnel, pernos de anclaje, soporte, emboquille, perfiles geológicos y mallas de perforación usando entidades nativas de CAD (`_.-PLINE`, `_.-ARC`, etc.) y capas `PA14-*`.
+    - Es obligatorio cuando el usuario indique explícitamente *"sin YQArch"* o *"CAD nativo"*.
+  - **Modo YQArch (Fast Drafting para Edificaciones en Superficie):**
+    - Exclusivo para diseño rápido de campamento, talleres, casetas de control y oficinas cuando el usuario lo solicite expresamente o se trate de un plano arquitectónico.
+    - Sigue el flujo secuencial estricto: Ejes (`ZXW`/`AX`) → Muros (`WW`) → Aberturas (`AD`/`WD`) → Cotas (`AZH`/`DD`).
+- **Estándar Métrico Estricto (Unidades en Metros):**
+  - Todo dibujo (en AutoLISP o Gateway interactivo) se realiza **estrictamente en metros**: `INSUNITS = 4`, `MEASUREMENT = 1`, `LUNITS = 2`, `LUPREC = 3`.
+  - Queda prohibido trabajar en milímetros o pulgadas.
+- **Calibración de Anotaciones (Cotas y Textos Proporcionales):**
+  - En entorno métrico, los textos de cota deben medir entre `0.20 m` y `0.25 m` (`DIMTXT = 0.22`, `DIMASZ = 0.18`, `DIMEXE = 0.11`, `DIMEXO = 0.06`, `DIMDEC = 2`) para evitar textos gigantes o microscópicos.
+  - La IA debe invocar la herramienta MCP `configurar_entorno_dibujo` antes de comenzar a dibujar interactivamente en un archivo nuevo o no configurado.
+- **Configuración de YQArch (Idioma y Unidades):**
+  - Si se utiliza YQArch, su idioma de interfaz debe configurarse a **inglés** (`YQLANG` opción inglés / `0`) y sus unidades a metros (`YQUNITS` / escala `SD` a 1:100 o 1:50) para evitar textos o menús en chino y descalibraciones de escala.
+- **Verificación Visual:** Toda inyección interactiva en tiempo real debe finalizar ejecutando `_.ZOOM E` para centrar y mostrar el dibujo en pantalla.
 
 ## Geología
 

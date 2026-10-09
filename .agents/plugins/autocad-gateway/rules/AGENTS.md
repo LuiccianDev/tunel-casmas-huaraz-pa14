@@ -34,7 +34,7 @@ Este plugin gobierna el desarrollo, mantenimiento y comunicación segura con el 
 Cuando el asistente interactúa con AutoCAD a través del Gateway, debe apegarse estrictamente a las siguientes reglas:
 
 1. **Endpoint y Transporte:**
-   - URL: `http://localhost:8080/execute`
+   - URL: `http://localhost:5055/execute`
    - Método: `POST`
    - Content-Type: `application/json`
    - Formato Payload:
@@ -54,7 +54,7 @@ Cuando el asistente interactúa con AutoCAD a través del Gateway, debe apegarse
    - La IA debe utilizar el patrón estándar:
      ```powershell
      $payload = @{ command = "_.RECTANG`n0,0`n10,10`n_.ZOOM`nE`n" } | ConvertTo-Json
-     Invoke-RestMethod -Uri "http://localhost:8080/execute" -Method Post -ContentType "application/json" -Body $payload
+     Invoke-RestMethod -Uri "http://localhost:5055/execute" -Method Post -ContentType "application/json" -Body $payload
      ```
 
 ---
