@@ -92,7 +92,7 @@ El servidor sigue los patrones modernos de desarrollo en .NET 10 recomendados en
 ## 5. Configuración en Clientes MCP
 
 ### Método 1: Estándar y Recomendado (Portátil con `dotnet` y `${workspaceFolder}`)
-Este es el formato estándar configurado en `.vscode/mcp.json` para el espacio de trabajo:
+Este es el formato estándar configurado en `.vscode/mcp.json` para el espacio de trabajo con token de seguridad:
 
 ```json
 {
@@ -102,14 +102,17 @@ Este es el formato estándar configurado en `.vscode/mcp.json` para el espacio d
       "command": "dotnet",
       "args": [
         "${workspaceFolder}/plugins/AutoCAD_MCP_Server/bin/Release/net10.0/AutoCAD_MCP_Server.dll"
-      ]
+      ],
+      "env": {
+        "AUTOCAD_GATEWAY_TOKEN": "pa14-autocad-token-casmas-2026"
+      }
     }
   }
 }
 ```
 
 ### Método 2: En Plugins de Antigravity (`.agents/plugins/autocad-gateway/mcp_config.json`)
-Para plugins dentro del workspace con rutas relativas a la raíz:
+Para plugins dentro del workspace con rutas relativas a la raíz y seguridad de token:
 
 ```json
 {
@@ -118,7 +121,10 @@ Para plugins dentro del workspace con rutas relativas a la raíz:
       "command": "dotnet",
       "args": [
         "plugins/AutoCAD_MCP_Server/bin/Release/net10.0/AutoCAD_MCP_Server.dll"
-      ]
+      ],
+      "env": {
+        "AUTOCAD_GATEWAY_TOKEN": "pa14-autocad-token-casmas-2026"
+      }
     }
   }
 }

@@ -33,10 +33,11 @@ Este plugin gobierna el desarrollo, mantenimiento y comunicación segura con el 
 
 Cuando el asistente interactúa con AutoCAD a través del Gateway, debe apegarse estrictamente a las siguientes reglas:
 
-1. **Endpoint y Transporte:**
+1. **Endpoint, Transporte y Seguridad:**
    - URL: `http://localhost:5055/execute`
    - Método: `POST`
    - Content-Type: `application/json`
+   - **Autenticación Obligatoria:** Encabezado HTTP `X-Gateway-Token: pa14-autocad-token-casmas-2026` (configurable mediante `AUTOCAD_GATEWAY_TOKEN`).
    - Formato Payload:
      ```json
      {
@@ -51,10 +52,11 @@ Cuando el asistente interactúa con AutoCAD a través del Gateway, debe apegarse
    - **Internacionalización:** Usar el prefijo `_.` en los comandos nativos (ej. `_.RECTANG`, `_.LINE`, `_.ZOOM`, `_.PLINE`) para asegurar compatibilidad en versiones de AutoCAD en español o inglés.
 
 3. **Envío de Comandos vía PowerShell:**
-   - La IA debe utilizar el patrón estándar:
+   - La IA debe utilizar el patrón estándar incluyendo el token de seguridad:
      ```powershell
+     $headers = @{ "X-Gateway-Token" = "pa14-autocad-token-casmas-2026" }
      $payload = @{ command = "_.RECTANG`n0,0`n10,10`n_.ZOOM`nE`n" } | ConvertTo-Json
-     Invoke-RestMethod -Uri "http://localhost:5055/execute" -Method Post -ContentType "application/json" -Body $payload
+     Invoke-RestMethod -Uri "http://localhost:5055/execute" -Method Post -Headers $headers -ContentType "application/json" -Body $payload
      ```
 
 ---

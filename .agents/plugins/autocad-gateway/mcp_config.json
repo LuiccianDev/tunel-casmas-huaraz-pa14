@@ -4,7 +4,10 @@
       "command": "dotnet",
       "args": [
         "plugins/AutoCAD_MCP_Server/bin/Release/net10.0/AutoCAD_MCP_Server.dll"
-      ]
+      ],
+      "env": {
+        "AUTOCAD_GATEWAY_TOKEN": "pa14-autocad-token-casmas-2026"
+      }
     }
   }
 }

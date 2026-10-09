@@ -17,6 +17,8 @@ builder.Services.AddHttpClient<IAutoCADGatewayClient, AutoCADGatewayClient>(clie
 {
     client.BaseAddress = new Uri("http://localhost:5055/");
     client.Timeout = TimeSpan.FromSeconds(15);
+    string token = Environment.GetEnvironmentVariable("AUTOCAD_GATEWAY_TOKEN") ?? "pa14-autocad-token-casmas-2026";
+    client.DefaultRequestHeaders.Add("X-Gateway-Token", token);
 });
 
 // Registro del servidor MCP con sus clases modulares de herramientas

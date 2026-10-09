@@ -63,9 +63,16 @@ El plugin implementa una arquitectura desacoplada basada en servicios, un enruta
 
 ---
 
-## 3. Especificación de Endpoints REST
+## 3. Especificación de Endpoints REST y Seguridad
 
-La API del Gateway expone 8 endpoints en `http://localhost:5055/`:
+La API del Gateway expone 8 endpoints en `http://localhost:5055/`.
+
+### Seguridad y Autenticación Obligatoria
+* **Cabecera HTTP requerida:** `X-Gateway-Token: pa14-autocad-token-casmas-2026` (configurable mediante la variable de entorno `AUTOCAD_GATEWAY_TOKEN`).
+* **Respuesta (401 Unauthorized):** Si la cabecera no se envía o el token no coincide, el servidor rechaza la solicitud de inmediato:
+  ```json
+  { "status": "error", "message": "No autorizado: X-Gateway-Token invalido o ausente." }
+  ```
 
 ### A. Ejecución de Comandos
 * **`POST /execute`**  

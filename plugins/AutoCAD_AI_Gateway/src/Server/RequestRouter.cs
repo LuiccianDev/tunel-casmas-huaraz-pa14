@@ -40,6 +40,14 @@ public sealed class RequestRouter
 
         try
         {
+            string expectedToken = Environment.GetEnvironmentVariable("AUTOCAD_GATEWAY_TOKEN") ?? "pa14-autocad-token-casmas-2026";
+            string? providedToken = request.Headers["X-Gateway-Token"];
+
+            if (!string.Equals(providedToken, expectedToken, StringComparison.Ordinal))
+            {
+                return (401, "{\"status\": \"error\", \"message\": \"No autorizado: X-Gateway-Token invalido o ausente.\"}");
+            }
+
             if (method == "POST" && path == "/execute")
             {
                 using var reader = new StreamReader(request.InputStream, request.ContentEncoding);

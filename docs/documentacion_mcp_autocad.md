@@ -35,16 +35,19 @@ Es fundamental distinguir el rol y tipo de salida binaria de cada componente tra
 | **`AutoCAD_MCP_Server`** | Console Application (`net10.0`) | `AutoCAD_MCP_Server.dll` y `AutoCAD_MCP_Server.exe` | Proceso independiente ejecutado por el cliente de IA mediante `STDIO`. |
 
 ### Invocación Recomendada del Servidor MCP:
-En `.vscode/mcp.json` y los plugins de Antigravity, la invocación estándar y portátil se realiza mediante el runtime de .NET ejecutando la DLL compilada:
+En `.vscode/mcp.json` y los plugins de Antigravity, la invocación estándar y portátil se realiza mediante el runtime de .NET ejecutando la DLL compilada con autenticación segura por token:
 ```json
 {
   "command": "dotnet",
   "args": [
     "${workspaceFolder}/plugins/AutoCAD_MCP_Server/bin/Release/net10.0/AutoCAD_MCP_Server.dll"
-  ]
+  ],
+  "env": {
+    "AUTOCAD_GATEWAY_TOKEN": "pa14-autocad-token-casmas-2026"
+  }
 }
 ```
-Esto evita codificar rutas absolutas y garantiza portabilidad entre diferentes equipos de trabajo.
+Esto evita codificar rutas absolutas, protege el puerto 5055 mediante el encabezado `X-Gateway-Token` y garantiza portabilidad entre diferentes equipos de trabajo.
 
 ---
 
