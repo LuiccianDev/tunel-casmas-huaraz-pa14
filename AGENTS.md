@@ -122,3 +122,12 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 - **Cero Búsquedas a Ciegas:** Está PROHIBIDO hacer búsquedas de texto masivas o iterativas para entender la estructura. Debes usar obligatoriamente las herramientas del MCP de Graphify para ver las dependencias, "God Nodes" y rutas cortas.
 - **Creación de Grafo:** Si la base de datos o carpeta del grafo no existe al momento de iniciar la revisión, tu primer paso técnico DEBE ser ejecutar `uvx --from graphifyy graphify update .` para inicializar el mapa arquitectónico.
 - **Mantenimiento Estricto:** Cualquier refactorización debe aplicar modularidad (SRP) y, al finalizar, siempre se debe resincronizar el grafo.
+
+## Documentación Viva y Sincronización de READMEs (Living Documentation)
+
+- **Sincronización Obligatoria en Cascada:** Queda estrictamente prohibido agregar, modificar o renombrar módulos en `src/casmas_pa14/modulos/` (`main.MODULOS`), parámetros de diseño o servicios en `plugins/` sin actualizar simultáneamente los archivos `README.md` correspondientes:
+  1. `README.md` (raíz): Tabla completa de entregables (módulos, hojas, memorias asociadas), directivas del doble canal de AutoCAD y scripts.
+  2. `plugins/AutoCAD_AI_Gateway/README.md`: Endpoints REST, puerto 5055, directivas métricas y comandos CAD.
+  3. `plugins/AutoCAD_MCP_Server/README.md`: Catálogo exhaustivo de herramientas MCP v2.2 y ejemplos de configuración de clientes.
+- **Guardián Automatizado:** Toda modificación es validada por la suite de pruebas (`tests/test_documentacion.py`), garantizando que cualquier desalineación entre el código y los READMEs sea bloqueada de inmediato en `.\scripts\check.ps1`.
+

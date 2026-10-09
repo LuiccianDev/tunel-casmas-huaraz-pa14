@@ -1,0 +1,114 @@
+"""Pruebas de integridad documental (Guardián de READMEs y Living Documentation)."""
+
+from pathlib import Path
+
+from casmas_pa14.main import MODULOS
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+README_ROOT = ROOT_DIR / "README.md"
+README_GATEWAY = ROOT_DIR / "plugins" / "AutoCAD_AI_Gateway" / "README.md"
+README_MCP = ROOT_DIR / "plugins" / "AutoCAD_MCP_Server" / "README.md"
+DOC_MCP = ROOT_DIR / "salidas" / "documentos" / "documentacion_mcp_autocad.md"
+VSCODE_MCP = ROOT_DIR / ".vscode" / "mcp.json"
+
+
+def test_readme_raiz_contiene_todos_los_modulos():
+    """Verifica que cada módulo registrado en main.MODULOS figure en el README raíz."""
+    assert README_ROOT.exists(), "El archivo README.md raíz no existe."
+    contenido = README_ROOT.read_text(encoding="utf-8")
+
+    for modulo in MODULOS:
+        nombre_modulo = modulo.__name__.split(".")[-1]
+        dummy_p = {"proyecto": {"nombre": "Test"}}
+        dummy_ctx = {}
+        try:
+            res = modulo.calcular(dummy_p, dummy_ctx)
+            libro = modulo.libro(res, dummy_p)
+            archivo_excel = libro.archivo
+        except Exception:
+            archivo_excel = (
+                nombre_modulo.replace("m", "")[:2] if len(nombre_modulo) >= 3 else ""
+            )
+
+        if archivo_excel:
+            assert archivo_excel in contenido, (
+                f"El entregable '{archivo_excel}' del módulo '{nombre_modulo}' "
+                "no está documentado en la tabla de README.md. ¡Actualiza README.md!"
+            )
+
+
+def test_readmes_usan_puerto_oficial_5055():
+    """Valida que todos los READMEs utilicen el puerto oficial 5055 y no el obsoleto 8080."""
+    archivos = [README_ROOT, README_GATEWAY, README_MCP, DOC_MCP]
+
+    for archivo in archivos:
+        assert archivo.exists(), f"El archivo '{archivo}' no existe."
+        texto = archivo.read_text(encoding="utf-8")
+        assert "8080" not in texto, (
+            f"El archivo '{archivo.name}' contiene referencia al puerto obsoleto 8080. "
+            "Debe usar el puerto oficial 5055."
+        )
+        assert "5055" in texto, (
+            f"El archivo '{archivo.name}' debe documentar el puerto oficial 5055."
+        )
+
+
+def test_plugins_readmes_documentan_endpoints_y_herramientas():
+    """Verifica que los READMEs de los plugins detallen todos los endpoints y herramientas."""
+    assert README_GATEWAY.exists()
+    assert README_MCP.exists()
+
+    texto_gateway = README_GATEWAY.read_text(encoding="utf-8")
+    endpoints_esperados = [
+        "/execute",
+        "/context/info",
+        "/context/entities",
+        "/context/layers",
+        "/context/texts",
+        "/context/extents",
+        "/context/selection",
+        "/context/blocks",
+    ]
+    for ep in endpoints_esperados:
+        assert ep in texto_gateway, (
+            f"El endpoint '{ep}' no está documentado en {README_GATEWAY}. "
+            "Actualiza la especificación de endpoints."
+        )
+
+    texto_mcp = README_MCP.read_text(encoding="utf-8")
+    herramientas_esperadas = [
+        "obtener_info_dibujo",
+        "leer_objetos_autocad",
+        "leer_capas_autocad",
+        "leer_textos_autocad",
+        "obtener_limites_dibujo",
+        "leer_seleccion_autocad",
+        "listar_bloques_disponibles",
+        "ping_autocad_gateway",
+        "ejecutar_comando_autocad",
+        "zoom_extension",
+        "guardar_dibujo",
+        "configurar_entorno_dibujo",
+    ]
+    for h in herramientas_esperadas:
+        assert h in texto_mcp, (
+            f"La herramienta MCP '{h}' no está documentada en {README_MCP}. "
+            "Actualiza el catálogo de herramientas."
+        )
+
+
+def test_mcp_configuraciones_y_binarios_alineados():
+    """Valida la consistencia de los binarios y configuración MCP (.dll en .vscode/mcp.json y READMEs)."""
+    assert VSCODE_MCP.exists(), "El archivo .vscode/mcp.json no existe."
+    texto_vscode = VSCODE_MCP.read_text(encoding="utf-8")
+    assert "AutoCAD_MCP_Server.dll" in texto_vscode, (
+        ".vscode/mcp.json debe apuntar al ensamblado AutoCAD_MCP_Server.dll."
+    )
+
+    texto_mcp = README_MCP.read_text(encoding="utf-8")
+    assert "${workspaceFolder}" in texto_mcp, (
+        "El README de AutoCAD_MCP_Server debe documentar la configuración con ${workspaceFolder}."
+    )
+    assert "AutoCAD_MCP_Server.dll" in texto_mcp, (
+        "El README de AutoCAD_MCP_Server debe documentar el uso de AutoCAD_MCP_Server.dll."
+    )

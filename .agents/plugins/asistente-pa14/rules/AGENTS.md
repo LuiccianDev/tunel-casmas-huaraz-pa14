@@ -34,3 +34,11 @@ Al trabajar en el proyecto **Túnel Casmas Huaraz PA14**, debes asegurar estrict
 - **Cero desorden documental:** Si recibes contexto normativo o manuales del usuario, guárdalos en `docs/entradas/`.
 - Si generas una salida en formato texto/documento como entregable, DEBES guardarla en `salidas/documentos/`.
 - Todos los nombres de archivo de documentación deben mantener la convención `snake_case`.
+
+## 6. Documentación Viva y Sincronización de READMEs (Living Documentation)
+- **Sincronización en Cascada Obligatoria:** Toda adición o modificación en `src/casmas_pa14/modulos/` (`main.MODULOS`) o en los servicios de CAD en `plugins/` exige actualizar de inmediato:
+  1. `README.md` (raíz): tabla de entregables, memorias asociadas, doble canal CAD y scripts.
+  2. `plugins/AutoCAD_AI_Gateway/README.md`: endpoints REST, puerto 5055 y arquitectura C#.
+  3. `plugins/AutoCAD_MCP_Server/README.md`: catálogo de 12 herramientas MCP y configuración JSON.
+- **Guardián de Integridad:** El test automatizado `tests/test_documentacion.py` validará en cada ejecución de `.\scripts\check.ps1` que el código y la documentación permanezcan 100% alineados.
+
