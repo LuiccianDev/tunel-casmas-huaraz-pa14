@@ -17,32 +17,32 @@ Definir y justificar la sección transversal del túnel según la normativa peru
 | Descripción | Símbolo | Valor | Unidad | Fórmula / Fuente |
 |---|---|---|---|---|
 | Tipo de sección |  | Herradura: hastiales rectos + bóveda semicircular (R = B/2) |  | Plano CAD |
-| Ancho de excavación | B | 13.3 | m | Plano CAD |
-| Altura total (fondo → clave) | H | 9.58 | m | Plano CAD |
-| Altura sobre rasante | Hr | 9.08 | m | Plano CAD |
-| Espesor bajo rasante | e | 0.5 | m | H − Hr |
-| Radio de bóveda | R | 6.65 | m | B / 2 |
-| Hastial desde el fondo | hw | 2.93 | m | H − R |
-| Hastial sobre rasante | hw' | 2.43 | m | hw − e |
-| Área de excavación | A | 108.434 | m² | B·hw + π·B²/8 |
-| Perímetro de excavación | P | 40.052 | m | B + 2·hw + π·B/2 |
-| Área libre sobre rasante | Au | 101.784 | m² | A − B·e |
+| Ancho de excavación | B | 13.3 | m | Entrada TOML / Plano CAD |
+| Altura total (fondo → clave) | H | 9.58 | m | Entrada TOML / Plano CAD |
+| Altura sobre rasante | Hr | 9.08 | m | Entrada TOML / Plano CAD |
+| Espesor bajo rasante | e | =C7-C8 | m | H − Hr |
+| Radio de bóveda | R | =C6/2 | m | B / 2 |
+| Hastial desde el fondo | hw | =C7-C10 | m | H − R |
+| Hastial sobre rasante | hw' | =C11-C9 | m | hw − e |
+| Área de excavación | A | =C6*C11+PI()*C6^2/8 | m² | B·hw + π·B²/8 |
+| Perímetro de excavación | P | =C6+2*C11+PI()*C6/2 | m | B + 2·hw + π·B/2 |
+| Área libre sobre rasante | Au | =C13-C6*C9 | m² | A − B·e |
 
 ## 4. Gálibo y plataforma
 
 | Descripción | Símbolo | Valor | Unidad | Fórmula / Fuente |
 |---|---|---|---|---|
-| Número de carriles | n | 2 | und | Plano CAD |
-| Ancho de carril | c | 3.6 | m | Plano CAD |
-| Berma (cada lado) | b | 1.8 | m | Plano CAD |
-| Separador central | s | 1 | m | Plano CAD |
-| Ancho del gálibo | Wg | 11.8 | m | n·c + 2·b + s |
-| Altura del gálibo | Hg | 5.5 | m | Plano CAD |
-| Área del gálibo | Ag | 64.9 | m² | Wg · Hg |
-| Vereda (cada lado) | v | 0.75 | m | Plano CAD |
-| Ancho de plataforma | Wp | 13.3 | m | Wg + 2·v |
-| Altura libre en borde del gálibo | hb | 5.498 | m | hw' + √(R² − (Wg/2)²) |
-| Holgura gálibo – bóveda | Δ | -0.002 | m | hb − Hg |
+| Número de carriles | n | 2 | und | Entrada TOML / Plano CAD |
+| Ancho de carril | c | 3.6 | m | Entrada TOML / Plano CAD |
+| Berma (cada lado) | b | 1.8 | m | Entrada TOML / Plano CAD |
+| Separador central | s | 1 | m | Entrada TOML / Plano CAD |
+| Ancho del gálibo | Wg | =C5*C6+2*C7+C8 | m | n·c + 2·b + s |
+| Altura del gálibo | Hg | 5.5 | m | Entrada TOML / Plano CAD |
+| Área del gálibo | Ag | =C9*C10 | m² | Wg · Hg |
+| Vereda (cada lado) | v | 0.75 | m | Entrada TOML / Plano CAD |
+| Ancho de plataforma | Wp | =C9+2*C12 | m | Wg + 2·v |
+| Altura libre en borde del gálibo | hb | =Geometria!C12+SQRT(Geometria!C10^2-(C9/2)^2) | m | hw' + √(R² − (Wg/2)²) |
+| Holgura gálibo – bóveda | Δ | =C14-C10 | m | hb − Hg |
 | Ancho de cuneta | ac | 1.2 | m | Plano CAD |
 | Profundidad de cuneta | pc | 0.4 | m | Plano CAD |
 | Bombeo transversal | i | 2 | % | Plano CAD |
@@ -51,13 +51,13 @@ Definir y justificar la sección transversal del túnel según la normativa peru
 
 | Elemento | Proyecto | Mínimo | Unidad | Cumple | Fuente |
 |---|---|---|---|---|---|
-| Ancho de carril | 3.6 | 3.6 | m | Sí | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 |
-| Berma (cada lado) | 1.8 | 1.2 | m | Sí | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 |
-| Vereda (cada lado) | 0.75 | 0.75 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
-| Gálibo vertical | 5.5 | 5.5 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
-| Altura libre en borde del gálibo (bóveda) | 5.498 | 5.5 | m | Sí | Geometría: hw' + √(R² − (Wg/2)²), tolerancia 0.01 m |
-| Altura libre sobre vereda (junto al hastial) | 2.43 | 2.4 | m | Sí | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
-| Gálibo + 2 veredas = ancho B | 13.3 | 13.3 | m | Sí | Geometría del plano CAD |
+| Ancho de carril | =Galibo!C6 | 3.6 | m | =B5>=C5 | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 |
+| Berma (cada lado) | =Galibo!C7 | 1.2 | m | =B6>=C6 | MTC Manual de Diseño Geométrico DG-2018, Sec. 304 |
+| Vereda (cada lado) | =Galibo!C12 | 0.75 | m | =B7>=C7 | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
+| Gálibo vertical | =Galibo!C10 | 5.5 | m | =B8>=C8 | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
+| Altura libre en borde del gálibo (bóveda) | =Galibo!C14 | 5.5 | m | =B9>=C9 | Geometría de la bóveda |
+| Altura libre sobre vereda (junto al hastial) | =Galibo!C14 | 2.4 | m | =B10>=C10 | MTC Manual de Túneles, Muros y O.C. (RD 036-2016-MTC/14) |
+| Gálibo + 2 veredas = ancho B | =Galibo!C13 | =Geometria!C6 | m | =ABS(B11-C11)<=0.01 | Geometría del plano CAD |
 
 Todas las comprobaciones **cumplen**.
 

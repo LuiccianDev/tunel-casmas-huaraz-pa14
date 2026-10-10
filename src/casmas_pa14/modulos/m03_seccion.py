@@ -151,16 +151,34 @@ def _tabla_geometria(r: dict, s: dict) -> Tabla:
     return tabla_parametros(
         [
             ("Tipo de sección", "", s["tipo"], "", "Plano CAD"),
-            ("Ancho de excavación", "B", r["ancho_m"], "m", "Plano CAD"),
-            ("Altura total (fondo → clave)", "H", r["altura_m"], "m", "Plano CAD"),
-            ("Altura sobre rasante", "Hr", r["altura_rasante_m"], "m", "Plano CAD"),
-            ("Espesor bajo rasante", "e", r["espesor_rasante_m"], "m", "H − Hr"),
-            ("Radio de bóveda", "R", r["radio_m"], "m", "B / 2"),
-            ("Hastial desde el fondo", "hw", r["hastial_m"], "m", "H − R"),
-            ("Hastial sobre rasante", "hw'", r["hastial_rasante_m"], "m", "hw − e"),
-            ("Área de excavación", "A", r["area_m2"], "m²", "B·hw + π·B²/8"),
-            ("Perímetro de excavación", "P", r["perimetro_m"], "m", "B + 2·hw + π·B/2"),
-            ("Área libre sobre rasante", "Au", r["area_util_m2"], "m²", "A − B·e"),
+            ("Ancho de excavación", "B", s["ancho_m"], "m", "Entrada TOML / Plano CAD"),
+            (
+                "Altura total (fondo → clave)",
+                "H",
+                s["altura_m"],
+                "m",
+                "Entrada TOML / Plano CAD",
+            ),
+            (
+                "Altura sobre rasante",
+                "Hr",
+                s["altura_sobre_rasante_m"],
+                "m",
+                "Entrada TOML / Plano CAD",
+            ),
+            ("Espesor bajo rasante", "e", "=C7-C8", "m", "H − Hr"),
+            ("Radio de bóveda", "R", "=C6/2", "m", "B / 2"),
+            ("Hastial desde el fondo", "hw", "=C7-C10", "m", "H − R"),
+            ("Hastial sobre rasante", "hw'", "=C11-C9", "m", "hw − e"),
+            ("Área de excavación", "A", "=C6*C11+PI()*C6^2/8", "m²", "B·hw + π·B²/8"),
+            (
+                "Perímetro de excavación",
+                "P",
+                "=C6+2*C11+PI()*C6/2",
+                "m",
+                "B + 2·hw + π·B/2",
+            ),
+            ("Área libre sobre rasante", "Au", "=C13-C6*C9", "m²", "A − B·e"),
         ]
     )
 
@@ -168,23 +186,41 @@ def _tabla_geometria(r: dict, s: dict) -> Tabla:
 def _tabla_galibo(r: dict, g: dict) -> Tabla:
     return tabla_parametros(
         [
-            ("Número de carriles", "n", g["carriles"], "und", "Plano CAD"),
-            ("Ancho de carril", "c", g["ancho_carril_m"], "m", "Plano CAD"),
-            ("Berma (cada lado)", "b", g["berma_m"], "m", "Plano CAD"),
-            ("Separador central", "s", g["separador_m"], "m", "Plano CAD"),
-            ("Ancho del gálibo", "Wg", r["ancho_galibo_m"], "m", "n·c + 2·b + s"),
-            ("Altura del gálibo", "Hg", r["altura_galibo_m"], "m", "Plano CAD"),
-            ("Área del gálibo", "Ag", r["area_galibo_m2"], "m²", "Wg · Hg"),
-            ("Vereda (cada lado)", "v", g["vereda_m"], "m", "Plano CAD"),
-            ("Ancho de plataforma", "Wp", r["ancho_plataforma_m"], "m", "Wg + 2·v"),
+            (
+                "Número de carriles",
+                "n",
+                g["carriles"],
+                "und",
+                "Entrada TOML / Plano CAD",
+            ),
+            (
+                "Ancho de carril",
+                "c",
+                g["ancho_carril_m"],
+                "m",
+                "Entrada TOML / Plano CAD",
+            ),
+            ("Berma (cada lado)", "b", g["berma_m"], "m", "Entrada TOML / Plano CAD"),
+            (
+                "Separador central",
+                "s",
+                g["separador_m"],
+                "m",
+                "Entrada TOML / Plano CAD",
+            ),
+            ("Ancho del gálibo", "Wg", "=C5*C6+2*C7+C8", "m", "n·c + 2·b + s"),
+            ("Altura del gálibo", "Hg", g["altura_m"], "m", "Entrada TOML / Plano CAD"),
+            ("Área del gálibo", "Ag", "=C9*C10", "m²", "Wg · Hg"),
+            ("Vereda (cada lado)", "v", g["vereda_m"], "m", "Entrada TOML / Plano CAD"),
+            ("Ancho de plataforma", "Wp", "=C9+2*C12", "m", "Wg + 2·v"),
             (
                 "Altura libre en borde del gálibo",
                 "hb",
-                r["altura_borde_galibo_m"],
+                "=Geometria!C12+SQRT(Geometria!C10^2-(C9/2)^2)",
                 "m",
                 "hw' + √(R² − (Wg/2)²)",
             ),
-            ("Holgura gálibo – bóveda", "Δ", r["holgura_galibo_m"], "m", "hb − Hg"),
+            ("Holgura gálibo – bóveda", "Δ", "=C14-C10", "m", "hb − Hg"),
             ("Ancho de cuneta", "ac", g["cuneta_ancho_m"], "m", "Plano CAD"),
             ("Profundidad de cuneta", "pc", g["cuneta_prof_m"], "m", "Plano CAD"),
             ("Bombeo transversal", "i", g["bombeo_pct"], "%", "Plano CAD"),
@@ -193,87 +229,77 @@ def _tabla_galibo(r: dict, g: dict) -> Tabla:
 
 
 def _tabla_norma(r: dict) -> Tabla:
-    return Tabla(COLUMNAS_NORMA, r["verificacion"])
+    return Tabla(
+        COLUMNAS_NORMA,
+        [
+            [
+                "Ancho de carril",
+                "=Galibo!C6",
+                r["verificacion"][0][2],
+                "m",
+                "=B5>=C5",
+                DG_2018,
+            ],
+            [
+                "Berma (cada lado)",
+                "=Galibo!C7",
+                r["verificacion"][1][2],
+                "m",
+                "=B6>=C6",
+                DG_2018,
+            ],
+            [
+                "Vereda (cada lado)",
+                "=Galibo!C12",
+                r["verificacion"][2][2],
+                "m",
+                "=B7>=C7",
+                MANUAL_TUNELES,
+            ],
+            [
+                "Gálibo vertical",
+                "=Galibo!C10",
+                r["verificacion"][3][2],
+                "m",
+                "=B8>=C8",
+                MANUAL_TUNELES,
+            ],
+            [
+                "Altura libre en borde del gálibo (bóveda)",
+                "=Galibo!C14",
+                r["verificacion"][4][2],
+                "m",
+                "=B9>=C9",
+                "Geometría de la bóveda",
+            ],
+            [
+                "Altura libre sobre vereda (junto al hastial)",
+                "=Galibo!C14",
+                r["verificacion"][5][2],
+                "m",
+                "=B10>=C10",
+                MANUAL_TUNELES,
+            ],
+            [
+                "Gálibo + 2 veredas = ancho B",
+                "=Galibo!C13",
+                "=Geometria!C6",
+                "m",
+                "=ABS(B11-C11)<=0.01",
+                "Geometría del plano CAD",
+            ],
+        ],
+    )
 
 
 def libro(r: dict, p: dict) -> Libro:
-    s, f = p["seccion"], p["perforacion"]
-    perforacion = tabla_parametros(
-        [
-            ("Frentes de ataque", "nf", f["frentes"], "und", "Dato"),
-            (
-                "Disparos por día y frente",
-                "nd",
-                f["disparos_por_dia_frente"],
-                "und",
-                "Dato",
-            ),
-            ("Longitud de barreno", "Lb", f["longitud_barreno_m"], "m", "Dato"),
-            ("Eficiencia de avance", "η", f["eficiencia_avance"], "", "Dato"),
-            ("Área de excavación", "A", r["area_m2"], "m²", "Hoja Geometria"),
-            ("Perímetro de excavación", "P", r["perimetro_m"], "m", "Hoja Geometria"),
-            (
-                "Número de taladros",
-                "N",
-                r["taladros"],
-                "und",
-                "P/E + K·A (E, K: datos)",
-            ),
-            ("Avance por disparo", "a", r["avance_disparo_m"], "m", "Lb · η"),
-            ("Avance diario (total)", "ad", r["avance_dia_m"], "m/día", "a · nd · nf"),
-            (
-                "Avance mensual (total)",
-                "am",
-                r["avance_mes_m"],
-                "m/mes",
-                "ad · días/mes",
-            ),
-            ("Duración de excavación", "Te", r["dias_excavacion"], "días", "⌈L / ad⌉"),
-        ]
-    )
-    volumenes = tabla_parametros(
-        [
-            ("Volumen teórico por disparo", "Vd", r["v_disparo_m3"], "m³", "A · a"),
-            (
-                "Volumen excavado por disparo",
-                "Ve",
-                r["v_excavado_disparo_m3"],
-                "m³",
-                "Vd · (1 + sobreexcavación)",
-            ),
-            (
-                "Volumen esponjado por disparo",
-                "Vs",
-                r["v_esponjado_disparo_m3"],
-                "m³",
-                "Ve · fe",
-            ),
-            ("Tonelaje por disparo", "T", r["t_disparo"], "t", "Ve · ρ"),
-            ("Longitud del túnel", "L", r["longitud_m"], "m", "01_Ubicacion"),
-            (
-                "Volumen total excavado",
-                "VT",
-                r["v_total_m3"],
-                "m³",
-                "A · (1 + sobreexcavación) · L",
-            ),
-            (
-                "Volumen total esponjado (a botadero)",
-                "VTs",
-                r["v_total_esponjado_m3"],
-                "m³",
-                "VT · fe",
-            ),
-        ]
-    )
+    s = p["seccion"]
     return Libro(
         "03_Seccion.xlsx",
         [
             Hoja("Geometria", "Geometría de excavación", [_tabla_geometria(r, s)]),
             Hoja("Galibo", "Gálibo y plataforma", [_tabla_galibo(r, s["galibo"])]),
             Hoja("Justificacion MTC", "Verificación normativa", [_tabla_norma(r)]),
-            Hoja("Perforacion y avance", "Perforación y avance", [perforacion]),
-            Hoja("Volumenes", "Volúmenes de excavación", [volumenes]),
         ],
     )
 

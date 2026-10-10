@@ -85,8 +85,6 @@ def test_flujo_completo(tmp_path):
         "Geometria",
         "Galibo",
         "Justificacion MTC",
-        "Perforacion y avance",
-        "Volumenes",
     ]
     hojas_maq = load_workbook(tmp_path / "excel" / "06_Maquinaria.xlsx").sheetnames
     assert hojas_maq[0:5] == [
@@ -161,7 +159,7 @@ def test_ubicacion_pendiente_se_exporta_como_porcentaje_excel(tmp_path):
     ws = wb["Eje del tunel"]
 
     assert ws["C5"].value.startswith("=SQRT((Coordenadas!")
-    assert ws["C6"].value == "=Coordenadas!E11-Coordenadas!E10"
+    assert ws["C6"].value == "=Coordenadas!E12-Coordenadas!E11"
     assert ws["C7"].value == "=SQRT(C5^2+C6^2)"
     assert ws["C8"].value == "=C6/C5"
     assert ws["C8"].number_format == "0.0%"
@@ -170,3 +168,25 @@ def test_ubicacion_pendiente_se_exporta_como_porcentaje_excel(tmp_path):
     distancias = wb["Distancias"]
     assert distancias["C5"].value.startswith("=SQRT((Coordenadas!")
     assert distancias["E5"].value == "=C5>=D5"
+
+
+def test_seccion_separa_perforacion_y_volumenes(tmp_path):
+    ejecutar(PARAMETROS, tmp_path, tmp_path / "memoria")
+    wb = load_workbook(tmp_path / "excel" / "03_Seccion.xlsx", data_only=False)
+
+    geo = wb["Geometria"]
+    assert geo["C9"].value == "=C7-C8"
+    assert geo["C13"].value == "=C6*C11+PI()*C6^2/8"
+    assert geo["C14"].value == "=C6+2*C11+PI()*C6/2"
+
+    galibo = wb["Galibo"]
+    assert galibo["C9"].value == "=C5*C6+2*C7+C8"
+    assert galibo["C14"].value.startswith("=Geometria!C12+SQRT(")
+
+    norma = wb["Justificacion MTC"]
+    assert norma["B5"].value == "=Galibo!C6"
+    assert norma["E5"].value == "=B5>=C5"
+    assert norma["E11"].value == "=ABS(B11-C11)<=0.01"
+
+    assert "Perforacion y avance" not in wb.sheetnames
+    assert "Volumenes" not in wb.sheetnames

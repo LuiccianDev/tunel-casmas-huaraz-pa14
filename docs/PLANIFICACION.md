@@ -22,7 +22,7 @@ Leyenda: `[x]` hecho · `[/]` en curso · `[ ]` pendiente.
 |---|-----------|--------|-------|--------|
 | 01 | Ubicación y coordenadas | `m01_ubicacion` | `01_Ubicacion.xlsx` | [x] oficial |
 | 02 | Geología | `m02_geologia` | `02_Geologia.xlsx` | [x] oficial (perfil longitudinal 5,556 m, Q-Slope y zonificación) |
-| 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [x] oficial (13.30x9.58 m, gálibo 11.80x5.50 m, verificación MTC) |
+| 03 | Sección del túnel | `m03_seccion` | `03_Seccion.xlsx` | [x] geometría, gálibo y verificación MTC; perforación, avance y volúmenes se entregarán en un libro independiente |
 | 04 | Personal | `m04_personal` | `04_Personal.xlsx` | [x] oficial (346 pax, MOD/MOI, fórmulas 100% dinámicas SUMIFS en desgloses, totales y %, memoria) |
 | 05 | Campamento y edificaciones | `m05_campamento` | `05_Campamento.xlsx` | [x] base |
 | 06 | Maquinaria (frente, botadero, campamento) | `m06_maquinaria` | `06_Maquinaria.xlsx` | [x] oficial (fichas técnicas, cálculo de rendimientos teórico y real, tablas Caterpillar/Epiroc) |
