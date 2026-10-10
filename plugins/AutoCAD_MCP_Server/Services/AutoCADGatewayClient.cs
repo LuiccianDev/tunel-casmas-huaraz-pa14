@@ -30,9 +30,10 @@ public sealed class AutoCADGatewayClient : IAutoCADGatewayClient
         try
         {
             using HttpResponseMessage response = await _httpClient.GetAsync(endpoint, cancellationToken);
-            if (response.IsSuccessStatusCode)
+            string cuerpo = await response.Content.ReadAsStringAsync(cancellationToken);
+            if (response.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(cuerpo))
             {
-                return await response.Content.ReadAsStringAsync(cancellationToken);
+                return cuerpo;
             }
 
             return $"{{\"status\": \"error\", \"code\": {(int)response.StatusCode}, \"message\": \"Gateway devolvio error {response.StatusCode}\"}}";
@@ -87,6 +88,21 @@ public sealed class AutoCADGatewayClient : IAutoCADGatewayClient
         catch (Exception ex)
         {
             return $"Fallo crítico al conectar con el Gateway de AutoCAD. Asegúrate de que AutoCAD esté abierto y el Gateway ejecutándose en el puerto 5055. Error: {ex.Message}";
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task<string> PostJsonAsync(string endpoint, string json, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            using HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
+            return await response.Content.ReadAsStringAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            return $"{{\"status\": \"error\", \"message\": \"Fallo al conectar con el Gateway en puerto 5055: {ex.Message}\"}}";
         }
     }
 }

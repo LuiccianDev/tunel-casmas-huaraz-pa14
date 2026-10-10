@@ -65,7 +65,7 @@ El plugin implementa una arquitectura desacoplada basada en servicios, un enruta
 
 ## 3. Especificación de Endpoints REST y Seguridad
 
-La API del Gateway expone 8 endpoints en `http://localhost:5055/`.
+La API del Gateway expone 16 endpoints en `http://localhost:5055/` (8 de AutoCAD base y 8 de Civil 3D).
 
 ### Seguridad y Autenticación Obligatoria
 * **Cabecera HTTP requerida:** `X-Gateway-Token: pa14-autocad-token-casmas-2026` (configurable mediante la variable de entorno `AUTOCAD_GATEWAY_TOKEN`).
@@ -107,6 +107,32 @@ La API del Gateway expone 8 endpoints en `http://localhost:5055/`.
 * **`GET /context/extents`**: Coordenadas de extensión mínima y máxima del dibujo (`minX`, `minY`, `minZ`, `maxX`, `maxY`, `maxZ`).
 * **`GET /context/selection`**: Cantidad de objetos seleccionados actualmente por el usuario con el ratón.
 * **`GET /context/blocks`**: Lista de definiciones de bloques disponibles (excluyendo anónimos y espacio papel).
+
+### C. Integración Civil 3D 2027 (`/civil/*`)
+
+El mismo `AutoCAD_AI_Gateway.dll` funciona en **AutoCAD 2027** y en **Civil 3D 2027** (referencias `AeccDbMgd` y `AecBaseMgd` con `Private=False`). `Civil3DServiceFactory` solo instancia `Civil3DService` si `AeccDbMgd` ya está cargado en el proceso; en AutoCAD estándar usa `NullCivil3DService`. En ese caso, todos los endpoints `/civil/*` (salvo `/civil/status`) responden **409** con `civil_available: false`, sin excepciones.
+
+**Lectura (GET):**
+* **`GET /civil/status`**: Disponibilidad de Civil 3D, documento activo y conteo de superficies/alineamientos.
+* **`GET /civil/surfaces`**: Superficies con cota mínima, cota máxima y número de triángulos.
+* **`GET /civil/surface/elevation?x=..&y=..&surface=..`**: Cota Z del terreno en (x, y). `surface` es opcional (por defecto, la primera). Error si el punto está fuera de la superficie.
+* **`GET /civil/alignments`**: Alineamientos con progresivas inicial/final, estacas (`1+250.50`) y longitud.
+* **`GET /civil/alignment/station-offset?x=..&y=..&alignment=..`**: Progresiva y desfase de un punto respecto al eje.
+* **`GET /civil/alignment/point-at-station?station=..&offset=..&alignment=..`**: Coordenada (x, y) de una progresiva y desfase (valida el rango del alineamiento).
+
+**Escritura (POST, JSON):**
+* **`POST /civil/alignment/create`**: Crea un alineamiento desde PIs con curvas circulares tangentes de radio fijo.
+  ```json
+  { "nombre": "EJE-TUNEL", "puntos": [{"x": 0, "y": 0}, {"x": 100, "y": 0}, {"x": 150, "y": 50}], "radio": 40, "capa": "PA14-EJE" }
+  ```
+  Validaciones: nombre obligatorio y único, mínimo 2 PIs, sin segmentos de longitud cero, valores finitos y radio ≥ 0. Si el radio no cabe (tangentes mayores que el segmento), se rechaza con un mensaje explícito. `radio` 0 o ausente genera un eje sin curvas. La capa se crea si no existe.
+* **`POST /civil/surface/create`**: Crea una superficie TIN desde puntos topográficos.
+  ```json
+  { "nombre": "TERRENO", "puntos": [{"x": 0, "y": 0, "z": 3000}, {"x": 50, "y": 0, "z": 3005}, {"x": 0, "y": 50, "z": 3008}] }
+  ```
+  Validaciones: nombre obligatorio y único, mínimo 3 puntos, valores finitos.
+
+Todas las escrituras se ejecutan en el hilo UI (`Application.Idle`) bajo `LockDocument` y transacción.
 
 ---
 

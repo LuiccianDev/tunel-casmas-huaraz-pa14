@@ -30,4 +30,13 @@ public interface IAutoCADGatewayClient
     /// <param name="cancellationToken">Token de cancelación opcional.</param>
     /// <returns>Una tarea asíncrona cuyo resultado es el diagnóstico de conectividad.</returns>
     Task<string> PingGatewayAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Envía un cuerpo JSON por POST a un endpoint del Gateway (por ejemplo, "civil/alignment/create").
+    /// </summary>
+    /// <param name="endpoint">La ruta relativa del endpoint.</param>
+    /// <param name="json">El cuerpo JSON ya serializado.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional.</param>
+    /// <returns>Una tarea asíncrona cuyo resultado es la respuesta JSON del Gateway (o un JSON de error).</returns>
+    Task<string> PostJsonAsync(string endpoint, string json, CancellationToken cancellationToken = default);
 }

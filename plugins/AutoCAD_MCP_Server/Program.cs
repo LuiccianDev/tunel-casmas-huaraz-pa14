@@ -32,7 +32,8 @@ builder.Services.AddMcpServer(options =>
 })
 .WithStdioServerTransport()
 .WithTools<ContextTools>()
-.WithTools<ExecutionTools>();
+.WithTools<ExecutionTools>()
+.WithTools<Civil3DTools>();
 
 var host = builder.Build();
 await host.RunAsync();

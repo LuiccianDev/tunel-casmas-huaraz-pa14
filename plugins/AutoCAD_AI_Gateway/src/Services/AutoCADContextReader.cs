@@ -18,37 +18,8 @@ public sealed class AutoCADContextReader : IAutoCADContextReader
     /// </summary>
     /// <param name="query">La función delegada que recibe el documento activo y retorna una cadena serializada.</param>
     /// <returns>Una tarea asíncrona con el resultado devuelto por la consulta.</returns>
-    private static Task<string> RunOnIdleAsync(Func<Document, string> query)
-    {
-        var tcs = new TaskCompletionSource<string>();
-        EventHandler? handler = null;
-        handler = (s, e) =>
-        {
-            if (handler != null)
-            {
-                Autodesk.AutoCAD.ApplicationServices.Application.Idle -= handler;
-            }
-            try
-            {
-                Document doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-                if (doc == null)
-                {
-                    tcs.SetResult("{\"status\": \"error\", \"message\": \"No hay documento abierto\"}");
-                    return;
-                }
-
-                string result = query(doc);
-                tcs.SetResult(result);
-            }
-            catch (Exception ex)
-            {
-                tcs.SetException(ex);
-            }
-        };
-
-        Autodesk.AutoCAD.ApplicationServices.Application.Idle += handler;
-        return tcs.Task;
-    }
+    private static Task<string> RunOnIdleAsync(Func<Document, string> query) =>
+        AutoCAD_AI_Gateway.Core.UiThreadInvoker.RunOnIdleAsync(query);
 
     /// <inheritdoc/>
     public Task<string> ReadSelectionCountAsync()

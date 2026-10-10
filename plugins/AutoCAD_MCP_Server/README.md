@@ -50,7 +50,8 @@ El servidor sigue los patrones modernos de desarrollo en .NET 10 recomendados en
                  │   [ AutoCAD AI Gateway ] ───> AutoCAD 2027
                  │
                  ├── [ ContextTools ]    ───> 7 Herramientas de Inspección DWG
-                 └── [ ExecutionTools ]  ───> 5 Herramientas de Acción y Control
+                 ├── [ ExecutionTools ]  ───> 5 Herramientas de Acción y Control
+                 └── [ Civil3DTools ]    ───> 8 Herramientas de Civil 3D (lectura y escritura)
 ```
 
 ### Características de Diseño:
@@ -59,11 +60,11 @@ El servidor sigue los patrones modernos de desarrollo en .NET 10 recomendados en
 2. **Inyección de Dependencias (.NET DI):**  
    El cliente HTTP (`IAutoCADGatewayClient`) se registra de forma desacoplada con `AddHttpClient`, inyectándose directamente en los constructores de las clases de herramientas.
 3. **Segregación de Responsabilidades:**  
-   Las 12 herramientas se dividen lógicamente en herramientas de solo lectura (`ContextTools`) y de acción/control (`ExecutionTools`).
+   Las 20 herramientas se dividen lógicamente en herramientas de solo lectura (`ContextTools`), de acción/control (`ExecutionTools`) y de ingeniería civil (`Civil3DTools`).
 
 ---
 
-## 4. Catálogo de Herramientas MCP (12 Herramientas)
+## 4. Catálogo de Herramientas MCP (20 Herramientas)
 
 ### A. Herramientas de Inspección y Contexto (`ContextTools`)
 
@@ -86,6 +87,21 @@ El servidor sigue los patrones modernos de desarrollo en .NET 10 recomendados en
 | **`zoom_extension`** | Ejecuta un Zoom Extensión (`_.ZOOM E`) para centrar y encuadrar todo en pantalla. | Ninguno |
 | **`guardar_dibujo`** | Guarda el archivo DWG activo en AutoCAD (`_.QSAVE`). | Ninguno |
 | **`configurar_entorno_dibujo`** | Calibra automáticamente las variables métricas del dibujo (`INSUNITS=4`, `MEASUREMENT=1`, `DIMTXT=0.22`, `DIMASZ=0.18`, etc.). | Ninguno |
+
+### C. Herramientas de Civil 3D 2027 (`Civil3DTools`)
+
+Requieren Civil 3D 2027 con el Gateway activo. En AutoCAD estándar responden `civil_available: false` (HTTP 409 en el Gateway).
+
+| Herramienta | Descripción | Parámetros |
+|---|---|---|
+| **`verificar_estado_civil3d`** | Indica si el host es Civil 3D y cuenta superficies y alineamientos. | Ninguno |
+| **`listar_superficies_civil3d`** | Lista superficies TIN con cota mínima, máxima y triángulos. | Ninguno |
+| **`consultar_elevacion_terreno`** | Cota Z del terreno en un punto. Falla si está fuera de la superficie. | `x`, `y`, `superficie` (opcional) |
+| **`listar_alineamientos_civil3d`** | Lista alineamientos con progresivas, estacas y longitud. | Ninguno |
+| **`consultar_estacion_alineamiento`** | Progresiva (estaca) y desfase de un punto respecto al eje. | `x`, `y`, `alineamiento` (opcional) |
+| **`obtener_coordenada_en_estacion`** | Coordenada (x, y) de una progresiva y desfase. | `progresiva`, `desfase`, `alineamiento` (opcional) |
+| **`crear_alineamiento_civil3d`** | Crea un alineamiento desde PIs con curvas circulares tangentes de radio fijo; valida nombre único y que el radio quepa. | `nombre`, `puntos` (`"x1,y1;x2,y2"`), `radio`, `capa` |
+| **`crear_superficie_civil3d`** | Crea una superficie TIN desde puntos topográficos; valida nombre único y mínimo 3 puntos. | `nombre`, `puntos` (`"x1,y1,z1;x2,y2,z2"`) |
 
 ---
 
