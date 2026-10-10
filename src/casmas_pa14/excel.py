@@ -32,6 +32,9 @@ _FILA_INICIAL = 4
 def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
     """Crea `carpeta/libro.archivo` con una pestaña por cada Hoja."""
     wb = Workbook()
+    wb.calculation.fullCalcOnLoad = True
+    wb.calculation.forceFullCalc = True
+    wb.calculation.calcMode = "auto"
     wb.remove(wb.active)
     for hoja in libro.hojas:
         ws = wb.create_sheet(hoja.nombre[:31])
@@ -200,6 +203,10 @@ def _escribir_tabla(
                     formato_sugerido = "#,##0"
                 elif unidad_param == "%":
                     formato_sugerido = "0.0%"
+                    if isinstance(valor_real, (int, float)) and not isinstance(
+                        valor_real, bool
+                    ):
+                        valor_real /= 100
 
             _celda(
                 celda,

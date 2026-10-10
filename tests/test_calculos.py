@@ -153,3 +153,20 @@ def test_personal_formulas_dinamicas(tmp_path):
     assert str(ws["C26"].value).startswith("=SUMIFS"), "C26 P_Camp debe ser SUMIFS"
     assert str(ws["C36"].value).startswith("="), "C36 Obreros debe ser fórmula"
     assert str(ws["C40"].value).startswith("="), "C40 Planilla debe ser fórmula"
+
+
+def test_ubicacion_pendiente_se_exporta_como_porcentaje_excel(tmp_path):
+    ejecutar(PARAMETROS, tmp_path, tmp_path / "memoria")
+    wb = load_workbook(tmp_path / "excel" / "01_Ubicacion.xlsx", data_only=False)
+    ws = wb["Eje del tunel"]
+
+    assert ws["C5"].value.startswith("=SQRT((Coordenadas!")
+    assert ws["C6"].value == "=Coordenadas!E11-Coordenadas!E10"
+    assert ws["C7"].value == "=SQRT(C5^2+C6^2)"
+    assert ws["C8"].value == "=C6/C5"
+    assert ws["C8"].number_format == "0.0%"
+    assert ws["C9"].value.startswith("=MOD(DEGREES(ATAN2(Coordenadas!")
+
+    distancias = wb["Distancias"]
+    assert distancias["C5"].value.startswith("=SQRT((Coordenadas!")
+    assert distancias["E5"].value == "=C5>=D5"
