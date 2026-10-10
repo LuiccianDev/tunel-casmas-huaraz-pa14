@@ -69,6 +69,14 @@ def test_plugins_readmes_documentan_endpoints_y_herramientas():
         "/context/extents",
         "/context/selection",
         "/context/blocks",
+        "/civil/status",
+        "/civil/surfaces",
+        "/civil/surface/elevation",
+        "/civil/surface/create",
+        "/civil/alignments",
+        "/civil/alignment/station-offset",
+        "/civil/alignment/point-at-station",
+        "/civil/alignment/create",
     ]
     for ep in endpoints_esperados:
         assert ep in texto_gateway, (
@@ -90,6 +98,14 @@ def test_plugins_readmes_documentan_endpoints_y_herramientas():
         "zoom_extension",
         "guardar_dibujo",
         "configurar_entorno_dibujo",
+        "verificar_estado_civil3d",
+        "listar_superficies_civil3d",
+        "consultar_elevacion_terreno",
+        "listar_alineamientos_civil3d",
+        "consultar_estacion_alineamiento",
+        "obtener_coordenada_en_estacion",
+        "crear_alineamiento_civil3d",
+        "crear_superficie_civil3d",
     ]
     for h in herramientas_esperadas:
         assert h in texto_mcp, (

@@ -72,6 +72,6 @@ Todas las comprobaciones **cumplen**.
 
 ## 7. Observaciones
 
-- Longitud L = 5539.3 m > 500 m: prever **zonas de emergencia / apartaderos** (Manual de Túneles) (S).
+- Longitud L = 5406.8 m > 500 m: prever **zonas de emergencia / apartaderos** (Manual de Túneles) (S).
 - Los valores marcados **(S)** no están confirmados con el texto oficial; verificarlos en el manual correspondiente.
 - El sostenimiento y el revestimiento dependen de la geología (02_Geologia, pendiente) y pueden cambiar la sección de excavación.

@@ -76,9 +76,9 @@ cota = 3900.0
 id = "PS"
 nombre = "SALIDA DEL TUNEL"
 zona = "18 L"
-este = 208898.27
-norte = 8942757.03
-cota = 3800.0
+este = 209031.05
+norte = 8942758.864
+cota = 3785.0
 
 # Distancias calculadas entre componentes del proyecto
 # Retiros de seguridad y distancias ambientales normativas (MTC EG-2013 / DS 024-2016-EM / DL 1278)

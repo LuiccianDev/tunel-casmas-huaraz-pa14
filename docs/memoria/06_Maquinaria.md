@@ -14,9 +14,9 @@ Se garantiza la compatibilidad de gálibos entre los equipos seleccionados y la 
 
 - **Productividad del cargador en frente:** 51.00 m³/h.
 
-- **Ciclo de acarreo a botadero:** 40.70 min por viaje.
+- **Ciclo de acarreo a botadero:** 40.03 min por viaje.
 
-- **Área requerida de botadero:** 115,954 m².
+- **Área requerida de botadero:** 113,181 m².
 
 ## 3. Tabla Consolidada de Fichas Técnicas de Maquinaria
 
