@@ -73,8 +73,8 @@ flowchart TD
 * **Propósito:** Control directo, dibujo interactivo y telemetría de AutoCAD por parte de asistentes de Inteligencia Artificial (Antigravity, Cursor, Claude Desktop).
 * **Puerto oficial:** **`http://localhost:5055/`**.
 * **Componentes (`plugins/`):**
-  1. **`AutoCAD_AI_Gateway`**: Plugin nativo .NET 10 cargado en AutoCAD con `NETLOAD`. Expone comandos `AI_START_SERVER` y `AI_STOP_SERVER`, gestionando una cola concurrente segura en `Application.Idle` con cancelación preventiva `\x03\x03` y 8 endpoints REST.
-  2. **`AutoCAD_MCP_Server`**: Servidor Model Context Protocol v2.2 (STDIO) que expone 12 herramientas de IA para consultar el modelo (capas, textos, entidades, límites) e inyectar comandos CAD paramétricos o YQArch en metros.
+  1. **`AutoCAD_AI_Gateway`**: Plugin nativo .NET 10 cargado en AutoCAD con `NETLOAD`. Expone comandos `AI_START_SERVER` y `AI_STOP_SERVER`, gestionando una cola concurrente segura en `Application.Idle` con cancelación preventiva `\x03\x03` y 16 endpoints REST (8 de AutoCAD base y 8 de Civil 3D: superficies, cotas de terreno y alineamientos, con lectura y escritura; el mismo DLL funciona en AutoCAD 2027 y Civil 3D 2027).
+  2. **`AutoCAD_MCP_Server`**: Servidor Model Context Protocol v2.2 (STDIO) que expone 20 herramientas de IA (12 de AutoCAD y 8 de Civil 3D) para consultar el modelo (capas, textos, entidades, límites) e inyectar comandos CAD paramétricos o YQArch en metros.
 
 ---
 
