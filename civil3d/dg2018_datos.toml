@@ -1,0 +1,106 @@
+# Datos normativos DG-2018 (MTC Perú) para el archivo de criterios de Civil 3D.
+# Fuente única del generador `civil3d/generar_dg2018.py`.
+# Fuente: Manual de Carreteras: Diseño Geométrico DG-2018, MTC Perú
+#         - Archivo local: `docs/entradas/manual_de_carreteras_dg_2018.pdf`
+#         - Enlace Google Drive: https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing
+# Todo valor marcado (S) es una discretización o supuesto complementario al manual.
+
+[general]
+archivo_salida = "PA14_DG2018_MTC_Roadway_Design_Standards.xml"
+prefijo_tablas = "DG-2018 MTC"          # nombre visible en Civil 3D
+unidad_velocidad = "kilometersPerHour"   # km/h
+
+# Tabla 302.02 (pág. 129) - Radios mínimos y peraltes máximos. Radio REDONDEADO (m) por velocidad (km/h).
+# Cada tabla = un caso de ubicación de la vía (clave = p máx %).
+[tabla_302_02.urbana]
+nombre = "Area urbana"
+p_max = 4.0
+velocidades = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+f_max       = [0.17, 0.17, 0.16, 0.15, 0.14, 0.14, 0.13, 0.12, 0.11, 0.09, 0.08]
+radio_calculado = [33.7, 60.0, 98.4, 149.2, 214.3, 280.0, 375.2, 492.1, 635.2, 872.2, 1108.9]
+radio_redondeado = [35, 60, 100, 150, 215, 280, 375, 495, 635, 875, 1110]
+
+[tabla_302_02.rural_hielo]
+nombre = "Rural con peligro de hielo"
+p_max = 6.0
+velocidades = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+f_max       = [0.17, 0.17, 0.16, 0.15, 0.14, 0.14, 0.13, 0.12, 0.11, 0.09, 0.08]
+radio_calculado = [30.8, 54.8, 89.5, 135.0, 192.9, 252.9, 335.9, 437.4, 560.4, 755.9, 950.5]
+radio_redondeado = [30, 55, 90, 135, 195, 255, 335, 440, 560, 755, 950]
+
+[tabla_302_02.rural_plano]
+nombre = "Rural plano u ondulado"
+p_max = 8.0
+velocidades = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+f_max       = [0.17, 0.17, 0.16, 0.15, 0.14, 0.14, 0.13, 0.12, 0.11, 0.09, 0.08]
+radio_calculado = [28.3, 50.4, 82.0, 123.2, 175.4, 229.1, 303.7, 393.7, 501.5, 667.0, 831.7]
+radio_redondeado = [30, 50, 85, 125, 175, 230, 305, 395, 500, 670, 835]
+
+[tabla_302_02.rural_accidentado]
+nombre = "Rural accidentado o escarpado"
+p_max = 12.0
+velocidades = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+f_max       = [0.17, 0.17, 0.16, 0.15, 0.14, 0.14, 0.13, 0.12, 0.11, 0.09, 0.08]
+radio_calculado = [24.4, 43.4, 70.3, 105.0, 148.4, 193.8, 255.1, 328.1, 414.2, 539.9, 665.4]
+radio_redondeado = [25, 45, 70, 105, 150, 195, 255, 330, 415, 540, 665]
+
+# Tolerancia (m) de contraste: R = V^2 / (127 (p + f)) vs "radio_calculado" de la tabla.
+# Nota: rural_hielo V=80 -> el manual imprime 252.9 y la formula da 252.0 (dif. 0.9 m);
+# se conserva el valor impreso del manual (255 redondeado).
+[verificacion]
+tolerancia_radio_m = 1.0
+
+# Sobreancho en curvas (Art. 302.09.03, Figura 302.18B, pág. 161 DG-2018):
+# Sa = n (R - sqrt(R^2 - L^2)) + V / (10 sqrt(R)), con Sa_min = 0.40 m.
+[sobreancho]
+coef_velocidad = 0.1     # Factor 1/10 de V / sqrt(R), Art. 302.09.03 DG-2018
+redondeo = 0.1           # m
+sa_minimo_m = 0.40       # m, Art. 302.09.03 y Tabla 302.20 DG-2018
+
+# Figura 304.07 (pág. 203 DG-2018) - Banquetas en corte y escalonamiento en terraplén (Assembly).
+[banquetas]
+altura_corte_max = 7.0           # m, exige banqueta si el corte supera esta altura
+ancho_banqueta_corte = 3.0       # m
+pendiente_banqueta_corte = 2.0   # %, transversal
+separacion_banquetas = 10.0      # m, altura entre banquetas sucesivas
+pendiente_long_max_banqueta = 3.0  # %
+banqueta_ladera_ancho_min = 3.0  # m, ladera con P >= pendiente_ladera
+banqueta_ladera_pendiente = 4.0  # %
+pendiente_ladera_limite = 20.0   # % (P)
+escalon_v = 1.0                  # m, relleno sobre talud antiguo
+escalon_h = 1.5                  # m
+talud_banqueta_vh = "3:1 (V:H)"  # talud de ladera mostrado en la figura
+
+# Peralte: bombeo oficial 2.0% en pavimento asfáltico/concreto (Tabla 304.03, pág. 195 DG-2018).
+# El DG-2018 publica los ábacos gráficos Figuras 302.02–302.05 (pág. 130–131) y los radios sin peralte
+# en las Tablas 304.04 y 304.06 (pág. 196–197); la variación intermedia e = p_max * R_min / R es una
+# discretización numérica (S) de las Figuras 302.02–302.05 para las tablas de Civil 3D.
+[peralte]
+bombeo = 2.0               # % Bombeo pavimentado (<500 mm/año), Tabla 304.03 DG-2018
+paso_e = 0.5               # % (S) paso de discretización para la tabla XML de Civil 3D
+fraccion_nc = 0.5          # (S) umbral NC respecto al bombeo
+
+# Curvas verticales y parámetro K (Sección 205 y Sección 303.04, págs. 104, 109 y 178–182 DG-2018):
+# - Convexa parada (Art. 303.04.03 a, Fig. 303.06): K_SSD = Dp^2 / 404  (h1=1.07 m, h2=0.15 m)
+# - Convexa paso/adelantamiento (Art. 303.04.03 b, Fig. 303.07): K_PSD = Da^2 / 946  (h1=1.07 m, h2=1.30 m)
+# - Cóncava faros (Art. 303.04.04, Fig. 303.08): K_HSD = Dp^2 / (120 + 3.5 * Dp)
+[curvas_verticales_k]
+divisor_convexa_parada = 404.0   # Art. 303.04.03 a) y Figura 303.06 (pág. 178 DG-2018)
+divisor_convexa_paso = 946.0     # Art. 303.04.03 b) y Figura 303.07 (pág. 179 DG-2018)
+concava_a = 120.0                # Art. 303.04.04 y Figura 303.08 (pág. 181 DG-2018)
+concava_b = 3.5                  # Art. 303.04.04 y Figura 303.08 (pág. 181 DG-2018)
+velocidades = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130]
+dp_parada = [35, 50, 65, 85, 105, 130, 160, 185, 220, 250, 285]           # m, Tabla 205.01 (pág. 104 DG-2018)
+da_adelantamiento = [200, 270, 345, 410, 485, 540, 615, 670, 730, 775, 815] # m, Tabla 205.03 (pág. 109 DG-2018)
+
+# Longitud de transición de peralte (Art. 302.08, pág. 152 y Tablas 302.13–302.18 DG-2018):
+# ip_max = 1.8 - 0.01*V (%);  L_min = (pf - pi) / ip_max * B.
+# Ancho de carril estándar = 3.60 m (calzada de 7.20 m en 2 carriles, Art. 304.03 y Tabla 304.01, pág. 191).
+[transicion_peralte]
+ip_base = 1.8            # %, Art. 302.08 DG-2018 (pág. 152)
+ip_factor_v = 0.01       # %/(km/h), Art. 302.08 DG-2018 (pág. 152)
+ancho_carril = 3.6       # m, Tabla 304.01 (pág. 191) y Tablas 302.15–302.18 DG-2018
+lt_minima = 5            # m (S) cota inferior numérica de seguridad
+[transicion_peralte.tablas]
+"2 Lane" = 1.0           # B = 3.60 m (1 carril desde el eje, Tabla 302.16 DG-2018)
+"4 Lane" = 2.0           # B = 7.20 m (2 carriles desde el eje / giro en borde, Tablas 302.15, 302.17, 302.18)

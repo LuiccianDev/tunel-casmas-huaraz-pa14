@@ -41,6 +41,7 @@ en **Markdown** y doble canal de planos para **AutoCAD** (generación batch en *
 | **10** | `10_Cronograma.xlsx` | Actividades constructivas · Duraciones · Carta Gantt | — | ✅ |
 | **13** | `13_Sostenimiento.xlsx` | Sostenimiento (Bieniawski/Barton: pernos, shotcrete, cerchas por tramo) | — | ✅ |
 | **—** | `PA14_dibujos.lsp` | Planos AutoLISP: Sección tipo, campamento, polvorines, saneamiento, botadero, malla | — | ✅ |
+| **—** | `PA14_DG2018_MTC_Roadway_Design_Standards.xml` | Criterios de diseño geométrico vial DG-2018 (MTC Perú) para Autodesk Civil 3D | [`civil3d/README.md`](civil3d/README.md) | ✅ |
 
 Cada hoja utiliza el formato estándar: **Descripción | Símbolo | Valor | Unidad | Fórmula / Fuente**.  
 Los cálculos se formulan de manera dinámica en Excel (`={Simbolo1}*{Simbolo2}`), garantizando recálculo inmediato sin valores estáticos hardcodeados.
@@ -75,6 +76,11 @@ flowchart TD
 * **Componentes (`plugins/`):**
   1. **`AutoCAD_AI_Gateway`**: Plugin nativo .NET 10 cargado en AutoCAD con `NETLOAD`. Expone comandos `AI_START_SERVER` y `AI_STOP_SERVER`, gestionando una cola concurrente segura en `Application.Idle` con cancelación preventiva `\x03\x03` y 16 endpoints REST (8 de AutoCAD base y 8 de Civil 3D: superficies, cotas de terreno y alineamientos, con lectura y escritura; el mismo DLL funciona en AutoCAD 2027 y Civil 3D 2027).
   2. **`AutoCAD_MCP_Server`**: Servidor Model Context Protocol v2.2 (STDIO) que expone 20 herramientas de IA (12 de AutoCAD y 8 de Civil 3D) para consultar el modelo (capas, textos, entidades, límites) e inyectar comandos CAD paramétricos o YQArch en metros.
+
+### Criterios de Diseño Vial Civil 3D (DG-2018 MTC Perú)
+* **Carpeta dedicada:** [`civil3d/`](civil3d/README.md).
+* **Fuente de datos:** [`civil3d/dg2018_datos.toml`](civil3d/dg2018_datos.toml), verificada contra [`docs/entradas/manual_de_carreteras_dg_2018.pdf`](docs/entradas/manual_de_carreteras_dg_2018.pdf) ([PDF DG-2018 MTC en Google Drive](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)).
+* **Archivo generado:** `civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml` mediante `uv run python civil3d/generar_dg2018.py`.
 
 ---
 
@@ -111,6 +117,7 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 |---|---|
 | Actualizar dependencias | `uv sync` |
 | Ejecutar pipeline de ingeniería | `uv run pa14` |
+| Generar criterios viales Civil 3D (DG-2018 `.xml`) | `uv run python civil3d/generar_dg2018.py` |
 | Formatear código Python | `uv run ruff format .` |
 | Linting y correcciones automáticas | `uv run ruff check --fix .` |
 | Ejecutar suite de pruebas (incluye guardián documental) | `uv run pytest -q` |
@@ -124,6 +131,11 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 ```
 ├── datos/
 │   └── parametros.toml          # ÚNICA fuente de datos de entrada del proyecto
+├── civil3d/
+│   ├── README.md                # Documentación y guía de criterios DG-2018 en Civil 3D
+│   ├── dg2018_datos.toml        # Parámetros normativos DG-2018 MTC (Tabla 302.02, Fig. 304.07)
+│   ├── generar_dg2018.py        # Generador y validador del XML de criterios para Civil 3D
+│   └── PA14_DG2018_MTC_Roadway_Design_Standards.xml # Estándares viales para Civil 3D
 ├── src/casmas_pa14/
 │   ├── main.py                  # Orquestador del pipeline (MODULOS 01-13)
 │   ├── config.py                # Rutas y carga del archivo TOML
@@ -157,4 +169,6 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 * **DS 024-2016-EM**: Reglamento de Seguridad y Salud Ocupacional en Minería (ventilación, refugios, polvorines, distancias).
 * **Reglamento Nacional de Edificaciones (RNE)**: Normas OS.100, IS.010, IS.020 (saneamiento, agua potable y alcantarillado).
 * **Reglamento SUCAMEC**: Normativa técnica para almacenamiento de explosivos y polvorines auxiliares.
+* **Manual de Carreteras: Diseño Geométrico DG-2018 (MTC Perú)**: Criterios de visibilidad (Tablas 205.01 y 205.03), radios mínimos (Tabla 302.02), transición de peralte (Art. 302.08), sobreancho (Art. 302.09.03), curvas verticales (Art. 303.04) y banquetas (Figura 304.07) — [`docs/entradas/manual_de_carreteras_dg_2018.pdf`](docs/entradas/manual_de_carreteras_dg_2018.pdf) ([PDF en Google Drive](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)).
+* **Manual de Carreteras: Túneles, Muros y Obras Complementarias MC-03-16 (MTC Perú)**: Criterios de diseño de túneles viales y obras conexas ([PDF en Google Drive](https://drive.google.com/file/d/1IIdtiAq3M-wXH4l8uuyQueE2mOMJV9Xr/view?usp=drive_link)).
 * **Geomecánica de Túneles**: Criterios de Hoek-Brown, Bieniawski (RMR) y Barton (Q) para sostenimiento; formulación de C. Konya para voladura.

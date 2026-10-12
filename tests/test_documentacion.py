@@ -142,3 +142,29 @@ def test_prompts_cad_autogenerados_con_38_edificaciones():
         assert codigo in texto, (
             f"El código '{codigo}' no figura en el catálogo autogenerado de prompts CAD."
         )
+
+
+def test_documentacion_civil3d_dg2018():
+    """Verifica que civil3d/README.md y README.md raíz documenten el XML DG-2018, su comando y fuente PDF."""
+    readme_civil3d = ROOT_DIR / "civil3d" / "README.md"
+    pdf_local = ROOT_DIR / "docs" / "entradas" / "manual_de_carreteras_dg_2018.pdf"
+    assert readme_civil3d.exists(), "El archivo civil3d/README.md no existe."
+    assert pdf_local.exists(), (
+        "El PDF oficial docs/entradas/manual_de_carreteras_dg_2018.pdf no existe."
+    )
+
+    comando = "uv run python civil3d/generar_dg2018.py"
+    xml_nombre = "PA14_DG2018_MTC_Roadway_Design_Standards.xml"
+    url_pdf_dg2018 = "https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing"
+
+    for archivo in (README_ROOT, readme_civil3d):
+        texto = archivo.read_text(encoding="utf-8")
+        assert comando in texto, (
+            f"El comando '{comando}' no está documentado en {archivo}."
+        )
+        assert xml_nombre in texto, (
+            f"El archivo '{xml_nombre}' no está documentado en {archivo}."
+        )
+        assert url_pdf_dg2018 in texto, (
+            f"El enlace al PDF de referencia DG-2018 no está documentado en {archivo}."
+        )
