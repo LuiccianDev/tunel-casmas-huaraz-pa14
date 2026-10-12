@@ -59,6 +59,22 @@ def calcular(p: dict, ctx: dict) -> dict:
 
 def libro(r: dict, p: dict) -> Libro:
     acts = r["actividades"]
+    filas_acts = []
+    for i, x in enumerate(acts):
+        fila_excel = 6 + i
+        filas_acts.append(
+            [
+                x["id"],
+                x["nombre"],
+                x["duracion"],
+                ", ".join(x["predecesoras"]),
+                x["tipo"],
+                x["desfase"],
+                x["inicio"],
+                f"=G{fila_excel}+C{fila_excel}-1",
+            ]
+        )
+    fila_fin_acts = 6 + len(acts) - 1
     tabla = Tabla(
         [
             "ID",
@@ -70,27 +86,21 @@ def libro(r: dict, p: dict) -> Libro:
             "Inicio",
             "Fin",
         ],
-        [
-            [
-                x["id"],
-                x["nombre"],
-                x["duracion"],
-                ", ".join(x["predecesoras"]),
-                x["tipo"],
-                x["desfase"],
-                x["inicio"],
-                x["fin"],
-            ]
-            for x in acts
-        ],
+        filas_acts,
         "FC = fin-comienzo · CC = comienzo-comienzo",
     )
     plazo = tabla_parametros(
         [
-            ("Inicio de obra", "", r["inicio"], "", "Dato"),
-            ("Fin de obra", "", r["fin"], "", "Máx. fin"),
-            ("Plazo total", "T", r["plazo_dias"], "días", "Fin − Inicio + 1"),
-            ("Plazo total", "T", r["plazo_dias"] / 30, "meses", "T / 30"),
+            ("Inicio de obra", "T_ini", f"=MIN(G6:G{fila_fin_acts})", "", "Dato"),
+            ("Fin de obra", "T_fin", f"=MAX(H6:H{fila_fin_acts})", "", "Máx. fin"),
+            (
+                "Plazo total en días",
+                "T",
+                "={T_fin}-{T_ini}+1",
+                "días",
+                "Fin − Inicio + 1",
+            ),
+            ("Plazo total en meses", "T_mes", "={T}/30", "meses", "T / 30"),
         ],
         "Plazo",
     )

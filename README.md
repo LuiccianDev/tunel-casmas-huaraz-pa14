@@ -30,8 +30,10 @@ en **Markdown** y doble canal de planos para **AutoCAD** (generación batch en *
 | **01** | `01_Ubicacion.xlsx` | Coordenadas · Eje del túnel · Distancias | — | ✅ |
 | **02** | `02_Geologia.xlsx` | Perfil litológico · RMR · Calidad de roca | — | ⏳ datos estructurados |
 | **11** | `11_Portales.xlsx` | Banquetas_Portales (Geometría, taludes, volúmenes in-situ y esponjados) | — | ✅ |
+| **15** | `15_Voladura_Banquetas.xlsx` | Voladura de banquetas en superficie (Epiroc PowerROC T25 — Modelo Konya): Calculadora_Konya_T25 · Voladura_Por_Banqueta · Ficha_PowerROC_T25 · BD_Explosivos · BD_Rocas · BD_Brocas_Equipos · Criterios_y_Fuentes | `15_voladura_banquetas.md` | ✅ |
 | **03** | `03_Seccion.xlsx` | Geometría · Perforación y avance · Volúmenes | `03_seccion.md` | ✅ |
-| **12** | `12_Voladura.xlsx` | Voladura_Konya (Burden, espaciamiento, cargas fondo/columna, retardos) | — | ✅ |
+| **14** | `14_Afrontonamiento.xlsx` | Afrontonamiento y sellado del portal: RMR_Geomecanica · Teoria_Cargas_Terzaghi · Afrontonamiento_Portal · Malla_Electrosoldada · Pernos_RockBolt · Shotcrete_Robotizado | `14_afrontonamiento.md` | ✅ |
+| **12** | `12_Voladura.xlsx` | Voladura subterránea del túnel (Jumbo 3 brazos Sandvik DT1131): Malla_y_Avance_Tunel · Voladura_Konya_Tunel · Ficha_Jumbo_DT1131 · BD_Explosivos · Catalogo_Detonacion · BD_Rocas · BD_Brocas_Equipos | `12_voladura.md` | ✅ |
 | **04** | `04_Personal.xlsx` | Relación de personal · Turnos · Resumen | `04_personal.md` | ✅ |
 | **05** | `05_Campamento.xlsx` | Edificaciones · Áreas requeridas · Resumen | `05_campamento.md` | ✅ |
 | **06** | `06_Maquinaria.xlsx` | Frente · Botadero · Campamento · 26 Fichas técnicas individuales · Resumen_Flota | `06_maquinaria.md` | ✅ |
@@ -39,7 +41,7 @@ en **Markdown** y doble canal de planos para **AutoCAD** (generación batch en *
 | **08** | `08_Agua.xlsx` | Consumo industrial/humano · PETAP · PETAR · Pozos | — | ✅ |
 | **09** | `09_Electricidad.xlsx` | Ventilación · Subestaciones y cargas · Grupo electrógeno · Resumen | — | ✅ |
 | **10** | `10_Cronograma.xlsx` | Actividades constructivas · Duraciones · Carta Gantt | — | ✅ |
-| **13** | `13_Sostenimiento.xlsx` | Sostenimiento (Bieniawski/Barton: pernos, shotcrete, cerchas por tramo) | — | ✅ |
+| **13** | `13_Sostenimiento.xlsx` | Sostenimiento subterráneo interior del túnel (Bieniawski/Barton: pernos, shotcrete y cerchas por tramo) | `13_sostenimiento.md` | ✅ |
 | **—** | `PA14_dibujos.lsp` | Planos AutoLISP: Sección tipo, campamento, polvorines, saneamiento, botadero, malla | — | ✅ |
 | **—** | `PA14_DG2018_MTC_Roadway_Design_Standards.xml` | Criterios de diseño geométrico vial DG-2018 (MTC Perú) para Autodesk Civil 3D | [`civil3d/README.md`](civil3d/README.md) | ✅ |
 

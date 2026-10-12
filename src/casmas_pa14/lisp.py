@@ -524,59 +524,33 @@ def dibujo_ubicacion(ub: dict) -> Dibujo:
     )
 
 
-def dibujo_malla(sec: dict, vol: dict | None = None) -> Dibujo:
-    """Malla de perforacion y voladura mecanizada (cuñe de 4 secciones, ayudas y periferia)."""
-    b, h, hw = sec["ancho_m"], sec["altura_m"], sec["hastial_m"]
-    radio = b / 2.0
-    xc = radio
-    yc = hw
+def _taladros_cune(x_cune: float, y_cune: float, r_tal: float) -> list[str]:
+    """Genera las entidades del cuñe cilíndrico de 4 secciones y el alivio central."""
+    cuerpo: list[str] = [
+        _circulo(x_cune, y_cune, 0.18, "PA14-ALIVIO"),
+        _texto_cen(x_cune, y_cune - 0.40, 0.20, "ALIVIO D=102mm", "PA14-TEXTO"),
+    ]
+    for d_sq in (0.25, 0.90):
+        for dx, dy in [(-d_sq, -d_sq), (-d_sq, d_sq), (d_sq, -d_sq), (d_sq, d_sq)]:
+            cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
+        cuerpo.append(
+            _rect(x_cune - d_sq, y_cune - d_sq, 2 * d_sq, 2 * d_sq, "PA14-SIMBOLOS")
+        )
 
-    cuerpo = []
-
-    # 1. Contorno de la excavacion (Herradura)
-    pts_contorno = f"'((0.0 0.0) ({_n(b)} 0.0) ({_n(b)} {_n(hw)}) (0.0 {_n(hw)}))"
-    cuerpo.append(f'(pa14:pline {pts_contorno} \'(0.0 0.0 1.0 0.0) T "PA14-CONTORNO")')
-
-    # 2. Eje vertical y nivel de hastiales
-    cuerpo.append(_linea(xc, -1.0, xc, h + 1.0, "PA14-EJE"))
-    cuerpo.append(_linea(-1.0, hw, b + 1.0, hw, "PA14-EJE"))
-
-    # 3. Arranque / Cuñe cilindrico de 4 secciones (Centro)
-    x_cune = xc
-    y_cune = hw + 0.60
-    r_alivio = 0.18
-    r_tal = 0.08
-
-    # Taladro de alivio central
-    cuerpo.append(_circulo(x_cune, y_cune, r_alivio, "PA14-ALIVIO"))
-    cuerpo.append(
-        _texto_cen(x_cune, y_cune - 0.40, 0.20, "ALIVIO D=102mm", "PA14-TEXTO")
-    )
-
-    # Cuadrante 1 (4 taladros a 0.25 m)
-    d1 = 0.25
-    for dx, dy in [(-d1, -d1), (-d1, d1), (d1, -d1), (d1, d1)]:
-        cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
-    cuerpo.append(_rect(x_cune - d1, y_cune - d1, 2 * d1, 2 * d1, "PA14-SIMBOLOS"))
-
-    # Cuadrante 2 (4 taladros en rombo a 0.50 m)
     d2 = 0.50
     for dx, dy in [(0, -d2), (0, d2), (-d2, 0), (d2, 0)]:
         cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
-    cuerpo.append(_linea(x_cune, y_cune - d2, x_cune + d2, y_cune, "PA14-SIMBOLOS"))
-    cuerpo.append(_linea(x_cune + d2, y_cune, x_cune, y_cune + d2, "PA14-SIMBOLOS"))
-    cuerpo.append(_linea(x_cune, y_cune + d2, x_cune - d2, y_cune, "PA14-SIMBOLOS"))
-    cuerpo.append(_linea(x_cune - d2, y_cune, x_cune, y_cune - d2, "PA14-SIMBOLOS"))
+    cuerpo.extend(
+        [
+            _linea(x_cune, y_cune - d2, x_cune + d2, y_cune, "PA14-SIMBOLOS"),
+            _linea(x_cune + d2, y_cune, x_cune, y_cune + d2, "PA14-SIMBOLOS"),
+            _linea(x_cune, y_cune + d2, x_cune - d2, y_cune, "PA14-SIMBOLOS"),
+            _linea(x_cune - d2, y_cune, x_cune, y_cune - d2, "PA14-SIMBOLOS"),
+        ]
+    )
 
-    # Cuadrante 3 (4 taladros en cuadrado a 0.90 m)
-    d3 = 0.90
-    for dx, dy in [(-d3, -d3), (-d3, d3), (d3, -d3), (d3, d3)]:
-        cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
-    cuerpo.append(_rect(x_cune - d3, y_cune - d3, 2 * d3, 2 * d3, "PA14-SIMBOLOS"))
-
-    # Cuadrante 4 (8 taladros a 1.45 m)
     d4 = 1.45
-    for dx, dy in [
+    pts_d4 = [
         (-d4, -d4),
         (-d4, 0),
         (-d4, d4),
@@ -585,37 +559,47 @@ def dibujo_malla(sec: dict, vol: dict | None = None) -> Dibujo:
         (d4, -d4),
         (d4, 0),
         (d4, d4),
-    ]:
+    ]
+    for dx, dy in pts_d4:
         cuerpo.append(_circulo(x_cune + dx, y_cune + dy, r_tal, "PA14-TALADROS"))
     cuerpo.append(_rect(x_cune - d4, y_cune - d4, 2 * d4, 2 * d4, "PA14-SIMBOLOS"))
+    return cuerpo
 
-    # 4. Taladros de Periferia (Hastiales y Corona)
+
+def _taladros_malla(
+    b: float, hw: float, radio: float, xc: float, yc: float
+) -> list[str]:
+    """Genera las entidades de taladros (cuñe de 4 secciones, periferia, arrastre y ayuda)."""
+    x_cune, y_cune = xc, hw + 0.60
+    r_tal = 0.08
+    cuerpo = _taladros_cune(x_cune, y_cune, r_tal)
+
     y_p = 0.40
     while y_p <= hw:
         cuerpo.append(_circulo(0.20, y_p, r_tal, "PA14-TALADROS"))
         cuerpo.append(_circulo(b - 0.20, y_p, r_tal, "PA14-TALADROS"))
         y_p += 0.60
 
-    r_perif = radio - 0.20
-    n_corona = 33
+    r_perif, n_corona = radio - 0.20, 33
     for i in range(1, n_corona):
         ang_rad = math.pi * i / n_corona
-        xt = xc - r_perif * math.cos(ang_rad)
-        yt = yc + r_perif * math.sin(ang_rad)
-        cuerpo.append(_circulo(xt, yt, r_tal, "PA14-TALADROS"))
+        cuerpo.append(
+            _circulo(
+                xc - r_perif * math.cos(ang_rad),
+                yc + r_perif * math.sin(ang_rad),
+                r_tal,
+                "PA14-TALADROS",
+            )
+        )
 
-    # 5. Taladros de Arrastre / Zapateras
     n_zapateras = 17
     dx_zap = (b - 0.80) / (n_zapateras - 1)
     for i in range(n_zapateras):
-        xz = 0.40 + i * dx_zap
-        cuerpo.append(_circulo(xz, 0.20, r_tal, "PA14-TALADROS"))
+        cuerpo.append(_circulo(0.40 + i * dx_zap, 0.20, r_tal, "PA14-TALADROS"))
 
-    # 6. Taladros de Ayuda / Destroza
     for x_ay in [1.20, 2.30, 3.40, 4.50, 8.80, 9.90, 11.00, 12.10]:
         cuerpo.append(_circulo(x_ay, 1.10, r_tal, "PA14-TALADROS"))
         cuerpo.append(_circulo(x_ay, 2.10, r_tal, "PA14-TALADROS"))
-
     for x_ay in [1.00, 2.20, 3.50, 4.80, 8.50, 9.80, 11.10, 12.30]:
         cuerpo.append(_circulo(x_ay, 3.50, r_tal, "PA14-TALADROS"))
 
@@ -626,8 +610,21 @@ def dibujo_malla(sec: dict, vol: dict | None = None) -> Dibujo:
             yt = yc + r_int * math.sin(ang_rad)
             if abs(xt - x_cune) > 1.3 or abs(yt - y_cune) > 1.3:
                 cuerpo.append(_circulo(xt, yt, r_tal, "PA14-TALADROS"))
+    return cuerpo
 
-    # 7. Cotas
+
+def dibujo_malla(sec: dict, vol: dict | None = None) -> Dibujo:
+    """Malla de perforacion y voladura mecanizada (cuñe de 4 secciones, ayudas y periferia)."""
+    b, h, hw = sec["ancho_m"], sec["altura_m"], sec["hastial_m"]
+    radio = b / 2.0
+    xc, yc = radio, hw
+
+    cuerpo = []
+    pts_contorno = f"'((0.0 0.0) ({_n(b)} 0.0) ({_n(b)} {_n(hw)}) (0.0 {_n(hw)}))"
+    cuerpo.append(f'(pa14:pline {pts_contorno} \'(0.0 0.0 1.0 0.0) T "PA14-CONTORNO")')
+    cuerpo.append(_linea(xc, -1.0, xc, h + 1.0, "PA14-EJE"))
+    cuerpo.append(_linea(-1.0, hw, b + 1.0, hw, "PA14-EJE"))
+    cuerpo.extend(_taladros_malla(b, hw, radio, xc, yc))
     cuerpo.append(_cota(0.0, 0.0, b, 0.0, xc, -1.80, f"B={b:.2f}m"))
     cuerpo.append(_cota(0.0, 0.0, 0.0, hw, -1.80, hw / 2, f"hw={hw:.2f}m"))
     cuerpo.append(_cota(0.0, 0.0, 0.0, h, -3.20, h / 2, f"H={h:.2f}m"))

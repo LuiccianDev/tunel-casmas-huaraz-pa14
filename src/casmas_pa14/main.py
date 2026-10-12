@@ -22,6 +22,8 @@ from .modulos import (
     m11_portales,
     m12_voladura,
     m13_sostenimiento,
+    m14_afrontonamiento,
+    m15_voladura_banquetas,
 )
 from .prompts_cad import generar_prompts_cad
 
@@ -31,7 +33,9 @@ MODULOS = [
     m01_ubicacion,
     m02_geologia,
     m11_portales,
+    m15_voladura_banquetas,
     m03_seccion,
+    m14_afrontonamiento,
     m12_voladura,
     m04_personal,
     m05_campamento,

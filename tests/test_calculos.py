@@ -72,6 +72,8 @@ def test_flujo_completo(tmp_path):
         "11_Portales.xlsx",
         "12_Voladura.xlsx",
         "13_Sostenimiento.xlsx",
+        "14_Afrontonamiento.xlsx",
+        "15_Voladura_Banquetas.xlsx",
     ]
     for a in archivos:
         assert a.exists() and a.stat().st_size > 0
@@ -190,3 +192,100 @@ def test_seccion_separa_perforacion_y_volumenes(tmp_path):
 
     assert "Perforacion y avance" not in wb.sheetnames
     assert "Volumenes" not in wb.sheetnames
+
+
+def test_voladura_banquetas_sostenimiento_y_afrontonamiento_separados(tmp_path):
+    ctx, _ = ejecutar(PARAMETROS, tmp_path, tmp_path / "memoria")
+
+    # 1. Verificar 12_Voladura.xlsx (exclusivo túnel subterráneo con Jumbo 3 brazos Sandvik DT1131)
+    wb_vol = load_workbook(tmp_path / "excel" / "12_Voladura.xlsx", data_only=False)
+    assert wb_vol.sheetnames == [
+        "Malla_y_Avance_Tunel",
+        "Voladura_Konya_Tunel",
+        "Ficha_Jumbo_DT1131",
+        "BD_Explosivos",
+        "Catalogo_Detonacion",
+        "BD_Rocas",
+        "BD_Brocas_Equipos",
+    ]
+    ws_malla = wb_vol["Malla_y_Avance_Tunel"]
+    assert ws_malla["C7"].value == 3
+    assert str(ws_malla["C17"].value).startswith("=")
+    assert (tmp_path / "memoria" / "12_Voladura.md").exists()
+    assert ctx["voladura"]["frente_tunel"]["brazos_jumbo"] == 3
+    assert ctx["voladura"]["frente_tunel"]["taladros_cargados"] == 231
+
+    # 2. Verificar 15_Voladura_Banquetas.xlsx (exclusivo banquetas de portal con Epiroc PowerROC T25)
+    wb_banq = load_workbook(
+        tmp_path / "excel" / "15_Voladura_Banquetas.xlsx", data_only=False
+    )
+    assert wb_banq.sheetnames == [
+        "Calculadora_Konya_T25",
+        "Voladura_Por_Banqueta",
+        "Ficha_PowerROC_T25",
+        "BD_Explosivos",
+        "BD_Rocas",
+        "BD_Brocas_Equipos",
+        "Criterios_y_Fuentes",
+    ]
+    ws_t25 = wb_banq["Calculadora_Konya_T25"]
+    assert str(ws_t25["C9"].value).startswith("=IFERROR(VLOOKUP(")
+    assert str(ws_t25["C13"].value).startswith("=IFERROR(VLOOKUP(")
+    ws_vb = wb_banq["Voladura_Por_Banqueta"]
+    assert str(ws_vb["I6"].value).startswith("=ROUNDUP(")
+    assert (tmp_path / "memoria" / "15_Voladura_Banquetas.md").exists()
+    assert ctx["voladura_banquetas"]["b_prac_m"] == pytest.approx(1.577, abs=0.02)
+    assert len(ctx["voladura_banquetas"]["banquetas_desglose"]) == 5
+
+    # 3. Verificar 13_Sostenimiento.xlsx (exclusivo interior del túnel) y su memoria
+    wb_sost = load_workbook(
+        tmp_path / "excel" / "13_Sostenimiento.xlsx", data_only=False
+    )
+    assert wb_sost.sheetnames == ["Sostenimiento"]
+    assert (tmp_path / "memoria" / "13_Sostenimiento.md").exists()
+
+    # 4. Verificar 14_Afrontonamiento.xlsx (afrontonamiento y sellado del portal) y su memoria
+    wb_afr = load_workbook(
+        tmp_path / "excel" / "14_Afrontonamiento.xlsx", data_only=False
+    )
+    assert wb_afr.sheetnames == [
+        "RMR_Geomecanica",
+        "Teoria_Cargas_Terzaghi",
+        "Afrontonamiento_Portal",
+        "Malla_Electrosoldada",
+        "Pernos_RockBolt",
+        "Shotcrete_Robotizado",
+    ]
+    ws_af = wb_afr["Afrontonamiento_Portal"]
+    assert ws_af["C12"].value == "=Teoria_Cargas_Terzaghi!C6"
+    assert ws_af["C13"].value == "=Teoria_Cargas_Terzaghi!C7"
+    assert ws_af["C22"].value == "=C21-C17"
+    ws_malla_af = wb_afr["Malla_Electrosoldada"]
+    assert ws_malla_af["C6"].value == "=Afrontonamiento_Portal!C22"
+    assert (tmp_path / "memoria" / "14_Afrontonamiento.md").exists()
+    assert ctx["afrontonamiento"]["area_neta_fronton_m2"] == pytest.approx(
+        493.08, abs=0.1
+    )
+
+
+def test_todos_los_libros_usan_formulas_dinamicas(tmp_path):
+    """Verifica que los 15 libros Excel contengan fórmulas nativas y ningún {Simbolo} sin resolver."""
+    ejecutar(PARAMETROS, tmp_path, tmp_path / "memoria")
+    carpeta_excel = tmp_path / "excel"
+    libros = sorted(carpeta_excel.glob("*.xlsx"))
+    assert len(libros) == 15
+
+    for ruta_libro in libros:
+        wb = load_workbook(ruta_libro, data_only=False)
+        tiene_formula = False
+        for ws in wb.worksheets:
+            for row in ws.iter_rows(values_only=True):
+                for val in row:
+                    if isinstance(val, str) and val.startswith("="):
+                        tiene_formula = True
+                        assert "{" not in val and "}" not in val, (
+                            f"Marcador sin resolver en {ruta_libro.name} [{ws.title}]: {val}"
+                        )
+        assert tiene_formula, (
+            f"El libro {ruta_libro.name} no contiene ninguna fórmula dinámica (=)"
+        )

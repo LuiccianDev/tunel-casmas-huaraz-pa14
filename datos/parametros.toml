@@ -2317,10 +2317,10 @@ ventana_limpieza_h = 4.0 # Tiempo de carguío y acarreo en ciclo operativo de 12
 eficiencia = 0.83        # Factor de eficiencia de obra estándar (50 min efectivos / 60 min, Manual CAT Ed. 49)
 
 [maquinaria.jumbo]
-brazos = 2
-velocidad_perforacion_m_min = 1.5 # Velocidad neta de penetración martillo Sandvik RD525 en andesita (Ficha Sandvik DT820)
-ventana_perforacion_h = 3.0       # Tiempo asignado a perforación de 142 taladros en ciclo operativo
-potencia_hp = 100
+brazos = 3
+velocidad_perforacion_m_min = 1.5 # Velocidad neta de penetración por brazo (Ficha Jumbo 3 brazos Sandvik DT1131)
+ventana_perforacion_h = 3.5       # Tiempo asignado a perforación del frente en ciclo operativo (12_Voladura)
+potencia_hp = 300                 # Potencia nominal Jumbo 3 brazos Sandvik DT1131 (225 kW / 300 HP)
 
 [maquinaria.cargador_frente]
 capacidad_m3 = 4.0   # Cat 966H
@@ -2346,15 +2346,24 @@ potencia_hp_tractor = 354       # Cat D8T
 
 [maquinaria.banquetas]
 volumen_movimiento_m3_dia = 500.0 # Ritmo diario programado de movimiento de tierras en banqueo de portales
-rendimiento_perforadora_m_h = 25.0 # Rendimiento nominal en precorte de taludes (Ficha Epiroc PowerROC T25)
+rendimiento_perforadora_m_h = 25.0 # Rendimiento nominal en banqueo y precorte (Ficha Epiroc PowerROC T25)
 rendimiento_excavadora_m3_h = 120.0 # Rendimiento en excavación masiva en banco (Manual CAT 336D)
-rendimiento_volquete_m3_h = 80.0   # Rendimiento de transporte en volquete tolva 15 m³ (Volvo FMX 8x4)
+rendimiento_volquete_m3_h = 80.0   # Rendimiento de transporte en volquete tolva (Volvo FMX 8x4)
+potencia_hp_perforadora = 173      # Epiroc PowerROC T25 (129 kW / 173 HP)
+potencia_hp_excavadora = 314       # Caterpillar 336 (314 HP)
+potencia_hp_volquete = 500         # Volvo FMX 8x4 Rígido (500 HP)
 
 [maquinaria.accesos]
 longitud_km = 2.5 # Longitud total de accesos industriales a portales y botaderos (Trazado vial)
 rendimiento_tractor_d8_m3_h = 150.0 # Rendimiento en corte y desbroce masivo (Manual CAT D8T)
 rendimiento_tractor_d6_m_h = 50.0   # Rendimiento en conformación y perfilado de subrasante (Manual CAT D6T)
 rendimiento_motoniveladora_km_dia = 1.5 # Rendimiento de nivelación y bombeo en afirmado (Manual MTC EG-2013 Sec. 301)
+potencia_hp_d8 = 354                # Caterpillar D8T (354 HP)
+potencia_hp_d6 = 215                # Caterpillar D6 (215 HP)
+potencia_hp_excavadora = 314        # Caterpillar 336 (314 HP)
+potencia_hp_volquete = 500          # Volvo FMX 8x4 Rígido (500 HP)
+potencia_hp_motoniveladora = 150    # Caterpillar 140G (150 HP)
+volquetes_asignados_und = 2         # Unidades asignadas a accesos viales
 
 # Parámetros universales para cálculo de rendimiento teórico y real (Caterpillar & Epiroc)
 [maquinaria.rendimientos]
@@ -2851,17 +2860,611 @@ angulo_talud_deg = 70.0
 lado_menor_m = 5.0
 
 # =============================================================================
-#  12 - VOLADURA KONYA
+#  12 - VOLADURA SUBTERRÁNEA DEL TÚNEL (JUMBO 3 BRAZOS SANDVIK DT1131 + CATÁLOGOS)
 # =============================================================================
 [voladura]
-# Parametros segun formulario C. Konya
-densidad_explosivo_g_cm3 = 1.2
-densidad_roca_g_cm3 = 2.5     # Reemplazado luego por geologia si se integra
-diametro_explosivo_mm = 45.0
-altura_banco_m = 3.0          # H
-angulo_taladro_deg = 0.0      # vertical por defecto
-constante_retardo_ms_m = 4.5  # Th (roca media-dura)
-factor_tiempo_filas_ms_m = 11.5 # TR (promedio)
+# Parámetros de perforación y voladura subterránea en frente (Sección Herradura 108.43 m²)
+equipo_perforacion_tunel = "Jumbo Frontal Computarizado 3 brazos Sandvik DT1131 / XE3C"
+brazos_jumbo = 3                      # Unidad: brazos | Fuente: Ficha Técnica Sandvik DT1131 (3 brazos automatizados iDATA)
+potencia_jumbo_hp = 300               # Unidad: HP | Fuente: Ficha Técnica Sandvik DT1131 (225 kW / 300 HP)
+velocidad_penetracion_m_min = 1.50    # Unidad: m/min | Fuente: Martillo hidráulico de alta frecuencia en roca andesítica/diorítica
+diametro_alivio_mm = 102.0            # Unidad: mm | Fuente: Broca escariadora de 4" (102 mm) para taladros vacíos de alivio en cuele
+diametro_explosivo_mm = 45.0          # Unidad: mm | Fuente: Broca de producción de 45 mm (1 3/4") en Jumbo Sandvik DT1131
+diametro_contorno_mm = 45.0           # Unidad: mm | Fuente: Taladros perimetrales con carga desacoplada (Exsacorte / Enaline)
+# Distribución de los 231 taladros cargados del frente por zonas (Manual EXSA 5ta Ed. - Cuele quemado cilíndrico)
+taladros_alivio_vacios = 4            # Unidad: und | Fuente: 4 taladros de alivio vacíos de Ø 102 mm en arranque (no cargados)
+taladros_cuele_und = 16               # Unidad: und | Fuente: Cuele quemado cilíndrico de 4 secciones (4x4 = 16 taladros)
+taladros_ayudas_und = 20              # Unidad: und | Fuente: Ayudas de arranque alrededor del cuele
+taladros_destroza_und = 105           # Unidad: und | Fuente: Taladros de producción / destroza en núcleo del frente
+taladros_cuadradores_und = 22         # Unidad: und | Fuente: Taladros de contorno lateral en hastiales (E = 0.60 m)
+taladros_corona_und = 42              # Unidad: und | Fuente: Taladros de recorte perimetral en bóveda (Smooth Blasting E = 0.60 m)
+taladros_arrastres_und = 26           # Unidad: und | Fuente: Zapateras / arrastres de piso en solera
+# Parámetros del modelo matemático de C.J. Konya aplicado a taladros de destroza del túnel
+densidad_explosivo_g_cm3 = 1.20       # Unidad: g/cm³ | Fuente: Emulsión encartuchada Semexsa / Exagel-E (Exsa)
+densidad_roca_g_cm3 = 2.50            # Unidad: g/cm³ | Fuente: Reemplazado dinámicamente por geología ponderada (2.60 t/m³)
+altura_banco_m = 3.294                # Unidad: m | Fuente: Avance efectivo por disparo en frente (L_b = 3.66 m * 0.90 = 3.294 m)
+angulo_taladro_deg = 0.0              # Unidad: grados | Fuente: Perforación horizontal paralela al eje del túnel
+constante_retardo_ms_m = 4.5          # Unidad: ms/m | Fuente: C.J. Konya Tabla TH (andesitas/granodioritas)
+factor_tiempo_filas_ms_m = 11.5       # Unidad: ms/m | Fuente: C.J. Konya Tabla TR (alivio progresivo hacia cara libre del cuele)
+factor_kr_lineas = 0.90               # Unidad: adim. | Fuente: Konya Tabla 1 (3 o más secciones de expansión = 0.90)
+factor_kd_depositacion = 1.00         # Unidad: adim. | Fuente: Konya Tabla 2 (depositación general = 1.00)
+factor_ks_estructura = 1.10           # Unidad: adim. | Fuente: Konya Tabla 3 (macizo competente = 1.10)
+
+[voladura.ficha_jumbo_dt1131]
+equipo = "Jumbo Frontal Computarizado de 3 Brazos para Túneles"
+marca_modelo = "Sandvik DT1131 / XE3C (iDATA)"
+aplicacion = "Perforación mecanizada del frente subterráneo del túnel PA14 (sección herradura 108.43 m²)"
+numero_brazos = "3 brazos hidráulicos universales SB110i con paralelismo automático"
+cobertura_max = "Hasta 130 m² (cubre íntegramente los 108.43 m² del Túnel PA14 desde una sola posición)"
+potencia_nominal = "225 kW (300 HP) electrohidráulico (3 x 75 kW centrales hidráulicas)"
+consumo_electrico = "165.0 kWh/h en perforación continua; traslado diésel 22 - 28 L/h"
+dimensiones = "17.50 m (largo) × 3.10 m (ancho) × 3.85 m (alto)"
+peso_operativo = "42.0 toneladas"
+viga_avance = " Barra estándar de 12 pies (3.66 m) a 14 pies (4.27 m)"
+brocas_frente = "Producción Ø 45 mm - 51 mm (botones) | Escariador de alivio Ø 102 mm (4\")"
+velocidad_penetracion = "1.50 m/min por brazo (270 m/h teóricos combinados con 3 brazos)"
+dotacion = "1 Operador de Jumbo Especialista + 1 Ayudante"
+archivo_ficha = "Jumbo Sandvik DT1131.pdf"
+link_ficha = "https://drive.google.com/file/d/1tfaX_C6rczxrH7CBsREmtLymkKBQKPVw/view"
+
+
+# =============================================================================
+#  15 - VOLADURA DE BANQUETAS Y PORTALES EN SUPERFICIE (EPIROC POWERROC T25 - KONYA)
+# =============================================================================
+[voladura_banquetas]
+# Calculadora de Perforación y Voladura de Banquetas en Superficie con Epiroc PowerROC T25 (Modelo C.J. Konya)
+equipo_perforacion = "Epiroc PowerROC T25"
+diametro_broca_mm = 64.0              # Unidad: mm | Fuente: Broca oficial de botones 2.5" T38/T45 (Ficha PowerROC T25)
+explosivo_base = "semexsa E-80"       # Unidad: texto | Fuente: Dinamita semigelatina Exsa (1.18 g/cm³, VOD 4500 m/s)
+densidad_explosivo_g_cm3 = 1.18       # Unidad: g/cm³ | Fuente: Catálogo Exsa - semexsa E-80
+vod_explosivo_m_s = 4500.0            # Unidad: m/s | Fuente: Catálogo Exsa - semexsa E-80
+presion_detonacion_kbar = 86.0        # Unidad: kbar | Fuente: Catálogo Exsa - semexsa E-80
+roca_base = "Diorita PA14 (Caso Base)" # Unidad: texto | Fuente: Monografía Konya UNT / Geomecánica PA14
+densidad_roca_g_cm3 = 2.76            # Unidad: g/cm³ | Fuente: Diorita PA14 (Caso Base)
+ucs_roca_mpa = 250.0                  # Unidad: MPa | Fuente: Resistencia compresiva uniaxial Diorita PA14
+resistencia_traccion_mpa = 18.0       # Unidad: MPa | Fuente: Resistencia a la tracción estimada roca dura (Konya)
+factor_esponjamiento = 1.50           # Unidad: ratio | Fuente: Factor de esponjamiento en roca ígnea dura
+altura_banco_m = 6.0                  # Unidad: m | Fuente: Altura de banco de diseño en banquetas de portal (5.0 - 6.0 m)
+factor_kd = 1.00                      # Unidad: adim. | Fuente: Factor por depositación de estratos (Konya)
+factor_ks = 1.00                      # Unidad: adim. | Fuente: Factor por estructura geológica (Konya)
+factor_ke = 1.00                      # Unidad: adim. | Fuente: Factor de acoplamiento explosivo (1.00 encartuchado atacado)
+factor_taco_kt = 0.85                 # Unidad: adim. | Fuente: Criterio Konya (0.70 estratificada, 0.85 fracturada, 1.00 masiva)
+factor_sobreperforacion_kj = 0.30     # Unidad: adim. | Fuente: C.J. Konya (J = 0.30 * B_max)
+factor_espaciamiento_ks_rel = 1.15    # Unidad: adim. | Fuente: C.J. Konya para roca dura (S/B = 1.15; secuencial = 1.40)
+error_perf_constante_m = 0.05         # Unidad: m | Fuente: Error de emboquille e0 = 0.05 m (Konya: e = 0.05 + 0.03*L)
+error_perf_pendiente_m_m = 0.03       # Unidad: m/m | Fuente: Desviación angular 0.03 m por metro perforado (Konya)
+volumen_banco_requerido_m3 = 2500.0   # Unidad: m³ | Fuente: Volumen de referencia por voladura masiva de banco
+largo_frente_banco_m = 50.0           # Unidad: m | Fuente: Longitud de frente de voladura en portal
+ancho_frente_banco_m = 20.0           # Unidad: m | Fuente: Ancho de banco de voladura en portal
+rendimiento_perforadora_m_h = 25.0    # Unidad: m/h | Fuente: Rendimiento efectivo en banqueo Epiroc PowerROC T25 (06_Maquinaria)
+# Parámetros complementarios de Voladura Controlada de Taludes de Banqueta (Buffer y Precorte - Guía Konya)
+carga_pozo_buffer_kg = 12.0           # Unidad: kg | Fuente: Carga explosiva controlada en fila de amortiguación (Buffer)
+relacion_fc_buffer_prod = 1.00        # Unidad: adim. | Fuente: Relación KBP = FC_buffer / FC_producción (Konya)
+diametro_precorte_mm = 64.0           # Unidad: mm | Fuente: Diámetro de taladros de precorte con PowerROC T25
+presion_barreno_precorte_mpa = 75.0   # Unidad: MPa | Fuente: Presión de taladro desacoplada con Enaline / Exsacorte
+angulo_inclinacion_precorte_deg = 20.0 # Unidad: grados | Fuente: Inclinación de talud de precorte respecto a la vertical (70° horiz.)
+
+[voladura_banquetas.ficha_powerroc_t25]
+equipo = "Perforadora hidráulica sobre orugas para superficie (Surface drill rig / Rockdrill)"
+marca_modelo = "Epiroc PowerROC T25"
+aplicacion = "Perforación vertical e inclinada en banquetas de portal, taludes de corte y cantera en superficie"
+motor = "Volvo TAD 551VE (Tier 3) / TAD 581VE (Tier 4F/Stage 5) turboalimentado"
+potencia_nominal = "129 kW (173 HP) a 2200-2300 rpm"
+martillo = "Epiroc RD 14UP (martillo en cabeza / tophammer de alto rendimiento)"
+compresor = "Atlas Copco de tornillo rotativo, presión máx. 4.0 bar (58 psi), caudal 17 L/pulso"
+rango_diametro = "51 mm a 89 mm (2.0\" a 3.5\")"
+sistema_varillaje = "Roscas T38 y T45"
+longitud_pasada = "3.1 m (10') o 3.7 m (12')"
+profundidad_max = "15.3 m (50') con avance corto, 18.4 m (60') con avance largo"
+broca_base = "Broca de botones de 64 mm (2.5\") con rosca T38/T45"
+velocidad_penetracion = "0.35 - 0.42 m/min (21.0 - 25.0 m/h) en roca diorítica/andesítica"
+vida_util_broca = "400 m de perforación"
+consumo_diesel = "14 - 18 L/h"
+archivo_ficha = "fichaTecnicaPerforadoraHidraulicaSobreOrugasEpirocPowerRocT25.pdf"
+link_ficha = "https://drive.google.com/file/d/1EDo3A-pjlWewC2BZioeCqFauxSTwR9Ks/view"
+
+[[voladura.catalogo_explosivos]]
+nombre = "Slurrex BS"
+fabricante = "Exsa"
+tipo = "Emulsión a granel"
+densidad_g_cm3 = 1.15
+vod_m_s = 5000.0
+resistencia_agua = "Excelente"
+pd_kbar = 85.0
+energia_kcal_kg = 890.0
+rws_pct = 102.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Tronex Plus"
+fabricante = "Enaex"
+tipo = "Dinamita gelatinosa"
+densidad_g_cm3 = 1.19
+vod_m_s = 5300.0
+resistencia_agua = "Excelente (12h)"
+pd_kbar = 120.0
+energia_kcal_kg = 1050.0
+rws_pct = 118.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Emultex C"
+fabricante = "Enaex"
+tipo = "Emulsión encartuchada"
+densidad_g_cm3 = 1.15
+vod_m_s = 5000.0
+resistencia_agua = "Excelente"
+pd_kbar = 90.0
+energia_kcal_kg = 920.0
+rws_pct = 104.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Enaline"
+fabricante = "Enaex"
+tipo = "Emulsión de contorno/precorte"
+densidad_g_cm3 = 1.10
+vod_m_s = 4800.0
+resistencia_agua = "Excelente"
+pd_kbar = 75.0
+energia_kcal_kg = 880.0
+rws_pct = 98.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Permicarb"
+fabricante = "Enaex"
+tipo = "Dinamita permisible"
+densidad_g_cm3 = 1.35
+vod_m_s = 4100.0
+resistencia_agua = "Buena (4h)"
+pd_kbar = 80.0
+energia_kcal_kg = 850.0
+rws_pct = 95.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Anfex-L"
+fabricante = "Enaex"
+tipo = "ANFO a granel en saco"
+densidad_g_cm3 = 0.62
+vod_m_s = 3200.0
+resistencia_agua = "Nula"
+pd_kbar = 30.0
+energia_kcal_kg = 750.0
+rws_pct = 85.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Blendex 930"
+fabricante = "Enaex"
+tipo = "ANFO pesado vaciable"
+densidad_g_cm3 = 1.18
+vod_m_s = 4500.0
+resistencia_agua = "Media"
+pd_kbar = 60.0
+energia_kcal_kg = 950.0
+rws_pct = 98.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "ANFO Estándar"
+fabricante = "Orica"
+tipo = "Agente explosivo seco (ANFO)"
+densidad_g_cm3 = 0.80
+vod_m_s = 3800.0
+resistencia_agua = "Nula"
+pd_kbar = 43.0
+energia_kcal_kg = 912.0
+rws_pct = 100.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "ANFO Pesado 50/50"
+fabricante = "Exsa / Enaex"
+tipo = "Mezcla 50% Emulsión + 50% ANFO"
+densidad_g_cm3 = 1.25
+vod_m_s = 4900.0
+resistencia_agua = "Buena"
+pd_kbar = 70.0
+energia_kcal_kg = 980.0
+rws_pct = 102.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Senatel Magnum"
+fabricante = "Orica"
+tipo = "Emulsión de alta potencia"
+densidad_g_cm3 = 1.20
+vod_m_s = 5500.0
+resistencia_agua = "Excelente"
+pd_kbar = 105.0
+energia_kcal_kg = 960.0
+rws_pct = 112.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Fortan 30 / 50"
+fabricante = "Orica"
+tipo = "ANFO Pesado dopado resistente al agua"
+densidad_g_cm3 = 1.24
+vod_m_s = 4950.0
+resistencia_agua = "Excelente"
+pd_kbar = 80.0
+energia_kcal_kg = 950.0
+rws_pct = 105.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Anfo Al 10"
+fabricante = "Genérico"
+tipo = "ANFO Aluminizado (10% Al)"
+densidad_g_cm3 = 0.83
+vod_m_s = 4300.0
+resistencia_agua = "Nula"
+pd_kbar = 48.0
+energia_kcal_kg = 1100.0
+rws_pct = 123.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Fortan Advantaje 20"
+fabricante = "Orica"
+tipo = "ANFO Pesado vaciable"
+densidad_g_cm3 = 0.925
+vod_m_s = 4100.0
+resistencia_agua = "Baja"
+pd_kbar = 52.0
+energia_kcal_kg = 920.0
+rws_pct = 96.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Fortan Advantaje 30"
+fabricante = "Orica"
+tipo = "ANFO Pesado vaciable"
+densidad_g_cm3 = 1.125
+vod_m_s = 4500.0
+resistencia_agua = "Media"
+pd_kbar = 62.0
+energia_kcal_kg = 940.0
+rws_pct = 98.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Fortan Advantaje 40"
+fabricante = "Orica"
+tipo = "ANFO Pesado bombeable"
+densidad_g_cm3 = 1.175
+vod_m_s = 4800.0
+resistencia_agua = "Buena"
+pd_kbar = 72.0
+energia_kcal_kg = 950.0
+rws_pct = 100.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Fortan Advantaje 50"
+fabricante = "Orica"
+tipo = "ANFO Pesado bombeable"
+densidad_g_cm3 = 1.315
+vod_m_s = 5100.0
+resistencia_agua = "Excelente"
+pd_kbar = 86.0
+energia_kcal_kg = 970.0
+rws_pct = 104.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Emultex PG"
+fabricante = "Enaex"
+tipo = "Emulsión a granel"
+densidad_g_cm3 = 1.22
+vod_m_s = 5200.0
+resistencia_agua = "Excelente"
+pd_kbar = 88.0
+energia_kcal_kg = 910.0
+rws_pct = 103.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Amex LD"
+fabricante = "Orica"
+tipo = "ANFO de baja densidad"
+densidad_g_cm3 = 0.65
+vod_m_s = 3000.0
+resistencia_agua = "Nula"
+pd_kbar = 28.0
+energia_kcal_kg = 760.0
+rws_pct = 86.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Senatel Magnafrag"
+fabricante = "Orica"
+tipo = "Emulsión encartuchada"
+densidad_g_cm3 = 1.15
+vod_m_s = 5100.0
+resistencia_agua = "Excelente"
+pd_kbar = 92.0
+energia_kcal_kg = 910.0
+rws_pct = 103.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "semexsa E-80"
+fabricante = "Exsa"
+tipo = "Dinamita semigelatina"
+densidad_g_cm3 = 1.18
+vod_m_s = 4500.0
+resistencia_agua = "Buena"
+pd_kbar = 86.0
+energia_kcal_kg = 995.0
+rws_pct = 113.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Exadit 65"
+fabricante = "Exsa"
+tipo = "Dinamita pulverulenta"
+densidad_g_cm3 = 1.05
+vod_m_s = 3600.0
+resistencia_agua = "Regular"
+pd_kbar = 44.0
+energia_kcal_kg = 912.0
+rws_pct = 95.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Exsablock"
+fabricante = "Exsa"
+tipo = "Explosivo de contorno"
+densidad_g_cm3 = 0.81
+vod_m_s = 3500.0
+resistencia_agua = "Regular"
+pd_kbar = 32.0
+energia_kcal_kg = 820.0
+rws_pct = 90.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Softron"
+fabricante = "Enaex"
+tipo = "Explosivo de contorno"
+densidad_g_cm3 = 1.21
+vod_m_s = 3900.0
+resistencia_agua = "Buena"
+pd_kbar = 50.0
+energia_kcal_kg = 850.0
+rws_pct = 92.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Gelatina Especial 75"
+fabricante = "Exsa"
+tipo = "Dinamita gelatinosa"
+densidad_g_cm3 = 1.38
+vod_m_s = 5500.0
+resistencia_agua = "Excelente"
+pd_kbar = 115.0
+energia_kcal_kg = 1100.0
+rws_pct = 122.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Emulnor 3000"
+fabricante = "Enaex"
+tipo = "Emulsión encartuchada"
+densidad_g_cm3 = 1.14
+vod_m_s = 5800.0
+resistencia_agua = "Excelente"
+pd_kbar = 96.0
+energia_kcal_kg = 908.0
+rws_pct = 101.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Emulnor 5000"
+fabricante = "Enaex"
+tipo = "Emulsión encartuchada"
+densidad_g_cm3 = 1.16
+vod_m_s = 5500.0
+resistencia_agua = "Excelente"
+pd_kbar = 90.0
+energia_kcal_kg = 1004.0
+rws_pct = 112.0
+
+[[voladura.catalogo_explosivos]]
+nombre = "Examon-P"
+fabricante = "Exsa"
+tipo = "Agente granular (ANFO)"
+densidad_g_cm3 = 0.80
+vod_m_s = 3200.0
+resistencia_agua = "Nula"
+pd_kbar = 25.0
+energia_kcal_kg = 900.0
+rws_pct = 100.0
+
+[[voladura.sistemas_iniciacion]]
+producto = "Detonador No Eléctrico Exsanel (MS / LP)"
+tipo = "Tubo de choque + Fulminante #12"
+caracteristica = "VOD onda de choque ~2,000 m/s (HMX + Al 20 mg/m)"
+aplicacion = "Secuenciación de arranque, ayudas y periferia sin riesgo eléctrico"
+
+[[voladura.sistemas_iniciacion]]
+producto = "Cordón Detonante Pentacord (3P, 5PE, 8P, 10PE)"
+tipo = "Núcleo de Pentrita (PETN 3 a 10 g/m)"
+caracteristica = "VOD ~7,000 m/s, alta resistencia a la tracción e impermeabilidad"
+aplicacion = "Líneas troncales, iniciación simultánea de precorte y contorno"
+
+[[voladura.sistemas_iniciacion]]
+producto = "Ensamblado Carmex (Mecha + Fulminante #8 + Conector)"
+tipo = "Iniciador pirotécnico convencional"
+caracteristica = "Tiempo de combustión mecha de seguridad: 150 - 180 s/m"
+aplicacion = "Encendido de línea maestra / chispeo de seguridad"
+
+[[voladura.sistemas_iniciacion]]
+producto = "Booster / Primer de Pentolita (APD 1/3 lb a 1 lb)"
+tipo = "Carga iniciadora colada (TNT + PETN)"
+caracteristica = "Densidad 1.65 g/cm³, VOD > 7,300 m/s, Pd > 220 kbar"
+aplicacion = "Iniciación de columnas de ANFO, ANFO Pesado y emulsiones a granel"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Diorita PA14 (Caso Base)"
+densidad_g_cm3 = 2.76
+ucs_mpa = 250.0
+esponjamiento = 1.50
+comportamiento = "Muy dura (Roca ígnea intrusiva plutónica)"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Diorita fracturada"
+densidad_g_cm3 = 2.68
+ucs_mpa = 180.0
+esponjamiento = 1.45
+comportamiento = "Media a dura"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Granito"
+densidad_g_cm3 = 2.67
+ucs_mpa = 200.0
+esponjamiento = 1.50
+comportamiento = "Muy dura"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Andesita"
+densidad_g_cm3 = 2.65
+ucs_mpa = 170.0
+esponjamiento = 1.45
+comportamiento = "Dura (Tramos volcánicos PA14)"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Basalto"
+densidad_g_cm3 = 2.90
+ucs_mpa = 280.0
+esponjamiento = 1.55
+comportamiento = "Extremadamente dura"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Caliza densa"
+densidad_g_cm3 = 2.60
+ucs_mpa = 120.0
+esponjamiento = 1.40
+comportamiento = "Media"
+
+[[voladura.rocas_geomecanica]]
+nombre = "Arenisca cuarcítica"
+densidad_g_cm3 = 2.45
+ucs_mpa = 100.0
+esponjamiento = 1.35
+comportamiento = "Blanda a media"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 45.0
+diametro_pulg = "1.75\""
+tecnologia = "Tophammer Subterráneo"
+tipo_cortador = "Broca de botones (Carburo de Tungsteno)"
+sistema_rosca = "R32 / T38"
+rango_roca = "Roca media a muy dura (80 - 250 MPa)"
+modelos_referencia = "Sandvik Alpha 330 / Epiroc SR35"
+equipos_compatibles = "Jumbo Sandvik DT820 (Frente subterráneo PA14)"
+fabricantes = "Sandvik, Epiroc"
+compatible_t25 = "No (Exclusivo Jumbo subterráneo)"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 51.0
+diametro_pulg = "2.0\""
+tecnologia = "Tophammer"
+tipo_cortador = "Broca de botones (Carburo de Tungsteno)"
+sistema_rosca = "R32 / T38"
+rango_roca = "Roca media a muy dura (100 - 250 MPa)"
+modelos_referencia = "Epiroc T38-51mm / Sandvik RT300"
+equipos_compatibles = "Epiroc PowerROC T25, Boomer S2, Furukawa HCR 900"
+fabricantes = "Epiroc, Sandvik, Mitsubishi"
+compatible_t25 = "Sí"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 64.0
+diametro_pulg = "2.5\""
+tecnologia = "Tophammer"
+tipo_cortador = "Broca de botones (faldón normal/retráctil)"
+sistema_rosca = "T38 / T45"
+rango_roca = "Roca media a muy dura (120 - 250 MPa)"
+modelos_referencia = "Epiroc T38-64mm Ballistic / Spherical"
+equipos_compatibles = "Epiroc PowerROC T25 (Broca Base Oficial Proyecto PA14)"
+fabricantes = "Epiroc, Sandvik, Sinodrills"
+compatible_t25 = "Sí (BROCA BASE DEL PROYECTO)"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 76.0
+diametro_pulg = "3.0\""
+tecnologia = "Tophammer"
+tipo_cortador = "Broca de botones (faldón retráctil)"
+sistema_roca = "T45"
+sistema_rosca = "T45"
+rango_roca = "Roca dura y fracturada (150 - 250 MPa)"
+modelos_referencia = "Epiroc T45-76mm Retrac"
+equipos_compatibles = "Epiroc PowerROC T25, PowerROC T35, Sandvik DX700"
+fabricantes = "Epiroc, Sandvik, RockMore"
+compatible_t25 = "Sí"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 89.0
+diametro_pulg = "3.5\""
+tecnologia = "Tophammer / DTH"
+tipo_cortador = "Broca de botones (Tophammer T45/T51 o DTH 3\")"
+sistema_rosca = "T45 / T51 / DTH COP 34"
+rango_roca = "Roca dura a muy dura (150 - 280 MPa)"
+modelos_referencia = "Epiroc T45-89mm / DTH COP 34-89mm"
+equipos_compatibles = "Epiroc PowerROC T25 (Límite máx.), SmartROC T35"
+fabricantes = "Epiroc, Sandvik, Mincon"
+compatible_t25 = "Sí (Límite superior de diámetro)"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 102.0
+diametro_pulg = "4.0\""
+tecnologia = "Tophammer / DTH"
+tipo_cortador = "Broca de botones DTH / escariadora de alivio"
+sistema_rosca = "T51 / DTH 4\" (COP 44 / DHD 340)"
+rango_roca = "Roca dura a extremadamente dura (180 - 300 MPa)"
+modelos_referencia = "Epiroc COP 44-102mm / Escariadora Jumbo 102mm"
+equipos_compatibles = "Taladro de Alivio Jumbo DT820 / SmartROC D50"
+fabricantes = "Epiroc, Sandvik, Halco"
+compatible_t25 = "No (Excede rango óptimo de 89 mm)"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 115.0
+diametro_pulg = "4.5\""
+tecnologia = "DTH (Martillo en Fondo)"
+tipo_cortador = "Broca de botones DTH (cara plana/cóncava)"
+sistema_rosca = "DTH 4\" (COP 44 / DHD 340)"
+rango_roca = "Roca dura a muy dura (180 - 300 MPa)"
+modelos_referencia = "Epiroc COP 44-115mm / Sandvik RH550"
+equipos_compatibles = "Epiroc SmartROC D50, FlexiROC D50, Sandvik DI550"
+fabricantes = "Epiroc, Sandvik, Mincon"
+compatible_t25 = "No"
+
+[[voladura.brocas_equipos]]
+diametro_mm = 152.0
+diametro_pulg = "6.0\""
+tecnologia = "DTH (Martillo en Fondo)"
+tipo_cortador = "Broca de botones DTH"
+sistema_rosca = "DTH 6\" (COP 64 / DHD 360)"
+rango_roca = "Roca muy dura y abrasiva (200 - 320 MPa)"
+modelos_referencia = "Epiroc COP 64-152mm"
+equipos_compatibles = "Epiroc SmartROC D65, Sandvik DI650i"
+fabricantes = "Epiroc, Sandvik, Halco"
+compatible_t25 = "No"
+
+[[voladura.fuentes_bibliograficas]]
+categoria = "Maquinaria del Proyecto"
+fuente = "Ficha Técnica Epiroc PowerROC T25 (Drive ID: 1EDo3A-pjlWewC2BZioeCqFauxSTwR9Ks)"
+justificacion = "Define los parámetros operativos del equipo en banquetas/portales y la broca base de 64 mm (2.5\") T38/T45."
+enlace = "https://drive.google.com/file/d/1EDo3A-pjlWewC2BZioeCqFauxSTwR9Ks/view"
+
+[[voladura.fuentes_bibliograficas]]
+categoria = "Manual de Explosivos"
+fuente = "Manual Práctico de Voladura EXSA (Drive ID: 183ndzm0ABZa2x0BPniKxSPEj_bblGMHB)"
+justificacion = "Provee densidades, velocidades de detonación (VOD), presión de detonación (Pd), resistencia al agua y sistemas de iniciación."
+enlace = "https://drive.google.com/file/d/183ndzm0ABZa2x0BPniKxSPEj_bblGMHB/view"
+
+[[voladura.fuentes_bibliograficas]]
+categoria = "Modelo Matemático"
+fuente = "Formulario Método de C.J. Konya (Drive ID: 14Td9M4s6EVbrN9z7LDXjTCG3cpUYXBBt)"
+justificacion = "Ecuaciones de Burden, Espaciamiento, Sobreperforación, Taco, Relación de Rigidez H/B y Retardos TH / TR."
+enlace = "https://drive.google.com/file/d/14Td9M4s6EVbrN9z7LDXjTCG3cpUYXBBt/view"
+
+[[voladura.fuentes_bibliograficas]]
+categoria = "Modelo Matemático y Voladura Controlada"
+fuente = "Ejemplo de Resolución del Modelo de Konya (Drive ID: 1udda7o9FkYwZHdL_YL8Ymc8BenyQvIdL)"
+justificacion = "Factores de corrección geomecánicos (Kr, Kd, Ks) y formulación de taladros de Producción, Buffer y Precorte."
+enlace = "https://drive.google.com/file/d/1udda7o9FkYwZHdL_YL8Ymc8BenyQvIdL/view"
+
+[[voladura.fuentes_bibliograficas]]
+categoria = "Monografía Académica UNT"
+fuente = "Modelo Matemático de Konya para el Diseño de Voladuras Eficientes en Minería - UNT Minas, Prof. Solio Arango Retamoso (Drive ID: 1RXv2e0QQ-9aGKBjdaaO4geoxsj8FGgdk)"
+justificacion = "Criterio de diámetro óptimo (8H a 15H), desacoplamiento, error de perforación e = 0.05 + 0.03L y caso práctico en Diorita (2.76 g/cm³)."
+enlace = "https://drive.google.com/file/d/1RXv2e0QQ-9aGKBjdaaO4geoxsj8FGgdk/view"
+
+[[voladura.fuentes_bibliograficas]]
+categoria = "Presentación Técnica"
+fuente = "Modelo Matemático Konya Voladura II - Dr. Dante Morales Cabrera (Drive ID: 1mAYcIuD8xiMdF81_Gpy047kObMkolrT4)"
+justificacion = "Formulación de Burden máximo B_max = 3.15 * D * (rho_e / rho_r)^(1/3) y ecuaciones secuenciales de espaciamiento."
+enlace = "https://drive.google.com/file/d/1mAYcIuD8xiMdF81_Gpy047kObMkolrT4/view"
 
 # =============================================================================
 #  02 - GEOLOGIA Y Q-SLOPE (Perfil Longitudinal Real - 5556 m)
@@ -3166,13 +3769,188 @@ lecho_secado_espesor_grava_m = 0.25                # Unidad: m | Norma: RNE OS.0
 
 
 # =============================================================================
-#  13 · SOSTENIMIENTO
+#  13 · SOSTENIMIENTO SUBTERRÁNEO DEL TÚNEL
 # =============================================================================
 [sostenimiento]
-esr = 1.0 # (S) Excavation Support Ratio (Túneles viales = 1.0 según Barton)
-peso_especifico_roca_t_m3 = 2.60 # (S) Peso específico
-esfuerzo_fluencia_acero_mpa = 420.0 # (S)
-capacidad_adherencia_mpa = 1.5 # (S)
-factor_seguridad_pernos = 1.5 # (S)
-perno_diametro_mm = 25.0 # (S)
-shotcrete_resistencia_mpa = 30.0 # (S)
+esr = 1.0                           # Unidad: adim. | Fuente: Excavation Support Ratio (Túneles viales = 1.0 según Barton 1974)
+peso_especifico_roca_t_m3 = 2.60    # Unidad: t/m³ | Fuente: Peso específico medio del macizo rocoso PA14
+esfuerzo_fluencia_acero_mpa = 420.0 # Unidad: MPa | Fuente: Acero corrugado ASTM A615 Grado 60 (fy = 420 MPa)
+capacidad_adherencia_mpa = 1.5      # Unidad: MPa | Fuente: Adherencia resina/lechada-roca (MTC RD 036-2016)
+factor_seguridad_pernos = 1.5       # Unidad: FS | Fuente: Factor de seguridad al arrancamiento (MTC EG-2013)
+perno_diametro_mm = 25.0            # Unidad: mm | Fuente: Diámetro perno helicoidal subterráneo (1")
+shotcrete_resistencia_mpa = 30.0    # Unidad: MPa | Fuente: Concreto lanzado f'c >= 28-30 MPa (MTC EG-2013)
+
+[[sostenimiento.clases_rmr]]
+rmr_min = 81
+clase = "I (Muy Buena)"
+soporte = "Ninguno / Desate localizado"
+esp_pernos_m = 0.0
+shotcrete_mm = 0.0
+cerchas = "No"
+
+[[sostenimiento.clases_rmr]]
+rmr_min = 61
+clase = "II (Buena)"
+soporte = "Pernos puntuales"
+esp_pernos_m = 2.50
+shotcrete_mm = 50.0
+cerchas = "No"
+
+[[sostenimiento.clases_rmr]]
+rmr_min = 41
+clase = "III (Regular)"
+soporte = "Pernos sistemáticos + Shotcrete"
+esp_pernos_m = 1.75
+shotcrete_mm = 100.0
+cerchas = "No"
+
+[[sostenimiento.clases_rmr]]
+rmr_min = 21
+clase = "IV (Mala)"
+soporte = "Pernos sistemáticos + Shotcrete + Cerchas ligeras"
+esp_pernos_m = 1.25
+shotcrete_mm = 150.0
+cerchas = "Ligeras @ 1.5m"
+
+[[sostenimiento.clases_rmr]]
+rmr_min = 0
+clase = "V (Muy Mala)"
+soporte = "Pernos sistemáticos + Shotcrete + Cerchas pesadas"
+esp_pernos_m = 1.00
+shotcrete_mm = 200.0
+cerchas = "Pesadas @ 0.75m"
+
+
+# =============================================================================
+#  14 · AFRONTONAMIENTO Y SELLADO DE PORTAL DEL TÚNEL
+# =============================================================================
+[afrontonamiento]
+# 1. Valoración Geomecánica RMR de Bieniawski (1989) en el Portal / Frontón
+ucs_roca_intacta_mpa = 75.0         # Unidad: MPa | Fuente: Ensayo de carga puntual / compresión simple en portal
+pts_ucs = 7                         # Unidad: puntos | Fuente: Bieniawski (1989) para rango 50 - 100 MPa
+rqd_portal_pct = 62.0               # Unidad: % | Fuente: RQD medio en talud de emboquille (50 - 75%)
+pts_rqd = 13                        # Unidad: puntos | Fuente: Bieniawski (1989) para RQD 50 - 75%
+espaciamiento_juntas_m = 0.25       # Unidad: m | Fuente: Espaciamiento moderado de discontinuidades (0.2 - 0.6 m)
+pts_espaciamiento = 10              # Unidad: puntos | Fuente: Bieniawski (1989) para 0.2 - 0.6 m
+condicion_juntas = "Ligeramente rugosas, sep. < 1 mm, paredes ligeramente alteradas"
+pts_condicion_juntas = 20           # Unidad: puntos | Fuente: Bieniawski (1989)
+condicion_agua = "Húmedo (filtración ligera / goteo ocasional)"
+pts_agua = 7                        # Unidad: puntos | Fuente: Bieniawski (1989) para caudal < 10 L/min
+orientacion_discontinuidades = "Regular (Favorable a Media en talud de portal)"
+ajuste_orientacion = -5             # Unidad: puntos | Fuente: Ajuste por orientación de juntas en portal (Bieniawski 1989)
+clase_macizo = "III"                # Unidad: clase | Fuente: RMR 41 - 60 (Roca Regular)
+calidad_macizo = "Roca Regular (Media)"
+
+# 2. Teoría de Cargas de Roca de Terzaghi (1946) para el Frontón
+condicion_terzaghi_id = 4           # Unidad: N° | Fuente: Condición 4 Terzaghi ("Medianamente fracturada en bloques algo abiertos")
+condicion_terzaghi_desc = "Medianamente fracturada en bloques algo abiertos"
+factor_k_terzaghi = 0.35            # Unidad: adim. | Fuente: Terzaghi (1946) para Condición 4 (rango 0.25 a 0.35*(B + Ht))
+peso_especifico_roca_kn_m3 = 26.5   # Unidad: kN/m³ | Fuente: Peso específico del macizo en portal (2.65 t/m³)
+
+# 3. Geometría del Afrontonamiento del Portal (Maniobra Cargador Frontal Caterpillar 966H)
+equipo_maniobra = "Cargador Frontal sobre Ruedas Caterpillar 966H"
+link_ficha_cat966h = "https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view"
+link_lectura_specs = "https://www.lectura-specs.es/es/modelo/maquinaria-para-la-construccion-y-obras-publicas/cargadoras-de-ruedas-caterpillar/966h-1030906"
+longitud_total_equipo_m = 8.84      # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Longitud con cuchara en suelo)
+ancho_sobre_neumaticos_m = 2.98     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+altura_cabina_m = 3.58              # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+radio_giro_ext_m = 7.26             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Radio de giro exterior neumáticos)
+altura_descarga_max_m = 3.10        # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+distancia_seguridad_op_m = 1.00     # Unidad: m | Fuente: Resguardo operacional lateral (D.S. 024-2016-EM)
+
+# 4. Malla Electrosoldada en el Frontón
+largo_pano_malla_m = 6.00           # Unidad: m | Fuente: Paño estándar de malla electrosoldada Q-188 / 100x100x5 mm
+ancho_pano_malla_m = 2.40           # Unidad: m | Fuente: Ancho comercial de paño de malla electrosoldada
+traslape_malla_m = 0.30             # Unidad: m | Fuente: Traslape mínimo normativo en ambos sentidos (3 cuadros = 0.30 m)
+tiempo_instalacion_pano_min = 15.0  # Unidad: min/paño | Fuente: Rendimiento de cuadrilla con plataforma elevadora
+
+# 5. Pernos de Anclaje RockBolt + Cartuchos de Resina + Ciclo del Bolter
+longitud_perno_fronton_m = 3.00     # Unidad: m | Fuente: Perno helicoidal ASTM A615 G60 en portal (L = 3.0 m)
+diametro_perno_fronton_mm = 22.0    # Unidad: mm | Fuente: Barra helicoidal de 22 mm (7/8")
+diametro_taladro_perno_mm = 32.0    # Unidad: mm | Fuente: Broca de empernado de 32 mm (1 1/4")
+espaciamiento_pernos_fronton_m = 1.50 # Unidad: m | Fuente: Malla cuadrada sistemática de 1.50 x 1.50 m
+diametro_cartucho_resina_mm = 28.0  # Unidad: mm | Fuente: Cartucho de resina poliéster de 28 mm
+longitud_cartucho_resina_mm = 305.0 # Unidad: mm | Fuente: Cartucho estándar de 305 mm (1 pie)
+peso_cartucho_resina_g = 320.0      # Unidad: g | Fuente: Peso unitario cartucho de resina (320 g/und)
+cartuchos_por_caja = 50             # Unidad: und/caja | Fuente: Presentación comercial en cajas de 50 cartuchos
+velocidad_perf_bolter_m_min = 1.50  # Unidad: m/min | Fuente: Velocidad neta de perforación del Bolter Robótico
+tiempo_maniobra_bolter_min = 1.00   # Unidad: min/perno | Fuente: Tiempo de posicionamiento de viga del Bolter
+tiempo_inyeccion_empernado_min = 2.50 # Unidad: min/perno | Fuente: Inserción de resina, batido y ajuste de placa
+
+# 6. Shotcrete Robotizado Vía Húmeda en el Frontón
+espesor_shotcrete_fronton_m = 0.12  # Unidad: m | Fuente: Espesor de diseño e = 12 cm (0.12 m) en Clase III portal
+rebote_shotcrete_pct = 0.10         # Unidad: ratio | Fuente: Rebote controlado del 10% en lanzado robotizado vía húmeda
+cemento_dosificacion_kg_m3 = 425.0  # Unidad: kg/m³ | Fuente: Dosificación Cemento Portland Tipo I (10 bolsas/m³)
+peso_bolsa_cemento_kg = 42.5        # Unidad: kg/bolsa | Fuente: Bolsa comercial de cemento en Perú (42.5 kg)
+relacion_agua_cemento = 0.58        # Unidad: A/C | Fuente: Relación agua/cemento de diseño en mezcla base
+arena_dosificacion_kg_m3 = 1700.0   # Unidad: kg/m³ | Fuente: Agregado graduado huso EFNARC (1,700 kg/m³)
+acelerante_sikacem_pct = 0.04       # Unidad: ratio | Fuente: Aditivo acelerante libre de álcalis SikaCem Gunite PE (4% peso cemento)
+nanosilice_pct = 0.01               # Unidad: ratio | Fuente: Adición de nanosílice / microsílice (1% peso cemento)
+fibra_sintetica_kg_m3 = 4.0         # Unidad: kg/m³ | Fuente: Macrofibra estructural SikaFiber Force-60 (4.0 kg/m³)
+rendimiento_robot_shotcrete_m3_h = 24.0 # Unidad: m³/h | Fuente: Rendimiento efectivo Robot Putzmeister Wetkret 4 / Normet
+tiempo_fraguado_inicial_h = 3.0     # Unidad: h | Fuente: Tiempo de espera de fraguado y ganancia de resistencia inicial
+
+[[afrontonamiento.terzaghi_clases]]
+id = 1
+condicion = "Dura e intacta"
+formula_hp = "Hp = 0.00"
+factor_k = 0.00
+observacion = "Ligero desprendimiento si hay fisuración; no requiere soporte sistemático."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 2
+condicion = "Dura estratificada o esquistosa"
+formula_hp = "Hp = 0.00 a 0.50 * B"
+factor_k = 0.25
+observacion = "Carga ligera; soporte localizado con pernos en clave."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 3
+condicion = "Masiva, ligeramente fracturada"
+formula_hp = "Hp = 0.00 a 0.25 * B"
+factor_k = 0.15
+observacion = "La carga puede cambiar erráticamente de un punto a otro."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 4
+condicion = "Medianamente fracturada en bloques algo abiertos"
+formula_hp = "Hp = 0.25 * B a 0.35 * (B + Ht)"
+factor_k = 0.35
+observacion = "Sin presiones laterales severas. CASO SELECCIONADO PARA EL PORTAL PA14."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 5
+condicion = "Muy fracturada en bloques y quebrada"
+formula_hp = "Hp = (0.35 a 1.10) * (B + Ht)"
+factor_k = 0.72
+observacion = "Poca o ninguna presión lateral; requiere malla, pernos y shotcrete."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 6
+condicion = "Totalmente triturada pero químicamente intacta"
+formula_hp = "Hp = 1.10 * (B + Ht)"
+factor_k = 1.10
+observacion = "Presiones laterales considerables; requiere cerchas pesadas."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 7
+condicion = "Roca exprimiente (Squeezing rock) a profundidad moderada"
+formula_hp = "Hp = (1.10 a 2.10) * (B + Ht)"
+factor_k = 1.60
+observacion = "Grandes presiones laterales; requiere solera curva (invert)."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 8
+condicion = "Roca exprimiente a gran profundidad"
+formula_hp = "Hp = (2.10 a 4.50) * (B + Ht)"
+factor_k = 3.30
+observacion = "Fuertes convergencias; soporte pesado con invert estructural."
+
+[[afrontonamiento.terzaghi_clases]]
+id = 9
+condicion = "Roca expansiva (Swelling rock)"
+formula_hp = "Hasta 250 pies (76 m)"
+factor_k = 4.50
+observacion = "Depende del contenido de arcillas expansivas; requiere anillo cerrado."
+
+

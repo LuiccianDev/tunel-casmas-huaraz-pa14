@@ -29,6 +29,53 @@ _BORDE = Border(left=_LINEA, right=_LINEA, top=_LINEA, bottom=_LINEA)
 _FILA_INICIAL = 4
 
 
+def _resolver_formulas(
+    celdas_formulas: list[tuple[Any, str]],
+    mapa_rangos: dict[str, str],
+    mapa_simbolos: dict[str, str],
+) -> None:
+    """Resuelve los marcadores {RANGO} y {Simbolo} en las fórmulas dinámicas."""
+    rangos_ord = sorted(mapa_rangos.keys(), key=len, reverse=True)
+    simbolos_ord = sorted(mapa_simbolos.keys(), key=len, reverse=True)
+    for celda, formula_plantilla in celdas_formulas:
+        formula_resuelta = formula_plantilla
+        for r_id in rangos_ord:
+            token = f"{{{r_id}}}"
+            if token in formula_resuelta:
+                formula_resuelta = formula_resuelta.replace(token, mapa_rangos[r_id])
+        for sim in simbolos_ord:
+            token = f"{{{sim}}}"
+            if token in formula_resuelta:
+                formula_resuelta = formula_resuelta.replace(token, mapa_simbolos[sim])
+        celda.value = formula_resuelta
+        if celda.number_format not in ("0.0%", "#,##0"):
+            celda.number_format = "#,##0.00"
+
+
+def _aplicar_validaciones(
+    ws: Worksheet,
+    celdas_validacion: list[tuple[Any, str]],
+    mapa_rangos: dict[str, str],
+) -> None:
+    """Agrega listas desplegables (DataValidation) a las celdas configuradas."""
+    if not celdas_validacion:
+        return
+    from openpyxl.worksheet.datavalidation import DataValidation
+
+    validaciones: dict[str, DataValidation] = {}
+    for celda, id_rango in celdas_validacion:
+        if id_rango not in mapa_rangos:
+            continue
+        partes = mapa_rangos[id_rango].split(":")
+        col_ini, fila_ini, fila_fin = partes[0][0], partes[0][1:], partes[1][1:]
+        rango_lista = f"=${col_ini}${fila_ini}:${col_ini}${fila_fin}"
+        if rango_lista not in validaciones:
+            dv = DataValidation(type="list", formula1=rango_lista, allow_blank=True)
+            ws.add_data_validation(dv)
+            validaciones[rango_lista] = dv
+        validaciones[rango_lista].add(celda)
+
+
 def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
     """Crea `carpeta/libro.archivo` con una pestaña por cada Hoja."""
     wb = Workbook()
@@ -65,53 +112,9 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
             fila += 1
             rangos_tablas.append(rango)
 
-        # Resolver fórmulas dinámicas referenciadas por {Símbolo} y {RANGO_TABLA}
-        for celda, formula_plantilla in celdas_formulas:
-            formula_resuelta = formula_plantilla
-            # 1. Reemplazar rangos de tablas (ordenados por longitud decreciente)
-            for r_id in sorted(mapa_rangos.keys(), key=len, reverse=True):
-                token = f"{{{r_id}}}"
-                if token in formula_resuelta:
-                    formula_resuelta = formula_resuelta.replace(
-                        token, mapa_rangos[r_id]
-                    )
-            # 2. Reemplazar símbolos de celdas (ordenados por longitud decreciente)
-            for sim in sorted(mapa_simbolos.keys(), key=len, reverse=True):
-                token = f"{{{sim}}}"
-                if token in formula_resuelta:
-                    formula_resuelta = formula_resuelta.replace(
-                        token, mapa_simbolos[sim]
-                    )
-            celda.value = formula_resuelta
-            if celda.number_format not in ("0.0%", "#,##0"):
-                celda.number_format = "#,##0.00"
+        _resolver_formulas(celdas_formulas, mapa_rangos, mapa_simbolos)
+        _aplicar_validaciones(ws, celdas_validacion, mapa_rangos)
 
-        # Aplicar validaciones de datos (Listas desplegables)
-        if celdas_validacion:
-            from openpyxl.worksheet.datavalidation import DataValidation
-
-            validaciones: dict[str, DataValidation] = {}
-            for celda, id_rango in celdas_validacion:
-                if id_rango in mapa_rangos:
-                    rango_tabla = mapa_rangos[id_rango]  # Ej. "A45:E50"
-                    # Extraer fila inicio y fin para tomar solo la primera columna
-                    partes = rango_tabla.split(":")
-                    col_ini = partes[0][0]
-                    fila_ini = partes[0][1:]
-                    fila_fin = partes[1][1:]
-                    # Rango absoluto de la primera columna: =$A$45:$A$50
-                    rango_lista = f"=${col_ini}${fila_ini}:${col_ini}${fila_fin}"
-
-                    if rango_lista not in validaciones:
-                        dv = DataValidation(
-                            type="list", formula1=rango_lista, allow_blank=True
-                        )
-                        ws.add_data_validation(dv)
-                        validaciones[rango_lista] = dv
-
-                    validaciones[rango_lista].add(celda)
-
-        # Activar filtro automático si la hoja contiene una sola tabla principal
         if len(hoja.tablas) == 1 and rangos_tablas:
             ws.auto_filter.ref = rangos_tablas[0]
 
@@ -123,6 +126,81 @@ def escribir_libro(libro: Libro, carpeta: Path, proyecto: str) -> Path:
     ruta = carpeta / libro.archivo
     wb.save(ruta)
     return ruta
+
+
+def _formatos_columna(columnas: list[str]) -> dict[int, str]:
+    """Detecta formatos sugeridos por nombre de columna."""
+    claves_enteros = (
+        "(pax)",
+        "pax",
+        "guardia",
+        "portal",
+        "trabajadores",
+        "obreros",
+        "staff",
+    )
+    formatos: dict[int, str] = {}
+    for col, nombre in enumerate(columnas, start=1):
+        nom_low = nombre.lower()
+        if nombre.strip().startswith("%"):
+            formatos[col] = "0.0%"
+        elif any(k in nom_low for k in claves_enteros):
+            formatos[col] = "#,##0"
+    return formatos
+
+
+def _ajustar_valor_param(
+    valor_real: Any, unidad_param: str, formato_base: str | None
+) -> tuple[Any, str | None]:
+    """Ajusta el valor y formato para la columna Valor de una tabla_parametros."""
+    if unidad_param in ("personas", "días", "dias", "und", "taladros"):
+        return valor_real, "#,##0"
+    if unidad_param == "%":
+        if isinstance(valor_real, (int, float)) and not isinstance(valor_real, bool):
+            valor_real /= 100
+        return valor_real, "0.0%"
+    return valor_real, formato_base
+
+
+def _escribir_fila_tabla(
+    ws: Worksheet,
+    fila: int,
+    datos: list[Any],
+    es_tabla_param: bool,
+    formatos_col: dict[int, str],
+    mapa_simbolos: dict[str, str] | None,
+    celdas_formulas: list[tuple[Any, str]] | None,
+    celdas_validacion: list[tuple[Any, str]] | None,
+) -> None:
+    """Escribe una fila de datos de una Tabla y registra símbolos/fórmulas."""
+    if es_tabla_param and mapa_simbolos is not None and len(datos) >= 2 and datos[1]:
+        simbolo = str(datos[1]).strip()
+        if simbolo:
+            mapa_simbolos[simbolo] = f"C{fila}"
+
+    es_total = bool(datos and str(datos[0]).strip().upper().startswith("TOTAL"))
+    unidad = str(datos[3]).strip().lower() if es_tabla_param and len(datos) >= 4 else ""
+
+    for col, valor in enumerate(datos, start=1):
+        celda = ws.cell(fila, col)
+        valor_real = valor
+        if type(valor).__name__ == "OpcionLista":
+            valor_real = valor.valor_inicial
+            if celdas_validacion is not None:
+                celdas_validacion.append((celda, valor.id_rango_ref))
+
+        formato = formatos_col.get(col)
+        if es_tabla_param and col == 3:
+            valor_real, formato = _ajustar_valor_param(valor_real, unidad, formato)
+
+        _celda(celda, valor_real, es_total=es_total, formato_sugerido=formato)
+        if (
+            celdas_formulas is not None
+            and isinstance(valor_real, str)
+            and valor_real.startswith("=")
+            and "{" in valor_real
+        ):
+            celdas_formulas.append((celda, valor_real))
 
 
 def _escribir_tabla(
@@ -144,84 +222,26 @@ def _escribir_tabla(
     for col, nombre in enumerate(tabla.columnas, start=1):
         _encabezado(ws.cell(fila, col, nombre))
 
-    # Detectar si la tabla tiene estructura estándar con columna 'Símbolo'
     es_tabla_param = (
         len(tabla.columnas) >= 3
         and tabla.columnas[1] == "Símbolo"
         and tabla.columnas[2] == "Valor"
     )
-
-    # Detectar formatos por columna (porcentaje o enteros)
-    formatos_col: dict[int, str] = {}
-    for col, nombre in enumerate(tabla.columnas, start=1):
-        nom_low = nombre.lower()
-        if nombre.strip().startswith("%"):
-            formatos_col[col] = "0.0%"
-        elif any(
-            k in nom_low
-            for k in [
-                "(pax)",
-                "pax",
-                "guardia",
-                "portal",
-                "trabajadores",
-                "obreros",
-                "staff",
-            ]
-        ):
-            formatos_col[col] = "#,##0"
-
+    formatos_col = _formatos_columna(tabla.columnas)
     fila_datos_inicio = fila + 1
+
     for datos in tabla.filas:
         fila += 1
-        if (
-            es_tabla_param
-            and mapa_simbolos is not None
-            and len(datos) >= 2
-            and datos[1] is not None
-        ):
-            simbolo = str(datos[1]).strip()
-            if simbolo:
-                mapa_simbolos[simbolo] = f"C{fila}"
-
-        es_total = bool(datos and str(datos[0]).strip().upper().startswith("TOTAL"))
-        unidad_param = (
-            str(datos[3]).strip().lower() if es_tabla_param and len(datos) >= 4 else ""
+        _escribir_fila_tabla(
+            ws,
+            fila,
+            datos,
+            es_tabla_param,
+            formatos_col,
+            mapa_simbolos,
+            celdas_formulas,
+            celdas_validacion,
         )
-        for col, valor in enumerate(datos, start=1):
-            celda = ws.cell(fila, col)
-
-            valor_real = valor
-            if type(valor).__name__ == "OpcionLista":
-                valor_real = valor.valor_inicial
-                if celdas_validacion is not None:
-                    celdas_validacion.append((celda, valor.id_rango_ref))
-
-            formato_sugerido = formatos_col.get(col)
-            if es_tabla_param and col == 3:
-                if unidad_param in ("personas", "días", "dias", "und", "taladros"):
-                    formato_sugerido = "#,##0"
-                elif unidad_param == "%":
-                    formato_sugerido = "0.0%"
-                    if isinstance(valor_real, (int, float)) and not isinstance(
-                        valor_real, bool
-                    ):
-                        valor_real /= 100
-
-            _celda(
-                celda,
-                valor_real,
-                es_total=es_total,
-                formato_sugerido=formato_sugerido,
-            )
-            if (
-                celdas_formulas is not None
-                and isinstance(valor_real, str)
-                and valor_real.startswith("=")
-                and "{" in valor_real
-                and "}" in valor_real
-            ):
-                celdas_formulas.append((celda, valor_real))
 
     letra_fin = get_column_letter(len(tabla.columnas))
     rango = f"A{fila_encabezado}:{letra_fin}{fila}"
@@ -256,6 +276,33 @@ def _encabezado(celda) -> None:
     celda.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
 
+def _normalizar_porcentaje(valor: Any) -> tuple[Any, bool]:
+    """Convierte cadenas como '15.0%' en float 0.15."""
+    if (
+        isinstance(valor, str)
+        and valor.strip().endswith("%")
+        and not valor.startswith("=")
+    ):
+        try:
+            return float(valor.replace("%", "").strip()) / 100.0, True
+        except ValueError:
+            pass
+    return valor, False
+
+
+def _formato_por_tipo(valor: Any) -> str | None:
+    """Devuelve el number_format de Excel según el tipo de dato."""
+    if isinstance(valor, float):
+        return "#,##0.00"
+    if isinstance(valor, int):
+        return "#,##0"
+    if isinstance(valor, date):
+        return "dd/mm/yyyy"
+    if isinstance(valor, str) and valor.startswith("="):
+        return "#,##0.00"
+    return None
+
+
 def _celda(
     celda,
     valor,
@@ -265,42 +312,19 @@ def _celda(
     if isinstance(valor, bool):
         valor = "Sí" if valor else "No"
 
-    es_porcentaje = False
-    if (
-        isinstance(valor, str)
-        and valor.strip().endswith("%")
-        and not valor.startswith("=")
-    ):
-        try:
-            num_str = valor.replace("%", "").strip()
-            valor = float(num_str) / 100.0
-            es_porcentaje = True
-        except ValueError:
-            pass
-
+    valor, es_porcentaje = _normalizar_porcentaje(valor)
     celda.value = valor
     celda.border = _BORDE
     if es_total:
         celda.fill = _RELLENO_TOTAL
-        celda.font = _FUENTE_TOTAL
-    else:
-        celda.font = _FUENTE_NORMAL
+    celda.font = _FUENTE_TOTAL if es_total else _FUENTE_NORMAL
 
-    if formato_sugerido:
-        celda.number_format = formato_sugerido
-    elif es_porcentaje:
-        celda.number_format = "0.0%"
-    elif isinstance(valor, float):
-        celda.number_format = "#,##0.00"
-    elif isinstance(valor, int):
-        celda.number_format = "#,##0"
-    elif isinstance(valor, date):
-        celda.number_format = "dd/mm/yyyy"
-    elif isinstance(valor, str) and valor.startswith("="):
-        celda.number_format = "#,##0.00"
-    elif isinstance(valor, str) and (
-        valor.startswith("http://") or valor.startswith("https://")
-    ):
+    formato = formato_sugerido or (
+        "0.0%" if es_porcentaje else _formato_por_tipo(valor)
+    )
+    if formato:
+        celda.number_format = formato
+    elif isinstance(valor, str) and valor.startswith(("http://", "https://")):
         celda.hyperlink = valor
         celda.font = Font(name="Calibri", size=11, color="0563C1", underline="single")
 

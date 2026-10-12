@@ -123,6 +123,8 @@ def libro(r: dict, p: dict) -> Libro:
         if pozo_pt
         else "Por definir por el usuario"
     )
+    ancho_sec, alt_sec = p["seccion"]["ancho_m"], p["seccion"]["altura_m"]
+    perim_sec = round(math.pi * (ancho_sec / 2) + 2 * (alt_sec - ancho_sec / 2), 2)
     consumo = tabla_parametros(
         [
             ("Población", "Pob", r["poblacion"], "personas", "04_Personal"),
@@ -136,22 +138,22 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Consumo humano diario",
                 "Vh",
-                "=C5*C6/1000",
+                "={Pob}*{Dot}/1000",
                 "m³/día",
                 "Pob · Dot / 1000",
             ),
-            ("Caudal promedio", "Qp", "=C5*C6/86400", "L/s", "Pob · Dot / 86400"),
+            ("Caudal promedio", "Qp", "={Pob}*{Dot}/86400", "L/s", "Pob · Dot / 86400"),
             (
                 "Caudal máximo diario",
                 "Qmd",
-                f"={a['k1']}*C8",
+                f"={a['k1']}*{{Qp}}",
                 "L/s",
                 "k1 · Qp (RNE OS.100)",
             ),
             (
                 "Caudal máximo horario",
                 "Qmh",
-                f"={a['k2']}*C8",
+                f"={a['k2']}*{{Qp}}",
                 "L/s",
                 "k2 · Qp (RNE OS.100)",
             ),
@@ -165,14 +167,14 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Agua de perforación (Jumbo)",
                 "Vp",
-                f"={a['perforacion_l_min_brazo']}*{p['maquinaria']['jumbo']['brazos']}*60*C11/1000",
+                f"={a['perforacion_l_min_brazo']}*{p['maquinaria']['jumbo']['brazos']}*60*{{hp}}/1000",
                 "m³/día",
                 "q · brazos · 60 · hp / 1000",
             ),
             (
                 "Agua de shotcrete (Sostenimiento)",
                 "Vs",
-                r["q_shotcrete_m3"],
+                f"={r['avance_dia_m']:.2f}*{perim_sec}*{a['espesor_shotcrete_m']}*{a['agua_shotcrete_l_m3']}/1000",
                 "m³/día",
                 f"Avance ({r['avance_dia_m']:.1f} m) · Perim · Espesor · Ratio",
             ),
@@ -193,11 +195,11 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Consumo industrial total",
                 "Vi",
-                "=SUM(C12:C15)",
+                "={Vp}+{Vs}+{Vl}+{Vr}",
                 "m³/día",
                 "Vp + Vs + Vl + Vr",
             ),
-            ("CONSUMO TOTAL DE AGUA", "VT", "=C7+C16", "m³/día", "Vh + Vi"),
+            ("CONSUMO TOTAL DE AGUA", "VT", "={Vh}+{Vi}", "m³/día", "Vh + Vi"),
         ]
     )
     petap = tabla_parametros(
@@ -212,35 +214,35 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Volumen de reservorio",
                 "Vr",
-                f"={t['fraccion_regulacion']}*C6*86.4+{t['reserva_m3']}",
+                f"={t['fraccion_regulacion']}*{{Qmd}}*86.4+{t['reserva_m3']}",
                 "m³",
                 f"{t['fraccion_regulacion']}·Qmd·86.4 + reserva (RNE OS.030)",
             ),
             (
-                "Reservorio (lado × lado × altura)",
-                "",
-                f"{r['lado_reservorio_m']:.1f} × {r['lado_reservorio_m']:.1f} × {t['altura_tanque_m']}",
+                "Lado del reservorio cuadrado",
+                "Lr",
+                f"=CEILING(SQRT({{Vr}}/{t['altura_tanque_m']}), 0.1)",
                 "m",
-                "√(Vr / h)",
+                f"√(Vr / {t['altura_tanque_m']} m)",
             ),
             (
                 "Área de filtro lento",
                 "Af",
-                f"=C6*3.6/{t['tasa_filtracion_m_h']}",
+                f"={{Qmd}}*3.6/{t['tasa_filtracion_m_h']}",
                 "m²",
                 "Qmd · 3.6 / tasa filtración (RNE OS.020)",
             ),
             (
                 "Hipoclorito de calcio",
                 "Cl",
-                f"=C6*86.4*{t['dosis_cloro_mg_l']}/1000/{t['pureza_hipoclorito']}",
+                f"={{Qmd}}*86.4*{t['dosis_cloro_mg_l']}/1000/{t['pureza_hipoclorito']}",
                 "kg/día",
                 "Q · dosis / pureza (DS 031-2010-SA)",
             ),
             (
                 "Potencia eléctrica de dosificación y bombas",
                 "P_ptap",
-                f"=C6*86.4*{t['kw_especifico_por_m3_dia']}",
+                f"={{Qmd}}*86.4*{t['kw_especifico_por_m3_dia']}",
                 "kW",
                 f"Qmd · 86.4 · {t['kw_especifico_por_m3_dia']} kW/(m³/día)",
             ),
@@ -259,21 +261,21 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Volumen diario de aguas residuales",
                 "Vr",
-                "='Consumo'!C5*C6/1000",
+                "='Consumo'!C5*{q}/1000",
                 "m³/día",
                 "Pob · q / 1000",
             ),
             (
                 "Periodo de retención",
                 "PR",
-                "=MAX(1.5-0.3*LOG10('Consumo'!C5*C6), 0.25)",
+                "=MAX(1.5-0.3*LOG10('Consumo'!C5*{q}), 0.25)",
                 "días",
                 "1.5 − 0.3·log(Pob·q) ≥ 0.25 (RNE IS.020 Art. 4.2)",
             ),
             (
                 "Volumen de sedimentación",
                 "Vs",
-                "='Consumo'!C5*C6*C8/1000",
+                "='Consumo'!C5*{q}*{PR}/1000",
                 "m³",
                 "Pob · q · PR / 1000 (RNE IS.020)",
             ),
@@ -294,21 +296,28 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Volumen útil del tanque séptico",
                 "Vt",
-                "=C9+C10+C11",
+                "={Vs}+{Vd}+{Vn}",
                 "m³",
                 "Vs + Vd + Vn (RNE IS.020)",
             ),
             (
-                "Tanque (largo × ancho × altura útil)",
-                "",
-                f"{r['largo_ts_m']:.1f} × {r['ancho_ts_m']:.1f} × {s['altura_util_m']}",
+                "Ancho del tanque séptico",
+                "Ats",
+                f"=CEILING(SQRT({{Vt}}/({s['altura_util_m']}*{s['relacion_largo_ancho']})), 0.1)",
+                "m",
+                "√(Vt / (h · relación))",
+            ),
+            (
+                "Largo del tanque séptico",
+                "Lts",
+                f"=CEILING({{Ats}}*{s['relacion_largo_ancho']}, 0.1)",
                 "m",
                 f"L = {s['relacion_largo_ancho']}·A (RNE IS.020)",
             ),
             (
                 "Potencia eléctrica de aireación y bombeo",
                 "P_ptar",
-                f"=C7*{s['kw_especifico_por_m3_dia']}",
+                f"={{Vr}}*{s['kw_especifico_por_m3_dia']}",
                 "kW",
                 f"Vr · {s['kw_especifico_por_m3_dia']} kW/(m³/día)",
             ),

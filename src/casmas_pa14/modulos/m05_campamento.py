@@ -128,22 +128,28 @@ def _tabla_edificaciones(edifs: list[dict], nota: str = "") -> Tabla:
         "Largo (m)",
         "Norma / Criterio Aplicable",
     ]
-    filas = [
-        [
-            e["id"],
-            e["nombre"],
-            e["grupo"],
-            e["campamento"],
-            e["personas"] if e["personas"] is not None else "N/A",
-            e["modulos"],
-            e["area_m2"],
-            e["ancho_m"],
-            e["largo_m"],
-            e["norma"],
-        ]
-        for e in edifs
-    ]
-    tot_area = sum(e["area_m2"] for e in edifs)
+    filas = []
+    # Con nota (subtítulo en fila 4, encabezado en fila 5), los datos inician en fila 6
+    fila_ini = 6 if nota else 5
+    fila_act = fila_ini
+    for e in edifs:
+        filas.append(
+            [
+                e["id"],
+                e["nombre"],
+                e["grupo"],
+                e["campamento"],
+                e["personas"] if e["personas"] is not None else "N/A",
+                e["modulos"],
+                e["area_m2"],
+                e["ancho_m"],
+                f"=CEILING(G{fila_act}/H{fila_act}, 0.5)",
+                e["norma"],
+            ]
+        )
+        fila_act += 1
+
+    fila_fin = fila_act - 1
     filas.append(
         [
             "TOTAL",
@@ -151,8 +157,8 @@ def _tabla_edificaciones(edifs: list[dict], nota: str = "") -> Tabla:
             "",
             "",
             "",
-            "",
-            tot_area,
+            f"=SUM(F{fila_ini}:F{fila_fin})",
+            f"=SUM(G{fila_ini}:G{fila_fin})",
             "",
             "",
             "Σ áreas construidas",
@@ -175,7 +181,7 @@ def libro(r: dict, p: dict) -> Libro:
         "Edificaciones e instalaciones del Campamento 2 — Satélite (Portal Salida / Portal B - 98 pax).",
     )
 
-    # Tabla de Grupos Funcionales
+    # Tabla de Grupos Funcionales (subtítulo en fila 4, encabezado en fila 5, datos desde fila 6)
     cols_g = [
         "Grupo Funcional",
         "Edificaciones (Cód.)",
@@ -183,23 +189,28 @@ def libro(r: dict, p: dict) -> Libro:
         "Área Total (m²)",
         "% del Total",
     ]
-    filas_g = [
-        [
-            g["grupo"],
-            g["edificaciones"],
-            g["cantidad_edif"],
-            g["area_m2"],
-            f"{g['pct_area']:.1f} %",
-        ]
-        for g in r["por_grupo"]
-    ]
+    filas_g = []
+    g_ini = 6
+    g_fin = g_ini + len(r["por_grupo"]) - 1
+    g_tot = g_fin + 1
+    for idx, g in enumerate(r["por_grupo"]):
+        f_row = g_ini + idx
+        filas_g.append(
+            [
+                g["grupo"],
+                g["edificaciones"],
+                g["cantidad_edif"],
+                g["area_m2"],
+                f"=D{f_row}/$D${g_tot}",
+            ]
+        )
     filas_g.append(
         [
             "TOTAL GENERAL",
             "EDIF-01 a EDIF-24",
-            r["total_edificaciones"],
-            r["area_construida_m2"],
-            "100.0 %",
+            f"=SUM(C{g_ini}:C{g_fin})",
+            f"=SUM(D{g_ini}:D{g_fin})",
+            f"=SUM(E{g_ini}:E{g_fin})",
         ]
     )
     tabla_g = Tabla(
@@ -208,26 +219,32 @@ def libro(r: dict, p: dict) -> Libro:
         "Consolidado de áreas techadas por grupo funcional de acuerdo al marco normativo RNE y D.S. 024-2016-EM.",
     )
 
+    fila_tot_todas = 6 + len(r["edificaciones"])
+    c1_edifs = [e for e in r["edificaciones"] if e["campamento"] == "CAMP1"]
+    c2_edifs = [e for e in r["edificaciones"] if e["campamento"] == "CAMP2"]
+    fila_tot_c1 = 6 + len(c1_edifs)
+    fila_tot_c2 = 6 + len(c2_edifs)
+
     resumen = tabla_parametros(
         [
             (
                 "Área construida total",
                 "Ac",
-                r["area_construida_m2"],
+                f"=Edificaciones!G{fila_tot_todas}",
                 "m²",
                 "Σ de las 24 edificaciones",
             ),
             (
                 "Área construida Campamento 1 (Principal)",
                 "Ac1",
-                r["area_camp1_m2"],
+                f"=Campamento_1!G{fila_tot_c1}",
                 "m²",
                 "Portal A (248 pax)",
             ),
             (
                 "Área construida Campamento 2 (Satélite)",
                 "Ac2",
-                r["area_camp2_m2"],
+                f"=Campamento_2!G{fila_tot_c2}",
                 "m²",
                 "Portal B (98 pax)",
             ),
@@ -235,20 +252,20 @@ def libro(r: dict, p: dict) -> Libro:
                 "Factor de terreno (vías, retiros, accesos)",
                 "ft",
                 p["campamento"]["factor_terreno"],
-                "",
+                "-",
                 "Dato normativo MTC EG-2013",
             ),
             (
                 "Área de terreno requerida",
                 "At",
-                r["area_terreno_m2"],
+                "={Ac}*{ft}",
                 "m²",
                 "Ac · ft",
             ),
             (
                 "Lado equivalente de terreno (cuadrado)",
                 "Lt",
-                r["lado_terreno_m"],
+                "=SQRT({At})",
                 "m",
                 "√At",
             ),

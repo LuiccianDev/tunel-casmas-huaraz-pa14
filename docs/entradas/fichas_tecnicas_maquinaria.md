@@ -16,43 +16,43 @@ La flota de maquinaria pesada ha sido dimensionada y seleccionada específicamen
 * **Marca y Modelo:** Sandvik DT820
 * **Función:** Perforación rápida y precisa del esquema de tiro (frente de avance), corte y taladros de periféricos.
 * **Especificaciones Técnicas:** Jumbo de 2 brazos hidráulicos con cobertura transversal de gran alcance (40 - 108 m²), perforadoras de alta frecuencia HF200 o HLX5, chasis articulado diésel para traslados y sistema electrohidráulico para operación de perforación. Potencia aprox. 150 kW (~200 HP). Dimensiones aprox. 14.85 m × 2.90 m × 3.60 m, peso 28.5 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1sX9ScgPFJFQTbQ_gTQp6Th9uGlE9jEZf/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1sX9ScgPFJFQTbQ_gTQp6Th9uGlE9jEZf)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1BsbZ9u6OT3Tbdj54X4fU4mfD0yqMvh6f/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1BsbZ9u6OT3Tbdj54X4fU4mfD0yqMvh6f)
 
 ### Perforación Frontal Computarizada (Jumbo 3 brazos)
 * **Marca y Modelo:** Sandvik DT1131 / XE3C
 * **Función:** Perforación automatizada para secciones masivas en tiempo récord, minimizando el sobrerompimiento (*overbreak*).
 * **Especificaciones Técnicas:** Jumbo electrohidráulico de 3 brazos articulados de avance rápido, equipado con sistema de control de perforación inteligente (iDATA) con navegación 3D e instrumentación para diseño de mallas de voladura de alta precisión. Potencia aprox. 225 kW (~300 HP). Dimensiones aprox. 17.50 m × 3.10 m × 3.85 m, peso 42.0 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1HtSX8R76efh7779lR0tUP9Ls5Nykecf4/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1HtSX8R76efh7779lR0tUP9Ls5Nykecf4)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1tfaX_C6rczxrH7CBsREmtLymkKBQKPVw/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1tfaX_C6rczxrH7CBsREmtLymkKBQKPVw)
 
 ### Carguío y Desescombro en Frente
 * **Marca y Modelo:** Caterpillar 966H / Caterpillar 966 (Versión Túnel)
 * **Función:** Carga rápida de la marina o material volado en el frente hacia los camiones de evacuación.
 * **Especificaciones Técnicas:** Cargador frontal sobre ruedas, motor Cat C11 ACERT (260 hp / 194 kW), peso operativo de 23.1 toneladas, cucharón roquero de 4.0 m³ con cuchilla BOCE, protección adicional de cabina FOPS/ROPS, luces LED de alta intensidad e iluminación perimetral para túneles. Dimensiones aprox. 8.86 m × 3.22 m × 3.58 m. Consumo promedio 22-28 L/h.
-* **Documentación:** CAT 966H ([Ver Ficha](https://drive.google.com/file/d/1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o)) / CAT 966 Túnel ([Ver Ficha](https://drive.google.com/file/d/1i65l1C9zTcxndQQnk3KuEC4ckbSeg84C/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1i65l1C9zTcxndQQnk3KuEC4ckbSeg84C))
+* **Documentación:** CAT 966H ([Ver Ficha](https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL)) / CAT 966 Túnel ([Ver Ficha](https://drive.google.com/file/d/1T1YIa1FcTM-xobqrFoaGA_WdnibOvTEr/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1T1YIa1FcTM-xobqrFoaGA_WdnibOvTEr))
 
 ### Acarreo y Evacuación de Marina (Camión Volquete Volvo FMX 460 6x4 T SX)
 * **Marca y Modelo:** Volvo FMX 460 6×4 T SX
 * **Función:** Transporte y acarreo integral continuo de roca fracturada (marina) desde el frente del túnel de gran sección hacia la zona de descarga en botadero, utilizando exclusivamente camiones volquetes convencionales y no dumpers ni equipos de bajo perfil.
 * **Especificaciones Técnicas:** Camión volquete pesado para carretera/obra, motor Volvo D13 (460 hp Euro 3/5), transmisión automatizada I-Shift con software para construcción pesada, chasis reforzado, tolva roquera de alta resistencia al impacto de 16 - 18 m³ para servicio pesado. Peso bruto vehicular combinado 41.0 t. Dimensiones aprox. 8.25 m × 2.55 m × 3.45 m. Consumo promedio 28-35 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1KdEm-orGNo5zISpkRuuZ-T4TIsVAUwr0/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1KdEm-orGNo5zISpkRuuZ-T4TIsVAUwr0)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1O4vAOIkuJSjrkUCiDNai1O3ztdgKK_-t/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1O4vAOIkuJSjrkUCiDNai1O3ztdgKK_-t)
 
 ### Sostenimiento y Empernado Mecanizado
 * **Marca y Modelo:** Epiroc Boltec M / Boltec E
 * **Función:** Instalación de pernos de anclaje (helicoidales, Swellex o resina) y retención de malla electro-soldada en techos y hastiales de gran altura.
 * **Especificaciones Técnicas:** Equipo de empernado mecanizado con brazo articulado de maniobra precisa, cargador de pernos mecanizado, sistema electrohidráulico y amplia cobertura vertical que permite alcanzar de forma segura la bóveda del túnel (hasta 12 m). Potencia 120 kW (160 HP). Dimensiones aprox. 12.80 m × 2.50 m × 3.10 m, peso 21.0 t.
-* **Documentación:** Boltec M ([Ver Ficha](https://drive.google.com/file/d/15Nb7gEyqrrzvu5KmpykYcx6BMHYdhsq-/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=15Nb7gEyqrrzvu5KmpykYcx6BMHYdhsq-)) / Boltec E ([Ver Ficha](https://drive.google.com/file/d/1LC3KGFOs5uClitm_3mKbI9rzBq-7vKey/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1LC3KGFOs5uClitm_3mKbI9rzBq-7vKey))
+* **Documentación:** Boltec M ([Ver Ficha](https://drive.google.com/file/d/1ofG7Q59oQqRagS6pUeVQPwgndPfEq3h9/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1ofG7Q59oQqRagS6pUeVQPwgndPfEq3h9)) / Boltec E ([Ver Ficha](https://drive.google.com/file/d/1nd9BCLr3veebSHKip1OPvOgNcMMnCQOZ/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1nd9BCLr3veebSHKip1OPvOgNcMMnCQOZ))
 
 ### Lanzado de Shotcrete
 * **Marca y Modelo:** Normet Spraymec 8100 VC
 * **Función:** Aplicación de hormigón proyectado (vía húmeda) para el soporte estructural primario y secundario del túnel.
 * **Especificaciones Técnicas:** Robot electrohidráulico sobre ruedas con alcance de proyección de 10.5 m en vertical y 16.5 m en horizontal, bomba de hormigón con capacidad de 30 m³/h, sistema de dosificación automatizada de aditivo acelerante acoplado al caudal de salida. Potencia eléctrica 55 kW / motor diésel 115 kW (155 HP). Dimensiones aprox. 11.20 m × 2.50 m × 3.30 m, peso 18.5 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1sW9qXz5qAahVvDIg5SOdNV8brjRR5LKq/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1sW9qXz5qAahVvDIg5SOdNV8brjRR5LKq)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1XWMLND13EMh_qIc-5FxkzlnnE2srUmCh/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1XWMLND13EMh_qIc-5FxkzlnnE2srUmCh)
 
 ### Transporte de Hormigón Subterráneo
 * **Marca y Modelo:** Normet Utimec MF 500 Transmixer
 * **Función:** Traslado de hormigón desde la planta de dosificación en superficie hacia la unidad de proyectado (Spraymec) en el frente.
 * **Especificaciones Técnicas:** Chasis diésel 4×4 articulado, tambor hormigonero con capacidad útil de 4.4 m³, motor diésel de bajo nivel de emisiones para minería/túneles (155 HP / 115 kW) y perfil compacto optimizado para agilidad en maniobras. Dimensiones aprox. 8.60 m × 2.30 m × 2.85 m, peso vacío 11.5 t. Consumo promedio 14-18 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1rtttk2JgZjWXPfMM3TnZaIDkqz3BNOmL/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1rtttk2JgZjWXPfMM3TnZaIDkqz3BNOmL)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1JGoBWZBQnmxCVwrk49WMWIVMfmit0-vm/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1JGoBWZBQnmxCVwrk49WMWIVMfmit0-vm)
 
 ---
 
@@ -62,43 +62,43 @@ La flota de maquinaria pesada ha sido dimensionada y seleccionada específicamen
 * **Marca y Modelo:** Volvo FMX 8×4 Rígido
 * **Función:** Transporte suplementario y descarga de gran volumen desde acopios intermedios y vertido en cresta de botadero mediante camiones volquetes pesados convencionales equipados con tolva roquera de alta resistencia para servicio pesado.
 * **Especificaciones Técnicas:** Motor Volvo D13 (480 - 520 hp), configuración de ejes 8×4 con capacidad de tolva extendida a 20 - 22 m³ (32 toneladas en tándem posterior y 18 toneladas en ejes delanteros, peso bruto 50 t), suspensión reforzada e inclinómetro de seguridad para basculamiento. Dimensiones aprox. 9.15 m × 2.55 m × 3.55 m. Consumo promedio 32-40 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1raUUt_Znx8_d1AMDlH95LXy7lLPkiA9U/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1raUUt_Znx8_d1AMDlH95LXy7lLPkiA9U)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1I0VOkulA6S_BBcfu8luaYBcdDbyzslXM/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1I0VOkulA6S_BBcfu8luaYBcdDbyzslXM)
 
 ### Carguío y Remanipulación en Botadero
 * **Marca y Modelo:** Caterpillar 966H
 * **Función:** Limpieza de plataforma de descarga, remanipulación de desmonte y carguío auxiliar.
 * **Especificaciones Técnicas:** Motor Cat C11 ACERT (260 hp / 194 kW), cucharón roquero de 4.0 m³, cinemática en Z de fuerza de desprendimiento elevada. Peso operativo 23.1 t. Dimensiones aprox. 8.86 m × 3.22 m × 3.58 m. Consumo promedio 22-28 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL)
 
 ### Extendido y Empuje Pesado en Cresta de Botadero
 * **Marca y Modelo:** Caterpillar D8 (D8T)
 * **Función:** Empuje de la masa de roca extendida en borde de talud, conformación de terrazas y fracturamiento de bloques con ripper.
 * **Especificaciones Técnicas:** Tractor sobre orugas pesadas, motor Cat C15 (354 hp netos / 394 hp brutos), peso operativo de 39.7 toneladas, hoja semi-universal (SU) de alta capacidad (8.7 m³) y desgarrador mono-vástago posterior (*ripper*). Dimensiones aprox. 7.95 m (con ripper) × 3.94 m (hoja) × 3.56 m. Consumo promedio 38-50 L/h.
-* **Documentación:** Ficha ([Ver Ficha](https://drive.google.com/file/d/1Hj9-qYutpt-_9b1deuryHiO6-Uxgu34u/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1Hj9-qYutpt-_9b1deuryHiO6-Uxgu34u)) / Especificaciones ([Descarga Directa](https://drive.google.com/uc?export=download&id=1NfbBTNFIIutdNrsR_4fc4qYB2wRjncXN))
+* **Documentación:** Ficha D8T ([Ver Ficha](https://drive.google.com/file/d/1IBUrUqPlHhWXG6ZBD80KRY33VxmjG50p/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1IBUrUqPlHhWXG6ZBD80KRY33VxmjG50p)) / Especificaciones D8 ([Ver Ficha](https://drive.google.com/file/d/1_Vxa91iHW2AFOq8iu_0F1GfE1BU-kNWx/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1_Vxa91iHW2AFOq8iu_0F1GfE1BU-kNWx))
 
 ### Extendido Secundario y Conformación de Bermas
 * **Marca y Modelo:** Caterpillar D6
 * **Función:** Perfilado fino de banquetas, conformación de bermas de seguridad de crestas (1.5 m de altura) y esparcido de capas delgadas.
 * **Especificaciones Técnicas:** Tractor sobre orugas mediano, motor Cat C7.1 (215 hp), transmisión totalmente VPAT de 6 vías, peso operativo aproximado de 22 - 24 toneladas. Dimensiones aprox. 5.70 m × 3.36 m × 3.15 m. Consumo promedio 22-28 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1DhXJxavfIIZ61JyVWHiuUN0348P9rjAH/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1DhXJxavfIIZ61JyVWHiuUN0348P9rjAH)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1QcT-EppMPy8AtkRJnK2VUN9mYuvJZ0s5/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1QcT-EppMPy8AtkRJnK2VUN9mYuvJZ0s5)
 
 ### Estabilización de Taludes y Excavación Perimetral
 * **Marca y Modelo:** Caterpillar 336
 * **Función:** Confección de zanjas de coronación, canales de desvío pluvial, peinado de taludes del botadero y reperfilado.
 * **Especificaciones Técnicas:** Excavadora hidráulica sobre orugas de 36 toneladas, motor Cat C9.3B (314 hp), balde de servicio pesado de 2.1 m³, profundidades de excavación de hasta 7.5 m. Dimensiones aprox. 11.18 m × 3.29 m × 3.17 m. Consumo promedio 26-34 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1ks61fH7iSN1g2gbs8Qs5jVCAsSMj2E6L/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1ks61fH7iSN1g2gbs8Qs5jVCAsSMj2E6L)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/11qzeAWuvh8KexwsSeA3JfiRezodNX7-Y/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=11qzeAWuvh8KexwsSeA3JfiRezodNX7-Y)
 
 ### Compactación y Densificación de Capas de Desmonte
 * **Marca y Modelo:** Caterpillar CS11 / CS11 GC
 * **Función:** Densificación del material depositado para garantizar estabilidad geotécnica y prevenir asentamientos diferenciales.
 * **Especificaciones Técnicas:** Rodillo compactador vibratorio monocilíndrico de 11.2 toneladas, ancho de tambor de 2.13 m (84''), fuerzas de compresión variables (amplitud alta/baja) ideal para recebo granular y suelo rocoso, motor Cat C4.4 (120 - 150 hp). Dimensiones aprox. 5.75 m × 2.30 m × 3.00 m. Consumo promedio 12-16 L/h.
-* **Documentación:** CS11 ([Ver Ficha](https://drive.google.com/file/d/1uMUIsqKouWkCxmgUJ41OnA4r81T0jsa9/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1uMUIsqKouWkCxmgUJ41OnA4r81T0jsa9)) / CS11 GC ([Ver Ficha](https://drive.google.com/file/d/1ZVQdKJVsuMzop0cKZVcb2bcl85vIBP4D/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1ZVQdKJVsuMzop0cKZVcb2bcl85vIBP4D))
+* **Documentación:** CS11 GC ([Ver Ficha](https://drive.google.com/file/d/1a9drr-ZMOZKyU7I9IWlT9OFbhtz3BFgs/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1a9drr-ZMOZKyU7I9IWlT9OFbhtz3BFgs)) / CS11 ([Ver Ficha](https://drive.google.com/file/d/1-BkbxNz3JjHLJ4EGI95wDUdtgq_0YJcX/view?usp=drivesdk) | [Descarga Directa](https://drive.google.com/uc?export=download&id=1-BkbxNz3JjHLJ4EGI95wDUdtgq_0YJcX))
 
 ### Mantenimiento y Conservación de Vías de Acarreo
 * **Marca y Modelo:** Caterpillar 140G / 140
 * **Función:** Perfilado y rasanteo continuo de pistas de rodadura interiores y accesos a botaderos, eliminación de calaminas y mantenimiento de bombeo.
 * **Especificaciones Técnicas:** Motoniveladora clásica de alta confiabilidad, vertedera de 3.66 m (12'), motor Cat 3306 (150 hp / 112 kW), diferencial de tracción directa. Peso operativo 14.5 t. Dimensiones aprox. 8.70 m × 2.45 m × 3.10 m. Consumo promedio 15-20 L/h.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1ezcAvLlllyydU9rUWMFkWqRAsjOKBH8c/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1ezcAvLlllyydU9rUWMFkWqRAsjOKBH8c)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1RuMAVJAH3cAgMVrBvaig9jGe4dkDo30N/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1RuMAVJAH3cAgMVrBvaig9jGe4dkDo30N)
 
 ---
 
@@ -150,31 +150,31 @@ La flota de maquinaria pesada ha sido dimensionada y seleccionada específicamen
 * **Marca y Modelo:** Normet Utimec MF 205 PER
 * **Función:** Traslado seguro del personal operativo de mina/túnel desde el emboquille hasta el frente de trabajo.
 * **Especificaciones Técnicas:** Chasis 4×4 articulado diésel, módulo cerrado de transporte con capacidad para 16 a 22 personas, cabina del conductor y módulo con certificación de protección ROPS/FOPS. Potencia motor diésel 155 HP (115 kW). Dimensiones aprox. 8.10 m × 2.20 m × 2.65 m, peso vacío 9.8 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/17t7l79WOgnD9Pwd0GrDbUds3rwsfxZnz/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=17t7l79WOgnD9Pwd0GrDbUds3rwsfxZnz)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1pWkvqpKnSYGLQ_ejKeVMaqL71JOuPS0M/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1pWkvqpKnSYGLQ_ejKeVMaqL71JOuPS0M)
 
 ### Logística y Transporte de Materiales/Explosivos
 * **Marca y Modelo:** Normet Utimec MF 100 Material
 * **Función:** Abastecimiento continuo de insumos al frente (pernos, malla, tuberías de agua/aire, cajas de explosivos autorizados).
 * **Especificaciones Técnicas:** Plataforma plana de servicio pesado con grúa hidráulica integrada de baja altura, capacidad de carga útil de 8 - 10 toneladas, tracción integral 4×4. Potencia motor diésel 155 HP (115 kW). Dimensiones aprox. 8.20 m × 2.25 m × 2.50 m, peso 10.2 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1V-nsVUSl4ptU-oZ7uSb2xXSTDlJPt8eI/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1V-nsVUSl4ptU-oZ7uSb2xXSTDlJPt8eI)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/183WuXxej_ZUUvkQT21Tt9hrEbFQHiVNi/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=183WuXxej_ZUUvkQT21Tt9hrEbFQHiVNi)
 
 ### Instalación y Mantenimiento de Servicios en Altura
 * **Marca y Modelo:** Normet Utilift MF 540
 * **Función:** Instalación de mangueras, mangas de ventilación de gran diámetro, bandejas eléctricas y tuberías en la bóveda del túnel.
 * **Especificaciones Técnicas:** Vehículo multifuncional equipado con plataforma de elevación de tijera hidráulica, altura de trabajo de hasta 6.5 m, capacidad de carga en plataforma de 3.0 toneladas. Potencia motor diésel 155 HP (115 kW). Dimensiones aprox. 8.35 m × 2.20 m × 2.70 m, peso 11.0 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1jK7Fz5tObhZRKUtdiz7a4nIAODLRiIWX/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1jK7Fz5tObhZRKUtdiz7a4nIAODLRiIWX)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1ERQe9Vq-QoYc7pcI55vUQ1_H3tesjTZ6/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1ERQe9Vq-QoYc7pcI55vUQ1_H3tesjTZ6)
 
 ### Perforación en Superficie y Cantera de Áridos
 * **Marca y Modelo:** Epiroc PowerROC T25
 * **Función:** Perforación de taladros para voladura de emboquille, zanjas exteriores y canteras de agregados para hormigón.
 * **Especificaciones Técnicas:** Equipo de perforación con martillo en cabeza (*Top Hammer*), motor Volvo TAD 551VE / 581VE (173 hp / 129 kW), cobertura de diámetro de perforación de 51 - 89 mm. Dimensiones aprox. 8.90 m × 2.45 m × 3.10 m, peso 12.5 t.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1omk7IO-8nsOs3twuUfIgzk-Rl5fPvwmL/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1omk7IO-8nsOs3twuUfIgzk-Rl5fPvwmL)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1EDo3A-pjlWewC2BZioeCqFauxSTwR9Ks/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1EDo3A-pjlWewC2BZioeCqFauxSTwR9Ks)
 
 ### Transporte Pesado y Movilización de Maquinaria
 * **Marca y Modelo:** Trail King TK110HDG
 * **Función:** Movilización terrestre e ingreso de equipos oruga y de gran tonelaje hacia el proyecto.
 * **Especificaciones Técnicas:** Semirremolque de cama baja (*Lowboy*) de 3 ejes, cuello de ganso desmontable hidráulico, capacidad nominal de 110,000 lb (50 toneladas). Longitud total aprox. 16.15 m, ancho 2.59 m (expandible a 3.05 m con outriggers), altura de plataforma de carga 0.61 m.
-* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1zjHjHdDRXgCM1ZByyNI64r3sUHJbKj1R/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1zjHjHdDRXgCM1ZByyNI64r3sUHJbKj1R)
+* **Documentación:** [Ver Ficha](https://drive.google.com/file/d/1vFgTjRJtKCk5oN0Sc7nY9Sz5s-dRMdog/view?usp=drivesdk) / [Descarga Directa](https://drive.google.com/uc?export=download&id=1vFgTjRJtKCk5oN0Sc7nY9Sz5s-dRMdog)
 
 ---
 
@@ -184,25 +184,25 @@ La flota de maquinaria pesada ha sido dimensionada y seleccionada específicamen
 
 | Zona Operativa | Proceso / Tarea | Tipo de Equipo | Marca y Modelo | Capacidad / Rendimiento | Potencia Motor | Dimensiones (L×An×Al) | Ficha Técnica |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Frente Túnel** | Perforación Frontal | Jumbo 2 brazos | Sandvik DT820 | Cobertura 40-108 m² | 200 HP (~150 kW) | 14.85 × 2.90 × 3.60 m | [Ver Ficha](https://drive.google.com/file/d/1sX9ScgPFJFQTbQ_gTQp6Th9uGlE9jEZf/view?usp=drivesdk) |
-| **Frente Túnel** | Perforación Masiva | Jumbo 3 brazos | Sandvik DT1131 / XE3C | Automatizado 3D inteligente | 300 HP (~225 kW) | 17.50 × 3.10 × 3.85 m | [Ver Ficha](https://drive.google.com/file/d/1HtSX8R76efh7779lR0tUP9Ls5Nykecf4/view?usp=drivesdk) |
-| **Frente Túnel** | Carguío de Marina | Cargador Frontal | Caterpillar 966H / 966 | Cucharón 4.0 m³ | 260 HP (Cat C11) | 8.86 × 3.22 × 3.58 m | [Ver Ficha](https://drive.google.com/file/d/1arLjrbnqjJAHNHgDd3OPxAS-CWwfP_-o/view?usp=drivesdk) |
-| **Frente Túnel** | Acarreo Subterráneo | Volquete 6×4 | Volvo FMX 460 6×4 T SX | Tolva roquera 16-18 m³ | 460 HP (Volvo D13) | 8.25 × 2.55 × 3.45 m | [Ver Ficha](https://drive.google.com/file/d/1KdEm-orGNo5zISpkRuuZ-T4TIsVAUwr0/view?usp=drivesdk) |
-| **Frente Túnel** | Empernado / Sostenimiento | Jumbo Empernador | Epiroc Boltec M / E | Cobertura en bóveda hasta 12 m | 160 HP (~120 kW) | 12.80 × 2.50 × 3.10 m | [Ver Ficha](https://drive.google.com/file/d/15Nb7gEyqrrzvu5KmpykYcx6BMHYdhsq-/view?usp=drivesdk) |
-| **Frente Túnel** | Lanzado de Shotcrete | Robot Proyector | Normet Spraymec 8100 VC | Caudal 30 m³/h | 155 HP (115 kW) | 11.20 × 2.50 × 3.30 m | [Ver Ficha](https://drive.google.com/file/d/1sW9qXz5qAahVvDIg5SOdNV8brjRR5LKq/view?usp=drivesdk) |
-| **Frente Túnel** | Transporte Hormigón | Mixertrans 4×4 | Normet Utimec MF 500 | Tambor 4.4 m³ | 155 HP (115 kW) | 8.60 × 2.30 × 2.85 m | [Ver Ficha](https://drive.google.com/file/d/1rtttk2JgZjWXPfMM3TnZaIDkqz3BNOmL/view?usp=drivesdk) |
-| **Botadero** | Acarreo Masivo | Volquete 8×4 | Volvo FMX Rígido 8×4 | Tolva 20-22 m³ (32 t) | 480-520 HP | 9.15 × 2.55 × 3.55 m | [Ver Ficha](https://drive.google.com/file/d/1raUUt_Znx8_d1AMDlH95LXy7lLPkiA9U/view?usp=drivesdk) |
-| **Botadero** | Remanipulación | Cargador Frontal | Caterpillar 966 GC | Cucharón 3.8-4.2 m³ | 267 HP (Cat C9.3B) | 8.65 × 3.00 × 3.50 m | [Ver Ficha](https://drive.google.com/file/d/1AKjLq2VbRkVqcvwuBRm_JgdOTclJAb7G/view?usp=drivesdk) |
-| **Botadero** | Extendido Pesado | Tractor Orugas | Caterpillar D8 | Hoja SU (8.7 m³) / Ripper | 354 HP (Cat C15) | 7.95 × 3.94 × 3.56 m | [Ver Ficha](https://drive.google.com/file/d/1Hj9-qYutpt-_9b1deuryHiO6-Uxgu34u/view?usp=drivesdk) |
-| **Botadero** | Bermas / Perfilado | Tractor Orugas | Caterpillar D6 | Hoja VPAT 6 vías | 215 HP (Cat C7.1) | 5.70 × 3.36 × 3.15 m | [Ver Ficha](https://drive.google.com/file/d/1DhXJxavfIIZ61JyVWHiuUN0348P9rjAH/view?usp=drivesdk) |
-| **Botadero** | Zanjas / Taludes | Excavadora | Caterpillar 336 | Balde 2.1 m³ (36 t) | 314 HP (Cat C9.3B) | 11.18 × 3.29 × 3.17 m | [Ver Ficha](https://drive.google.com/file/d/1ks61fH7iSN1g2gbs8Qs5jVCAsSMj2E6L/view?usp=drivesdk) |
-| **Botadero** | Densificación | Rodillo Vibratorio | Caterpillar CS11 / CS11 GC | Tambor 2.13 m (11.2 t) | 120-150 HP | 5.75 × 2.30 × 3.00 m | [Ver Ficha](https://drive.google.com/file/d/1uMUIsqKouWkCxmgUJ41OnA4r81T0jsa9/view?usp=drivesdk) |
-| **Botadero** | Mantenimiento Vías | Motoniveladora | Caterpillar 140G | Vertedera 3.66 m (12') | 150 HP (Cat 3306) | 8.70 × 2.45 × 3.10 m | [Ver Ficha](https://drive.google.com/file/d/1ezcAvLlllyydU9rUWMFkWqRAsjOKBH8c/view?usp=drivesdk) |
-| **Servicios** | Personal Subterráneo | Bus Subterráneo | Normet Utimec MF 205 PER | 16-22 pasajeros | 155 HP (Diésel 4×4) | 8.10 × 2.20 × 2.65 m | [Ver Ficha](https://drive.google.com/file/d/17t7l79WOgnD9Pwd0GrDbUds3rwsfxZnz/view?usp=drivesdk) |
-| **Servicios** | Logística / Insumos | Camión Plataforma | Normet Utimec MF 100 Material | Carga útil 8-10 t | 155 HP (Diésel 4×4) | 8.20 × 2.25 × 2.50 m | [Ver Ficha](https://drive.google.com/file/d/1V-nsVUSl4ptU-oZ7uSb2xXSTDlJPt8eI/view?usp=drivesdk) |
-| **Servicios** | Elevación / Mangueras | Elevador Tijera | Normet Utilift MF 540 | Altura 6.5 m (3.0 t) | 155 HP (Diésel 4×4) | 8.35 × 2.20 × 2.70 m | [Ver Ficha](https://drive.google.com/file/d/1jK7Fz5tObhZRKUtdiz7a4nIAODLRiIWX/view?usp=drivesdk) |
-| **Superficie** | Perforación Cantera | Perforadora Cantera | Epiroc PowerROC T25 | Diámetro 51-89 mm | 173 HP (Volvo) | 8.90 × 2.45 × 3.10 m | [Ver Ficha](https://drive.google.com/file/d/1omk7IO-8nsOs3twuUfIgzk-Rl5fPvwmL/view?usp=drivesdk) |
-| **Logística** | Cama Baja | Semirremolque | Trail King TK110HDG | Capacidad 50 toneladas | 3 Ejes | 16.15 × 2.59 × 0.61 m | [Ver Ficha](https://drive.google.com/file/d/1zjHjHdDRXgCM1ZByyNI64r3sUHJbKj1R/view?usp=drivesdk) |
+| **Frente Túnel** | Perforación Frontal | Jumbo 2 brazos | Sandvik DT820 | Cobertura 40-108 m² | 200 HP (~150 kW) | 14.85 × 2.90 × 3.60 m | [Ver Ficha](https://drive.google.com/file/d/1BsbZ9u6OT3Tbdj54X4fU4mfD0yqMvh6f/view?usp=drivesdk) |
+| **Frente Túnel** | Perforación Masiva | Jumbo 3 brazos | Sandvik DT1131 / XE3C | Automatizado 3D inteligente | 300 HP (~225 kW) | 17.50 × 3.10 × 3.85 m | [Ver Ficha](https://drive.google.com/file/d/1tfaX_C6rczxrH7CBsREmtLymkKBQKPVw/view?usp=drivesdk) |
+| **Frente Túnel** | Carguío de Marina | Cargador Frontal | Caterpillar 966H / 966 | Cucharón 4.0 m³ | 260 HP (Cat C11) | 8.86 × 3.22 × 3.58 m | [Ver Ficha](https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view?usp=drivesdk) |
+| **Frente Túnel** | Acarreo Subterráneo | Volquete 6×4 | Volvo FMX 460 6×4 T SX | Tolva roquera 16-18 m³ | 460 HP (Volvo D13) | 8.25 × 2.55 × 3.45 m | [Ver Ficha](https://drive.google.com/file/d/1O4vAOIkuJSjrkUCiDNai1O3ztdgKK_-t/view?usp=drivesdk) |
+| **Frente Túnel** | Empernado / Sostenimiento | Jumbo Empernador | Epiroc Boltec M / E | Cobertura en bóveda hasta 12 m | 160 HP (~120 kW) | 12.80 × 2.50 × 3.10 m | [Ver Ficha](https://drive.google.com/file/d/1ofG7Q59oQqRagS6pUeVQPwgndPfEq3h9/view?usp=drivesdk) |
+| **Frente Túnel** | Lanzado de Shotcrete | Robot Proyector | Normet Spraymec 8100 VC | Caudal 30 m³/h | 155 HP (115 kW) | 11.20 × 2.50 × 3.30 m | [Ver Ficha](https://drive.google.com/file/d/1XWMLND13EMh_qIc-5FxkzlnnE2srUmCh/view?usp=drivesdk) |
+| **Frente Túnel** | Transporte Hormigón | Mixertrans 4×4 | Normet Utimec MF 500 | Tambor 4.4 m³ | 155 HP (115 kW) | 8.60 × 2.30 × 2.85 m | [Ver Ficha](https://drive.google.com/file/d/1JGoBWZBQnmxCVwrk49WMWIVMfmit0-vm/view?usp=drivesdk) |
+| **Botadero** | Acarreo Masivo | Volquete 8×4 | Volvo FMX Rígido 8×4 | Tolva 20-22 m³ (32 t) | 480-520 HP | 9.15 × 2.55 × 3.55 m | [Ver Ficha](https://drive.google.com/file/d/1I0VOkulA6S_BBcfu8luaYBcdDbyzslXM/view?usp=drivesdk) |
+| **Botadero** | Remanipulación | Cargador Frontal | Caterpillar 966 GC | Cucharón 3.8-4.2 m³ | 267 HP (Cat C9.3B) | 8.65 × 3.00 × 3.50 m | [Ver Ficha](https://drive.google.com/file/d/1HTmyU84fEs3kvU7zx6sV8Ayj4eOGlD40/view?usp=drivesdk) |
+| **Botadero** | Extendido Pesado | Tractor Orugas | Caterpillar D8 | Hoja SU (8.7 m³) / Ripper | 354 HP (Cat C15) | 7.95 × 3.94 × 3.56 m | [Ver Ficha](https://drive.google.com/file/d/1IBUrUqPlHhWXG6ZBD80KRY33VxmjG50p/view?usp=drivesdk) |
+| **Botadero** | Bermas / Perfilado | Tractor Orugas | Caterpillar D6 | Hoja VPAT 6 vías | 215 HP (Cat C7.1) | 5.70 × 3.36 × 3.15 m | [Ver Ficha](https://drive.google.com/file/d/1QcT-EppMPy8AtkRJnK2VUN9mYuvJZ0s5/view?usp=drivesdk) |
+| **Botadero** | Zanjas / Taludes | Excavadora | Caterpillar 336 | Balde 2.1 m³ (36 t) | 314 HP (Cat C9.3B) | 11.18 × 3.29 × 3.17 m | [Ver Ficha](https://drive.google.com/file/d/11qzeAWuvh8KexwsSeA3JfiRezodNX7-Y/view?usp=drivesdk) |
+| **Botadero** | Densificación | Rodillo Vibratorio | Caterpillar CS11 / CS11 GC | Tambor 2.13 m (11.2 t) | 120-150 HP | 5.75 × 2.30 × 3.00 m | [Ver Ficha](https://drive.google.com/file/d/1a9drr-ZMOZKyU7I9IWlT9OFbhtz3BFgs/view?usp=drivesdk) |
+| **Botadero** | Mantenimiento Vías | Motoniveladora | Caterpillar 140G | Vertedera 3.66 m (12') | 150 HP (Cat 3306) | 8.70 × 2.45 × 3.10 m | [Ver Ficha](https://drive.google.com/file/d/1RuMAVJAH3cAgMVrBvaig9jGe4dkDo30N/view?usp=drivesdk) |
+| **Servicios** | Personal Subterráneo | Bus Subterráneo | Normet Utimec MF 205 PER | 16-22 pasajeros | 155 HP (Diésel 4×4) | 8.10 × 2.20 × 2.65 m | [Ver Ficha](https://drive.google.com/file/d/1pWkvqpKnSYGLQ_ejKeVMaqL71JOuPS0M/view?usp=drivesdk) |
+| **Servicios** | Logística / Insumos | Camión Plataforma | Normet Utimec MF 100 Material | Carga útil 8-10 t | 155 HP (Diésel 4×4) | 8.20 × 2.25 × 2.50 m | [Ver Ficha](https://drive.google.com/file/d/183WuXxej_ZUUvkQT21Tt9hrEbFQHiVNi/view?usp=drivesdk) |
+| **Servicios** | Elevación / Mangueras | Elevador Tijera | Normet Utilift MF 540 | Altura 6.5 m (3.0 t) | 155 HP (Diésel 4×4) | 8.35 × 2.20 × 2.70 m | [Ver Ficha](https://drive.google.com/file/d/1ERQe9Vq-QoYc7pcI55vUQ1_H3tesjTZ6/view?usp=drivesdk) |
+| **Superficie** | Perforación Cantera | Perforadora Cantera | Epiroc PowerROC T25 | Diámetro 51-89 mm | 173 HP (Volvo) | 8.90 × 2.45 × 3.10 m | [Ver Ficha](https://drive.google.com/file/d/1EDo3A-pjlWewC2BZioeCqFauxSTwR9Ks/view?usp=drivesdk) |
+| **Logística** | Cama Baja | Semirremolque | Trail King TK110HDG | Capacidad 50 toneladas | 3 Ejes | 16.15 × 2.59 × 0.61 m | [Ver Ficha](https://drive.google.com/file/d/1vFgTjRJtKCk5oN0Sc7nY9Sz5s-dRMdog/view?usp=drivesdk) |
 | **Logística** | Agua Potable / Polvo | Cisterna de Agua | Volvo FMX 6×4 R (5,000 gal) | 19,000 L / 500 GPM | 380-420 HP | 8.90 × 2.55 × 3.20 m | [Ver Ficha](https://fr.scribd.com/document/626423472/Ficha-Tecnica-c-Agua-5000-Gln-2018) |
 | **Logística** | Combustible | Cisterna Diésel | Volvo FMX 6×4 (OSINERGMIN) | 4,000 - 5,000 gal | 380-420 HP | 8.80 × 2.50 × 3.25 m | [Ver Ficha](https://es.scribd.com/document/704132893/02-FICHA-RH-EXP-202200124306-INVERSIONES-EL-GRANATE-E-I-R-L) |
 | **Servicios** | Salud / Emergencia | Ambulancia 4x4 | Toyota Hilux 4x4 Tipo II | Asistencial MINSA | 201 HP (1GD 2.8L) | 5.35 × 1.90 × 2.45 m | [Ver Ficha](https://es.scribd.com/document/721189236/CARACTERISTICAS-TECNICAS-AMBULANCIA-RURAL-TIPO-I-y-II-CARMEN-OK-5) |

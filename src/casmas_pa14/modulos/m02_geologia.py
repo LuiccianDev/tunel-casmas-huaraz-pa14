@@ -33,6 +33,8 @@ def calcular(p: dict[str, Any], ctx: dict[str, Any]) -> dict[str, Any]:
             {
                 "progresiva_inicio": float(t["progresiva_inicio"]),
                 "progresiva_fin": float(t["progresiva_fin"]),
+                "longitud_m": float(t["progresiva_fin"])
+                - float(t["progresiva_inicio"]),
                 "tipo_roca": str(t["tipo_roca"]),
                 "densidad_t_m3": float(t["densidad_t_m3"]),
                 "esponjamiento": float(t["esponjamiento"]),
@@ -55,6 +57,7 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
     cols = [
         "Prog. Inicio (m)",
         "Prog. Fin (m)",
+        "Longitud (m)",
         "Tipo de Roca",
         "Densidad (t/m³)",
         "Esponjamiento",
@@ -65,22 +68,21 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
         "Ja",
         "Jw",
         "SRF",
-        "Q-Slope (Calc)",
-        "Q-Slope (Fórmula Excel)",
+        "Q-Slope",
         "Descripción",
     ]
     filas = []
-    # Fila inicial de datos en Excel: Tabla inicia en fila 4 (fila 4 = encabezado, fila 5 = primer dato)
-    fila_actual = 5
+    # Tabla sin subtítulo: encabezado en fila 4, primer dato en fila 5
+    fila_ini = 5
+    fila_actual = fila_ini
     for t in resultados["tramos"]:
-        # Columnas en Excel:
-        # A: Prog. Inicio, B: Prog. Fin, C: Tipo Roca, D: Densidad, E: Esponjamiento, F: RMR
-        # G: RQD, H: Jn, I: Jr, J: Ja, K: Jw, L: SRF, M: Q-Slope valor, N: Q-Slope Formula
-        formula_excel = f"=(G{fila_actual}/H{fila_actual})*(I{fila_actual}/J{fila_actual})*(K{fila_actual}/L{fila_actual})"
+        f_long = f"=B{fila_actual}-A{fila_actual}"
+        f_q = f"=(H{fila_actual}/I{fila_actual})*(J{fila_actual}/K{fila_actual})*(L{fila_actual}/M{fila_actual})"
         filas.append(
             [
                 t["progresiva_inicio"],
                 t["progresiva_fin"],
+                f_long,
                 t["tipo_roca"],
                 t["densidad_t_m3"],
                 t["esponjamiento"],
@@ -91,14 +93,34 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
                 t["ja"],
                 t["jw"],
                 t["srf"],
-                t["q_slope"],
-                formula_excel,
+                f_q,
                 t["descripcion"],
             ]
         )
         fila_actual += 1
 
-    if not filas:
+    if resultados["tramos"]:
+        fila_fin = fila_actual - 1
+        filas.append(
+            [
+                "TOTAL LONGITUD",
+                "",
+                f"=SUM(C{fila_ini}:C{fila_fin})",
+                "",
+                f"=AVERAGE(E{fila_ini}:E{fila_fin})",
+                f"=AVERAGE(F{fila_ini}:F{fila_fin})",
+                f"=AVERAGE(G{fila_ini}:G{fila_fin})",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "Longitud total y promedios ponderables del perfil",
+            ]
+        )
+    else:
         filas = [["No hay datos"] + [""] * 14]
 
     return Libro(
