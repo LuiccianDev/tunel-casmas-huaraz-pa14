@@ -1,0 +1,28 @@
+# =============================================================================
+#  Exclusion de archivos binarios, caches y salidas pesadas para ahorrar tokens
+#  Nota: Para documentos en docs/entradas/, usar siempre los archivos .md y
+#  consultar primero docs/entradas/indice_dg2018.md.
+# =============================================================================
+.venv/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.pyc
+
+# Documentos PDF originales (usar sus pares .md convertidos con MarkItDown)
+docs/entradas/*.pdf
+
+# Salidas autogeneradas pesadas (la fuente de verdad es datos/parametros.toml y civil3d/dg2018_datos.toml)
+salidas/excel/*.xlsx
+salidas/lisp/*.lsp
+civil3d/*.xml
+
+# Artefactos pesados de Graphify (usar GRAPH_REPORT.md o herramientas MCP de Graphify)
+graphify-out/graph.html
+graphify-out/graph.json
+graphify-out/cache/
+graphify-out/20*/
+
+# Binarios de compilacion .NET
+plugins/**/bin/
+plugins/**/obj/

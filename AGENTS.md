@@ -110,9 +110,11 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 - Actualizar `docs/PLANIFICACION.md` al completar o agregar tareas.
 
 
-## Documentación (Entradas y Salidas)
+## Documentación (Entradas y Salidas) y Ahorro de Tokens
 
 - **Entradas (Contexto/Base):** Todo documento de referencia aportado por el usuario (fichas técnicas, marco regulatorio, normativas) debe alojarse en `docs/entradas/`.
+- **Prohibido leer PDFs directamente:** Todo `.pdf` en `docs/entradas/` cuenta con su par `.md` convertido con `MarkItDown` (sincronizable vía `uv run --with "markitdown[pdf]" python scripts/convertir_pdfs.py`).
+- **Índice de Coordenadas:** Antes de consultar el manual DG-2018 (`docs/entradas/manual_de_carreteras_dg_2018.md`) o los documentos de Konya, el asistente **DEBE** consultar [`docs/entradas/indice_dg2018.md`](docs/entradas/indice_dg2018.md) y leer únicamente el rango de líneas (`StartLine`–`EndLine`) requerido.
 - **Salidas (Generados):** Todo documento de texto o markdown generado como producto o entregable del proyecto (como prompts generados o reportes) debe guardarse en `salidas/documentos/`.
 - **Nomenclatura:** Todos los archivos documentales deben estar en minúsculas y usar `snake_case`.
 
@@ -129,5 +131,6 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
   1. `README.md` (raíz): Tabla completa de entregables (módulos, hojas, memorias asociadas), directivas del doble canal de AutoCAD y scripts.
   2. `plugins/AutoCAD_AI_Gateway/README.md`: Endpoints REST, puerto 5055, directivas métricas y comandos CAD.
   3. `plugins/AutoCAD_MCP_Server/README.md`: Catálogo exhaustivo de herramientas MCP v2.2 y ejemplos de configuración de clientes.
-- **Guardián Automatizado:** Toda modificación es validada por la suite de pruebas (`tests/test_documentacion.py`), garantizando que cualquier desalineación entre el código y los READMEs sea bloqueada de inmediato en `.\scripts\check.ps1`.
+  4. `civil3d/README.md` y `civil3d/guia_uso_dg2018.md`: Trazabilidad y guía del estándar vial DG-2018.
+- **Guardián Automatizado:** Toda modificación es validada por la suite de pruebas (`tests/test_documentacion.py`), garantizando que cualquier desalineación entre el código y los READMEs sea bloqueada de inmediato en `.\scripts\check.ps1` (o `.\scripts\check.ps1 -Fast`).
 

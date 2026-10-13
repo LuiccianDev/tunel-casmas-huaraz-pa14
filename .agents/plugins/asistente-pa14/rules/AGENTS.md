@@ -39,6 +39,18 @@ Al trabajar en el proyecto **Túnel Casmas Huaraz PA14**, debes asegurar estrict
 - **Sincronización en Cascada Obligatoria:** Toda adición o modificación en `src/casmas_pa14/modulos/` (`main.MODULOS`) o en los servicios de CAD en `plugins/` exige actualizar de inmediato:
   1. `README.md` (raíz): tabla de entregables, memorias asociadas, doble canal CAD y scripts.
   2. `plugins/AutoCAD_AI_Gateway/README.md`: endpoints REST, puerto 5055 y arquitectura C#.
-  3. `plugins/AutoCAD_MCP_Server/README.md`: catálogo de 12 herramientas MCP y configuración JSON.
-- **Guardián de Integridad:** El test automatizado `tests/test_documentacion.py` validará en cada ejecución de `.\scripts\check.ps1` que el código y la documentación permanezcan 100% alineados.
+  3. `plugins/AutoCAD_MCP_Server/README.md`: catálogo de herramientas MCP y configuración JSON.
+  4. `civil3d/README.md` y `civil3d/guia_uso_dg2018.md`: trazabilidad del estándar vial DG-2018.
+- **Guardián de Integridad:** El test automatizado `tests/test_documentacion.py` validará en cada ejecución de `.\scripts\check.ps1` (o `.\scripts\check.ps1 -Fast`) que el código y la documentación permanezcan 100% alineados.
+
+## 7. Control de Tokens y Consulta Instantánea (MarkItDown + Índice de Líneas)
+- **Prohibido leer PDFs directamente:** Todos los archivos `.pdf` en `docs/entradas/` cuentan con su versión limpia en Markdown (`.md`) generada con `MarkItDown`. Si se añade un nuevo PDF a `docs/entradas/`, ejecuta primero:
+  ```powershell
+  uv run --with "markitdown[pdf]" python scripts/convertir_pdfs.py
+  ```
+- **Consulta por Rangos Exactos:** Antes de consultar el manual DG-2018 (`docs/entradas/manual_de_carreteras_dg_2018.md`) o los textos del modelo de Konya, **DEBES** leer primero [`docs/entradas/indice_dg2018.md`](../../../../docs/entradas/indice_dg2018.md) y abrir únicamente el rango `StartLine`–`EndLine` requerido (~50 líneas).
+
+## 8. Estándares de Diseño Vial Civil 3D (DG-2018 MTC)
+- La única fuente de verdad para los criterios de Civil 3D es `civil3d/dg2018_datos.toml`, compilada hacia `civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml` mediante `uv run python civil3d/generar_dg2018.py`.
+- En **Offset Alignments**, instruir siempre al usuario a seleccionar los métodos automáticos `DG-2018 MTC Tabla Sobreancho: ...` con `Apply Widening To = Inside Only` (borde interior de la curva).
 

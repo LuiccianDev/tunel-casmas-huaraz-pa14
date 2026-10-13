@@ -168,3 +168,16 @@ def test_documentacion_civil3d_dg2018():
         assert url_pdf_dg2018 in texto, (
             f"El enlace al PDF de referencia DG-2018 no está documentado en {archivo}."
         )
+
+
+def test_entradas_pdf_tienen_markdown_e_indice():
+    """Garantiza que todo PDF en docs/entradas/ tenga su versión .md convertida y exista indice_dg2018.md."""
+    entradas_dir = ROOT_DIR / "docs" / "entradas"
+    indice = entradas_dir / "indice_dg2018.md"
+    assert indice.exists(), "El índice rápido docs/entradas/indice_dg2018.md no existe."
+    for pdf in entradas_dir.glob("*.pdf"):
+        md_par = pdf.with_suffix(".md")
+        assert md_par.exists(), (
+            f"El archivo '{pdf.name}' no tiene su versión Markdown '{md_par.name}'. "
+            "Ejecuta: uv run --with 'markitdown[pdf]' python scripts/convertir_pdfs.py"
+        )

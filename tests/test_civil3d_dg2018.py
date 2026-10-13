@@ -56,3 +56,36 @@ def test_curvas_verticales_k_oficial_dg2018():
     assert tabla_k.get("name") == "DG-2018 MTC Curvas Verticales (Art. 303.04)"
     psd_30 = tabla_k.find(f".//{NS}MinimumK_PSD[@speed='30']")
     assert psd_30 is not None and psd_30.get("K") == str(round(200**2 / 946.0))
+
+
+def test_metodos_sobreancho_por_vehiculo_y_tabla():
+    gen = _gen()
+    datos = gen.cargar_datos()
+    raiz = gen.construir_xml(datos).getroot()
+    metodos = {m.get("name"): m for m in raiz.iter(f"{NS}WideningMethod")}
+    assert "DG-2018 MTC Sobreancho (formula)" in metodos
+    # Verifica constante wl por defecto en la fórmula general
+    wl_const = metodos["DG-2018 MTC Sobreancho (formula)"].find(
+        f".//{NS}WideningConstant[@name='wl']"
+    )
+    assert wl_const is not None and wl_const.get("value") == "8.25"
+
+    # Verifica tablas y fórmulas para cada vehículo del TOML
+    for veh in datos["sobreancho"]["vehiculos"].values():
+        nombre_tab = f"DG-2018 MTC Tabla Sobreancho: {veh['nombre']}"
+        nombre_for = f"DG-2018 MTC Formula Sobreancho: {veh['nombre']}"
+        assert nombre_tab in metodos
+        assert nombre_for in metodos
+        # La tabla debe tener anchos de calzada y valores dWidth
+        lw = metodos[nombre_tab].find(f".//{NS}LaneWidth[@width='7.2']")
+        assert lw is not None
+        # En radios grandes (R=3000, V=50), Sa < 0.40 m -> dWidth debe ser 0.0
+        iw_3000 = lw.find(
+            f".//{NS}WideningDesignSpeed[@speed='50']/{NS}IncreasedWidth[@radius='3000']"
+        )
+        assert iw_3000 is not None and iw_3000.get("dWidth") == "0.0"
+        # En radios pequeños (R=30, V=30), dWidth debe ser >= 0.4
+        iw_30 = lw.find(
+            f".//{NS}WideningDesignSpeed[@speed='30']/{NS}IncreasedWidth[@radius='30']"
+        )
+        assert iw_30 is not None and float(iw_30.get("dWidth")) >= 0.4

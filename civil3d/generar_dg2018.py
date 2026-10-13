@@ -8,6 +8,7 @@ Uso:  uv run python civil3d/generar_dg2018.py
 
 from __future__ import annotations
 
+import math
 import sys
 import tomllib
 import xml.etree.ElementTree as ET
@@ -66,14 +67,78 @@ def _metodo_bombeo(padre: ET.Element, nombre: str) -> None:
         _el(estilo, "TransitionFormula", type=tipo, formula=formula)
 
 
-def _sobreancho(padre: ET.Element, nombre: str, datos: dict) -> None:
+def calcular_sa(
+    r: float, v: float, l_m: float, n: int, coef_v: float, sa_min: float, red: float
+) -> float:
+    """Calcula el sobreancho Sa (m) según Art. 302.09.03 DG-2018 con umbral mínimo."""
+    if r <= l_m:
+        return 0.0
+    sa_bruto = n * (r - math.sqrt(r**2 - l_m**2)) + coef_v * v / math.sqrt(r)
+    sa_red = round(round(sa_bruto / red) * red, 2)
+    return sa_red if sa_red >= sa_min - 1e-9 else 0.0
+
+
+def _sobreancho(padre: ET.Element, pref: str, datos: dict) -> None:
+    """Genera métodos de sobreancho por fórmula (con constantes) y por tabla automática."""
     s = datos["sobreancho"]
-    m = _el(padre, "WideningMethod", name=nombre)
-    por_formula = _el(m, "WideningTypeByFormula")
-    formula = (
-        f"{{n}}*({{r}}-sqrt({{r}}^2-{{wl}}^2))+{s['coef_velocidad']}*{{v}}/sqrt({{r}})"
-    )
-    _el(por_formula, "WideningFormula", roundingFactor=s["redondeo"], formula=formula)
+    coef_v = s["coef_velocidad"]
+    red = s["redondeo"]
+    sa_min = s["sa_minimo_m"]
+    n_calz = s["carriles_calzada"]
+    velocidades = datos["curvas_verticales_k"]["velocidades"]
+
+    # 1. Método general por fórmula (usa {wl} del cuadro de diálogo, con constante por defecto)
+    m_gen = _el(padre, "WideningMethod", name=f"{pref} Sobreancho (formula)")
+    pf_gen = _el(m_gen, "WideningTypeByFormula")
+    f_gen = f"{{n}}*({{r}}-sqrt({{r}}^2-{{wl}}^2))+{coef_v}*{{v}}/sqrt({{r}})"
+    _el(pf_gen, "WideningFormula", roundingFactor=red, formula=f_gen)
+    const_gen = _el(pf_gen, "WideningConstants")
+    _el(const_gen, "WideningConstant", name="wl", value="8.25")
+
+    # 2. Métodos automáticos por vehículo de diseño (Tabla + Fórmula dedicada)
+    for veh in s["vehiculos"].values():
+        l_val = veh["l_m"]
+        # 2a. Método por tabla (100% automático en Civil 3D, incluye umbral Sa >= 0.40 m)
+        m_tab = _el(
+            padre,
+            "WideningMethod",
+            name=f"{pref} Tabla Sobreancho: {veh['nombre']}",
+        )
+        pt = _el(
+            m_tab,
+            "WideningTypeByTable",
+            StandardName=pref,
+            TableType="Standard",
+            NumberOfLanes="1",
+        )
+        for ancho in s["anchos_calzada"]:
+            lw = _el(
+                pt,
+                "LaneWidth",
+                width=f"{ancho:.1f}",
+                NumberOfLanes=str(n_calz),
+            )
+            for v in velocidades:
+                wds = _el(lw, "WideningDesignSpeed", speed=v)
+                for r in s["radios_tabla"]:
+                    if r <= l_val:
+                        continue
+                    dw = calcular_sa(r, v, l_val, n_calz, coef_v, sa_min, red)
+                    _el(wds, "IncreasedWidth", radius=r, dWidth=f"{dw:.1f}")
+
+        # 2b. Método por fórmula con L fijo del vehículo (no depende de editar {wl} en UI)
+        m_f = _el(
+            padre,
+            "WideningMethod",
+            name=f"{pref} Formula Sobreancho: {veh['nombre']}",
+        )
+        pf = _el(m_f, "WideningTypeByFormula")
+        formula_v = (
+            f"{n_calz}*({{r}}-sqrt({{r}}^2-{l_val}^2))+{coef_v}*{{v}}/sqrt({{r}})"
+        )
+        _el(pf, "WideningFormula", roundingFactor=red, formula=formula_v)
+        consts = _el(pf, "WideningConstants")
+        _el(consts, "WideningConstant", name="L", value=str(l_val))
 
 
 def _filas_peralte(t: dict, v: int, rmin: float, pp: dict) -> list[tuple[int, str]]:
@@ -180,7 +245,7 @@ def construir_xml(datos: dict) -> ET.ElementTree:
     _metodo_bombeo(metodos, f"{pref} Bombeo (Crowned Roadway)")
     _tablas_peralte(_el(alin, "SuperelevationTables"), datos)
     anchos = _el(alin, "WideningMethods")
-    _sobreancho(anchos, f"{pref} Sobreancho (formula)", datos)
+    _sobreancho(anchos, pref, datos)
     _tabla_k(_el(_el(raiz, "Profiles"), "MinimumKTables"), datos)
     ET.indent(raiz, space="  ")
     return ET.ElementTree(raiz)

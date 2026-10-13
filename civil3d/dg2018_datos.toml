@@ -50,12 +50,39 @@ radio_redondeado = [25, 45, 70, 105, 150, 195, 255, 330, 415, 540, 665]
 [verificacion]
 tolerancia_radio_m = 1.0
 
-# Sobreancho en curvas (Art. 302.09.03, Figura 302.18B, pág. 161 DG-2018):
+# Sobreancho en curvas (Art. 302.09.03, Figura 302.18B, pág. 161 y Tabla 302.20, pág. 162 DG-2018):
 # Sa = n (R - sqrt(R^2 - L^2)) + V / (10 sqrt(R)), con Sa_min = 0.40 m.
+# En el Art. 302.09.03 se establece que el sobreancho se aplica en el borde interior de la calzada
+# (de 2 carriles, ancho en tangente 7.20 m, 6.60 m o 6.00 m).
 [sobreancho]
 coef_velocidad = 0.1     # Factor 1/10 de V / sqrt(R), Art. 302.09.03 DG-2018
 redondeo = 0.1           # m
 sa_minimo_m = 0.40       # m, Art. 302.09.03 y Tabla 302.20 DG-2018
+carriles_calzada = 2     # Calzada bidireccional estándar de 2 carriles
+anchos_calzada = [7.2, 6.6, 6.0] # m, anchos típicos de calzada de 2 carriles (Tabla 304.01 DG-2018)
+radios_tabla = [3000, 2500, 2000, 1500, 1000, 900, 800, 700, 600, 500, 450, 400, 350, 300, 250, 200, 150, 130, 120, 100, 90, 80, 70, 60, 55, 50, 45, 40, 37, 35, 30, 28, 25]
+
+# Vehículos de diseño oficiales según Tabla 202.01 (pág. 27) y Sección 202 DG-2018:
+# L = Distancia entre el eje posterior y la parte frontal (parachoques delantero) = Vuelo delantero + Separación de ejes (m).
+[sobreancho.vehiculos.b2_c2]
+codigo = "B2 / C2"
+nombre = "Omnibus 2 ejes B2 / Camion 2 ejes C2 (L=8.25m)"
+l_m = 8.25               # m, Separación de ejes oficial B2 (Tabla 202.01 pág. 27 DG-2018) / C2 estándar
+
+[sobreancho.vehiculos.b3_c3]
+codigo = "B3-1 / C3"
+nombre = "Omnibus 3 ejes B3-1 / Camion 3 ejes C3 (L=9.95m)"
+l_m = 9.95               # m, Vuelo delantero (2.40 m) + separación ejes (7.55 m), Tabla 202.01 DG-2018
+
+[sobreancho.vehiculos.b2_total]
+codigo = "B2-Total"
+nombre = "Omnibus 2 ejes B2 con vuelo delantero (L=10.55m)"
+l_m = 10.55              # m, Vuelo delantero (2.30 m) + separación ejes (8.25 m), Tabla 202.01 DG-2018
+
+[sobreancho.vehiculos.t2s1_t3s2]
+codigo = "T2S1 / T3S2"
+nombre = "Semirremolque articulado T2S1 / T3S2 (L=12.50m)"
+l_m = 12.50              # m, Separación de ejes semirremolque, Tabla 202.01 pág. 27 DG-2018
 
 # Figura 304.07 (pág. 203 DG-2018) - Banquetas en corte y escalonamiento en terraplén (Assembly).
 [banquetas]
