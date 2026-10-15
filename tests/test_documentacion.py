@@ -181,3 +181,88 @@ def test_entradas_pdf_tienen_markdown_e_indice():
             f"El archivo '{pdf.name}' no tiene su versión Markdown '{md_par.name}'. "
             "Ejecuta: uv run --with 'markitdown[pdf]' python scripts/convertir_pdfs.py"
         )
+
+
+def test_estructura_plugins_antigravity():
+    """Valida que todos los plugins en .agents/plugins/ cumplan el esquema oficial de Antigravity 2.0."""
+    import json
+
+    agents_dir = ROOT_DIR / ".agents"
+    plugins_json = agents_dir / "plugins.json"
+    skills_json = agents_dir / "skills.json"
+    assert plugins_json.exists(), "El archivo .agents/plugins.json no existe."
+    assert skills_json.exists(), "El archivo .agents/skills.json no existe."
+
+    plugins_dir = agents_dir / "plugins"
+    assert plugins_dir.exists(), "El directorio .agents/plugins no existe."
+
+    campos_permitidos = {
+        "name",
+        "displayName",
+        "version",
+        "description",
+        "logo",
+        "suggestedPrompts",
+        "disabled",
+    }
+    plugins_esperados = {
+        "asistente-pa14",
+        "autocad-gateway",
+        "code-reviewer",
+        "graphify",
+        "powerbi",
+        "qgis",
+    }
+    carpetas = {p.name for p in plugins_dir.iterdir() if p.is_dir()}
+    assert plugins_esperados.issubset(carpetas), (
+        f"Faltan plugins esperados en .agents/plugins/: {plugins_esperados - carpetas}"
+    )
+
+    for plugin_path in sorted(p for p in plugins_dir.iterdir() if p.is_dir()):
+        manifest_file = plugin_path / "plugin.json"
+        readme_file = plugin_path / "README.md"
+        assert manifest_file.exists(), f"Falta plugin.json en {plugin_path.name}"
+        assert readme_file.exists(), f"Falta README.md en {plugin_path.name}"
+
+        data = json.loads(manifest_file.read_text(encoding="utf-8"))
+        campos_extra = set(data.keys()) - campos_permitidos
+        assert not campos_extra, (
+            f"Campos no soportados en {plugin_path.name}/plugin.json: {campos_extra}"
+        )
+        assert data.get("name") == plugin_path.name, (
+            f"El campo 'name' en {plugin_path.name}/plugin.json debe coincidir con la carpeta."
+        )
+        assert data.get("displayName"), (
+            f"Falta 'displayName' en {plugin_path.name}/plugin.json"
+        )
+        assert data.get("version"), f"Falta 'version' en {plugin_path.name}/plugin.json"
+        assert data.get("description"), (
+            f"Falta 'description' en {plugin_path.name}/plugin.json"
+        )
+
+        logo_rel = data.get("logo")
+        assert logo_rel, f"Falta 'logo' en {plugin_path.name}/plugin.json"
+        assert (plugin_path / logo_rel).exists(), (
+            f"El archivo de logo '{logo_rel}' no existe en {plugin_path.name}"
+        )
+
+        prompts = data.get("suggestedPrompts", [])
+        assert isinstance(prompts, list) and len(prompts) == 3, (
+            f"{plugin_path.name}/plugin.json debe tener exactamente 3 'suggestedPrompts'."
+        )
+
+        rules_dir = plugin_path / "rules"
+        if rules_dir.exists():
+            archivos_reglas = [f.name for f in rules_dir.iterdir() if f.is_file()]
+            assert archivos_reglas == ["AGENTS.md"], (
+                f"En {plugin_path.name}/rules/ solo debe existir 'AGENTS.md' "
+                f"(encontrado: {archivos_reglas})."
+            )
+
+        skills_dir = plugin_path / "skills"
+        if skills_dir.exists():
+            for skill_folder in (s for s in skills_dir.iterdir() if s.is_dir()):
+                skill_md = skill_folder / "SKILL.md"
+                assert skill_md.exists(), (
+                    f"Falta SKILL.md en {plugin_path.name}/skills/{skill_folder.name}"
+                )
