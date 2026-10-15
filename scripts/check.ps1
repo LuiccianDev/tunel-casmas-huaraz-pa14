@@ -28,9 +28,9 @@ try {
     uv run python civil3d/generar_dg2018.py
 
     Write-Host ""
-    Write-Host "=== [4/5] Ejecutando pruebas unitarias (Pytest) ===" -ForegroundColor Cyan
+    Write-Host "=== [4/5] Ejecutando pruebas unitarias y arnés de código fuente (Pytest) ===" -ForegroundColor Cyan
     if ($Fast) {
-        uv run pytest tests/test_civil3d_dg2018.py tests/test_documentacion.py -q
+        uv run pytest tests/test_civil3d_dg2018.py tests/test_documentacion.py tests/test_arnes_fuente_excel.py tests/test_arnes_fuente_lisp.py -q
     } else {
         uv run pytest -q
     }

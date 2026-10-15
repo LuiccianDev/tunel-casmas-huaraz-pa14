@@ -47,6 +47,14 @@ def _resolver_formulas(
             token = f"{{{sim}}}"
             if token in formula_resuelta:
                 formula_resuelta = formula_resuelta.replace(token, mapa_simbolos[sim])
+        if "{" in formula_resuelta and "}" in formula_resuelta:
+            import re
+
+            tokens_restantes = re.findall(r"\{[^{}]+\}", formula_resuelta)
+            if tokens_restantes:
+                raise ValueError(
+                    f"Fórmula contiene símbolos o tokens no resueltos {tokens_restantes}: '{formula_resuelta}'"
+                )
         celda.value = formula_resuelta
         if celda.number_format not in ("0.0%", "#,##0"):
             celda.number_format = "#,##0.00"

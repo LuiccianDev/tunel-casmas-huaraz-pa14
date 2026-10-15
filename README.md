@@ -107,7 +107,9 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 
 | Acción | Comando PowerShell (Windows) | Descripción |
 |---|---|---|
-| **Verificación Total** | `.\scripts\check.ps1` | Ruff format + Ruff check + Pytest + Generación PA14 |
+| **Verificación Total** | `.\scripts\check.ps1` | Ruff format + Ruff check + XML Civil 3D + Pytest + Generación PA14 |
+| **Verificación Rápida** | `.\scripts\check.ps1 -Fast` | Linting + XML Civil 3D + Arnés de código fuente en memoria (~1.5 s) |
+| **Monitor Reactivo (Arnés en Vivo)** | `.\scripts\watch_harness.ps1` | Vigila `src/`, `datos/` y `civil3d/`; ejecuta el arnés ante cada guardado |
 | **Generar Entregables** | `.\scripts\run.ps1` | Ejecuta el pipeline completo de ingeniería |
 | **Compilar Plugins CAD** | `.\scripts\build_plugins.ps1` | Compila `AutoCAD_AI_Gateway` y `AutoCAD_MCP_Server` en Release |
 
