@@ -1,4 +1,12 @@
 {
   "name": "qgis",
-  "description": "Integración local segura de QGIS MCP para gestión de capas geográficas, análisis espacial y cartografía del proyecto Túnel PA14"
+  "displayName": "QGIS Geospatial MCP",
+  "version": "1.1.0",
+  "description": "Integración segura de QGIS MCP (EPSG:32718 / UTM 18S) para gestión de capas geoespaciales, análisis topográfico y cartografía del proyecto Túnel PA14.",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Verifica el enlace con QGIS Desktop mediante ping y lista las capas cargadas",
+    "Comprueba que todas las capas del proyecto estén en el sistema UTM Zona 18S (EPSG:32718)",
+    "Genera un buffer o análisis espacial no destructivo sobre el eje del túnel"
+  ]
 }

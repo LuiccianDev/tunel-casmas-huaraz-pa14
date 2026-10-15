@@ -48,5 +48,5 @@ Al diseñar una planta desde cero, **DEBES** seguir este orden para maximizar la
    - **Comandos YQArch:** `DD` (Dim linear) o `DDWW` (Dim interior walls) para un acotado interno súper rápido.
 
 ## 3. Uso del Catálogo Local
-- Consulta SIEMPRE el archivo `yqarch_commands.md` ubicado en el directorio principal del plugin `autocad-gateway/rules/` para verificar la nomenclatura exacta y el nombre interno del comando antes de enviarlo por el Gateway.
+- Consulta SIEMPRE el archivo [yqarch_commands.md](./references/yqarch_commands.md) ubicado en el directorio `references/` de este skill para verificar la nomenclatura exacta y el nombre interno del comando antes de enviarlo por el Gateway.
 - Los comandos nativos de YQArch a menudo se ingresan como alias sin el prefijo `_`, pero asegúrate de respetar la sintaxis de escapes requerida por el Gateway.

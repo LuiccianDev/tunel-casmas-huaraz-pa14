@@ -1,4 +1,12 @@
 {
   "name": "graphify",
-  "description": "Integración local de Graphify para análisis de grafos de conocimiento y navegación arquitectónica"
+  "displayName": "Graphify Knowledge Graph",
+  "version": "1.1.0",
+  "description": "Integración local de Graphify MCP para análisis determinista de grafos de conocimiento, navegación arquitectónica y trazabilidad de dependencias.",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Consulta el grafo de conocimiento para explicar el flujo de datos entre módulos",
+    "Actualiza el grafo del proyecto tras modificar los módulos de ingeniería",
+    "Identifica los nodos centrales (God Nodes) y comunidades en GRAPH_REPORT.md"
+  ]
 }

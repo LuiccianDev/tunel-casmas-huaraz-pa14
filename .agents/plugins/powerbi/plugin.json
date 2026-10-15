@@ -1,4 +1,12 @@
 {
   "name": "powerbi",
-  "description": "Integración local del Power BI Authoring MCP Server para modelado semántico, medidas DAX y mejores prácticas en Power BI Desktop y Fabric"
+  "displayName": "Power BI Modeling MCP",
+  "version": "1.1.0",
+  "description": "Integración oficial de Microsoft Power BI Authoring MCP Server para modelado semántico, medidas DAX y validación en Power BI Desktop y proyectos PBIP/TMDL.",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Conéctate al modelo activo de Power BI Desktop y lista sus tablas y medidas",
+    "Crea y valida medidas DAX para el control de costos y avance del túnel",
+    "Verifica las relaciones e integridad del modelo semántico según mejores prácticas"
+  ]
 }

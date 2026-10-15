@@ -1,9 +1,12 @@
 {
   "name": "autocad-gateway",
-  "description": "Plugin para asistencia técnica, mantenimiento y comunicación segura con AutoCAD AI Gateway (.NET / C#). Agrupa principios de Clean Code, buenas prácticas de .NET y documentación C# junto a directivas de inyección a AutoCAD.",
+  "displayName": "AutoCAD & Civil 3D AI Gateway",
+  "version": "2.2.0",
+  "description": "Integración en tiempo real con AutoCAD 2027 y Civil 3D vía HTTP Gateway (puerto 5055) y servidor MCP (.NET 10 / C#). Incluye reglas métricas, YQArch y buenas prácticas .NET.",
+  "logo": "assets/logo.svg",
   "suggestedPrompts": [
-    "Audita el código C# del gateway para AutoCAD siguiendo Clean Code",
-    "Inyecta un comando en AutoCAD usando el endpoint seguro del Gateway",
-    "Verifica y compila el plugin AutoCAD_AI_Gateway en modo Release"
+    "Verifica la conexión con AutoCAD Gateway y configura el entorno métrico",
+    "Dibuja la sección transversal del túnel en AutoCAD usando comandos nativos",
+    "Compila AutoCAD_AI_Gateway y AutoCAD_MCP_Server en configuración Release"
   ]
 }

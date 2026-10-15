@@ -1,8 +1,12 @@
 {
   "name": "asistente-pa14",
-  "description": "Asistente de Calidad para el proyecto Túnel Casmas Huaraz PA14. Asegura la correcta formulación de parámetros, archivos Excel, y la calidad del código.",
+  "displayName": "Asistente de Calidad PA14",
+  "version": "2.2.0",
+  "description": "Asistente de ingeniería y control de calidad para el proyecto Túnel Casmas Huaraz PA14. Gobierna la reactividad en cadena desde parametros.toml, formato Excel dinámico y sincronización documental.",
+  "logo": "assets/logo.svg",
   "suggestedPrompts": [
-    "Verifica la calidad del código y ejecuta los tests del proyecto",
-    "Ayúdame a generar un nuevo entregable y actualizar el grafo"
+    "Verifica la calidad del código y ejecuta check.ps1 en todo el proyecto",
+    "Audita que todas las hojas Excel usen fórmulas dinámicas sin valores estáticos",
+    "Regenera los entregables, memorias y planos AutoLISP tras actualizar parametros.toml"
   ]
 }

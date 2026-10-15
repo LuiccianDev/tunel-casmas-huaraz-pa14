@@ -1,8 +1,12 @@
 {
   "name": "code-reviewer",
-  "description": "Revisor de código anti-espagueti y optimizador de tokens. Obliga al uso de Graphify (MCP) para entender la arquitectura en lugar de hacer búsquedas redundantes.",
+  "displayName": "Code Reviewer & Anti-Spaghetti",
+  "version": "1.1.0",
+  "description": "Auditor de calidad estructural y revisor anti-espagueti. Combina análisis de arquitectura Graphify-First con revisiones profundas de mantenibilidad y modularidad.",
+  "logo": "assets/logo.svg",
   "suggestedPrompts": [
-    "Revisa la arquitectura del último módulo usando Graphify e identifica nodos espagueti",
-    "Analiza las dependencias antes de refactorizar"
+    "Ejecuta una revisión profunda de calidad y mantenibilidad sobre los últimos cambios",
+    "Audita la arquitectura usando Graphify e identifica posibles God Nodes o código espagueti",
+    "Analiza las dependencias de un módulo antes de refactorizarlo"
   ]
 }
