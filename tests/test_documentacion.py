@@ -179,7 +179,7 @@ def test_entradas_pdf_tienen_markdown_e_indice():
         md_par = pdf.with_suffix(".md")
         assert md_par.exists(), (
             f"El archivo '{pdf.name}' no tiene su versión Markdown '{md_par.name}'. "
-            "Ejecuta: uv run --with 'markitdown[pdf]' python scripts/convertir_pdfs.py"
+            "Ejecuta: uv run --with 'markitdown[pdf]' python scripts/utils/convertir_pdfs.py"
         )
 
 

@@ -113,7 +113,7 @@ Proyecto: **Túnel Casmas Huaraz PA14** (curso de Túneles). Idioma: **español*
 ## Documentación (Entradas y Salidas) y Ahorro de Tokens
 
 - **Entradas (Contexto/Base):** Todo documento de referencia aportado por el usuario (fichas técnicas, marco regulatorio, normativas) debe alojarse en `docs/entradas/`.
-- **Prohibido leer PDFs directamente:** Todo `.pdf` en `docs/entradas/` cuenta con su par `.md` convertido con `MarkItDown` (sincronizable vía `uv run --with "markitdown[pdf]" python scripts/convertir_pdfs.py`).
+- **Prohibido leer PDFs directamente:** Todo `.pdf` en `docs/entradas/` cuenta con su par `.md` convertido con `MarkItDown` (sincronizable vía `uv run --with "markitdown[pdf]" python scripts/utils/convertir_pdfs.py`).
 - **Índice de Coordenadas:** Antes de consultar el manual DG-2018 (`docs/entradas/manual_de_carreteras_dg_2018.md`) o los documentos de Konya, el asistente **DEBE** consultar [`docs/entradas/indice_dg2018.md`](docs/entradas/indice_dg2018.md) y leer únicamente el rango de líneas (`StartLine`–`EndLine`) requerido.
 - **Salidas (Generados):** Todo documento de texto o markdown generado como producto o entregable del proyecto (como prompts generados o reportes) debe guardarse en `salidas/documentos/`.
 - **Nomenclatura:** Todos los archivos documentales deben estar en minúsculas y usar `snake_case`.

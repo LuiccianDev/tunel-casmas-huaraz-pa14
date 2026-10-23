@@ -1,12 +1,12 @@
 {
   "name": "code-reviewer",
-  "displayName": "Code Reviewer & Anti-Spaghetti",
-  "version": "1.1.0",
-  "description": "Auditor de calidad estructural y revisor anti-espagueti. Combina análisis de arquitectura Graphify-First con revisiones profundas de mantenibilidad y modularidad.",
+  "displayName": "Code Reviewer & Clean Architect",
+  "version": "1.2.0",
+  "description": "Auditor de calidad, Clean Code y arquitectura anti-espagueti para el proyecto Túnel PA14. Asegura principio de responsabilidad única, modularidad y verificación con Graphify y Pytest.",
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
-    "Ejecuta una revisión profunda de calidad y mantenibilidad sobre los últimos cambios",
-    "Audita la arquitectura usando Graphify e identifica posibles God Nodes o código espagueti",
-    "Analiza las dependencias de un módulo antes de refactorizarlo"
+    "Ejecuta una auditoría de Clean Code y modularidad sobre los últimos cambios en src/",
+    "Audita la arquitectura con Graphify para detectar acoplamiento, dependencias circulares o God Nodes",
+    "Analiza la modularidad de un archivo extenso y elabora un plan de refactorización limpio"
   ]
 }

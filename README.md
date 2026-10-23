@@ -42,7 +42,7 @@ en **Markdown** y doble canal de planos para **AutoCAD** (generación batch en *
 | **09** | `09_Electricidad.xlsx` | Ventilación · Subestaciones y cargas · Grupo electrógeno · Resumen | — | ✅ |
 | **10** | `10_Cronograma.xlsx` | Actividades constructivas · Duraciones · Carta Gantt | — | ✅ |
 | **13** | `13_Sostenimiento.xlsx` | Sostenimiento subterráneo interior del túnel (Bieniawski/Barton: pernos, shotcrete y cerchas por tramo) | `13_sostenimiento.md` | ✅ |
-| **—** | `PA14_dibujos.lsp` | Planos AutoLISP: Sección tipo, campamento, polvorines, saneamiento, botadero, malla | — | ✅ |
+| **—** | `PA14_dibujos.lsp` / `PA14_campamento_1.lsp` / `PA14_campamento_2.lsp` | Planos AutoLISP: Ubicación UTM, sección, malla, geología, y los 2 archivos consolidados de Campamento 1 y Campamento 2 con sus 38 edificaciones (`EDIF-01` a `EDIF-38`) | — | ✅ |
 | **—** | `PA14_DG2018_MTC_Roadway_Design_Standards.xml` | Criterios de diseño geométrico vial DG-2018 (MTC Perú) para Autodesk Civil 3D | [`civil3d/README.md`](civil3d/README.md) | ✅ |
 
 Cada hoja utiliza el formato estándar: **Descripción | Símbolo | Valor | Unidad | Fórmula / Fuente**.  
@@ -66,10 +66,11 @@ flowchart TD
 ```
 
 ### Canal 1: Batch Portable (AutoLISP)
-* **Archivo generado:** `salidas/lisp/PA14_dibujos.lsp`.
-* **Propósito:** Entregable formal y autónomo para entrega del proyecto. No requiere tener AutoCAD abierto durante la ejecución de Python.
-* **Carga en AutoCAD:** Comando `APPLOAD` → seleccionar `PA14_dibujos.lsp`.
-* **Comandos disponibles:** `PA14_TODO`, `PA14_SECCION`, `PA14_CAMPAMENTO`, `PA14_POLVORIN`, `PA14_SANEAMIENTO`, `PA14_BOTADERO`, `PA14_MALLA`.
+* **Archivos generados:**
+  * `salidas/lisp/PA14_dibujos.lsp`: Planos generales del túnel (`PA14_TODO`, `PA14_UBICACION`, `PA14_SECCION`, `PA14_MALLA`, `PA14_GEOLOGIA`).
+  * `salidas/lisp/PA14_campamento_1.lsp`: Todo el **Campamento 1 Principal (Portal Entrada - 248 pax)** en un solo archivo (`PA14_CAMPAMENTO_1` dibuja el Master Plan + sus 23 plantas detalladas en grilla; o `PA14_MASTER_CAMP1` y `PA14_EDIF_XX` por separado).
+  * `salidas/lisp/PA14_campamento_2.lsp`: Todo el **Campamento 2 Satélite (Portal Salida - 98 pax)** en un solo archivo (`PA14_CAMPAMENTO_2` dibuja el Master Plan + sus 15 plantas detalladas en grilla; o `PA14_MASTER_CAMP2` y `PA14_EDIF_XX` por separado).
+* **Propósito:** Entregables formales y autónomos del proyecto. No requieren tener AutoCAD abierto durante la ejecución de Python.
 * **Estándar:** Unidades en metros, capas institucionales `PA14-*`, entidades generadas mediante `entmake`.
 
 ### Canal 2: Interactivo en Tiempo Real (Gateway + MCP Server en C# / .NET 10)

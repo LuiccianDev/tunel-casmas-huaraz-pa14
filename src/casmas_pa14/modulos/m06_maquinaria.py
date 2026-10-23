@@ -2,9 +2,8 @@
 
 import math
 
-from ..fichas_maquinaria import FICHAS_TECNICAS
+from ..catalogos import FICHAS_TECNICAS, generar_tablas_rendimiento_equipo
 from ..modelo import Hoja, Libro, Memoria, Tabla, tabla_parametros
-from ..rendimientos_tablas import generar_tablas_rendimiento_equipo
 
 CLAVE = "maquinaria"
 

@@ -140,3 +140,80 @@ def test_arnes_generar_lisp_aislado(tmp_path: Path):
     assert "PA14: dibujo terminado." in contenido, (
         "Falta el mensaje de finalización segura."
     )
+
+
+def test_arnes_38_edificaciones_y_2_campamentos_lisp(tmp_path: Path):
+    """Valida la generación dinámica en exactamente 2 archivos: PA14_campamento_1.lsp y PA14_campamento_2.lsp."""
+    from casmas_pa14.lisp_campamento import (
+        dibujo_edificacion,
+        generar_lisp_campamento,
+    )
+
+    p, ctx = _obtener_contexto_calculado()
+    nombre_proy = p.get("proyecto", {}).get("nombre", "PA14 Test")
+    edifs = ctx["campamento"]["edificaciones"]
+    det01 = ctx["campamento"].get("edif01_detalle", {})
+
+    assert len(edifs) == 38, (
+        "Deben existir exactamente las 38 edificaciones del campamento."
+    )
+
+    equip = ctx["campamento"].get("equipamiento", {})
+    cuerpos_por_id: dict[str, str] = {}
+
+    for edif in edifs:
+        d = dibujo_edificacion(edif, det01, equip)
+        assert isinstance(d, Dibujo)
+        cuerpo_str = "\n".join(d.cuerpo)
+        assert cuerpo_str.count("(") == cuerpo_str.count(")"), (
+            f"Paréntesis desbalanceados en {edif['id']}."
+        )
+        cuerpo_str.encode("ascii")
+        cuerpos_por_id[edif["id"]] = cuerpo_str
+
+    # Verificaciones de coherencia estructural e ingeniería por tipología
+    assert "PABELLON A" in cuerpos_por_id["EDIF-02"]
+    assert "PABELLON B" in cuerpos_por_id["EDIF-02"]
+    assert 'PA14-MUROS"' not in cuerpos_por_id["EDIF-25"], (
+        "EDIF-25 (Playa de estacionamiento abierta) no debe tener muros de edificio."
+    )
+    assert 'PA14-MUROS"' not in cuerpos_por_id["EDIF-27"], (
+        "EDIF-27 (Playa auxiliar abierta) no debe tener muros de edificio."
+    )
+    assert "TIPOLOGIA: T3" in cuerpos_por_id["EDIF-26"]
+    assert "BALANZA ELECTRONICA" in cuerpos_por_id["EDIF-24"]
+    assert 'PA14-CERCO"' in cuerpos_por_id["EDIF-15"]
+    assert "RESERVORIO APOYADO" in cuerpos_por_id["EDIF-15"]
+    assert "MODULO CONTENEDOR ISO 40'" in cuerpos_por_id["EDIF-32"]
+    assert "AREA A: BODEGA" in cuerpos_por_id["EDIF-33"]
+    assert "AREA B: ACOPIO RESIDUOS" in cuerpos_por_id["EDIF-33"]
+    assert "PARAPETO PERIMETRAL DE TIERRA" in cuerpos_por_id["EDIF-23"]
+    assert "PARAPETO PERIMETRAL DE TIERRA" in cuerpos_por_id["EDIF-28"]
+
+    rutas = generar_lisp_campamento(ctx, tmp_path, nombre_proy)
+    assert len(rutas) == 2, (
+        f"Se esperaban exactamente 2 archivos .lsp (Campamento 1 y Campamento 2), se generaron {len(rutas)}."
+    )
+
+    c1 = tmp_path / "PA14_campamento_1.lsp"
+    c2 = tmp_path / "PA14_campamento_2.lsp"
+    assert c1.exists() and c2.exists()
+
+    txt_c1 = c1.read_text(encoding="ascii")
+    txt_c2 = c2.read_text(encoding="ascii")
+    assert txt_c1.count("(") == txt_c1.count(")")
+    assert txt_c2.count("(") == txt_c2.count(")")
+    assert "(defun c:PA14_CAMPAMENTO_1" in txt_c1
+    assert "(defun c:PA14_MASTER_CAMP1" in txt_c1
+    assert "pa14:pedir-origen" in txt_c1
+    assert "(defun c:PA14_CAMPAMENTO_2" in txt_c2
+    assert "(defun c:PA14_MASTER_CAMP2" in txt_c2
+    assert "pa14:pedir-origen" in txt_c2
+
+    for e in edifs:
+        num = e["id"].split("-")[1]
+        cmd = f"(defun c:PA14_EDIF_{num}"
+        if e["campamento"] == "CAMP1":
+            assert cmd in txt_c1, f"Falta {cmd} en PA14_campamento_1.lsp"
+        else:
+            assert cmd in txt_c2, f"Falta {cmd} en PA14_campamento_2.lsp"

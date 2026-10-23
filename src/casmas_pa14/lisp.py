@@ -110,6 +110,11 @@ _LIBRERIA = r"""
   (setvar "ANGDIR" 0)     ; antihorario
   (pa14:dim-estilo 1.0 0.22 0.18))
 (defun pa14:origen (x y) (setq *ox* x *oy* y))
+(defun pa14:pedir-origen (msg / pt)
+  (setq pt (getpoint (strcat "\n" msg " [Clic en pantalla o ENTER para 0,0]: ")))
+  (if pt
+    (pa14:origen (car pt) (cadr pt))
+    (pa14:origen 0.0 0.0)))
 (defun pa14:inicio ()
   (setq *pa14-eco* (getvar "CMDECHO"))
   (setvar "CMDECHO" 0)

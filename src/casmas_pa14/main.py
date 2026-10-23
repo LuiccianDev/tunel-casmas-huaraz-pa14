@@ -4,9 +4,11 @@ import argparse
 import sys
 from pathlib import Path
 
+from .catalogos import generar_prompts_cad
 from .config import MEMORIAS, PARAMETROS, SALIDAS, cargar_parametros
 from .excel import escribir_libro
 from .lisp import generar_lisp
+from .lisp_campamento import generar_lisp_campamento
 from .memoria import escribir_memoria
 from .modulos import (
     m01_ubicacion,
@@ -25,7 +27,6 @@ from .modulos import (
     m14_afrontonamiento,
     m15_voladura_banquetas,
 )
-from .prompts_cad import generar_prompts_cad
 
 # Orden = dependencias (cada módulo usa resultados de los anteriores).
 # m02_geologia se agregará aquí cuando estén los datos.
@@ -70,6 +71,7 @@ def ejecutar(
                 )
             )
     archivos.append(generar_lisp(ctx, salida / "lisp", proyecto))
+    archivos.extend(generar_lisp_campamento(ctx, salida / "lisp", proyecto))
     archivos.append(generar_prompts_cad(ctx, salida / "documentos", proyecto))
     return ctx, archivos
 

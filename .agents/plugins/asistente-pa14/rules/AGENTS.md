@@ -46,7 +46,7 @@ Al trabajar en el proyecto **Túnel Casmas Huaraz PA14**, debes asegurar estrict
 ## 7. Control de Tokens y Consulta Instantánea (MarkItDown + Índice de Líneas)
 - **Prohibido leer PDFs directamente:** Todos los archivos `.pdf` en `docs/entradas/` cuentan con su versión limpia en Markdown (`.md`) generada con `MarkItDown`. Si se añade un nuevo PDF a `docs/entradas/`, ejecuta primero:
   ```powershell
-  uv run --with "markitdown[pdf]" python scripts/convertir_pdfs.py
+  uv run --with "markitdown[pdf]" python scripts/utils/convertir_pdfs.py
   ```
 - **Consulta por Rangos Exactos:** Antes de consultar el manual DG-2018 (`docs/entradas/manual_de_carreteras_dg_2018.md`) o los textos del modelo de Konya, **DEBES** leer primero [`docs/entradas/indice_dg2018.md`](../../../../docs/entradas/indice_dg2018.md) y abrir únicamente el rango `StartLine`–`EndLine` requerido (~50 líneas).
 

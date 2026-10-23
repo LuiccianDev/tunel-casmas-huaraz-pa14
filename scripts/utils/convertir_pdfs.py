@@ -4,8 +4,8 @@ Solo procesa los PDFs nuevos o modificados cuyo par `.md` no exista o sea más a
 a menos que se pase el argumento `--force`.
 
 Uso:
-    uv run --with "markitdown[pdf]" python scripts/convertir_pdfs.py
-    uv run --with "markitdown[pdf]" python scripts/convertir_pdfs.py --force
+    uv run --with "markitdown[pdf]" python scripts/utils/convertir_pdfs.py
+    uv run --with "markitdown[pdf]" python scripts/utils/convertir_pdfs.py --force
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import re
 import sys
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[1]
+RAIZ = Path(__file__).resolve().parents[2]
 CARPETA_ENTRADAS = RAIZ / "docs" / "entradas"
 
 

@@ -34,11 +34,11 @@ cota = 3860.0
 
 [[ubicacion.puntos]]
 id = "BOT2"
-nombre = "BOTADERO 2"
+nombre = "BOTADERO 2" # Botadero B (Portal Salida / Huaraz) - Lat: -9.5595480°, Lon: -77.6533379° (Google Earth)
 zona = "18 L"
-este = 208582.25
-norte = 8942242.82
-cota = 3810.0
+este = 208723.98
+norte = 8942164.14
+cota = 3820.0
 
 [[ubicacion.puntos]]
 id = "CAM2"
@@ -2309,6 +2309,29 @@ area_m2 = 12.0
 ancho_m = 3.0
 norma = "Ley N° 30299 SUCAMEC / D.S. 024-2016-EM (Custodia armada 24/7 a 300 m Portal B)"
 
+# Equipamiento de ingeniería por edificación: gobierna la geometría de los planos
+# AutoLISP (salidas/lisp/PA14_campamento_1.lsp y _2.lsp). Unidades en el nombre de la clave.
+[campamento.equipamiento]
+"EDIF-10" = { n_bahias = 3, tecle_t = 15.0 }                      # RNE A.060: 3 bahías (Jumbo/Volquete/Scoop), tecle 15 t
+"EDIF-14" = { caudal_lps = 5.0, diametro_pozo_pulg = 8.0 }        # RNE OS.010: captación 5 L/s, entubado 8" (S)
+"EDIF-15" = { reservorio_m3 = 120.0, altura_agua_m = 3.0, n_filtros = 2 }  # RNE OS.030 reservorio apoyado; tirante (S)
+"EDIF-16" = { n_reactores_mbbr = 2 }                              # RNE OS.090: tren MBBR en paralelo (S)
+"EDIF-17" = { n_camaras = 2 }                                     # RNE IS.010: 2 trampas en paralelo (operación/limpieza) (S)
+"EDIF-18" = { n_celdas = 7 }                                      # NTP 900.058-2019: 7 colores de segregación
+"EDIF-19" = { n_trincheras = 3 }                                  # D.Leg. 1278: trincheras de compostaje (S)
+"EDIF-20" = { potencia_kva = 2500.0, n_grupos = 3 }               # CNE Suministro: 3 grupos en paralelo (S)
+"EDIF-21" = { n_tanques = 2, capacidad_tanque_gal = 10000.0, factor_cubeto = 1.10, altura_cubeto_m = 1.20, relacion_l_d = 3.5 }  # D.S. 052-93-EM / NFPA 30: cubeto 110 % del mayor tanque; L/D (S)
+"EDIF-22" = { lamparas = 100, duchas = 16 }                       # D.S. 024-2016-EM Art. 97; 1 ducha/10 trab. RNE IS.010 (S)
+"EDIF-24" = { balanza_t = 80.0, largo_balanza_m = 18.0, ancho_balanza_m = 3.0 }  # Balanza camionera 80 t estándar (S)
+"EDIF-25" = { cajones_livianos = 20, bahias_buses = 4 }           # RNE A.010 Cap. X: 2.50x5.00 m y 3.50x12.00 m
+"EDIF-26" = { bahias_volquetes = 6, bahias_equipos = 4 }          # MTC EG-2013 Sec. 104 (S)
+"EDIF-27" = { cajones_livianos = 8, bahias_buses = 2, bahias_pesados = 3 }  # RNE A.010 (S)
+"EDIF-29" = { n_bahias = 2, tecle_t = 5.0 }                       # RNE A.060: taller auxiliar Portal B (S)
+"EDIF-30" = { n_tanques = 1, capacidad_tanque_gal = 10000.0, factor_cubeto = 1.10, altura_cubeto_m = 1.20, relacion_l_d = 3.5 }  # D.S. 052-93-EM / NFPA 30 (S)
+"EDIF-31" = { potencia_kva = 1000.0, n_grupos = 2 }               # CNE Suministro: 2 grupos en paralelo (S)
+"EDIF-32" = { reservorio_m3 = 40.0, altura_agua_m = 3.0, caudal_ptap_lps = 2.0, caudal_ptar_lps = 1.5 }  # RNE OS.020/OS.090 (S)
+"EDIF-36" = { lamparas = 40 }                                     # D.S. 024-2016-EM Art. 97
+
 # =============================================================================
 #  06 · MAQUINARIA
 # =============================================================================
@@ -2813,6 +2836,21 @@ desfase_dias = 0
 # =============================================================================
 [portales]
 factor_esponjamiento = 1.30 # Factor de esponjamiento de suelo de cobertura y roca alterada en portal (MTC EG-2013)
+
+# Geometría del Corte de Portal y Emboquille (Croquis de Afrontonamiento y Banquetas)
+[portales.corte_emboquille]
+ancho_acceso_m = 28.53          # Unidad: m | Ancho de plataforma horizontal de acceso al emboquille (croquis)
+pendiente_acceso_pct = -2.00     # Unidad: % | Pendiente transversal de drenaje de plataforma de acceso (S)
+altura_fronton_m = 17.50        # Unidad: m | Altura vertical del fronton de emboquille (croquis)
+ancho_banqueta1_m = 5.00        # Unidad: m | Ancho de banqueta 1 superior al fronton (croquis)
+pendiente_banqueta_pct = 2.00   # Unidad: % | Pendiente transversal hacia talud para drenaje de banqueta (DG-2018)
+angulo_talud1_deg = 65.0        # Unidad: deg | Angulo de talud de banco 1 (croquis)
+altura_banco1_m = 10.00         # Unidad: m | Altura vertical de banco 1 (Relacion de avance 1:2 con berma 5m) (S)
+ancho_banqueta2_m = 5.00        # Unidad: m | Ancho de banqueta 2 (croquis)
+angulo_talud2_deg = 60.0        # Unidad: deg | Angulo de talud de banco 2 (croquis)
+altura_banco2_m = 10.00         # Unidad: m | Altura vertical de banco 2 (Relacion de avance 1:2 con berma 5m) (S)
+ancho_banqueta3_m = 5.00        # Unidad: m | Ancho de banqueta 3 (croquis)
+angulo_talud_final_deg = 60.0   # Unidad: deg | Angulo de talud final proyectado a terreno natural (croquis)
 
 [[portales.banquetas]]
 id = "Banqueta 01 - Tramo I"

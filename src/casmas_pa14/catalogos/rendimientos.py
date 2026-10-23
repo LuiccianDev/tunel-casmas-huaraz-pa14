@@ -6,7 +6,7 @@ y las tablas de referencia y justificación empírica (conversión volumétrica,
 coeficientes de llenado, velocidades de pasada, dureza de roca, etc.).
 """
 
-from .modelo import OpcionLista, Tabla, tabla_parametros
+from ..modelo import OpcionLista, Tabla, tabla_parametros
 
 # =============================================================================
 #  TABLAS DE REFERENCIA ESTÁNDAR (CATERPILLAR & EPIROC)
