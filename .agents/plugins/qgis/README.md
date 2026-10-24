@@ -4,8 +4,12 @@ Integración segura de **QGIS Desktop** mediante el servidor **QGIS MCP** para g
 
 ## Contenido del Paquete
 
+- **Subagente Especializado (`agents/qgis.md`)**:
+  - `qgis-pa14`: Ingeniero especialista en SIG, modelación territorial, cuencas, perfiles de elevación y edición vectorial transaccional segura.
 - **Servidor MCP (`mcp_config.json`)**:
-  - `qgis`: Conecta con QGIS Desktop en `localhost:9876` autenticado con `QGIS_MCP_TOKEN`.
+  - `qgis`: Conecta con QGIS Desktop en `localhost:9876` autenticado de forma segura heredando `QGIS_MCP_TOKEN` desde las variables de entorno del sistema (Zero-Secrets en archivos).
+- **Hooks de Ciclo de Vida (`hooks.json` & `hook_qgis_guard.py`)**:
+  - `qgis-integrity-guard`: Previene cambios no autorizados al CRS proyectado oficial (`EPSG:32718`) y protege las capas base originales de modificaciones destructivas.
 - **Reglas (`rules/AGENTS.md`)**:
   - Verificación inicial de enlace (`ping`), validación estricta de CRS (`EPSG:32718`) y operaciones geoespaciales no destructivas.
 - **Skills (`skills/`)**:

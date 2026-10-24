@@ -6,8 +6,10 @@ Este plugin gobierna la interacción del asistente con el software SIG **QGIS De
 
 ## 1. Protocolo de Conexión y Seguridad
 
-1. **Autenticación Obligatoria:**
-   - La comunicación con el socket TCP interno de QGIS está protegida por el token de seguridad `pa14-qgis-token-casmas-2026` inyectado mediante la variable `QGIS_MCP_TOKEN`.
+1. **Autenticación Obligatoria y Seguridad Zero-Secrets:**
+   - La comunicación con el socket TCP interno de QGIS está protegida por un token de seguridad administrado localmente mediante la variable de entorno `QGIS_MCP_TOKEN`.
+   - **Regla Zero-Secrets:** NUNCA exponer contraseñas ni el token `QGIS_MCP_TOKEN` dentro de los archivos de configuración (`mcp_config.json`, `.vscode/mcp.json`). El proceso del servidor MCP (`uvx ... qgis-mcp-server`) hereda esta variable de entorno de forma automática desde el sistema operativo.
+   - Los parámetros de red `QGIS_MCP_HOST` (`localhost`) y `QGIS_MCP_PORT` (`9876`) se configuran en el bloque `env` del cliente o se dejan por defecto.
    - Si el plugin de QGIS no tiene este token configurado o no se encuentra iniciado (*Start Server*), las llamadas fallarán con error de autenticación o conexión rechazada.
 
 2. **Verificación de Enlace Inicial (Liveness):**

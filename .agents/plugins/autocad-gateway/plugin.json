@@ -1,8 +1,8 @@
 {
   "name": "autocad-gateway",
   "displayName": "AutoCAD & Civil 3D AI Gateway",
-  "version": "2.2.0",
-  "description": "Integración en tiempo real con AutoCAD 2027 y Civil 3D vía HTTP Gateway (puerto 5055) y servidor MCP (.NET 10 / C#). Incluye reglas métricas, YQArch y buenas prácticas .NET.",
+  "version": "2.3.0",
+  "description": "Integración en tiempo real con AutoCAD 2027 y Civil 3D vía HTTP Gateway (puerto 5055) y servidor MCP (.NET 10 / C#). Incluye subagente cad-civil3d-pa14, reglas métricas estrictas, AutoLISP y diseño vial DG-2018.",
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
     "Verifica la conexión con AutoCAD Gateway y configura el entorno métrico",

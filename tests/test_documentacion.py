@@ -1,5 +1,6 @@
 """Pruebas de integridad documental (Guardián de READMEs y Living Documentation)."""
 
+import json
 from pathlib import Path
 
 from casmas_pa14.main import MODULOS
@@ -266,3 +267,85 @@ def test_estructura_plugins_antigravity():
                 assert skill_md.exists(), (
                     f"Falta SKILL.md en {plugin_path.name}/skills/{skill_folder.name}"
                 )
+
+
+def test_subagentes_personalizados_pa14():
+    """Valida la existencia y formato oficial de los subagentes especializados PA14."""
+    agents_workspace = ROOT_DIR / ".agents" / "agents"
+    assert agents_workspace.exists(), "La carpeta .agents/agents/ no existe."
+
+    subagentes_esperados = {
+        "calculista.md": "calculista-pa14",
+        "geologo.md": "geologo-pa14",
+        "cad_civil3d.md": "cad-civil3d-pa14",
+        "auditor_qa.md": "auditor-qa-pa14",
+        "qgis.md": "qgis-pa14",
+        "powerbi.md": "powerbi-pa14",
+    }
+
+    for archivo, nombre_esperado in subagentes_esperados.items():
+        agente_file = agents_workspace / archivo
+        assert agente_file.exists(), (
+            f"Falta el subagente '{archivo}' en .agents/agents/"
+        )
+
+        contenido = agente_file.read_text(encoding="utf-8")
+        assert contenido.startswith("---"), (
+            f"{archivo} debe iniciar con frontmatter YAML."
+        )
+        partes = contenido.split("---", 2)
+        assert len(partes) >= 3, (
+            f"{archivo} debe contener bloque frontmatter YAML cerrado."
+        )
+
+        yaml_text = partes[1]
+        assert f"name: {nombre_esperado}" in yaml_text, (
+            f"{archivo} debe tener 'name: {nombre_esperado}'."
+        )
+        assert "description:" in yaml_text, f"{archivo} debe tener 'description'."
+        assert "mainAgent: true" in yaml_text, (
+            f"{archivo} debe tener 'mainAgent: true'."
+        )
+        assert "subagent: true" in yaml_text, f"{archivo} debe tener 'subagent: true'."
+
+
+def test_hooks_ciclo_de_vida_antigravity():
+    """Verifica la configuración y scripts ejecutables de los hooks de Antigravity."""
+    hooks_file = ROOT_DIR / ".agents" / "plugins" / "asistente-pa14" / "hooks.json"
+    assert hooks_file.exists(), "El archivo hooks.json de asistente-pa14 no existe."
+
+    datos = json.loads(hooks_file.read_text(encoding="utf-8"))
+    assert "pa14-environment-guard" in datos, (
+        "hooks.json debe contener el bloque 'pa14-environment-guard'."
+    )
+
+    guard = datos["pa14-environment-guard"]
+    assert guard.get("enabled") is True
+    assert "PreToolUse" in guard
+    assert "PostToolUse" in guard
+
+    # Validación de hooks en asistente-pa14
+    script_guard = ROOT_DIR / ".agents" / "plugins" / "asistente-pa14" / "hook_guard.py"
+    script_post = (
+        ROOT_DIR / ".agents" / "plugins" / "asistente-pa14" / "hook_post_edit.py"
+    )
+    assert script_guard.exists(), "Falta hook_guard.py en asistente-pa14"
+    assert script_post.exists(), "Falta hook_post_edit.py en asistente-pa14"
+
+    # Validación de hooks en qgis
+    hooks_qgis = ROOT_DIR / ".agents" / "plugins" / "qgis" / "hooks.json"
+    assert hooks_qgis.exists(), "El archivo hooks.json de qgis no existe."
+    datos_qgis = json.loads(hooks_qgis.read_text(encoding="utf-8"))
+    assert "qgis-integrity-guard" in datos_qgis
+    assert (
+        ROOT_DIR / ".agents" / "plugins" / "qgis" / "hook_qgis_guard.py"
+    ).exists(), "Falta hook_qgis_guard.py en qgis"
+
+    # Validación de hooks en powerbi
+    hooks_powerbi = ROOT_DIR / ".agents" / "plugins" / "powerbi" / "hooks.json"
+    assert hooks_powerbi.exists(), "El archivo hooks.json de powerbi no existe."
+    datos_powerbi = json.loads(hooks_powerbi.read_text(encoding="utf-8"))
+    assert "powerbi-integrity-guard" in datos_powerbi
+    assert (
+        ROOT_DIR / ".agents" / "plugins" / "powerbi" / "hook_powerbi_guard.py"
+    ).exists(), "Falta hook_powerbi_guard.py en powerbi"

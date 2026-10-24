@@ -1,0 +1,17 @@
+{
+  "powerbi-integrity-guard": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "call_mcp_tool|mcp_powerbi.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run python .agents/plugins/powerbi/hook_powerbi_guard.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

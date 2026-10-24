@@ -1,8 +1,8 @@
 {
   "name": "asistente-pa14",
   "displayName": "Asistente de Calidad PA14",
-  "version": "2.2.0",
-  "description": "Asistente de ingeniería y control de calidad para el proyecto Túnel Casmas Huaraz PA14. Gobierna la reactividad en cadena desde parametros.toml, formato Excel dinámico y sincronización documental.",
+  "version": "2.3.0",
+  "description": "Asistente de ingeniería y control de calidad para el proyecto Túnel Casmas Huaraz PA14. Gobierna la reactividad en cadena desde parametros.toml, formato Excel dinámico, hooks de entorno y subagentes calculista y geólogo.",
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
     "Verifica la calidad del código y ejecuta check.ps1 en todo el proyecto",

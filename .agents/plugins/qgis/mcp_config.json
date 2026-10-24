@@ -9,8 +9,7 @@
       ],
       "env": {
         "QGIS_MCP_HOST": "localhost",
-        "QGIS_MCP_PORT": "9876",
-        "QGIS_MCP_TOKEN": "pa14-qgis-token-casmas-2026"
+        "QGIS_MCP_PORT": "9876"
       }
     }
   }

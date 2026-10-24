@@ -1,8 +1,8 @@
 {
   "name": "code-reviewer",
   "displayName": "Code Reviewer & Clean Architect",
-  "version": "1.2.0",
-  "description": "Auditor de calidad, Clean Code y arquitectura anti-espagueti para el proyecto Túnel PA14. Asegura principio de responsabilidad única, modularidad y verificación con Graphify y Pytest.",
+  "version": "1.3.0",
+  "description": "Auditor de calidad, Clean Code y arquitectura anti-espagueti para el proyecto Túnel PA14. Incluye subagente auditor-qa-pa14, principio de responsabilidad única, modularidad y verificación con Graphify y Pytest.",
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
     "Ejecuta una auditoría de Clean Code y modularidad sobre los últimos cambios en src/",

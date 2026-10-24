@@ -1,0 +1,17 @@
+{
+  "qgis-integrity-guard": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "call_mcp_tool|mcp_qgis.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run python .agents/plugins/qgis/hook_qgis_guard.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
