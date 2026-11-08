@@ -2360,31 +2360,6 @@ tiempo_fijo_min = 8.0           # carga + descarga + maniobras
 distancia_portal_botadero_m = 500.0 # Distancia geométrica media de acarreo a DME Portal Tinco/Huaraz
 potencia_hp = 460
 
-# Ciclo detallado de Carguío (CAT 966H) y Acarreo (Volvo FMX 8x4) en Accesos y Portales
-# Fuente: calculo_carguio_acarreo_tunel.xlsx (Google Drive Unidad 2)
-[maquinaria.ciclo_carguio_acarreo]
-capacidad_cucharon_cat966h_m3 = 5.06   # Unidad: m3 | Capacidad colmado cucharon roquero CAT 966H
-capacidad_banco_cat966h_m3 = 4.00      # Unidad: m3 | Capacidad in-situ por pase
-factor_llenado_cat966h = 0.95          # Unidad: - | Factor de llenado en roca dinamitada
-tiempo_ciclo_elemental_s = 31.56       # Unidad: s | Ciclo elemental de excavacion y carga en V
-tiempo_ciclo_elemental_min = 0.526     # Unidad: min | 31.56 s / 60
-pasadas_llenado_volquete = 4           # Unidad: pasadas | 4 pases para completar tolva util 16 m3
-tiempo_total_carguio_min = 2.104       # Unidad: min | 4 pasadas * 0.526 min
-capacidad_tolva_util_volvo_m3 = 16.0   # Unidad: m3 | Capacidad util en material suelto Volvo FMX 8x4
-carga_nominal_volvo_t = 32.0           # Unidad: t | Carga util maxima por volquete rigido
-velocidad_cargado_kmh = 25.0           # Unidad: km/h | Velocidad media en rampa cargado
-velocidad_vacio_kmh = 35.0             # Unidad: km/h | Velocidad media de retorno en vacio
-tiempo_descarga_min = 0.70             # Unidad: min | Basculamiento y descarga en botadero
-tiempo_maniobras_min = 0.40            # Unidad: min | Maniobras de cuadre y espera
-tiempo_fijo_volvo_min = 1.10           # Unidad: min | Descarga (0.7) + Maniobras (0.4)
-volumen_banco_total_m3 = 2455.25       # Unidad: m3 | Volumen total en banco removido en accesos
-volumen_suelto_total_m3 = 3191.83      # Unidad: m3 | Volumen suelto esponjado (30%)
-masa_transportada_t = 6506.41          # Unidad: t | Masa total a transportar (diorita 2.65 t/m3)
-numero_viajes_total = 210              # Unidad: viajes | Total de viajes requeridos en accesos
-horas_acarreo_totales = 5.47           # Unidad: h | Tiempo neto de acarreo de flota
-rendimiento_horario_m3_banco_h = 448.73 # Unidad: m3/h | Rendimiento promedio horario de produccion
-match_factor_promedio = 1.35          # Unidad: - | Factor de acoplamiento optimo cargador/camion
-
 [maquinaria.botadero]
 altura_m = 10.0                 # Altura máxima de terraza de conformación según MTC EG-2013 Sec. 210
 factor_taludes = 1.30           # Área adicional por talud 1V:1.5H y bermas de seguridad (MTC EG-2013)
@@ -2402,56 +2377,17 @@ potencia_hp_excavadora = 314       # Caterpillar 336 (314 HP)
 potencia_hp_volquete = 500         # Volvo FMX 8x4 Rígido (500 HP)
 
 [maquinaria.accesos]
-longitud_km = 0.38 # Longitud total de accesos industriales a portal (380 m, Fuente: diseno_accesos_banquetas_mov_tierra.xlsx)
-ancho_calzada_m = 5.00 # Ancho uniforme de calzada de accesos (5.0 m)
-talud_corte = 1.00 # Relación de talud 1H:1V en accesos
-espesor_afirmado_m = 0.20 # Espesor de afirmado compactado
-volumen_corte_total_m3 = 2455.25 # Volumen total de corte en banco en accesos
-volumen_afirmado_total_m3 = 380.00 # Volumen total de afirmado
-rendimiento_tractor_d8_m3_h = 126.0 # Rendimiento en corte y desbroce masivo (CAT D8T a 10.5 h/guardia)
-rendimiento_tractor_d6_m_h = 50.0   # Rendimiento en conformación y perfilado de subrasante (Manual CAT D6T)
-rendimiento_motoniveladora_km_dia = 1.5 # Rendimiento de nivelación y bombeo en afirmado (Manual MTC EG-2013 Sec. 301)
 potencia_hp_d8 = 354                # Caterpillar D8T (354 HP)
 potencia_hp_d6 = 215                # Caterpillar D6 (215 HP)
 potencia_hp_excavadora = 314        # Caterpillar 336 (314 HP)
 potencia_hp_volquete = 500          # Volvo FMX 8x4 Rígido (500 HP)
 potencia_hp_motoniveladora = 150    # Caterpillar 140G (150 HP)
-volquetes_asignados_und = 4         # Flota balanceada de 4 volquetes asignados a accesos (Match Factor 1.06 a 1.35)
-
-[[maquinaria.accesos.tramos]]
-nombre = "Acceso 1"
-longitud_m = 155.0
-volumen_corte_m3 = 1018.125
-volumen_afirmado_m3 = 155.0
-horas_desbroce_d8 = 8.08
-
-[[maquinaria.accesos.tramos]]
-nombre = "Acceso 2"
-longitud_m = 112.0
-volumen_corte_m3 = 725.000
-volumen_afirmado_m3 = 112.0
-horas_desbroce_d8 = 5.75
-
-[[maquinaria.accesos.tramos]]
-nombre = "Acceso 3"
-longitud_m = 53.0
-volumen_corte_m3 = 332.125
-volumen_afirmado_m3 = 53.0
-horas_desbroce_d8 = 2.64
-
-[[maquinaria.accesos.tramos]]
-nombre = "Acceso a Base/Portal"
-longitud_m = 60.0
-volumen_corte_m3 = 380.000
-volumen_afirmado_m3 = 60.0
-horas_desbroce_d8 = 3.02
+volquetes_asignados_und = 4         # Flota balanceada de 4 volquetes asignados a accesos
 
 # Parámetros universales para cálculo de rendimiento teórico y real (Caterpillar & Epiroc)
 [maquinaria.rendimientos]
 factor_altitud = 0.930            # Falt a 3850 msnm (motores turbo y compensados)
 eficiencia_operativa = 0.800       # E (50 min/hora de trabajo efectivo)
-coeficiente_carga_k = 0.800        # K para roca fracturada o dinamitada
-factor_abundamiento = 1.500        # Fv de roca natural a suelta
 factor_llenado_balde = 0.750       # F_ll factor de llenado efectivo del cucharón/tolva
 porcentaje_perdidas_reales = 0.873 # P factor de pérdidas por maniobras/condiciones de obra
 
@@ -2460,8 +2396,6 @@ porcentaje_perdidas_reales = 0.873 # P factor de pérdidas por maniobras/condici
 velocidad_trabajo_kmh = 6.5        # V velocidad media en perfilado/nivelación
 ancho_hoja_m = 3.66                # H longitud total de la vertedera (12 pies)
 ancho_efectivo_m = 2.60            # Ancho barrido con vertedera inclinada
-espesor_capa_m = 0.15              # A espesor medio de capa a conformar
-numero_pasadas = 4                 # P pasadas requeridas para rasante final
 eficiencia_operativa = 0.850       # E eficiencia de motoniveladora
 
 # Parámetros específicos para rodillo compactador (Cat CS11 / CS533E)
@@ -2470,8 +2404,6 @@ velocidad_trabajo_kmh = 5.0        # V velocidad de compactación con vibración
 ancho_tambor_m = 2.13              # A ancho del tambor (84'')
 traslape_m = 0.20                  # Traslape entre franjas adyacentes
 ancho_efectivo_m = 1.93            # Ancho neto útil de pasada
-espesor_capa_compactada_m = 0.20   # C espesor de capa de afirmado/base compactada
-numero_pasadas = 6                 # P pasadas recomendadas según suelo
 perdidas_reales = 0.850            # %P pérdidas por giros, aceleración y sobrepaso
 
 # Parámetros específicos para perforadoras (Jumbos y Rockdrill)
@@ -2479,7 +2411,6 @@ perdidas_reales = 0.850            # %P pérdidas por giros, aceleración y sobr
 velocidad_penetracion_m_min = 1.50 # Vp en roca andesítica/granodiorítica media
 disponibilidad_mecanica = 0.850    # Dmec disponibilidad del equipo hidráulico
 factor_utilizacion = 0.750         # U utilización en ciclo de disparo
-tiempo_posicionamiento_min = 0.50  # t de emboquille y cambio de barreno
 
 
 
@@ -2895,21 +2826,6 @@ desfase_dias = 0
 [portales]
 factor_esponjamiento = 1.30 # Factor de esponjamiento de suelo de cobertura y roca alterada en portal (MTC EG-2013)
 
-# Geometría del Corte de Portal y Emboquille (Croquis de Afrontonamiento y Banquetas)
-[portales.corte_emboquille]
-ancho_acceso_m = 28.53          # Unidad: m | Ancho de plataforma horizontal de acceso al emboquille (croquis)
-pendiente_acceso_pct = -2.00     # Unidad: % | Pendiente transversal de drenaje de plataforma de acceso (S)
-altura_fronton_m = 17.50        # Unidad: m | Altura vertical del fronton de emboquille (croquis)
-ancho_banqueta1_m = 5.00        # Unidad: m | Ancho de banqueta 1 superior al fronton (croquis)
-pendiente_banqueta_pct = 2.00   # Unidad: % | Pendiente transversal hacia talud para drenaje de banqueta (DG-2018)
-angulo_talud1_deg = 65.0        # Unidad: deg | Angulo de talud de banco 1 (croquis)
-altura_banco1_m = 10.00         # Unidad: m | Altura vertical de banco 1 (Relacion de avance 1:2 con berma 5m) (S)
-ancho_banqueta2_m = 5.00        # Unidad: m | Ancho de banqueta 2 (croquis)
-angulo_talud2_deg = 60.0        # Unidad: deg | Angulo de talud de banco 2 (croquis)
-altura_banco2_m = 10.00         # Unidad: m | Altura vertical de banco 2 (Relacion de avance 1:2 con berma 5m) (S)
-ancho_banqueta3_m = 5.00        # Unidad: m | Ancho de banqueta 3 (croquis)
-angulo_talud_final_deg = 60.0   # Unidad: deg | Angulo de talud final proyectado a terreno natural (croquis)
-
 # Determinación empírica del ángulo de banquetas mediante Q-slope (Bar & Barton, 2015)
 # Fuente: angulo_banquetas_qslope.xlsx (Google Drive Unidad 2)
 [portales.q_slope]
@@ -2967,33 +2883,15 @@ lado_mayor_m = 13.2162
 angulo_talud_deg = 70.0
 lado_menor_m = 5.0
 
-# 3 Banquetas Uniformes de Portal y Base (Fuente: diseno_accesos_banquetas_mov_tierra.xlsx - Google Drive Unidad 2)
-[portales.banquetas_diseno_u2]
-altura_total_talud_m = 28.0
-numero_banquetas = 3
-longitud_banqueta_m = 35.0
-ancho_banqueta_m = 4.0
-altura_banco_m = 6.0
-volumen_banco_banqueta_m3 = 420.0
-volumen_suelto_banqueta_m3 = 470.4
-factor_esponjamiento = 1.12
-altura_base_portal_m = 10.0
-ancho_base_portal_m = 40.0
-longitud_base_portal_m = 35.0
-volumen_base_portal_m3 = 7000.0
-volumen_total_portal_m3 = 8260.0
-
 # =============================================================================
 #  CORTES, SECCIONES TRANSVERSALES Y CUBICACIONES CIVIL 3D (GOOGLE DRIVE U2)
 # =============================================================================
 [portales.cortes_civil3d]
 volumen_total_corte_m3 = 76105.14
 volumen_total_relleno_m3 = 27.03
-longitud_total_alineamientos_m = 979.13
 talud_corte_h_v = "0.5:1"
 angulo_talud_corte_deg = 63.43 # Compatible con Q-slope (63.42°)
 ancho_banqueta_resguardo_m = 5.00
-altura_banco_banqueta_m = 6.00
 
 # 1. Acceso Túnel B (Fuente: mov_tierra_acceso_tunel.xlsx)
 [portales.cortes_civil3d.acceso_tunel_b]
@@ -3054,9 +2952,6 @@ progresiva_fin = "0+039.954"
 longitud_m = 40.00
 volumen_corte_m3 = 24245.14
 volumen_relleno_m3 = 0.00
-area_corte_000_m2 = 614.97
-area_corte_020_m2 = 602.22
-area_corte_040_m2 = 607.91
 
 # Criterios y Parámetros Geométricos de Diseño Vial DG-2018 para Cortes y Accesos
 [portales.dg2018_geometria]
@@ -3064,11 +2959,9 @@ clasificacion_via = "Trocha de Acceso / Camino de Obra Subterránea (DG-2018 MTC
 velocidad_diseno_kph = 30.0               # Unidad: km/h | Velocidad directriz de acceso en orografía accidentada Tipo 4
 radio_minimo_curvatura_m = 15.00          # Unidad: m | Radio interior mínimo excepcional en curvas de retorno
 bombeo_calzada_pct = -2.00                # Unidad: % | Pendiente transversal de bombeo para drenaje pluvial
-vehiculo_diseno = "Camión Volquete C3 / C4 (Volvo FMX 8x4)"
 distancia_ejes_vehiculo_m = 5.10          # Unidad: m | Distancia entre eje delantero y eje posterior tándem (L)
 numero_carriles = 1                       # Unidad: - | Número de vías/carriles de circulación
 sobreancho_calculado_m = 1.67             # Unidad: m | Fórmula MTC DG-2018: S = n*(R - sqrt(R^2 - L^2)) + V/(10*sqrt(R))
-ancho_calzada_ampliada_curva_m = 5.27     # Unidad: m | Calzada base (3.60 m) + sobreancho S (1.67 m)
 talud_corte_h_v = "0.5:1"                 # Unidad: H:V | Talud de desmonte en roca media/buena (63.43°)
 angulo_talud_corte_deg = 63.43            # Unidad: ° | Compatible con ángulo máximo admisible de Q-slope (63.42°)
 ancho_banqueta_resguardo_m = 5.00         # Unidad: m | Ancho de berma/banqueta intermedia de retención
@@ -3083,7 +2976,6 @@ periodo_retorno_anos = 25                 # Unidad: años | Criterio MTC para ob
 intensidad_precipitacion_mm_h = 65.0      # Unidad: mm/h | Isoyetas de máxima intensidad horaria cuenca Casmas-Huaraz
 coeficiente_escorrentia = 0.85            # Unidad: - | Pavimento afirmado compactado y taludes de roca sana (C)
 rugosidad_manning_concreto = 0.015        # Unidad: - | Concreto simple f'c=175 kg/cm2 frotachado (Manual MTC)
-rugosidad_manning_roca = 0.025            # Unidad: - | Excavación en roca sin revestir
 velocidad_minima_flujo_m_s = 0.60         # Unidad: m/s | Límite mínimo para evitar sedimentación de arenas
 velocidad_maxima_flujo_m_s = 4.50         # Unidad: m/s | Límite máximo en cuneta de concreto para evitar cavitación
 borde_libre_minimo_m = 0.10               # Unidad: m | Revancha de seguridad mínima contra rebose
@@ -3098,7 +2990,6 @@ talud_lado_corte_z2 = 1.43                # Unidad: H:V | Talud exterior hacia d
 pendiente_longitudinal_pct = 2.50         # Unidad: % | Pendiente longitudinal de la rasante vial
 longitud_tramo_m = 200.00                 # Unidad: m | Longitud del tramo aportante
 ancho_tributario_m = 16.00                # Unidad: m | Ancho medio de captación (calzada + berma + talud)
-espesor_revestimiento_m = 0.075           # Unidad: m | Revestimiento de concreto simple f'c=175 kg/cm2 (3 pulgadas)
 
 # Cuneta Tipo 2: Banquetas de Resguardo de Desmonte (Banquetas 1 y 2)
 [portales.drenaje_cunetas.cuneta_banquetas]
@@ -3110,7 +3001,6 @@ talud_lado_corte_z2 = 1.00                # Unidad: H:V | Talud exterior
 pendiente_longitudinal_pct = 2.00         # Unidad: % | Pendiente hacia bajante lateral
 longitud_tramo_m = 383.05                 # Unidad: m | Longitud acumulada de banquetas de corte
 ancho_tributario_m = 8.00                 # Unidad: m | Franja de talud y banqueta de retención
-espesor_revestimiento_m = 0.075           # Unidad: m | Concreto simple f'c=175 kg/cm2
 
 # Cuneta Tipo 3: Zanja de Coronación de Desmonte
 [portales.drenaje_cunetas.cuneta_coronacion]
@@ -3122,27 +3012,17 @@ talud_lado_corte_z2 = 0.75                # Unidad: H:V | Talud de zanja
 pendiente_longitudinal_pct = 3.00         # Unidad: % | Pendiente natural de ladera hacia quebrada
 longitud_tramo_m = 120.00                 # Unidad: m | Longitud de cresta de corte
 ancho_tributario_m = 10.00                # Unidad: m | Cuenca vertiente natural superior
-espesor_revestimiento_m = 0.050           # Unidad: m | Mampostería / mortero lanzado
 
 # Control de Tiempos de Ejecución Tramo a Tramo por Progresiva y Tren de Maquinaria
 [portales.control_tiempos_progresivas]
-cargador_modelo = "Caterpillar CAT 966H"
-cargador_capacidad_banco_m3 = 4.00        # Unidad: m³ banco | Capacidad nominal de cuchara
 cargador_tiempo_ciclo_camion_min = 2.104  # Unidad: min | 4 pasadas de 31.56 s cada una
-volquete_modelo = "Volvo FMX 8x4 Rígido"
 volquete_capacidad_suelta_m3 = 16.00      # Unidad: m³ suelto | Tolva roquera
-volquete_carga_util_t = 32.0              # Unidad: t | Carga útil nominal
 volquetes_en_flota = 4                    # Unidad: unidades | Camiones asignados
 volquete_vel_cargado_kmh = 25.0           # Unidad: km/h | En subida/bajada de trocha
 volquete_vel_vacio_kmh = 35.0             # Unidad: km/h | Retorno vacío
 volquete_tiempo_fijo_min = 1.10           # Unidad: min | Descarga (0.7 min) + Maniobra (0.4 min)
-perforadora_modelo = "Epiroc PowerROC T25"
-perforadora_rendimiento_m_h = 35.0        # Unidad: m/h | Perforación en banco de roca de 6 m
-cuneta_equipo_limpieza = "Excavadora CAT 336D + Motoniveladora CAT 140K"
 cuneta_rendimiento_limpieza_m_h = 40.0    # Unidad: m/h | Perfilado, zanjeo y limpieza de cuneta triangular
 horas_efectivas_por_guardia = 10.5        # Unidad: h/guardia | Jornada minera típica
-guardias_por_dia = 2                      # Unidad: guardias/día | 2 turnos (Día y Noche)
-horas_operativas_dia = 21.0               # Unidad: h/día | 2 × 10.5 h
 distancia_portal_botadero_m = 600.0       # Unidad: m | Distancia base entre emboquille y terraza del Botadero B
 
 
