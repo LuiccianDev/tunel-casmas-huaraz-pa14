@@ -11,7 +11,6 @@
 
 [proyecto]
 nombre = "Túnel Casmas Huaraz PA14"
-curso = "Túneles"
 fecha_inicio = 2026-11-02 # Hito contractual de entrega de terreno y acta de inicio de obra
 altitud_msnm = 3850.0     # Altitud media real entre entrada (3900) y salida (3800)
 
@@ -1899,25 +1898,10 @@ factor_terreno = 1.5 # Relación área total terreno / área edificada (vías, r
 [campamento.edif01_detalle]
 largo_total_m = 48.70           # m, largo total del pabellón modular (plano AR-DM-001)
 ancho_cuerpo_m = 12.00          # m, ancho de crujía habitable (5m + 2m + 5m)
-ancho_total_m = 18.00           # m, ancho total incluyendo voladizos y escaleras exteriores
 ancho_modulo_m = 3.50           # m, ancho modular de habitación según RNE A.020 (área útil >= 14 m²)
-profundidad_habitacion_m = 5.00  # m, profundidad según modulación prefabricada y RNE A.020
 ancho_pasadizo_m = 2.00         # m, ancho pasadizo central térmico (RNE A.070 / A.130)
 ancho_modulo_central_m = 4.50   # m, ancho vestíbulo central y caja de escaleras según RNE A.130 Art. 22
 espesor_muro_ext_m = 0.15       # m, panel sándwich termoacústico PIR 100mm + perfiles según RNE EM.050
-espesor_tabique_m = 0.10        # m, tabiquería modular drywall acústico con lana de roca RNE EM.050
-altura_planta_baja_m = 2.50     # m, altura libre nivel PB (plano AR-DM-001)
-altura_primer_piso_m = 2.60     # m, altura libre nivel P1 (plano AR-DM-001)
-altura_techo_cercha_m = 1.50    # m, flecha para pendiente 25% drenaje pluvial en sierra RNE OS.060
-ancho_cama_m = 1.00             # m, cama individual plaza y media estándar hotelero/staff
-largo_cama_m = 2.00             # m, largo estándar ergonómico NTP 260.001
-ancho_bano_m = 1.50             # m, ancho baño privado completo según RNE IS.010
-largo_bano_m = 1.80             # m, largo baño con inodoro, lavatorio y ducha según RNE IS.010
-ancho_closet_m = 0.60           # m, profundidad estándar de ropero según RNE A.020
-largo_closet_m = 1.20           # m, frente mínimo para guardarropa de faena NTP 260.001
-codigo_plano = "AR-DM-001"      # código de plano según catálogo de edificaciones
-revision_plano = "REV B"        # revisión del entregable
-escala_plano = "1:100"          # escala normalizada de presentación
 
 [[campamento.edificaciones]]
 id = "EDIF-01"
@@ -2314,20 +2298,17 @@ norma = "Ley N° 30299 SUCAMEC / D.S. 024-2016-EM (Custodia armada 24/7 a 300 m 
 [campamento.equipamiento]
 "EDIF-10" = { n_bahias = 3, tecle_t = 15.0 }                      # RNE A.060: 3 bahías (Jumbo/Volquete/Scoop), tecle 15 t
 "EDIF-14" = { caudal_lps = 5.0, diametro_pozo_pulg = 8.0 }        # RNE OS.010: captación 5 L/s, entubado 8" (S)
-"EDIF-15" = { reservorio_m3 = 120.0, altura_agua_m = 3.0, n_filtros = 2 }  # RNE OS.030 reservorio apoyado; tirante (S)
-"EDIF-16" = { n_reactores_mbbr = 2 }                              # RNE OS.090: tren MBBR en paralelo (S)
-"EDIF-17" = { n_camaras = 2 }                                     # RNE IS.010: 2 trampas en paralelo (operación/limpieza) (S)
-"EDIF-18" = { n_celdas = 7 }                                      # NTP 900.058-2019: 7 colores de segregación
+"EDIF-15" = { reservorio_m3 = 120.0, altura_agua_m = 3.0 }        # RNE OS.030 reservorio apoyado; tirante (S)
 "EDIF-19" = { n_trincheras = 3 }                                  # D.Leg. 1278: trincheras de compostaje (S)
 "EDIF-20" = { potencia_kva = 2500.0, n_grupos = 3 }               # CNE Suministro: 3 grupos en paralelo (S)
-"EDIF-21" = { n_tanques = 2, capacidad_tanque_gal = 10000.0, factor_cubeto = 1.10, altura_cubeto_m = 1.20, relacion_l_d = 3.5 }  # D.S. 052-93-EM / NFPA 30: cubeto 110 % del mayor tanque; L/D (S)
-"EDIF-22" = { lamparas = 100, duchas = 16 }                       # D.S. 024-2016-EM Art. 97; 1 ducha/10 trab. RNE IS.010 (S)
-"EDIF-24" = { balanza_t = 80.0, largo_balanza_m = 18.0, ancho_balanza_m = 3.0 }  # Balanza camionera 80 t estándar (S)
+"EDIF-21" = { n_tanques = 2, capacidad_tanque_gal = 10000.0 }     # D.S. 052-93-EM / NFPA 30: tanques diésel
+"EDIF-22" = { lamparas = 100 }                                     # D.S. 024-2016-EM Art. 97
+"EDIF-24" = { balanza_t = 80.0 }                                  # Balanza camionera 80 t estándar (S)
 "EDIF-25" = { cajones_livianos = 20, bahias_buses = 4 }           # RNE A.010 Cap. X: 2.50x5.00 m y 3.50x12.00 m
 "EDIF-26" = { bahias_volquetes = 6, bahias_equipos = 4 }          # MTC EG-2013 Sec. 104 (S)
-"EDIF-27" = { cajones_livianos = 8, bahias_buses = 2, bahias_pesados = 3 }  # RNE A.010 (S)
+"EDIF-27" = { cajones_livianos = 8, bahias_buses = 2 }            # RNE A.010 (S)
 "EDIF-29" = { n_bahias = 2, tecle_t = 5.0 }                       # RNE A.060: taller auxiliar Portal B (S)
-"EDIF-30" = { n_tanques = 1, capacidad_tanque_gal = 10000.0, factor_cubeto = 1.10, altura_cubeto_m = 1.20, relacion_l_d = 3.5 }  # D.S. 052-93-EM / NFPA 30 (S)
+"EDIF-30" = { n_tanques = 1, capacidad_tanque_gal = 10000.0 }     # D.S. 052-93-EM / NFPA 30 (S)
 "EDIF-31" = { potencia_kva = 1000.0, n_grupos = 2 }               # CNE Suministro: 2 grupos en paralelo (S)
 "EDIF-32" = { reservorio_m3 = 40.0, altura_agua_m = 3.0, caudal_ptap_lps = 2.0, caudal_ptar_lps = 1.5 }  # RNE OS.020/OS.090 (S)
 "EDIF-36" = { lamparas = 40 }                                     # D.S. 024-2016-EM Art. 97
@@ -3039,7 +3020,6 @@ potencia_jumbo_hp = 300               # Unidad: HP | Fuente: Ficha Técnica Sand
 velocidad_penetracion_m_min = 1.50    # Unidad: m/min | Fuente: Martillo hidráulico de alta frecuencia en roca andesítica/diorítica
 diametro_alivio_mm = 102.0            # Unidad: mm | Fuente: Broca escariadora de 4" (102 mm) para taladro de alivio en cuele
 diametro_explosivo_mm = 51.0         # Unidad: mm | Fuente: Broca de producción de 51 mm (2") en cuele, ayudas y arrastres
-diametro_contorno_mm = 48.0          # Unidad: mm | Fuente: Broca de contorno de 48 mm (1 7/8") en hastiales y corona
 # Distribución de la malla de perforación del frente (Fuente: malla_1_disparo.xlsx - Google Drive Unidad 2)
 # Malla 1: 141 taladros totales (1 de alivio vacío Ø 102 mm + 140 taladros cargados)
 taladros_alivio_vacios = 1           # Unidad: und | 1 taladro de alivio central vacío de Ø 102 mm
@@ -3049,24 +3029,16 @@ taladros_destroza_und = 0            # Unidad: und | Integrada en las 72 ayudas 
 taladros_cuadradores_und = 14        # Unidad: und | Taladros de hastiales laterales (Ø 48 mm, E = 0.80 m, B = 0.80 m)
 taladros_corona_und = 24             # Unidad: und | Taladros de recorte perimetral en bóveda (Ø 48 mm, E = 0.72 m, B = 0.60 m)
 taladros_arrastres_und = 14          # Unidad: und | Zapateras / arrastres de piso en solera (Ø 51 mm, E = 1.00 m, B = 1.20 m)
-carga_explosiva_total_kg = 362.28    # Unidad: kg/disparo | Consumo total de explosivo calculado en Malla 1
-cartuchos_totales_und = 1199.6       # Unidad: cartuchos | Total de cartuchos por disparo calculado en Malla 1
 
 # Malla alternativa con 2 alivios (Fuente: malla_2_alivio.xlsx - Google Drive Unidad 2)
 [voladura.malla_2_alivios]
-taladros_totales = 142
 taladros_cargados = 140
 taladros_alivio_vacios = 2
 diametro_alivio_mm = 102.0
-diametro_produccion_mm = 51.0
-diametro_contorno_mm = 48.0
-carga_explosiva_total_kg = 511.22
-cartuchos_totales_und = 1687.3
 # Parámetros del modelo matemático de C.J. Konya aplicado a taladros de destroza del túnel
 densidad_explosivo_g_cm3 = 1.20       # Unidad: g/cm³ | Fuente: Emulsión encartuchada Semexsa / Exagel-E (Exsa)
 densidad_roca_g_cm3 = 2.50            # Unidad: g/cm³ | Fuente: Reemplazado dinámicamente por geología ponderada (2.60 t/m³)
 altura_banco_m = 3.294                # Unidad: m | Fuente: Avance efectivo por disparo en frente (L_b = 3.66 m * 0.90 = 3.294 m)
-angulo_taladro_deg = 0.0              # Unidad: grados | Fuente: Perforación horizontal paralela al eje del túnel
 constante_retardo_ms_m = 4.5          # Unidad: ms/m | Fuente: C.J. Konya Tabla TH (andesitas/granodioritas)
 factor_tiempo_filas_ms_m = 11.5       # Unidad: ms/m | Fuente: C.J. Konya Tabla TR (alivio progresivo hacia cara libre del cuele)
 factor_kr_lineas = 0.90               # Unidad: adim. | Fuente: Konya Tabla 1 (3 o más secciones de expansión = 0.90)
@@ -3096,7 +3068,6 @@ link_ficha = "https://drive.google.com/file/d/1tfaX_C6rczxrH7CBsREmtLymkKBQKPVw/
 # =============================================================================
 [voladura_banquetas]
 # Calculadora de Perforación y Voladura de Banquetas en Superficie con Epiroc PowerROC T25 (Modelo C.J. Konya)
-equipo_perforacion = "Epiroc PowerROC T25"
 diametro_broca_mm = 64.0              # Unidad: mm | Fuente: Broca oficial de botones 2.5" T38/T45 (Ficha PowerROC T25)
 explosivo_base = "semexsa E-80"       # Unidad: texto | Fuente: Dinamita semigelatina Exsa (1.18 g/cm³, VOD 4500 m/s)
 densidad_explosivo_g_cm3 = 1.18       # Unidad: g/cm³ | Fuente: Catálogo Exsa - semexsa E-80
@@ -3123,7 +3094,6 @@ rendimiento_perforadora_m_h = 25.0    # Unidad: m/h | Fuente: Rendimiento efecti
 # Parámetros complementarios de Voladura Controlada de Taludes de Banqueta (Buffer y Precorte - Guía Konya)
 carga_pozo_buffer_kg = 12.0           # Unidad: kg | Fuente: Carga explosiva controlada en fila de amortiguación (Buffer)
 relacion_fc_buffer_prod = 1.00        # Unidad: adim. | Fuente: Relación KBP = FC_buffer / FC_producción (Konya)
-diametro_precorte_mm = 64.0           # Unidad: mm | Fuente: Diámetro de taladros de precorte con PowerROC T25
 presion_barreno_precorte_mpa = 75.0   # Unidad: MPa | Fuente: Presión de taladro desacoplada con Enaline / Exsacorte
 angulo_inclinacion_precorte_deg = 20.0 # Unidad: grados | Fuente: Inclinación de talud de precorte respecto a la vertical (70° horiz.)
 
@@ -3794,12 +3764,6 @@ descripcion = "Material no rocoso (suelos, rellenos), inestable, alta deformabil
 # =============================================================================
 [sostenimiento]
 esr = 1.0                           # Unidad: adim. | Fuente: Excavation Support Ratio (Túneles viales = 1.0 según Barton 1974)
-peso_especifico_roca_t_m3 = 2.60    # Unidad: t/m³ | Fuente: Peso específico medio del macizo rocoso PA14
-esfuerzo_fluencia_acero_mpa = 420.0 # Unidad: MPa | Fuente: Acero corrugado ASTM A615 Grado 60 (fy = 420 MPa)
-capacidad_adherencia_mpa = 1.5      # Unidad: MPa | Fuente: Adherencia resina/lechada-roca (MTC RD 036-2016)
-factor_seguridad_pernos = 1.5       # Unidad: FS | Fuente: Factor de seguridad al arrancamiento (MTC EG-2013)
-perno_diametro_mm = 25.0            # Unidad: mm | Fuente: Diámetro perno helicoidal subterráneo (1")
-shotcrete_resistencia_mpa = 30.0    # Unidad: MPa | Fuente: Concreto lanzado f'c >= 28-30 MPa (MTC EG-2013)
 
 [[sostenimiento.clases_rmr]]
 rmr_min = 81
@@ -3847,53 +3811,31 @@ cerchas = "Pesadas @ 0.75m"
 # =============================================================================
 [afrontonamiento]
 # 1. Valoración Geomecánica RMR de Bieniawski (1989) en el Portal / Frontón (Fuente: geomecanica_portal.xlsx)
-ucs_roca_intacta_mpa = 80.0         # Unidad: MPa | Fuente: Ensayo de compresión uniaxial (50 - 100 MPa)
 pts_ucs = 7                         # Unidad: puntos | Fuente: Bieniawski (1989)
-rqd_portal_pct = 70.0               # Unidad: % | Fuente: RQD en talud de emboquille (50 - 75%)
 pts_rqd = 13                        # Unidad: puntos | Fuente: Bieniawski (1989)
-espaciamiento_juntas_m = 0.30       # Unidad: m | Fuente: Espaciamiento de discontinuidades (0.20 - 0.60 m)
 pts_espaciamiento = 10              # Unidad: puntos | Fuente: Bieniawski (1989)
-condicion_juntas = "Superficies ligeramente rugosas, paredes ligeramente alteradas"
 pts_condicion_juntas = 20           # Unidad: puntos | Fuente: Bieniawski (1989)
-condicion_agua = "Completamente seco"
 pts_agua = 15                       # Unidad: puntos | Fuente: geomecanica_portal.xlsx (Seco = 15 pts)
 rmr_basico = 65                     # Unidad: puntos | RMR básico = 7 + 13 + 10 + 20 + 15 = 65 (Clase II)
-orientacion_discontinuidades = "Desfavorable en talud de portal"
 ajuste_orientacion = -5             # Unidad: puntos | Fuente: Ajuste por orientación de juntas en portal
-rmr_ajustado = 60                   # Unidad: puntos | RMR ajustado = 65 - 5 = 60 (Límite Clase II / III)
-clase_macizo = "II / III"           # Unidad: clase | Fuente: RMR 60 (Buena a Regular)
-calidad_macizo = "Roca Buena a Regular"
 
 # 2. Teoría de Cargas de Roca de Terzaghi (1946) para el Frontón
-condicion_terzaghi_id = 4           # Unidad: N° | Fuente: Condición 4 Terzaghi ("Medianamente fracturada en bloques algo abiertos")
-condicion_terzaghi_desc = "Medianamente fracturada en bloques algo abiertos"
 factor_k_terzaghi = 0.35            # Unidad: adim. | Fuente: Terzaghi (1946) para Condición 4 (rango 0.25 a 0.35*(B + Ht))
 peso_especifico_roca_kn_m3 = 26.5   # Unidad: kN/m³ | Fuente: Peso específico del macizo en portal (2.65 t/m³)
 
 # 3. Geometría del Afrontonamiento del Portal (Maniobra Cargador Frontal Caterpillar 966H)
-equipo_maniobra = "Cargador Frontal sobre Ruedas Caterpillar 966H"
 link_ficha_cat966h = "https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view"
-link_lectura_specs = "https://www.lectura-specs.es/es/modelo/maquinaria-para-la-construccion-y-obras-publicas/cargadoras-de-ruedas-caterpillar/966h-1030906"
 longitud_total_equipo_m = 8.84      # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Longitud con cuchara en suelo)
 ancho_sobre_neumaticos_m = 2.96     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
-ancho_cucharon_m = 3.22             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
 altura_cabina_m = 3.58              # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
-altura_pasador_m = 4.24             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
 radio_giro_ext_m = 7.26             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Radio de giro exterior neumáticos)
-diametro_circulo_giro_m = 14.73     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
-tiempo_ciclo_hidraulico_s = 12.7    # Unidad: s | Levantamiento 6.5s, Descarga 2.7s, Bajada 3.5s
 distancia_seguridad_op_m = 1.00     # Unidad: m | Fuente: Resguardo operacional lateral (D.S. 024-2016-EM)
 
 # 4. Malla Electrosoldada en el Frontón (Fuente: diseno_sostenimiento_fronton.xlsx)
 largo_pano_malla_m = 25.00          # Unidad: m | Fuente: Rollo minero Aceros Arequipa Q-139 (25.0 m)
 ancho_pano_malla_m = 2.42           # Unidad: m | Fuente: Ancho comercial de rollo minero Q-139 (2.42 m)
 traslape_malla_m = 0.30             # Unidad: m | Fuente: Traslape normativo por borde (0.30 m)
-diametro_alambre_mm = 3.4           # Unidad: mm | Fuente: Alambre grafilado alta resistencia Ø 3.4 mm
-cocada = "10x10 cm"                 # Unidad: cm | Cuadrícula de 100 x 100 mm
 area_util_pano_m2 = 52.364          # Unidad: m² | Área neta útil por panel: (25.0 - 0.30) * (2.42 - 0.30)
-area_sostener_m2 = 591.566          # Unidad: m² | Área neta del frontón a sostener
-paneles_requeridos = 12             # Unidad: und | Paneles requeridos en obra = ceil(591.566 / 52.364)
-rendimiento_colocacion_h_panel = 0.30 # Unidad: h/panel | Rendimiento de cuadrilla con plataforma
 
 # 5. Pernos de Anclaje RockBolt de Emboquille (Fuente: diseno_sostenimiento_fronton.xlsx)
 longitud_perno_fronton_m = 9.00     # Unidad: m | Fuente: Perno helicoidal largo de cosido de emboquille (L = 9.0 m)
@@ -3904,8 +3846,6 @@ diametro_cartucho_resina_mm = 28.0  # Unidad: mm | Fuente: Cartucho de resina po
 longitud_cartucho_resina_mm = 305.0 # Unidad: mm | Fuente: Cartucho estándar de 305 mm (1 pie)
 peso_cartucho_resina_g = 320.0      # Unidad: g | Fuente: Peso unitario cartucho de resina (320 g/und)
 cartuchos_por_caja = 50             # Unidad: und/caja | Fuente: Presentación comercial en cajas de 50 cartuchos
-rendimiento_perf_bolter_m_min = 0.20 # Unidad: m/min | Fuente: Rendimiento neto perforación Bolter Epiroc
-rendimiento_empernado_bolter_m_min = 0.40 # Unidad: m/min | Fuente: Rendimiento neto inserción y batido Bolter
 
 # 6. Shotcrete Robotizado Vía Húmeda en el Frontón (Fuente: diseno_sostenimiento_fronton.xlsx)
 espesor_shotcrete_fronton_m = 0.10  # Unidad: m | Fuente: Espesor de diseño e = 10 cm (0.10 m) en frontón portal
@@ -3914,8 +3854,6 @@ cemento_dosificacion_kg_m3 = 425.0  # Unidad: kg/m³ | Fuente: Dosificación Cem
 peso_bolsa_cemento_kg = 42.5        # Unidad: kg/bolsa | Fuente: Bolsa comercial de cemento en Perú (42.5 kg)
 relacion_agua_cemento = 0.58        # Unidad: A/C | Fuente: Relación agua/cemento de diseño en mezcla base
 arena_dosificacion_kg_m3 = 1700.0   # Unidad: kg/m³ | Fuente: Agregado graduado arena lavada (1,700 kg/m³)
-acelerante_sikacem_kg_m3 = 17.0     # Unidad: kg/m³ | Fuente: Aditivo acelerante SikaCem Gunite PE (4% cemento)
-nanosilice_kg_m3 = 4.25             # Unidad: kg/m³ | Fuente: Nanosílice en emulsión (1% cemento)
 fibra_sintetica_kg_m3 = 4.0         # Unidad: kg/m³ | Fuente: Macrofibra estructural SikaFiber Force-60 (4.0 kg/m³)
 rendimiento_robot_shotcrete_m3_h = 24.0 # Unidad: m³/h | Fuente: Caudal efectivo Robot Lanzador (GHP25C-IV)
 tiempo_fraguado_inicial_h = 3.0     # Unidad: h | Fuente: Tiempo de fraguado y resistencia inicial
