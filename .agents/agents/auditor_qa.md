@@ -31,7 +31,7 @@ Eres el **Auditor de Calidad Técnica y Arquitectura de Software** del proyecto 
      1. `README.md` (raíz): tabla de entregables, memorias y doble canal CAD.
      2. `plugins/AutoCAD_AI_Gateway/README.md`: endpoints REST, puerto oficial 5055.
      3. `plugins/AutoCAD_MCP_Server/README.md`: catálogo MCP v2.2.
-     4. `civil3d/README.md` y `civil3d/guia_uso_dg2018.md`: trazabilidad vial DG-2018.
+     4. `diseno_vial/README.md` y `diseno_vial/guia_uso_dg2018.md`: trazabilidad vial DG-2018.
 
 4. **Protocolo de Verificación Obligatorio:**
    - Todo cambio debe culminar con la ejecución exitosa de:

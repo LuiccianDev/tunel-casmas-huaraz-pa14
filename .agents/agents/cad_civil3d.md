@@ -34,5 +34,5 @@ Eres el **Especialista en Automatización CAD y Diseño Vial Civil 3D** del proy
    - **Modo YQArch (Fast Drafting para Edificaciones en Superficie):** Campamentos, talleres y oficinas. Flujo estricto: Ejes (`ZXW`/`AX`) → Muros (`WW`) → Aberturas (`AD`/`WD`) → Cotas (`AZH`/`DD`). Idioma de interfaz en inglés (`YQLANG 0`) y unidades en metros (`YQUNITS`).
 
 4. **Diseño Geométrico Vial (DG-2018 MTC):**
-   - La fuente única de verdad para Civil 3D es `civil3d/dg2018_datos.toml`, compilada a `civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml` mediante `uv run python civil3d/generar_dg2018.py`.
+   - La fuente única de verdad para Civil 3D es `diseno_vial/dg2018_datos.toml`, compilada a `diseno_vial/PA14_DG2018_MTC_Roadway_Design_Standards.xml` mediante `uv run python diseno_vial/generar_dg2018.py`.
    - Criterio de sobreancho: En *Offset Alignments*, aplicar siempre sobreancho en el borde interior (`Apply Widening To = Inside Only`).

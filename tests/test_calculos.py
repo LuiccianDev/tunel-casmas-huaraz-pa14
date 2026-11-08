@@ -350,3 +350,98 @@ def test_ningun_modulo_principal_supera_500_lineas():
         if n > 500:
             excesos.append((archivo.name, n))
     assert not excesos, f"Módulos que superan 500 líneas (SRP): {excesos}"
+
+
+def test_estructura_limpia_y_limite_lineas_modulos():
+    """Garantiza que en la raíz de modulos/ solo existan __init__.py y m01..m15, y que ningún archivo en modulos/** supere 500 líneas."""
+    import re
+    from pathlib import Path
+
+    mod_dir = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14" / "modulos"
+    sueltos = [
+        f.name
+        for f in sorted(mod_dir.glob("*.py"))
+        if f.name != "__init__.py" and not re.match(r"^m\d{2}_[a-z0-9_]+\.py$", f.name)
+    ]
+    assert not sueltos, (
+        f"Archivos sueltos no numerados en la raíz de modulos/: {sueltos}"
+    )
+
+    excesos = []
+    for f in sorted(mod_dir.rglob("*.py")):
+        n = len(f.read_text(encoding="utf-8").splitlines())
+        if n > 500:
+            excesos.append((str(f.relative_to(mod_dir)), n))
+    assert not excesos, (
+        f"Archivos en modulos/** que superan 500 líneas (SRP): {excesos}"
+    )
+
+    for fachada in [
+        "m04_personal.py",
+        "m06_maquinaria.py",
+        "m09_electricidad.py",
+        "m11_portales.py",
+        "m12_voladura.py",
+        "m14_afrontonamiento.py",
+        "m15_voladura_banquetas.py",
+    ]:
+        n_fachada = len((mod_dir / fachada).read_text(encoding="utf-8").splitlines())
+        assert n_fachada < 150, f"Fachada {fachada} supera 150 líneas ({n_fachada})"
+
+    # Verificar que no exista el archivo duplicado datos_c3d.py ni rendimientos.py > 500 líneas
+    assert not (mod_dir / "portales" / "datos_c3d.py").exists()
+    cat_dir = mod_dir.parent / "catalogos"
+    for f_cat in ("rendimientos.py", "tablas_referencia_cat.py"):
+        n_cat = len((cat_dir / f_cat).read_text(encoding="utf-8").splitlines())
+        assert n_cat <= 500, f"catalogos/{f_cat} supera 500 líneas ({n_cat})"
+
+
+def test_coherencia_reactiva_voladura_maquinaria_polvorin_y_excel():
+    """Verifica que 12_Voladura propague taladros a 06_Maquinaria y 07_Polvorin, y que las fórmulas de 03_Seccion y 05_Campamento sean válidas."""
+    from casmas_pa14.config import PARAMETROS, cargar_parametros
+    from casmas_pa14.main import MODULOS
+    from casmas_pa14.modulos import m03_seccion, m05_campamento
+
+    p = cargar_parametros(PARAMETROS)
+    ctx = {}
+    for mod in MODULOS:
+        ctx[mod.CLAVE] = mod.calcular(p, ctx)
+
+    # 1. Propagación reactiva 12_Voladura -> 06_Maquinaria y 07_Polvorin
+    vol_ft = ctx["voladura"]["frente_tunel"]
+    assert ctx["maquinaria"]["taladros_frente"] == vol_ft["taladros_perforados"] == 141
+    assert ctx["maquinaria"]["t_perforacion_h"] == pytest.approx(
+        vol_ft["tiempo_perf_neto_h"], rel=1e-4
+    )
+    assert ctx["polvorin"]["taladros_disparo"] == vol_ft["taladros_cargados"] == 140
+
+    # 2. Verificación normativa en 03_Seccion apunta a =Geometria!C12 para altura libre sobre vereda
+    libro_sec = m03_seccion.libro(ctx["seccion"], p)
+    tabla_norma = libro_sec.hojas[2].tablas[0]
+    fila_vereda = [f for f in tabla_norma.filas if "vereda (junto al hastial)" in f[0]][
+        0
+    ]
+    assert fila_vereda[1] == "=Geometria!C12"
+
+    # 3. Memoria de 03_Seccion no contiene fórmulas crudas de Excel
+    mem_sec = m03_seccion.memoria(ctx["seccion"], p)
+    for _, bloques in mem_sec.secciones:
+        for b in bloques:
+            if hasattr(b, "filas"):
+                for fila in b.filas:
+                    for celda in fila:
+                        assert not (isinstance(celda, str) and celda.startswith("=")), (
+                            f"Fórmula cruda en memoria 03_Seccion: {celda}"
+                        )
+
+    # 4. Hojas referenciadas en Resumen_Grupos de 05_Campamento existen en el libro
+    libro_camp = m05_campamento.libro(ctx["campamento"], p)
+    nombres_hojas = {h.nombre for h in libro_camp.hojas}
+    tabla_res_camp = libro_camp.hojas[3].tablas[1]
+    for fila in tabla_res_camp.filas:
+        val = str(fila[2])
+        if "!" in val and val.startswith("="):
+            hoja_ref = val[1:].split("!")[0]
+            assert hoja_ref in nombres_hojas, (
+                f"Referencia a hoja inexistente en 05_Campamento: {val}"
+            )

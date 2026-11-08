@@ -223,10 +223,11 @@ def test_arnes_38_edificaciones_y_2_campamentos_lisp(tmp_path: Path):
 
 
 def test_arquitectura_modular_lisp_cumple_srp():
-    """Valida que lisp.py sea una fachada limpia (<120 líneas) y lisp_cad/* cumpla SRP (<500 líneas)."""
+    """Valida que lisp.py sea una fachada limpia (<120 líneas) y lisp_cad/* y lisp_campamento/* cumplan SRP (<=500 líneas)."""
     raiz_pkg = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14"
     lisp_fachada = raiz_pkg / "lisp.py"
     lisp_cad_dir = raiz_pkg / "lisp_cad"
+    lisp_camp_dir = raiz_pkg / "lisp_campamento"
 
     lineas_fachada = len(lisp_fachada.read_text(encoding="utf-8").splitlines())
     assert lineas_fachada < 120, (
@@ -241,4 +242,13 @@ def test_arquitectura_modular_lisp_cumple_srp():
     )
     for arch in archivos_cad:
         n_lin = len(arch.read_text(encoding="utf-8").splitlines())
-        assert n_lin <= 500, f"{arch.name} supera las 500 líneas ({n_lin})."
+        assert n_lin <= 500, f"lisp_cad/{arch.name} supera las 500 líneas ({n_lin})."
+
+    assert lisp_camp_dir.is_dir(), (
+        "Debe existir el subpaquete src/casmas_pa14/lisp_campamento/."
+    )
+    for arch in sorted(lisp_camp_dir.glob("*.py")):
+        n_lin = len(arch.read_text(encoding="utf-8").splitlines())
+        assert n_lin <= 500, (
+            f"lisp_campamento/{arch.name} supera las 500 líneas ({n_lin})."
+        )

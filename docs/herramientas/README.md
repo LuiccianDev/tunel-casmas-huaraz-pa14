@@ -8,7 +8,7 @@ Este directorio centraliza la documentación técnica, guías de arquitectura y 
 
 | Herramienta / Servidor | Tipo de Integración | Archivo de Documentación | Subagente Especializado |
 | :--- | :--- | :--- | :--- |
-| **AutoCAD & Civil 3D AI Gateway** | HTTP Gateway (puerto 5055) + MCP Server (.NET 10 / C#) | [`documentacion_mcp_autocad.md`](./documentacion_mcp_autocad.md) | `cad-civil3d-pa14` |
+| **AutoCAD & Civil 3D AI Gateway** | HTTP Gateway (puerto 5055) + MCP Server (.NET 10 / C#) | [`LuiccianDev/autocad-mcp`](https://github.com/LuiccianDev/autocad-mcp) | `cad-civil3d-pa14` |
 | **QGIS Geospatial MCP** | Socket TCP (puerto 9876) + WGS84 UTM 18S (EPSG:32718) | [`documentacion_mcp_qgis.md`](./documentacion_mcp_qgis.md) | `qgis-pa14` |
 | **Power BI Modeling MCP** | Servidor oficial Microsoft Power BI Authoring (VertiPaq / DAX) | [`documentacion_mcp_powerbi.md`](./documentacion_mcp_powerbi.md) | `powerbi-pa14` |
 | **Graphify Knowledge Graph** | Grafo de conocimiento determinista (`graphify-out/`) | [`guia_graphify.md`](./guia_graphify.md) | `auditor-qa-pa14` |

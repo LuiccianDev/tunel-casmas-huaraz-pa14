@@ -71,19 +71,19 @@ def test_prompts_cad_autogenerados_con_38_edificaciones():
 
 
 def test_documentacion_civil3d_dg2018():
-    """Verifica que civil3d/README.md y README.md raíz documenten el XML DG-2018, su comando y fuente PDF."""
-    readme_civil3d = ROOT_DIR / "civil3d" / "README.md"
-    pdf_local = ROOT_DIR / "docs" / "entradas" / "manual_de_carreteras_dg_2018.pdf"
-    assert readme_civil3d.exists(), "El archivo civil3d/README.md no existe."
-    assert pdf_local.exists(), (
-        "El PDF oficial docs/entradas/manual_de_carreteras_dg_2018.pdf no existe."
+    """Verifica que diseno_vial/README.md y README.md raíz documenten el XML DG-2018, su comando y fuente oficial."""
+    readme_diseno_vial = ROOT_DIR / "diseno_vial" / "README.md"
+    md_local = ROOT_DIR / "docs" / "entradas" / "manual_de_carreteras_dg_2018.md"
+    assert readme_diseno_vial.exists(), "El archivo diseno_vial/README.md no existe."
+    assert md_local.exists(), (
+        "El documento docs/entradas/manual_de_carreteras_dg_2018.md no existe."
     )
 
-    comando = "uv run python civil3d/generar_dg2018.py"
+    comando = "uv run python diseno_vial/generar_dg2018.py"
     xml_nombre = "PA14_DG2018_MTC_Roadway_Design_Standards.xml"
     url_pdf_dg2018 = "https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing"
 
-    for archivo in (README_ROOT, readme_civil3d):
+    for archivo in (README_ROOT, readme_diseno_vial):
         texto = archivo.read_text(encoding="utf-8")
         assert comando in texto, (
             f"El comando '{comando}' no está documentado en {archivo}."
@@ -97,16 +97,14 @@ def test_documentacion_civil3d_dg2018():
 
 
 def test_entradas_pdf_tienen_markdown_e_indice():
-    """Garantiza que todo PDF en docs/entradas/ tenga su versión .md convertida y exista indice_dg2018.md."""
+    """Garantiza que docs/entradas/ no retenga PDFs redundantes y cuente con sus archivos .md e indice_dg2018.md."""
     entradas_dir = ROOT_DIR / "docs" / "entradas"
     indice = entradas_dir / "indice_dg2018.md"
     assert indice.exists(), "El índice rápido docs/entradas/indice_dg2018.md no existe."
-    for pdf in entradas_dir.glob("*.pdf"):
-        md_par = pdf.with_suffix(".md")
-        assert md_par.exists(), (
-            f"El archivo '{pdf.name}' no tiene su versión Markdown '{md_par.name}'. "
-            "Ejecuta: uv run --with 'markitdown[pdf]' python scripts/utils/convertir_pdfs.py"
-        )
+    pdfs_residuales = [p.name for p in entradas_dir.glob("*.pdf")]
+    assert not pdfs_residuales, (
+        f"Existen PDFs redundantes en docs/entradas/ que ya tienen su par .md: {pdfs_residuales}"
+    )
 
 
 def test_estructura_plugins_antigravity():

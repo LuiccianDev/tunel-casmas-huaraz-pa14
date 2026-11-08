@@ -12,10 +12,10 @@ __pycache__/
 # Documentos PDF originales (usar sus pares .md convertidos con MarkItDown)
 docs/entradas/*.pdf
 
-# Salidas autogeneradas pesadas (la fuente de verdad es datos/parametros.toml y civil3d/dg2018_datos.toml)
+# Salidas autogeneradas pesadas (la fuente de verdad es datos/parametros.toml y diseno_vial/dg2018_datos.toml)
 salidas/excel/*.xlsx
 salidas/lisp/*.lsp
-civil3d/*.xml
+diseno_vial/*.xml
 
 # Artefactos pesados de Graphify (usar GRAPH_REPORT.md o herramientas MCP de Graphify)
 graphify-out/graph.html

@@ -5,7 +5,7 @@ description: "Protocolo de cálculo de ingeniería subterránea, reactividad en 
 
 # Calculista de Ingeniería PA14
 
-Esta habilidad gobierna el flujo de trabajo de cálculo de los 13 módulos de ingeniería del **Túnel Casmas Huaraz PA14** (geometría, geología, sección tipo, personal, campamento, maquinaria, polvorín, agua, electricidad, cronograma, portales, voladura, sostenimiento y banquetas).
+Esta habilidad gobierna el flujo de trabajo de cálculo de los **15 módulos de ingeniería (`m01` a `m15`)** del **Túnel Casmas Huaraz PA14** (ubicación, geología, sección, personal, campamento, maquinaria, polvorín, agua, electricidad, cronograma, portales, voladura, sostenimiento, afrontonamiento y voladura de banquetas).
 
 ---
 
@@ -14,12 +14,14 @@ Esta habilidad gobierna el flujo de trabajo de cálculo de los 13 módulos de in
 Todo cálculo debe seguir estrictamente este flujo unidireccional y reactivo:
 
 ```
-[datos/parametros.toml] ──> [mNN_modulo.calcular(p, ctx)] ──> [ctx] ──> [mNN_modulo.libro(r, p)]
+[datos/parametros.toml] ──> [parametros.validar_parametros(p)] ──> [mNN_modulo.calcular(p, ctx)] ──> [ctx] ──> [mNN_modulo.libro(r, p)]
          ▲                                                                      │
          └───────────── Única Fuente de Verdad ─────────────────────────────────┘
 ```
 
-1. **Parámetro de Entrada:** Se documenta en `datos/parametros.toml` con unidad, descripción y fuente normativa. Si es un supuesto, se marca con `(S)`.
+1. **Parámetro de Entrada y Validación Formal (`parametros.py`):**
+   * Se documenta en `datos/parametros.toml` con unidad, descripción y fuente normativa (o `(S)` si es supuesto).
+   * `cargar_parametros()` ejecuta `validar_parametros(p)` (`SECCIONES_REQUERIDAS` + `validar_invariantes_fisicos(p)`). Todo nuevo parámetro crítico con restricción física debe añadir su invariante en `src/casmas_pa14/parametros.py` y referenciar su clave literal en `src/casmas_pa14/` para pasar `test_auditoria_parametros.py` (cero parámetros huérfanos).
 2. **Cálculo en Python (`calcular(p, ctx)`):**
    * Lee entradas desde `p["clave"]` o desde módulos previos calculados en `ctx["clave_previa"]`.
    * **Prohibido recalcular** lo que ya calculó otro módulo.
@@ -31,6 +33,7 @@ Todo cálculo debe seguir estrictamente este flujo unidireccional y reactivo:
      formula = "={Q}*{E}/({T}*{Fv})"
      ```
    * El compilador `excel.py` traduce automáticamente `{Simbolo}` a la coordenada de celda (ej. `C15`), garantizando que si el usuario cambia un dato en Excel, todo se recalcule en vivo.
+   * **Invariante de Orden en Cruces entre Hojas:** Cuando una hoja referencia una celda de otra hoja (ej. `=Teoria_Cargas_Terzaghi!C6` o `=Afrontonamiento_Portal!C22`), no alteres el orden de las filas previas en `tabla_parametros` durante refactorizaciones sin actualizar simultáneamente las referencias cruzadas.
 
 ---
 

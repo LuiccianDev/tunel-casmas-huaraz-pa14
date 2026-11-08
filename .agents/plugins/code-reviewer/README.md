@@ -14,4 +14,4 @@ Plugin de auditoría estructural, prevención de código espagueti y optimizaci�
 
 ### Skills (`skills/`)
 - **`clean-code`**: Auditoría de Clean Code, principio de responsabilidad única (SRP), eliminación de antipatrones espagueti y refactorización guiada.
-- **`thermo-nuclear-code-quality-review`: Auditoría exhaustiva de mantenibilidad, simplificación estructural (*code judo*), control de tamaño de archivos y eliminación de ramificaciones ad-hoc.
+- *(Nota: la suite completa `thermos` / `thermo-nuclear-code-quality-review` / `thermo-nuclear-review` reside ahora de forma global en `.agents/skills/`).*

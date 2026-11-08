@@ -6,7 +6,7 @@
 #  Escucha cambios en:
 #    - src/casmas_pa14/
 #    - datos/parametros.toml
-#    - civil3d/dg2018_datos.toml
+#    - diseno_vial/dg2018_datos.toml
 #
 #  Ejecuta instantaneamente el arnes de codigo fuente en memoria.
 # =============================================================================
@@ -18,7 +18,7 @@ if (-not $ProjectRoot) { $ProjectRoot = Get-Location }
 
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host " [PA14] WATCH HARNESS ACTIVO - Monitor Reactivo en Vivo   " -ForegroundColor Cyan
-Write-Host " Vigilando: src/casmas_pa14, datos, civil3d              " -ForegroundColor DarkCyan
+Write-Host " Vigilando: src/casmas_pa14, datos, diseno_vial           " -ForegroundColor DarkCyan
 Write-Host " Presiona Ctrl + C para detener el monitor                " -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Cyan
 
@@ -50,7 +50,7 @@ $Watchers = @()
 $RutasVigilar = @(
     (Join-Path $ProjectRoot "src\casmas_pa14"),
     (Join-Path $ProjectRoot "datos"),
-    (Join-Path $ProjectRoot "civil3d")
+    (Join-Path $ProjectRoot "diseno_vial")
 )
 
 $UltimoDisparo = [DateTime]::MinValue

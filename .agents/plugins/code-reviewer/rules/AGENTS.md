@@ -17,7 +17,7 @@ Al momento de revisar código, refactorizar o auditar la calidad en el proyecto 
 ## 2. Estándares Estrictos de Clean Code y Modularidad (Anti-Espagueti)
 1. **Principio de Responsabilidad Única (SRP):**
    * Separación tajante entre cálculo (`modulos/`), persistencia/presentación (`excel.py`, `lisp.py`) y orquestación (`main.py`).
-   * Prohibido crear archivos "todoterreno". Si un módulo crece más allá de 400-500 líneas, debe dividirse en un subpaquete limpio (como `src/casmas_pa14/lisp_campamento/`).
+   * Prohibido crear archivos "todoterreno". Ningún módulo principal `src/casmas_pa14/modulos/m*.py` ni submódulo de paquete (`lisp_cad/`, `lisp_campamento/`, `voladura/`, `afrontonamiento/`, `banquetas/`) puede superar las **500 líneas tras ejecutar `uv run ruff format .`**. Los módulos complejos deben estructurarse como fachada ligera ($< 150$ líneas) + subpaquete (`calculo.py`, `hojas.py`, `catalogos_hojas.py`, `memoria_doc.py`).
 2. **Cero Números Mágicos (Hardcoding):**
    * Bloqueo inmediato a cualquier intento de introducir constantes numéricas no documentadas o calculadas estáticamente en el código. Toda constante debe leerse de `parametros.toml` o de `ctx`.
 3. **Nombrado Expresivo:**
