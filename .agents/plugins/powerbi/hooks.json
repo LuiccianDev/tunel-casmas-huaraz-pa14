@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run python .agents/plugins/powerbi/hook_powerbi_guard.py",
+            "command": "uv run python hook_powerbi_guard.py",
             "timeout": 10
           }
         ]

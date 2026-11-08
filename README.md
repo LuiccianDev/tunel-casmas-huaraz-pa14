@@ -73,12 +73,11 @@ flowchart TD
 * **Propósito:** Entregables formales y autónomos del proyecto. No requieren tener AutoCAD abierto durante la ejecución de Python.
 * **Estándar:** Unidades en metros, capas institucionales `PA14-*`, entidades generadas mediante `entmake`.
 
-### Canal 2: Interactivo en Tiempo Real (Gateway + MCP Server en C# / .NET 10)
-* **Propósito:** Control directo, dibujo interactivo y telemetría de AutoCAD por parte de asistentes de Inteligencia Artificial (Antigravity, Cursor, Claude Desktop).
-* **Puerto oficial:** **`http://localhost:5055/`**.
-* **Componentes (`plugins/`):**
-  1. **`AutoCAD_AI_Gateway`**: Plugin nativo .NET 10 cargado en AutoCAD con `NETLOAD`. Expone comandos `AI_START_SERVER` y `AI_STOP_SERVER`, gestionando una cola concurrente segura en `Application.Idle` con cancelación preventiva `\x03\x03` y 16 endpoints REST (8 de AutoCAD base y 8 de Civil 3D: superficies, cotas de terreno y alineamientos, con lectura y escritura; el mismo DLL funciona en AutoCAD 2027 y Civil 3D 2027).
-  2. **`AutoCAD_MCP_Server`**: Servidor Model Context Protocol v2.2 (STDIO) que expone 20 herramientas de IA (12 de AutoCAD y 8 de Civil 3D) para consultar el modelo (capas, textos, entidades, límites) e inyectar comandos CAD paramétricos o YQArch en metros.
+### Canal 2: Interactivo en Tiempo Real (AutoCAD AI Gateway & MCP Server)
+* **Repositorio oficial desacoplado:** [**LuiccianDev/autocad-mcp**](https://github.com/LuiccianDev/autocad-mcp).
+* **Propósito:** Control directo, telemetría y dibujo interactivo en tiempo real sobre AutoCAD 2027 y Civil 3D por parte de agentes de Inteligencia Artificial (Antigravity, Cursor, Claude Desktop).
+* **Puerto oficial:** **`http://localhost:5055/`** con token de seguridad `X-Gateway-Token`.
+* **Arquitectura:** Servidor Model Context Protocol (MCP) y Gateway nativo .NET 10 (`NETLOAD`) desacoplados y mantenidos de forma independiente en su propio repositorio.
 
 ### Criterios de Diseño Vial Civil 3D (DG-2018 MTC Perú)
 * **Carpeta dedicada:** [`civil3d/`](civil3d/README.md).
@@ -89,10 +88,9 @@ flowchart TD
 
 ## 3. Requisitos del Sistema
 
-* **Cálculos y Python:** [uv](https://docs.astral.sh/uv/) (administra automáticamente Python 3.12 y el entorno virtual `.venv`).
-* **CAD Plugins (Opcional, para desarrollo en C#):**
-  * SDK de .NET 10.0 (x64).
-  * Autodesk AutoCAD 2027 (x64).
+* **Cálculos y Entorno:** [uv](https://docs.astral.sh/uv/) (administra automáticamente Python 3.12 y el entorno virtual `.venv`).
+* **CAD Batch:** Autodesk AutoCAD o Civil 3D (para cargar los scripts generados `.lsp`).
+* **CAD Interactivo en Vivo:** Consultar el repositorio independiente [**LuiccianDev/autocad-mcp**](https://github.com/LuiccianDev/autocad-mcp).
 
 ---
 
@@ -112,7 +110,6 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 | **Verificación Rápida** | `.\scripts\check.ps1 -Fast` | Linting + XML Civil 3D + Arnés de código fuente en memoria (~1.5 s) |
 | **Monitor Reactivo (Arnés en Vivo)** | `.\scripts\watch_harness.ps1` | Vigila `src/`, `datos/` y `civil3d/`; ejecuta el arnés ante cada guardado |
 | **Generar Entregables** | `.\scripts\run.ps1` | Ejecuta el pipeline completo de ingeniería |
-| **Compilar Plugins CAD** | `.\scripts\build_plugins.ps1` | Compila `AutoCAD_AI_Gateway` y `AutoCAD_MCP_Server` en Release |
 | **Extraer Datos Drive (U2)** | `uv run python scripts/utils/extraer_drive_unidad2.py` | Descarga y exportación en solo lectura de Google Drive (Unidad 2) |
 
 ---
@@ -127,7 +124,6 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 | Formatear código Python | `uv run ruff format .` |
 | Linting y correcciones automáticas | `uv run ruff check --fix .` |
 | Ejecutar suite de pruebas (incluye guardián documental) | `uv run pytest -q` |
-| Compilar solución .NET de AutoCAD | `dotnet build -c Release plugins/AutoCAD_Integration.slnx` |
 | Sincronizar grafo de conocimiento (Graphify) | `uvx --from graphifyy graphify update .` |
 
 ---
@@ -150,10 +146,6 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 │   ├── lisp.py                  # Generador de planos AutoLISP (.lsp)
 │   ├── memoria.py               # Generador de memorias técnicas (.md)
 │   └── modulos/                 # 13 módulos de ingeniería (m01 a m13)
-├── plugins/
-│   ├── AutoCAD_Integration.slnx # Solución unificada de integración CAD (.NET 10)
-│   ├── AutoCAD_AI_Gateway/      # Plugin nativo C# para AutoCAD 2027 (puerto 5055)
-│   └── AutoCAD_MCP_Server/      # Servidor Model Context Protocol v2.2 STDIO
 ├── tests/                       # Suite de pruebas unitarias y guardián documental
 ├── docs/
 │   ├── memoria/                 # Memorias técnicas de cálculo en Markdown
@@ -163,7 +155,7 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 │   ├── excel/                   # Libros de cálculo .xlsx
 │   ├── lisp/                    # Archivo PA14_dibujos.lsp
 │   └── documentos/              # Reportes y salidas documentales
-├── scripts/                     # Scripts de automatización (check, run, build_plugins)
+├── scripts/                     # Scripts de automatización (check, run)
 ├── AGENTS.md                    # Reglas obligatorias para asistentes de IA
 └── pyproject.toml               # Configuración del proyecto, dependencias y herramientas
 ```

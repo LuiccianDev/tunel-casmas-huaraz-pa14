@@ -41,6 +41,7 @@ desktop.ini
 # ---------------------------------------------------------------- Tools / SO
 graphify-out/
 .superpowers/
+.agents/plugins/*/.agents/
 
 # ---------------------------------------------------------------- .NET / C# Plugins
 **/[Bb]in/
