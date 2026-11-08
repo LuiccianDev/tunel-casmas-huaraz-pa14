@@ -319,3 +319,18 @@ def test_m14_afrontonamiento_modular_srp():
         assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
 
 
+def test_m15_banquetas_modular_srp():
+    """Verifica que m15_voladura_banquetas.py sea fachada (<150 líneas) y modulos/banquetas/* cumpla SRP (<500 líneas)."""
+    from pathlib import Path
+
+    mod_dir = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14" / "modulos"
+    m15 = mod_dir / "m15_voladura_banquetas.py"
+    banq_pkg = mod_dir / "banquetas"
+
+    assert len(m15.read_text(encoding="utf-8").splitlines()) < 150
+    assert banq_pkg.is_dir()
+    for f in banq_pkg.glob("*.py"):
+        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
+
+
+
