@@ -289,3 +289,33 @@ def test_todos_los_libros_usan_formulas_dinamicas(tmp_path):
         assert tiene_formula, (
             f"El libro {ruta_libro.name} no contiene ninguna fórmula dinámica (=)"
         )
+
+
+def test_m12_voladura_modular_srp():
+    """Verifica que m12_voladura.py sea fachada (<150 líneas) y modulos/voladura/* cumpla SRP (<500 líneas)."""
+    from pathlib import Path
+
+    mod_dir = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14" / "modulos"
+    m12 = mod_dir / "m12_voladura.py"
+    vol_pkg = mod_dir / "voladura"
+
+    assert len(m12.read_text(encoding="utf-8").splitlines()) < 150
+    assert vol_pkg.is_dir()
+    for f in vol_pkg.glob("*.py"):
+        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
+
+
+def test_m14_afrontonamiento_modular_srp():
+    """Verifica que m14_afrontonamiento.py sea fachada (<150 líneas) y modulos/afrontonamiento/* cumpla SRP (<500 líneas)."""
+    from pathlib import Path
+
+    mod_dir = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14" / "modulos"
+    m14 = mod_dir / "m14_afrontonamiento.py"
+    afr_pkg = mod_dir / "afrontonamiento"
+
+    assert len(m14.read_text(encoding="utf-8").splitlines()) < 150
+    assert afr_pkg.is_dir()
+    for f in afr_pkg.glob("*.py"):
+        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
+
+
