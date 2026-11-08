@@ -33,14 +33,19 @@ def calcular(p: dict, ctx: dict) -> dict:
     )
 
     # Agua para shotcrete de sostenimiento primario (según avance diario del túnel)
-    avance_dia = (
+    sec_ctx = ctx.get("seccion", {})
+    avance_dia = sec_ctx.get(
+        "avance_dia_m",
         f["disparos_por_dia_frente"]
         * f["frentes"]
         * f["longitud_barreno_m"]
-        * f["eficiencia_avance"]
+        * f["eficiencia_avance"],
     )
-    ancho_sec, alt_sec = p["seccion"]["ancho_m"], p["seccion"]["altura_m"]
-    perim_sec = math.pi * (ancho_sec / 2) + 2 * (alt_sec - ancho_sec / 2)
+    perim_sec = sec_ctx.get(
+        "perimetro_m",
+        math.pi * (p["seccion"]["ancho_m"] / 2)
+        + 2 * (p["seccion"]["altura_m"] - p["seccion"]["ancho_m"] / 2),
+    )
     vol_shotcrete = avance_dia * perim_sec * a["espesor_shotcrete_m"]
     q_shotcrete = vol_shotcrete * a["agua_shotcrete_l_m3"] / 1000
 
@@ -89,6 +94,7 @@ def calcular(p: dict, ctx: dict) -> dict:
         "horas_perforacion": horas_perf,
         "q_perforacion_m3": q_perforacion,
         "avance_dia_m": avance_dia,
+        "perimetro_tunel_m": perim_sec,
         "vol_shotcrete_m3": vol_shotcrete,
         "q_shotcrete_m3": q_shotcrete,
         "q_lavado_m3": q_lavado,
@@ -123,8 +129,7 @@ def libro(r: dict, p: dict) -> Libro:
         if pozo_pt
         else "Por definir por el usuario"
     )
-    ancho_sec, alt_sec = p["seccion"]["ancho_m"], p["seccion"]["altura_m"]
-    perim_sec = round(math.pi * (ancho_sec / 2) + 2 * (alt_sec - ancho_sec / 2), 2)
+    perim_sec = round(r["perimetro_tunel_m"], 2)
     consumo = tabla_parametros(
         [
             ("Población", "Pob", r["poblacion"], "personas", "04_Personal"),

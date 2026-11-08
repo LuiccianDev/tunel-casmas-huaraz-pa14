@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from ...modelo import Tabla
+from ..voladura.catalogos_hojas import tablas_bd_explosivos_rocas_brocas
 
 
 def construir_tablas_catalogos_banquetas(
@@ -37,88 +38,15 @@ def construir_tablas_catalogos_banquetas(
         "Ficha Técnica de la Perforadora Hidráulica sobre Orugas Epiroc PowerROC T25",
     )
 
-    filas_exp = [
-        [
-            e["nombre"],
-            e["fabricante"],
-            e["tipo"],
-            e["densidad_g_cm3"],
-            e["vod_m_s"],
-            e["resistencia_agua"],
-            e["pd_kbar"],
-            e["energia_kcal_kg"],
-            e["rws_pct"],
-        ]
-        for e in vol_p.get("catalogo_explosivos", [])
-    ]
-    tabla_bd_exp = Tabla(
-        [
-            "Nombre de Explosivo",
-            "Fabricante",
-            "Tipo / Familia",
-            "Densidad (g/cm³)",
-            "VOD (m/s)",
-            "Resistencia al Agua",
-            "Presión Detonación Pd (kbar)",
-            "Energía Específica (kcal/kg)",
-            "Potencia Relativa RWS (%)",
-        ],
-        filas_exp,
-        "Catálogo Comercial de Explosivos Industriales (EXSA, Enaex, Orica)",
-    )
-
-    filas_rocas = [
-        [
-            r_item["nombre"],
-            r_item["densidad_g_cm3"],
-            r_item["ucs_mpa"],
-            r_item["esponjamiento"],
-            r_item["comportamiento"],
-        ]
-        for r_item in vol_p.get("rocas_geomecanica", [])
-    ]
-    tabla_rocas = Tabla(
-        [
-            "Macizo Rocoso",
-            "Densidad (g/cm³)",
-            "Resistencia Compresiva Uniaxial Rc (MPa)",
-            "Factor de Esponjamiento (Fe)",
-            "Comportamiento en Voladura",
-        ],
-        filas_rocas,
-        "Base de Datos Geomecánica de Macizos Rocosos (Caso Base: Diorita PA14)",
-    )
-
-    filas_brocas = [
-        [
-            b["diametro_mm"],
-            b["diametro_pulg"],
-            b["tecnologia"],
-            b["tipo_cortador"],
-            b["sistema_rosca"],
-            b["rango_roca"],
-            b["modelos_referencia"],
-            b["equipos_compatibles"],
-            b["fabricantes"],
-            b["compatible_t25"],
-        ]
-        for b in vol_p.get("brocas_equipos", [])
-    ]
-    tabla_brocas = Tabla(
-        [
-            "Diámetro (mm)",
-            "Diámetro (pulg)",
-            "Tecnología",
-            "Tipo de Cortador",
-            "Sistema de Rosca / Martillo",
-            "Rango de Roca Recomendado",
-            "Modelos de Referencia",
-            "Equipos Compatibles",
-            "Fabricantes",
-            "Compatible con Epiroc PowerROC T25",
-        ],
-        filas_brocas,
-        "Catálogo de Brocas de Perforación y Compatibilidad con Epiroc PowerROC T25",
+    tabla_bd_exp, tabla_rocas, tabla_brocas = tablas_bd_explosivos_rocas_brocas(
+        vol_p,
+        titulo_rocas=(
+            "Base de Datos Geomecánica de Macizos Rocosos (Caso Base: Diorita PA14)"
+        ),
+        col_t25="Compatible con Epiroc PowerROC T25",
+        titulo_brocas=(
+            "Catálogo de Brocas de Perforación y Compatibilidad con Epiroc PowerROC T25"
+        ),
     )
 
     filas_criterios = [

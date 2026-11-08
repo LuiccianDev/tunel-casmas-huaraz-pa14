@@ -171,7 +171,7 @@ def construir_memoria_banquetas(r: dict[str, Any], p: dict[str, Any]) -> Memoria
                     "con varillaje T38/T45).",
                     "> **Nota de separación técnica:** La perforación y voladura subterránea en el frente interior del "
                     "túnel (que emplea el **Jumbo Frontal Computarizado de 3 brazos Sandvik DT1131 / XE3C** con barra "
-                    "de $3.66\\text{ m}$ y broca $\\varnothing 45\\text{ mm}$) se encuentra en el entregable separado "
+                    "de $3.66\\text{ m}$ y broca $\\varnothing 51\\text{ mm}$) se encuentra en el entregable separado "
                     "**`12_Voladura.xlsx`** y **`12_Voladura.md`**.",
                     t_resumen_t25,
                 ],
@@ -180,9 +180,9 @@ def construir_memoria_banquetas(r: dict[str, Any], p: dict[str, Any]) -> Memoria
                 "2. Programación de Perforación y Voladura para los 5 Tramos de Banquetas (`11_Portales`)",
                 [
                     "Integrando los volúmenes geométricos in-situ de las 5 banquetas calculadas en `11_Portales.xlsx` "
-                    "($3,795.21\\text{ m}^3$ en banco) con la malla práctica de C.J. Konya ($B_p = 1.58\\text{ m} \\times "
-                    "S_p = 1.81\\text{ m}$), se obtiene el requerimiento total de taladros, metros perforados, horas "
-                    "de operación de la **Epiroc PowerROC T25** y consumo de explosivo **Semexsa E-80**:",
+                    f"(${r['tot_vol_banq_m3']:,.2f}\\text{{ m}}^3$ en banco) con la malla práctica de C.J. Konya ($B_p = {r['b_prac_m']:.2f}\\text{{ m}} \\times "
+                    f"S_p = {r['s_m']:.2f}\\text{{ m}}$), se obtiene el requerimiento total de taladros, metros perforados, horas "
+                    f"de operación de la **Epiroc PowerROC T25** y consumo de explosivo **{r['explosivo_base']}**:",
                     t_banquetas,
                 ],
             ),

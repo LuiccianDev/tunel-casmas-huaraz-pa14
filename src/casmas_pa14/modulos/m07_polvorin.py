@@ -44,16 +44,18 @@ def dimensionar(cajas: int, c: dict) -> dict:
 
 def calcular(p: dict, ctx: dict) -> dict:
     sec, pol, f = ctx["seccion"], p["polvorin"], p["perforacion"]
+    vol_ft = ctx.get("voladura", {}).get("frente_tunel", {})
+    n_tal_carg = vol_ft.get("taladros_cargados", sec["taladros"])
     disparos_dia = f["disparos_por_dia_frente"] * f["frentes"]
     kg_disparo = f["factor_carga_kg_m3"] * sec["v_disparo_m3"]
     kg_stock = kg_disparo * disparos_dia * pol["dias_stock"]
     acc = pol["accesorios"]
-    det_disparo = sec["taladros"] * acc["detonadores_por_taladro"]
+    det_disparo = n_tal_carg * acc["detonadores_por_taladro"]
     det_stock = det_disparo * disparos_dia * pol["dias_stock"]
     exp = pol["explosivos"]
     return {
         "v_disparo_m3": sec["v_disparo_m3"],
-        "taladros_disparo": sec["taladros"],
+        "taladros_disparo": n_tal_carg,
         "det_por_taladro": acc["detonadores_por_taladro"],
         "disparos_dia": disparos_dia,
         "kg_disparo": kg_disparo,
@@ -174,11 +176,11 @@ def libro(r: dict, p: dict) -> Libro:
             ("Días de stock", "ds", pol["dias_stock"], "días", "Dato"),
             ("Explosivo almacenado", "Qs", "={Qdia}*{ds}", "kg", "Qdía · ds"),
             (
-                "Taladros por disparo (03_Seccion)",
+                "Taladros cargados por disparo (12_Voladura)",
                 "Ntal",
                 r["taladros_disparo"],
                 "und",
-                "03_Seccion",
+                "12_Voladura",
             ),
             (
                 "Detonadores por taladro",

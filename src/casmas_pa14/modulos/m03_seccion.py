@@ -147,7 +147,7 @@ def calcular(p: dict, ctx: dict) -> dict:
 
 
 # ---------------------------------------------------------------- tablas
-def _tabla_geometria(r: dict, s: dict) -> Tabla:
+def _tabla_geometria(r: dict, s: dict, para_excel: bool = True) -> Tabla:
     return tabla_parametros(
         [
             ("Tipo de sección", "", s["tipo"], "", "Plano CAD"),
@@ -166,24 +166,60 @@ def _tabla_geometria(r: dict, s: dict) -> Tabla:
                 "m",
                 "Entrada TOML / Plano CAD",
             ),
-            ("Espesor bajo rasante", "e", "=C7-C8", "m", "H − Hr"),
-            ("Radio de bóveda", "R", "=C6/2", "m", "B / 2"),
-            ("Hastial desde el fondo", "hw", "=C7-C10", "m", "H − R"),
-            ("Hastial sobre rasante", "hw'", "=C11-C9", "m", "hw − e"),
-            ("Área de excavación", "A", "=C6*C11+PI()*C6^2/8", "m²", "B·hw + π·B²/8"),
+            (
+                "Espesor bajo rasante",
+                "e",
+                "=C7-C8" if para_excel else round(r["espesor_rasante_m"], 2),
+                "m",
+                "H − Hr",
+            ),
+            (
+                "Radio de bóveda",
+                "R",
+                "=C6/2" if para_excel else round(r["radio_m"], 2),
+                "m",
+                "B / 2",
+            ),
+            (
+                "Hastial desde el fondo",
+                "hw",
+                "=C7-C10" if para_excel else round(r["hastial_m"], 2),
+                "m",
+                "H − R",
+            ),
+            (
+                "Hastial sobre rasante",
+                "hw'",
+                "=C11-C9" if para_excel else round(r["hastial_rasante_m"], 2),
+                "m",
+                "hw − e",
+            ),
+            (
+                "Área de excavación",
+                "A",
+                "=C6*C11+PI()*C6^2/8" if para_excel else round(r["area_m2"], 2),
+                "m²",
+                "B·hw + π·B²/8",
+            ),
             (
                 "Perímetro de excavación",
                 "P",
-                "=C6+2*C11+PI()*C6/2",
+                "=C6+2*C11+PI()*C6/2" if para_excel else round(r["perimetro_m"], 2),
                 "m",
                 "B + 2·hw + π·B/2",
             ),
-            ("Área libre sobre rasante", "Au", "=C13-C6*C9", "m²", "A − B·e"),
+            (
+                "Área libre sobre rasante",
+                "Au",
+                "=C13-C6*C9" if para_excel else round(r["area_util_m2"], 2),
+                "m²",
+                "A − B·e",
+            ),
         ]
     )
 
 
-def _tabla_galibo(r: dict, g: dict) -> Tabla:
+def _tabla_galibo(r: dict, g: dict, para_excel: bool = True) -> Tabla:
     return tabla_parametros(
         [
             (
@@ -208,19 +244,45 @@ def _tabla_galibo(r: dict, g: dict) -> Tabla:
                 "m",
                 "Entrada TOML / Plano CAD",
             ),
-            ("Ancho del gálibo", "Wg", "=C5*C6+2*C7+C8", "m", "n·c + 2·b + s"),
+            (
+                "Ancho del gálibo",
+                "Wg",
+                "=C5*C6+2*C7+C8" if para_excel else round(r["ancho_galibo_m"], 2),
+                "m",
+                "n·c + 2·b + s",
+            ),
             ("Altura del gálibo", "Hg", g["altura_m"], "m", "Entrada TOML / Plano CAD"),
-            ("Área del gálibo", "Ag", "=C9*C10", "m²", "Wg · Hg"),
+            (
+                "Área del gálibo",
+                "Ag",
+                "=C9*C10" if para_excel else round(r["area_galibo_m2"], 2),
+                "m²",
+                "Wg · Hg",
+            ),
             ("Vereda (cada lado)", "v", g["vereda_m"], "m", "Entrada TOML / Plano CAD"),
-            ("Ancho de plataforma", "Wp", "=C9+2*C12", "m", "Wg + 2·v"),
+            (
+                "Ancho de plataforma",
+                "Wp",
+                "=C9+2*C12" if para_excel else round(r["ancho_plataforma_m"], 2),
+                "m",
+                "Wg + 2·v",
+            ),
             (
                 "Altura libre en borde del gálibo",
                 "hb",
-                "=Geometria!C12+SQRT(Geometria!C10^2-(C9/2)^2)",
+                "=Geometria!C12+SQRT(Geometria!C10^2-(C9/2)^2)"
+                if para_excel
+                else round(r["altura_borde_galibo_m"], 3),
                 "m",
                 "hw' + √(R² − (Wg/2)²)",
             ),
-            ("Holgura gálibo – bóveda", "Δ", "=C14-C10", "m", "hb − Hg"),
+            (
+                "Holgura gálibo – bóveda",
+                "Δ",
+                "=C14-C10" if para_excel else round(r["holgura_galibo_m"], 3),
+                "m",
+                "hb − Hg",
+            ),
             ("Ancho de cuneta", "ac", g["cuneta_ancho_m"], "m", "Plano CAD"),
             ("Profundidad de cuneta", "pc", g["cuneta_prof_m"], "m", "Plano CAD"),
             ("Bombeo transversal", "i", g["bombeo_pct"], "%", "Plano CAD"),
@@ -228,7 +290,13 @@ def _tabla_galibo(r: dict, g: dict) -> Tabla:
     )
 
 
-def _tabla_norma(r: dict) -> Tabla:
+def _tabla_norma(r: dict, para_excel: bool = True) -> Tabla:
+    if not para_excel:
+        filas_md = [
+            [f[0], round(f[1], 3), round(f[2], 3), f[3], f[4], f[5]]
+            for f in r["verificacion"]
+        ]
+        return Tabla(COLUMNAS_NORMA, filas_md)
     return Tabla(
         COLUMNAS_NORMA,
         [
@@ -274,7 +342,7 @@ def _tabla_norma(r: dict) -> Tabla:
             ],
             [
                 "Altura libre sobre vereda (junto al hastial)",
-                "=Galibo!C14",
+                "=Geometria!C12",
                 r["verificacion"][5][2],
                 "m",
                 "=B10>=C10",
@@ -373,9 +441,9 @@ def memoria(r: dict, p: dict) -> Memoria:
                     "`[seccion.norma]`."
                 ],
             ),
-            ("3. Geometría de excavación", [_tabla_geometria(r, s)]),
-            ("4. Gálibo y plataforma", [_tabla_galibo(r, g)]),
-            ("5. Verificación normativa", [_tabla_norma(r), estado]),
+            ("3. Geometría de excavación", [_tabla_geometria(r, s, para_excel=False)]),
+            ("4. Gálibo y plataforma", [_tabla_galibo(r, g, para_excel=False)]),
+            ("5. Verificación normativa", [_tabla_norma(r, para_excel=False), estado]),
             ("6. Justificación de las dimensiones", ["\n".join(justificacion)]),
             ("7. Observaciones", ["\n".join(observaciones)]),
         ],

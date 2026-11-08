@@ -5,8 +5,6 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from .datos_c3d import TRAMOS_SECTORES_C3D
-
 
 def calcular_control_progresivas(portales: dict[str, Any]) -> dict[str, Any]:
     """Calcula rendimientos, ciclos de volquete y tiempos de ejecución por tramos y frentes."""
@@ -27,7 +25,8 @@ def calcular_control_progresivas(portales: dict[str, Any]) -> dict[str, Any]:
     total_viajes = 0
     total_horas = 0.0
 
-    for s in TRAMOS_SECTORES_C3D:
+    sectores_cfg = portales.get("sectores_progresivas", [])
+    for s in sectores_cfg:
         tramos_res = []
         d_base = s["distancia_base_m"]
         sub_vol_banco = 0.0

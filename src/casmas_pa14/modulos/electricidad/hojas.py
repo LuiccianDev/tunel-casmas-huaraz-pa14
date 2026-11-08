@@ -1,6 +1,6 @@
 """Construcción de tablas y libro Excel para 09 · Electricidad."""
 
-from ..modelo import Hoja, Libro, Tabla, tabla_parametros
+from ...modelo import Hoja, Libro, Tabla, tabla_parametros
 
 
 def libro(r: dict, p: dict) -> Libro:
@@ -132,7 +132,7 @@ def libro(r: dict, p: dict) -> Libro:
                 "Nfi",
                 f"='Iluminacion'!G{fila_total_ilum}",
                 "und",
-                "Σ 24 edificaciones especializadas",
+                f"Σ {n_ilum} edificaciones especializadas",
             ),
             (
                 "Perímetro de terreno de campamentos",

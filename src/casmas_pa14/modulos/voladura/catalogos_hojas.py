@@ -7,6 +7,102 @@ from typing import Any
 from ...modelo import Tabla
 
 
+def tablas_bd_explosivos_rocas_brocas(
+    vol_p: dict[str, Any],
+    *,
+    titulo_rocas: str = "Base de Datos Geomecánica de Macizos Rocosos",
+    col_t25: str = "Compatible con PowerROC T25 (Superficie)",
+    titulo_brocas: str = (
+        "Catálogo de Brocas de Perforación Subterránea (Jumbo DT1131) y Superficie"
+    ),
+) -> tuple[Tabla, Tabla, Tabla]:
+    """Construye las tres tablas compartidas de explosivos, rocas y brocas desde voladura."""
+    filas_exp = [
+        [
+            e["nombre"],
+            e["fabricante"],
+            e["tipo"],
+            e["densidad_g_cm3"],
+            e["vod_m_s"],
+            e["resistencia_agua"],
+            e["pd_kbar"],
+            e["energia_kcal_kg"],
+            e["rws_pct"],
+        ]
+        for e in vol_p.get("catalogo_explosivos", [])
+    ]
+    tabla_bd_exp = Tabla(
+        [
+            "Nombre de Explosivo",
+            "Fabricante",
+            "Tipo / Familia",
+            "Densidad (g/cm³)",
+            "VOD (m/s)",
+            "Resistencia al Agua",
+            "Presión Detonación Pd (kbar)",
+            "Energía Específica (kcal/kg)",
+            "Potencia Relativa RWS (%)",
+        ],
+        filas_exp,
+        "Catálogo Comercial de Explosivos Industriales (EXSA, Enaex, Orica)",
+    )
+
+    filas_rocas = [
+        [
+            r_item["nombre"],
+            r_item["densidad_g_cm3"],
+            r_item["ucs_mpa"],
+            r_item["esponjamiento"],
+            r_item["comportamiento"],
+        ]
+        for r_item in vol_p.get("rocas_geomecanica", [])
+    ]
+    tabla_rocas = Tabla(
+        [
+            "Macizo Rocoso",
+            "Densidad (g/cm³)",
+            "Resistencia Compresiva Uniaxial Rc (MPa)",
+            "Factor de Esponjamiento (Fe)",
+            "Comportamiento en Voladura",
+        ],
+        filas_rocas,
+        titulo_rocas,
+    )
+
+    filas_brocas = [
+        [
+            b["diametro_mm"],
+            b["diametro_pulg"],
+            b["tecnologia"],
+            b["tipo_cortador"],
+            b["sistema_rosca"],
+            b["rango_roca"],
+            b["modelos_referencia"],
+            b["equipos_compatibles"],
+            b["fabricantes"],
+            b["compatible_t25"],
+        ]
+        for b in vol_p.get("brocas_equipos", [])
+    ]
+    tabla_brocas = Tabla(
+        [
+            "Diámetro (mm)",
+            "Diámetro (pulg)",
+            "Tecnología",
+            "Tipo de Cortador",
+            "Sistema de Rosca / Martillo",
+            "Rango de Roca Recomendado",
+            "Modelos de Referencia",
+            "Equipos Compatibles",
+            "Fabricantes",
+            col_t25,
+        ],
+        filas_brocas,
+        titulo_brocas,
+    )
+    return tabla_bd_exp, tabla_rocas, tabla_brocas
+
+
 def construir_tablas_catalogos_voladura(
     vol_p: dict[str, Any],
 ) -> tuple[Tabla, Tabla, Tabla, Tabla, Tabla, Tabla, Tabla]:
@@ -38,35 +134,7 @@ def construir_tablas_catalogos_voladura(
         "Ficha Técnica del Jumbo Frontal Computarizado de 3 Brazos Sandvik DT1131 / XE3C",
     )
 
-    filas_exp = [
-        [
-            e["nombre"],
-            e["fabricante"],
-            e["tipo"],
-            e["densidad_g_cm3"],
-            e["vod_m_s"],
-            e["resistencia_agua"],
-            e["pd_kbar"],
-            e["energia_kcal_kg"],
-            e["rws_pct"],
-        ]
-        for e in vol_p.get("catalogo_explosivos", [])
-    ]
-    tabla_bd_exp = Tabla(
-        [
-            "Nombre de Explosivo",
-            "Fabricante",
-            "Tipo / Familia",
-            "Densidad (g/cm³)",
-            "VOD (m/s)",
-            "Resistencia al Agua",
-            "Presión Detonación Pd (kbar)",
-            "Energía Específica (kcal/kg)",
-            "Potencia Relativa RWS (%)",
-        ],
-        filas_exp,
-        "Catálogo Comercial de Explosivos Industriales (EXSA, Enaex, Orica)",
-    )
+    tabla_bd_exp, tabla_rocas, tabla_brocas = tablas_bd_explosivos_rocas_brocas(vol_p)
 
     tabla_termo = Tabla(
         [
@@ -161,60 +229,6 @@ def construir_tablas_catalogos_voladura(
         ],
         filas_ini,
         "3. Sistemas y Accesorios de Iniciación Subterránea (EXSA Fanel MS / LP)",
-    )
-
-    filas_rocas = [
-        [
-            r_item["nombre"],
-            r_item["densidad_g_cm3"],
-            r_item["ucs_mpa"],
-            r_item["esponjamiento"],
-            r_item["comportamiento"],
-        ]
-        for r_item in vol_p.get("rocas_geomecanica", [])
-    ]
-    tabla_rocas = Tabla(
-        [
-            "Macizo Rocoso",
-            "Densidad (g/cm³)",
-            "Resistencia Compresiva Uniaxial Rc (MPa)",
-            "Factor de Esponjamiento (Fe)",
-            "Comportamiento en Voladura",
-        ],
-        filas_rocas,
-        "Base de Datos Geomecánica de Macizos Rocosos",
-    )
-
-    filas_brocas = [
-        [
-            b["diametro_mm"],
-            b["diametro_pulg"],
-            b["tecnologia"],
-            b["tipo_cortador"],
-            b["sistema_rosca"],
-            b["rango_roca"],
-            b["modelos_referencia"],
-            b["equipos_compatibles"],
-            b["fabricantes"],
-            b["compatible_t25"],
-        ]
-        for b in vol_p.get("brocas_equipos", [])
-    ]
-    tabla_brocas = Tabla(
-        [
-            "Diámetro (mm)",
-            "Diámetro (pulg)",
-            "Tecnología",
-            "Tipo de Cortador",
-            "Sistema de Rosca / Martillo",
-            "Rango de Roca Recomendado",
-            "Modelos de Referencia",
-            "Equipos Compatibles",
-            "Fabricantes",
-            "Compatible con PowerROC T25 (Superficie)",
-        ],
-        filas_brocas,
-        "Catálogo de Brocas de Perforación Subterránea (Jumbo DT1131) y Superficie",
     )
 
     return (

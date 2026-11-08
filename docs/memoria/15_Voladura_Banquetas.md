@@ -6,7 +6,7 @@
 
 El presente documento (`15_Voladura_Banquetas.md` y libro `15_Voladura_Banquetas.xlsx`) desarrolla **exclusivamente la perforación y voladura en superficie (a cielo abierto con dos caras libres)** para la excavación escalonada de las **Banquetas y Taludes de los Portales de Entrada y Salida**, empleando la **Perforadora Hidráulica sobre Orugas (`Rockdrill`) Epiroc PowerROC T25** ($173\text{ HP}$, martillo en cabeza `RD 14UP`, broca de botones $\varnothing 64\text{ mm} = 2.5''$ con varillaje T38/T45).
 
-> **Nota de separación técnica:** La perforación y voladura subterránea en el frente interior del túnel (que emplea el **Jumbo Frontal Computarizado de 3 brazos Sandvik DT1131 / XE3C** con barra de $3.66\text{ m}$ y broca $\varnothing 45\text{ mm}$) se encuentra en el entregable separado **`12_Voladura.xlsx`** y **`12_Voladura.md`**.
+> **Nota de separación técnica:** La perforación y voladura subterránea en el frente interior del túnel (que emplea el **Jumbo Frontal Computarizado de 3 brazos Sandvik DT1131 / XE3C** con barra de $3.66\text{ m}$ y broca $\varnothing 51\text{ mm}$) se encuentra en el entregable separado **`12_Voladura.xlsx`** y **`12_Voladura.md`**.
 
 **Parámetros de Perforación y Voladura de Banquetas en Superficie (Epiroc PowerROC T25)**
 
@@ -31,7 +31,7 @@ El presente documento (`15_Voladura_Banquetas.md` y libro `15_Voladura_Banquetas
 
 ## 2. Programación de Perforación y Voladura para los 5 Tramos de Banquetas (`11_Portales`)
 
-Integrando los volúmenes geométricos in-situ de las 5 banquetas calculadas en `11_Portales.xlsx` ($3,795.21\text{ m}^3$ en banco) con la malla práctica de C.J. Konya ($B_p = 1.58\text{ m} \times S_p = 1.81\text{ m}$), se obtiene el requerimiento total de taladros, metros perforados, horas de operación de la **Epiroc PowerROC T25** y consumo de explosivo **Semexsa E-80**:
+Integrando los volúmenes geométricos in-situ de las 5 banquetas calculadas en `11_Portales.xlsx` ($6,270.00\text{ m}^3$ en banco) con la malla práctica de C.J. Konya ($B_p = 1.58\text{ m} \times S_p = 1.81\text{ m}$), se obtiene el requerimiento total de taladros, metros perforados, horas de operación de la **Epiroc PowerROC T25** y consumo de explosivo **semexsa E-80**:
 
 **Resumen de Perforación y Voladura por Tramo de Banqueta del Portal**
 

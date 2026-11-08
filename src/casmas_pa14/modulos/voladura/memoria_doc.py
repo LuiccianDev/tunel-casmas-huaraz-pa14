@@ -58,18 +58,22 @@ def construir_memoria_voladura(r: dict[str, Any], p: dict[str, Any]) -> Memoria:
                 "A_tun * Av_disp",
             ],
             [
-                "Taladros vacíos de alivio (Ø 102 mm)",
+                f"Taladros vacíos de alivio (Ø {ft['d_alivio_mm']:.0f} mm)",
                 "N_aliv",
                 ft["n_alivio_vacios"],
                 "taladros",
                 "Escariados sin carga en el cuele",
             ],
             [
-                "Taladros cargados en el frente (Ø 45 mm)",
+                f"Taladros cargados en el frente (Ø {ft['de_mm']:.0f} mm)",
                 "N_carg",
                 ft["taladros_cargados"],
                 "taladros",
-                "Cuele (16) + Ayudas (20) + Destroza (105) + Contorno (64) + Arrastres (26)",
+                (
+                    f"Cuele ({ft['n_cuele']}) + Ayudas ({ft['n_ayudas']}) + "
+                    f"Destroza ({ft['n_destroza']}) + Cuadradores ({ft['n_cuadradores']}) + "
+                    f"Corona ({ft['n_corona']}) + Arrastres ({ft['n_arrastres']})"
+                ),
             ],
             [
                 "Total de taladros perforados por disparo",
@@ -183,10 +187,10 @@ def construir_memoria_voladura(r: dict[str, Any], p: dict[str, Any]) -> Memoria:
                 [
                     "El presente documento (`12_Voladura.md` y libro `12_Voladura.xlsx`) desarrolla **exclusivamente la "
                     "perforación y voladura subterránea en el frente de ataque del Túnel Casmas Huaraz PA14** "
-                    "($B = 13.30\\text{ m}, H = 9.58\\text{ m}, A = 108.43\\text{ m}^2$), donde se trabaja con **una sola "
+                    f"($B = {ft['ancho_m']:.2f}\\text{{ m}}, H = {ft['altura_m']:.2f}\\text{{ m}}, A = {ft['area_m2']:.2f}\\text{{ m}}^2$), donde se trabaja con **una sola "
                     "cara libre inicial** empleando el **Jumbo Frontal Computarizado de 3 brazos Sandvik DT1131 / XE3C** "
-                    "($300\\text{ HP}$, barra de $12\\text{ pies} = 3.66\\text{ m}$, broca de producción $\\varnothing 45\\text{ mm}$ "
-                    "y escariador de alivio $\\varnothing 102\\text{ mm}$).",
+                    f"($300\\text{{ HP}}$, barra de $12\\text{{ pies}} = {ft['lb_m']:.2f}\\text{{ m}}$, broca de producción $\\varnothing {ft['de_mm']:.0f}\\text{{ mm}}$ "
+                    f"y escariador de alivio $\\varnothing {ft['d_alivio_mm']:.0f}\\text{{ mm}}$).",
                     "> **Nota de separación técnica:** La perforación y voladura a cielo abierto para los cortes escalonados "
                     "de las **Banquetas y Taludes de Portal en Superficie** (que emplea la perforadora hidráulica sobre "
                     "orugas **Epiroc PowerROC T25** con broca $\\varnothing 64\\text{ mm}$ y el modelo de bancos de C.J. Konya) "
@@ -199,7 +203,7 @@ def construir_memoria_voladura(r: dict[str, Any], p: dict[str, Any]) -> Memoria:
                 [
                     "Una vez aperturada la cavidad inicial por el **cuele quemado cilíndrico de 4 secciones** y sus "
                     "ayudas, los taladros del núcleo de **destroza/producción** trabajan hacia la cara libre interna "
-                    "generada, rigiéndose por las relaciones del modelo de C.J. Konya para $\\varnothing 45\\text{ mm}$:",
+                    f"generada, rigiéndose por las relaciones del modelo de C.J. Konya para $\\varnothing {inp['de_mm']:.0f}\\text{{ mm}}$:",
                     t_resumen_tunel,
                 ],
             ),

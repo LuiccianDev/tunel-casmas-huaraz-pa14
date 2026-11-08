@@ -4,7 +4,7 @@
 
 ## 1. Alcance y Diferenciación Operativa (Túnel Subterráneo vs. Banquetas en Superficie)
 
-El presente documento (`12_Voladura.md` y libro `12_Voladura.xlsx`) desarrolla **exclusivamente la perforación y voladura subterránea en el frente de ataque del Túnel Casmas Huaraz PA14** ($B = 13.30\text{ m}, H = 9.58\text{ m}, A = 108.43\text{ m}^2$), donde se trabaja con **una sola cara libre inicial** empleando el **Jumbo Frontal Computarizado de 3 brazos Sandvik DT1131 / XE3C** ($300\text{ HP}$, barra de $12\text{ pies} = 3.66\text{ m}$, broca de producción $\varnothing 45\text{ mm}$ y escariador de alivio $\varnothing 102\text{ mm}$).
+El presente documento (`12_Voladura.md` y libro `12_Voladura.xlsx`) desarrolla **exclusivamente la perforación y voladura subterránea en el frente de ataque del Túnel Casmas Huaraz PA14** ($B = 13.30\text{ m}, H = 9.58\text{ m}, A = 108.43\text{ m}^2$), donde se trabaja con **una sola cara libre inicial** empleando el **Jumbo Frontal Computarizado de 3 brazos Sandvik DT1131 / XE3C** ($300\text{ HP}$, barra de $12\text{ pies} = 3.66\text{ m}$, broca de producción $\varnothing 51\text{ mm}$ y escariador de alivio $\varnothing 102\text{ mm}$).
 
 > **Nota de separación técnica:** La perforación y voladura a cielo abierto para los cortes escalonados de las **Banquetas y Taludes de Portal en Superficie** (que emplea la perforadora hidráulica sobre orugas **Epiroc PowerROC T25** con broca $\varnothing 64\text{ mm}$ y el modelo de bancos de C.J. Konya) se encuentra independizada en el entregable **`15_Voladura_Banquetas.xlsx`** y su memoria **`15_Voladura_Banquetas.md`**.
 
@@ -18,14 +18,14 @@ El presente documento (`12_Voladura.md` y libro `12_Voladura.xlsx`) desarrolla *
 | Avance efectivo por disparo (90%) | Av_disp | 3.29 | m | L_bar * 0.90 |
 | Volumen in-situ por disparo | V_disp | 357.18 | m³ | A_tun * Av_disp |
 | Taladros vacíos de alivio (Ø 102 mm) | N_aliv | 1 | taladros | Escariados sin carga en el cuele |
-| Taladros cargados en el frente (Ø 45 mm) | N_carg | 140 | taladros | Cuele (16) + Ayudas (20) + Destroza (105) + Contorno (64) + Arrastres (26) |
+| Taladros cargados en el frente (Ø 51 mm) | N_carg | 140 | taladros | Cuele (16) + Ayudas (72) + Destroza (0) + Cuadradores (14) + Corona (24) + Arrastres (14) |
 | Total de taladros perforados por disparo | N_perf | 141 | taladros | N_carg + N_aliv |
 | Tiempo neto de perforación (3 brazos) | T_perf_h | 1.91 | h/disparo | M_perf / (Vp * 3 brazos * 60) |
 | Consumo de explosivo por disparo | Q_disp_kg | 571.49 | kg/disparo | V_disp * 1.60 kg/m³ |
 
 ## 2. Modelo Matemático de C.J. Konya en la Zona de Destroza del Frente
 
-Una vez aperturada la cavidad inicial por el **cuele quemado cilíndrico de 4 secciones** y sus ayudas, los taladros del núcleo de **destroza/producción** trabajan hacia la cara libre interna generada, rigiéndose por las relaciones del modelo de C.J. Konya para $\varnothing 45\text{ mm}$:
+Una vez aperturada la cavidad inicial por el **cuele quemado cilíndrico de 4 secciones** y sus ayudas, los taladros del núcleo de **destroza/producción** trabajan hacia la cara libre interna generada, rigiéndose por las relaciones del modelo de C.J. Konya para $\varnothing 51\text{ mm}$:
 
 **Parámetros de Destroza Subterránea (Modelo Matemático de C.J. Konya)**
 

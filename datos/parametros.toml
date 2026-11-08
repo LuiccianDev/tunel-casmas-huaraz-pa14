@@ -3001,6 +3001,86 @@ cuneta_rendimiento_limpieza_m_h = 40.0    # Unidad: m/h | Perfilado, zanjeo y li
 horas_efectivas_por_guardia = 10.5        # Unidad: h/guardia | Jornada minera típica
 distancia_portal_botadero_m = 600.0       # Unidad: m | Distancia base entre emboquille y terraza del Botadero B
 
+[[portales.sectores_progresivas]]
+sector = "1. Acceso Túnel B (ACCESO-TUNEL-B)"
+clave = "acceso_tunel_b"
+distancia_base_m = 600.0
+tramos = [
+    ["0+000.000 a 0+020.000", 20.0, 421.65],
+    ["0+020.000 a 0+040.000", 20.0, 978.12],
+    ["0+040.000 a 0+060.000", 20.0, 1193.51],
+    ["0+060.000 a 0+080.000", 20.0, 1414.10],
+    ["0+080.000 a 0+120.000", 40.0, 2955.58],
+    ["0+120.000 a 0+140.000", 20.0, 3771.55],
+    ["0+140.000 a 0+160.000", 20.0, 4700.28],
+    ["0+160.000 a 0+180.000", 20.0, 5554.91],
+    ["0+180.000 a 0+200.000", 20.0, 5981.78],
+]
+
+[[portales.sectores_progresivas]]
+sector = "2. Acceso Botadero B (ALINEAMIENTO-BOTADERO-B)"
+clave = "acceso_botadero_b"
+distancia_base_m = 200.0
+tramos = [
+    ["0+000.000 a 0+020.000", 20.0, 384.57],
+    ["0+020.000 a 0+040.000", 20.0, 740.62],
+    ["0+040.000 a 0+060.000", 20.0, 737.21],
+    ["0+060.000 a 0+080.000", 20.0, 539.69],
+    ["0+080.000 a 0+100.000", 20.0, 453.69],
+    ["0+100.000 a 0+120.000", 20.0, 542.90],
+    ["0+120.000 a 0+140.000", 20.0, 847.54],
+    ["0+140.000 a 0+160.000", 20.0, 1033.14],
+    ["0+160.000 a 0+180.000", 20.0, 888.10],
+    ["0+180.000 a 0+200.000", 20.0, 584.06],
+    ["0+200.000 a 0+220.000", 20.0, 380.72],
+    ["0+220.000 a 0+240.000", 20.0, 386.43],
+    ["0+240.000 a 0+260.000", 20.0, 518.35],
+    ["0+260.000 a 0+280.000", 20.0, 658.38],
+    ["0+280.000 a 0+300.000", 20.0, 594.19],
+    ["0+300.000 a 0+320.000", 20.0, 422.78],
+    ["0+320.000 a 0+340.000", 20.0, 318.25],
+    ["0+340.000 a 0+356.078", 16.08, 161.19],
+]
+
+[[portales.sectores_progresivas]]
+sector = "3. Acceso Banqueta 1 (ALINEAMIENTO-BANQUETA-1)"
+clave = "acceso_banqueta_1"
+distancia_base_m = 700.0
+tramos = [
+    ["0+000.000 a 0+080.000", 80.0, 1222.19],
+    ["0+080.000 a 0+120.000", 40.0, 727.03],
+    ["0+120.000 a 0+140.000", 20.0, 343.33],
+    ["0+140.000 a 0+160.000", 20.0, 606.46],
+    ["0+160.000 a 0+180.000", 20.0, 1139.15],
+    ["0+180.000 a 0+200.000", 20.0, 1582.39],
+    ["0+200.000 a 0+220.000", 20.0, 1566.57],
+    ["0+220.000 a 0+240.000", 20.0, 1457.46],
+    ["0+240.000 a 0+260.000", 20.0, 1289.71],
+    ["0+260.000 a 0+276.425", 16.43, 767.59],
+]
+
+[[portales.sectores_progresivas]]
+sector = "4. Acceso Banqueta 2 (ALINEAMIENTO-BANQUETA-2)"
+clave = "acceso_banqueta_2"
+distancia_base_m = 700.0
+tramos = [
+    ["0+000.000 a 0+020.000", 20.0, 173.40],
+    ["0+020.000 a 0+040.000", 20.0, 357.25],
+    ["0+040.000 a 0+060.000", 20.0, 422.22],
+    ["0+060.000 a 0+080.000", 20.0, 381.06],
+    ["0+080.000 a 0+100.000", 20.0, 326.07],
+    ["0+100.000 a 0+106.621", 6.62, 99.24],
+]
+
+[[portales.sectores_progresivas]]
+sector = "5. Banquetas Túnel / Emboquille (BANQUETAS-TUNEL)"
+clave = "banquetas_tunel"
+distancia_base_m = 600.0
+tramos = [
+    ["0+000.000 a 0+020.000", 20.0, 12171.91],
+    ["0+020.000 a 0+040.000", 20.0, 12073.23],
+]
+
 
 
 
@@ -3823,6 +3903,7 @@ longitud_total_equipo_m = 8.84      # Unidad: m | Fuente: Ficha Técnica Caterpi
 ancho_sobre_neumaticos_m = 2.96     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
 altura_cabina_m = 3.58              # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
 radio_giro_ext_m = 7.26             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Radio de giro exterior neumáticos)
+altura_descarga_max_m = 3.10        # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Altura libre de descarga a 45°)
 distancia_seguridad_op_m = 1.00     # Unidad: m | Fuente: Resguardo operacional lateral (D.S. 024-2016-EM)
 
 # 4. Malla Electrosoldada en el Frontón (Fuente: diseno_sostenimiento_fronton.xlsx)
@@ -3830,6 +3911,7 @@ largo_pano_malla_m = 25.00          # Unidad: m | Fuente: Rollo minero Aceros Ar
 ancho_pano_malla_m = 2.42           # Unidad: m | Fuente: Ancho comercial de rollo minero Q-139 (2.42 m)
 traslape_malla_m = 0.30             # Unidad: m | Fuente: Traslape normativo por borde (0.30 m)
 area_util_pano_m2 = 52.364          # Unidad: m² | Área neta útil por panel: (25.0 - 0.30) * (2.42 - 0.30)
+tiempo_instalacion_pano_min = 15.0  # Unidad: min/paño | Fuente: Rendimiento cuadrilla de emboquille con telehandler (S)
 
 # 5. Pernos de Anclaje RockBolt de Emboquille (Fuente: diseno_sostenimiento_fronton.xlsx)
 longitud_perno_fronton_m = 9.00     # Unidad: m | Fuente: Perno helicoidal largo de cosido de emboquille (L = 9.0 m)
@@ -3840,6 +3922,9 @@ diametro_cartucho_resina_mm = 28.0  # Unidad: mm | Fuente: Cartucho de resina po
 longitud_cartucho_resina_mm = 305.0 # Unidad: mm | Fuente: Cartucho estándar de 305 mm (1 pie)
 peso_cartucho_resina_g = 320.0      # Unidad: g | Fuente: Peso unitario cartucho de resina (320 g/und)
 cartuchos_por_caja = 50             # Unidad: und/caja | Fuente: Presentación comercial en cajas de 50 cartuchos
+velocidad_perf_bolter_m_min = 1.50  # Unidad: m/min | Fuente: Ficha Técnica Bolter Robótico (06_Maquinaria)
+tiempo_maniobra_bolter_min = 1.00   # Unidad: min | Fuente: Tiempo de posicionamiento de brazo por taladro (S)
+tiempo_inyeccion_empernado_min = 2.50 # Unidad: min | Fuente: Tiempo de inyección de resina e inserción de perno (S)
 
 # 6. Shotcrete Robotizado Vía Húmeda en el Frontón (Fuente: diseno_sostenimiento_fronton.xlsx)
 espesor_shotcrete_fronton_m = 0.10  # Unidad: m | Fuente: Espesor de diseño e = 10 cm (0.10 m) en frontón portal
@@ -3848,6 +3933,8 @@ cemento_dosificacion_kg_m3 = 425.0  # Unidad: kg/m³ | Fuente: Dosificación Cem
 peso_bolsa_cemento_kg = 42.5        # Unidad: kg/bolsa | Fuente: Bolsa comercial de cemento en Perú (42.5 kg)
 relacion_agua_cemento = 0.58        # Unidad: A/C | Fuente: Relación agua/cemento de diseño en mezcla base
 arena_dosificacion_kg_m3 = 1700.0   # Unidad: kg/m³ | Fuente: Agregado graduado arena lavada (1,700 kg/m³)
+acelerante_sikacem_pct = 0.04       # Unidad: ratio | Fuente: Ficha Técnica SikaCem Gunite PE (4.0% peso del cemento)
+nanosilice_pct = 0.01               # Unidad: ratio | Fuente: Adición de nanosílice/microsílice (1.0% peso del cemento)
 fibra_sintetica_kg_m3 = 4.0         # Unidad: kg/m³ | Fuente: Macrofibra estructural SikaFiber Force-60 (4.0 kg/m³)
 rendimiento_robot_shotcrete_m3_h = 24.0 # Unidad: m³/h | Fuente: Caudal efectivo Robot Lanzador (GHP25C-IV)
 tiempo_fraguado_inicial_h = 3.0     # Unidad: h | Fuente: Tiempo de fraguado y resistencia inicial

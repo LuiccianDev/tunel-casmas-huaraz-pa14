@@ -91,7 +91,7 @@ def construir_libro_afrontonamiento(r: dict[str, Any], p: dict[str, Any]) -> Lib
             [
                 "61 - 80",
                 "II",
-                "Buena",
+                f"Buena (RMR Básico Portal = {r['rmr_basico']})",
                 "300 - 400",
                 "35° - 45°",
                 "1 año para claro de 10 m",
@@ -99,7 +99,7 @@ def construir_libro_afrontonamiento(r: dict[str, Any], p: dict[str, Any]) -> Lib
             [
                 "41 - 60",
                 "III",
-                "Regular (CASO PORTAL PA14 = 42)",
+                f"Regular (RMR Corregido Portal = {r['rmr_corregido']})",
                 "200 - 300",
                 "25° - 35°",
                 "1 semana para claro de 5 m",

@@ -1,4 +1,4 @@
-"""05 · Campamento: edificaciones especializadas (EDIF-01 a EDIF-24), áreas y CAD."""
+"""05 · Campamento: edificaciones especializadas (EDIF-01 a EDIF-38), áreas y CAD."""
 
 import math
 
@@ -169,9 +169,10 @@ def _tabla_edificaciones(edifs: list[dict], nota: str = "") -> Tabla:
 
 
 def libro(r: dict, p: dict) -> Libro:
+    n_edif = len(r["edificaciones"])
     todas = _tabla_edificaciones(
         r["edificaciones"],
-        "Catálogo completo de las 24 edificaciones del Proyecto Túnel Casmas Huaraz PA14.",
+        f"Catálogo completo de las {n_edif} edificaciones del Proyecto Túnel Casmas Huaraz PA14.",
     )
     camp1 = _tabla_edificaciones(
         [e for e in r["edificaciones"] if e["campamento"] == "CAMP1"],
@@ -208,7 +209,7 @@ def libro(r: dict, p: dict) -> Libro:
     filas_g.append(
         [
             "TOTAL GENERAL",
-            "EDIF-01 a EDIF-24",
+            f"EDIF-01 a EDIF-{n_edif:02d}",
             f"=SUM(C{g_ini}:C{g_fin})",
             f"=SUM(D{g_ini}:D{g_fin})",
             f"=SUM(E{g_ini}:E{g_fin})",
@@ -220,7 +221,7 @@ def libro(r: dict, p: dict) -> Libro:
         "Consolidado de áreas techadas por grupo funcional de acuerdo al marco normativo RNE y D.S. 024-2016-EM.",
     )
 
-    fila_tot_todas = 6 + len(r["edificaciones"])
+    fila_tot_todas = 6 + n_edif
     c1_edifs = [e for e in r["edificaciones"] if e["campamento"] == "CAMP1"]
     c2_edifs = [e for e in r["edificaciones"] if e["campamento"] == "CAMP2"]
     fila_tot_c1 = 6 + len(c1_edifs)
@@ -231,21 +232,21 @@ def libro(r: dict, p: dict) -> Libro:
             (
                 "Área construida total",
                 "Ac",
-                f"=Edificaciones!G{fila_tot_todas}",
+                f"=Todas_Edificaciones!G{fila_tot_todas}",
                 "m²",
-                "Σ de las 24 edificaciones",
+                f"Σ de las {n_edif} edificaciones",
             ),
             (
                 "Área construida Campamento 1 (Principal)",
                 "Ac1",
-                f"=Campamento_1!G{fila_tot_c1}",
+                f"=Campamento_1_Principal!G{fila_tot_c1}",
                 "m²",
                 "Portal A (248 pax)",
             ),
             (
                 "Área construida Campamento 2 (Satélite)",
                 "Ac2",
-                f"=Campamento_2!G{fila_tot_c2}",
+                f"=Campamento_2_Satelite!G{fila_tot_c2}",
                 "m²",
                 "Portal B (98 pax)",
             ),
@@ -278,7 +279,7 @@ def libro(r: dict, p: dict) -> Libro:
         [
             Hoja(
                 "Todas_Edificaciones",
-                "Catálogo General de 24 Edificaciones",
+                f"Catálogo General de {n_edif} Edificaciones",
                 [todas],
             ),
             Hoja(

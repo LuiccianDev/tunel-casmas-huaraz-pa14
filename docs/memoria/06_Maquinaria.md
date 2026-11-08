@@ -10,7 +10,7 @@ Se garantiza la compatibilidad de gálibos entre los equipos seleccionados y la 
 
 ## 2. Ciclos Operativos de Perforación, Carguío y Evacuación
 
-- **Tiempo de perforación de barreno:** 3.12 h por disparo.
+- **Tiempo de perforación de barreno (141 taladros perforados):** 1.91 h por disparo.
 
 - **Productividad del cargador en frente:** 51.00 m³/h.
 

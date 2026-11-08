@@ -66,25 +66,25 @@ def construir_memoria_afrontonamiento(r: dict[str, Any], p: dict[str, Any]) -> M
                 "Área bruta - Área sección del túnel",
             ],
             [
-                "Paños de malla electrosoldada (6.0 x 2.4 m, traslape 0.30 m)",
+                f"Paños de malla electrosoldada ({r['l_pano']:.2f} x {r['w_pano']:.2f} m, traslape {r['traslape']:.2f} m)",
                 r["n_panos_malla"],
                 "paños",
                 f"Área útil {r['area_util_pano_m2']:.2f} m²/paño ({r['t_total_malla_h']:.2f} h)",
             ],
             [
-                "Pernos RockBolt (L=3.0 m, d=22 mm, malla 1.5x1.5 m)",
+                f"Pernos RockBolt (L={r['l_perno_f']:.2f} m, d={r['d_perno_mm']:.0f} mm, malla {r['esp_perno_f']:.2f}x{r['esp_perno_f']:.2f} m)",
                 r["n_pernos_fronton"],
                 "pernos",
                 f"Ciclo Bolter Robótico: {r['t_total_empernado_h']:.2f} h",
             ],
             [
-                "Cartuchos de resina epóxica (28x305 mm, 320 g)",
+                f"Cartuchos de resina epóxica ({r['d_cart_mm']:.0f}x{r['l_cart_mm']:.0f} mm, {r['peso_cart_g']:.0f} g)",
                 r["total_cartuchos"],
                 "cartuchos",
                 f"{r['cartuchos_x_tal']} cart/perno ({r['total_cajas_resina']} cajas, {r['masa_resina_kg']:.1f} kg)",
             ],
             [
-                "Volumen real de Shotcrete (e=0.12 m + 10% rebote)",
+                f"Volumen real de Shotcrete (e={r['e_shot_m']:.2f} m + {r['rebote'] * 100:.0f}% rebote)",
                 r["vol_shot_real_m3"],
                 "m³",
                 f"Cemento: {r['bolsas_cemento']} bolsas, Fibra: {r['fibra_total_kg']:.1f} kg ({r['t_total_shotcrete_h']:.2f} h)",
@@ -102,12 +102,12 @@ def construir_memoria_afrontonamiento(r: dict[str, Any], p: dict[str, Any]) -> M
                 [
                     "El **afrontonamiento y sellado del portal** prepara y estabiliza el talud frontal exterior "
                     "de emboquille antes de iniciar el avance subterráneo del túnel. Su dimensionamiento integra "
-                    "la **Teoría de Cargas de Roca de Karl Terzaghi (1946)** para un macizo Clase III "
-                    "($\\text{RMR} = 42$, Condición 4: *roca medianamente fracturada en bloques algo abiertos*, "
-                    "$H_p = 0.35(B + H_t)$) con la envolvente cinemática de giro del cargador frontal "
-                    "**Caterpillar 966H** ([Ficha Técnica en Drive](https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view)), "
-                    "descontando el área de la sección herradura del túnel ($108.43\\text{ m}^2$) para obtener el "
-                    "**Área Neta del Frontón a Sellar ($493.08\\text{ m}^2$)**.",
+                    "la **Teoría de Cargas de Roca de Karl Terzaghi (1946)** para el macizo de portal "
+                    f"($\\text{{RMR}}_{{\\text{{básico}}}} = {r['rmr_basico']}$, $\\text{{RMR}}_{{\\text{{corregido}}}} = {r['rmr_corregido']}$, Condición 4: *roca medianamente fracturada en bloques algo abiertos*, "
+                    f"$H_p = {r['k_terz']:.2f}(B + H_t)$) con la envolvente cinemática de giro del cargador frontal "
+                    f"**Caterpillar 966H** ([Ficha Técnica en Drive]({r['link_ficha_cat966h']})), "
+                    f"descontando el área de la sección herradura del túnel (${r['area_tunel_m2']:.2f}\\text{{ m}}^2$) para obtener el "
+                    f"**Área Neta del Frontón a Sellar (${r['area_neta_fronton_m2']:.2f}\\text{{ m}}^2$)**.",
                     t_resumen_fronton,
                 ],
             ),
