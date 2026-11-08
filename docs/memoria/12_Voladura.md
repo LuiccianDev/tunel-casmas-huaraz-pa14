@@ -17,10 +17,10 @@ El presente documento (`12_Voladura.md` y libro `12_Voladura.xlsx`) desarrolla *
 | Longitud de barreno (12 pies) | L_bar | 3.66 | m | Barra estándar Jumbo Sandvik DT1131 |
 | Avance efectivo por disparo (90%) | Av_disp | 3.29 | m | L_bar * 0.90 |
 | Volumen in-situ por disparo | V_disp | 357.18 | m³ | A_tun * Av_disp |
-| Taladros vacíos de alivio (Ø 102 mm) | N_aliv | 4 | taladros | Escariados sin carga en el cuele |
-| Taladros cargados en el frente (Ø 45 mm) | N_carg | 231 | taladros | Cuele (16) + Ayudas (20) + Destroza (105) + Contorno (64) + Arrastres (26) |
-| Total de taladros perforados por disparo | N_perf | 235 | taladros | N_carg + N_aliv |
-| Tiempo neto de perforación (3 brazos) | T_perf_h | 3.19 | h/disparo | M_perf / (Vp * 3 brazos * 60) |
+| Taladros vacíos de alivio (Ø 102 mm) | N_aliv | 1 | taladros | Escariados sin carga en el cuele |
+| Taladros cargados en el frente (Ø 45 mm) | N_carg | 140 | taladros | Cuele (16) + Ayudas (20) + Destroza (105) + Contorno (64) + Arrastres (26) |
+| Total de taladros perforados por disparo | N_perf | 141 | taladros | N_carg + N_aliv |
+| Tiempo neto de perforación (3 brazos) | T_perf_h | 1.91 | h/disparo | M_perf / (Vp * 3 brazos * 60) |
 | Consumo de explosivo por disparo | Q_disp_kg | 571.49 | kg/disparo | V_disp * 1.60 kg/m³ |
 
 ## 2. Modelo Matemático de C.J. Konya en la Zona de Destroza del Frente
@@ -31,14 +31,14 @@ Una vez aperturada la cavidad inicial por el **cuele quemado cilíndrico de 4 se
 
 | Parámetro | Símbolo | Valor | Unidad | Criterio / Fórmula Konya |
 |---|---|---|---|---|
-| Diámetro de taladro de producción | De | 45 | mm | Jumbo 3 brazos Sandvik DT1131 |
+| Diámetro de taladro de producción | De | 51 | mm | Jumbo 3 brazos Sandvik DT1131 |
 | Densidad del explosivo | Sge | 1.2 | g/cm³ | Emulsión encartuchada / ANFO Pesado |
 | Densidad de la roca | Sgr | 2.6 | g/cm³ | Litología ponderada PA14 |
-| Burden teórico de Konya en destroza | B | 1.31 | m | 0.012 * (2*Sge/Sgr + 1.5) * De |
-| Burden corregido (Kr, Kd, Ks) | Bc | 1.30 | m | B * Kr * Kd * Ks |
-| Espaciamiento en destroza | S | 1.83 | m | 1.4 * B |
-| Taco inerte | T | 0.92 | m | 0.7 * B |
-| Carga total por taladro de destroza | Qt | 5.29 | kg/tal | (Cf + Cc) * Qbk |
-| Factor de carga volumétrico en destroza | FC | 0.67 | kg/m³ | Qt / V |
-| Retardo barreno a barreno | th | 8.2 | ms | Th * S |
-| Retardo entre secciones | tR | 15.0 | ms | TR * B |
+| Burden teórico de Konya en destroza | B | 1.48 | m | 0.012 * (2*Sge/Sgr + 1.5) * De |
+| Burden corregido (Kr, Kd, Ks) | Bc | 1.47 | m | B * Kr * Kd * Ks |
+| Espaciamiento en destroza | S | 2.08 | m | 1.4 * B |
+| Taco inerte | T | 1.04 | m | 0.7 * B |
+| Carga total por taladro de destroza | Qt | 6.62 | kg/tal | (Cf + Cc) * Qbk |
+| Factor de carga volumétrico en destroza | FC | 0.65 | kg/m³ | Qt / V |
+| Retardo barreno a barreno | th | 9.3 | ms | Th * S |
+| Retardo entre secciones | tR | 17.1 | ms | TR * B |

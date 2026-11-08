@@ -245,7 +245,7 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
             "D_prod",
             ft["de_mm"],
             "mm",
-            'Broca de botones de 1 3/4" (45 mm)',
+            'Brocas de producción Ø 51 mm (2") y contorno Ø 48 mm (1 7/8")',
         ),
         (
             "Longitud de barreno ( Barra de 12 pies )",
@@ -301,7 +301,7 @@ def libro(resultados: dict[str, Any], p: dict[str, Any]) -> Libro:
             "N_aliv",
             ft["n_alivio_vacios"],
             "taladros",
-            "4 taladros escariados sin carga explosiva",
+            f"{ft['n_alivio_vacios']} taladro(s) escariado(s) de Ø 102 mm sin carga explosiva",
         ),
         (
             "Taladros de Arranque / Cuele quemado (4 secciones)",

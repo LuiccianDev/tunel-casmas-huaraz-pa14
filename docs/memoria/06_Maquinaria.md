@@ -16,7 +16,7 @@ Se garantiza la compatibilidad de gálibos entre los equipos seleccionados y la 
 
 - **Ciclo de acarreo a botadero:** 40.03 min por viaje.
 
-- **Área requerida de botadero:** 113,181 m².
+- **Área requerida de botadero:** 113,180 m².
 
 ## 3. Tabla Consolidada de Fichas Técnicas de Maquinaria
 

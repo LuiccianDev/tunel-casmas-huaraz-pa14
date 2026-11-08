@@ -10,7 +10,7 @@ El **afrontonamiento y sellado del portal** prepara y estabiliza el talud fronta
 
 | Componente / Parámetro | Valor Calculado | Unidad | Criterio Técnico / Fuente |
 |---|---|---|---|
-| Valoración Geomecánica RMR Básico / Corregido | 57 / 52 | pts | Bieniawski (1989) — Clase III (Roca Regular) |
+| Valoración Geomecánica RMR Básico / Corregido | 65 / 60 | pts | Bieniawski (1989) — Clase III (Roca Regular) |
 | Altura de carga de roca aflojada (Hp Terzaghi) | 8.008 | m | Condición 4: Hp = 0.35 * (B + Ht) |
 | Altura total del frontón (Ht + Hp) | 17.588 | m | Ht = 9.58 m + Hp = 8.01 m |
 | Presión vertical de diseño sobre clave | 212.212 | kPa | gamma = 26.5 kN/m³ * Hp |
@@ -18,7 +18,7 @@ El **afrontonamiento y sellado del portal** prepara y estabiliza el talud fronta
 | Área bruta del frontón | 601.51 | m² | Ancho frontón * Altura frontón |
 | Área de la sección herradura del túnel descontada | 108.434 | m² | 03_Seccion (13.30 x 9.58 m) |
 | ÁREA NETA A SELLAR / AFRONTONAR EN EL PORTAL | 493.076 | m² | Área bruta - Área sección del túnel |
-| Paños de malla electrosoldada (6.0 x 2.4 m, traslape 0.30 m) | 42 | paños | Área útil 11.97 m²/paño (10.50 h) |
-| Pernos RockBolt (L=3.0 m, d=22 mm, malla 1.5x1.5 m) | 220 | pernos | Ciclo Bolter Robótico: 20.17 h |
-| Cartuchos de resina epóxica (28x305 mm, 320 g) | 1540 | cartuchos | 7 cart/perno (31 cajas, 492.8 kg) |
-| Volumen real de Shotcrete (e=0.12 m + 10% rebote) | 65.086 | m³ | Cemento: 651 bolsas, Fibra: 260.3 kg (5.71 h) |
+| Paños de malla electrosoldada (6.0 x 2.4 m, traslape 0.30 m) | 10 | paños | Área útil 52.36 m²/paño (2.50 h) |
+| Pernos RockBolt (L=3.0 m, d=22 mm, malla 1.5x1.5 m) | 25 | pernos | Ciclo Bolter Robótico: 3.96 h |
+| Cartuchos de resina epóxica (28x305 mm, 320 g) | 525 | cartuchos | 21 cart/perno (11 cajas, 168.0 kg) |
+| Volumen real de Shotcrete (e=0.12 m + 10% rebote) | 56.704 | m³ | Cemento: 568 bolsas, Fibra: 226.8 kg (5.36 h) |

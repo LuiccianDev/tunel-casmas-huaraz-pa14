@@ -9,7 +9,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 README_ROOT = ROOT_DIR / "README.md"
 README_GATEWAY = ROOT_DIR / "plugins" / "AutoCAD_AI_Gateway" / "README.md"
 README_MCP = ROOT_DIR / "plugins" / "AutoCAD_MCP_Server" / "README.md"
-DOC_MCP = ROOT_DIR / "docs" / "documentacion_mcp_autocad.md"
+DOC_MCP = ROOT_DIR / "docs" / "herramientas" / "documentacion_mcp_autocad.md"
 DOC_PROMPTS = ROOT_DIR / "salidas" / "documentos" / "prompts_edificaciones_cad.md"
 VSCODE_MCP = ROOT_DIR / ".vscode" / "mcp.json"
 

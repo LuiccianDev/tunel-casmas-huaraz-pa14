@@ -29,10 +29,10 @@ en **Markdown** y doble canal de planos para **AutoCAD** (generación batch en *
 |---|-------|-------------------|---------|--------|
 | **01** | `01_Ubicacion.xlsx` | Coordenadas · Eje del túnel · Distancias | — | ✅ |
 | **02** | `02_Geologia.xlsx` | Perfil litológico · RMR · Calidad de roca | — | ⏳ datos estructurados |
-| **11** | `11_Portales.xlsx` | Banquetas_Portales (Geometría, taludes, volúmenes in-situ y esponjados) | — | ✅ |
+| **11** | `11_Portales.xlsx` | Banquetas_Portales · Q_Slope_Taludes (Bar & Barton, 2015) · Cortes_Civil3D_Accesos (Cubicaciones y Assemblies) · Cunetas_Drenaje_Pluvial (Manning) · Control_Tiempos_Progresivas | `16_extraccion_datos_unidad2.md` · `18_revision_cortes_movimiento_tierras.md` · `19_dimensiones_geometricas_accesos_dg2018.md` · `20_dimensionamiento_hidraulico_cunetas.md` · `21_control_tiempos_progresivas_maquinaria.md` | ✅ |
 | **15** | `15_Voladura_Banquetas.xlsx` | Voladura de banquetas en superficie (Epiroc PowerROC T25 — Modelo Konya): Calculadora_Konya_T25 · Voladura_Por_Banqueta · Ficha_PowerROC_T25 · BD_Explosivos · BD_Rocas · BD_Brocas_Equipos · Criterios_y_Fuentes | `15_voladura_banquetas.md` | ✅ |
 | **03** | `03_Seccion.xlsx` | Geometría · Perforación y avance · Volúmenes | `03_seccion.md` | ✅ |
-| **14** | `14_Afrontonamiento.xlsx` | Afrontonamiento y sellado del portal: RMR_Geomecanica · Teoria_Cargas_Terzaghi · Afrontonamiento_Portal · Malla_Electrosoldada · Pernos_RockBolt · Shotcrete_Robotizado | `14_afrontonamiento.md` | ✅ |
+| **14** | `14_Afrontonamiento.xlsx` | Afrontonamiento y sellado del portal: RMR_Geomecanica · Teoria_Cargas_Terzaghi · Afrontonamiento_Portal · Malla_Electrosoldada · Pernos_RockBolt · Shotcrete_Robotizado | `14_afrontonamiento.md` · `17_auditoria_discrepancias_drive.md` | ✅ |
 | **12** | `12_Voladura.xlsx` | Voladura subterránea del túnel (Jumbo 3 brazos Sandvik DT1131): Malla_y_Avance_Tunel · Voladura_Konya_Tunel · Ficha_Jumbo_DT1131 · BD_Explosivos · Catalogo_Detonacion · BD_Rocas · BD_Brocas_Equipos | `12_voladura.md` | ✅ |
 | **04** | `04_Personal.xlsx` | Relación de personal · Turnos · Resumen | `04_personal.md` | ✅ |
 | **05** | `05_Campamento.xlsx` | Edificaciones · Áreas requeridas · Resumen | `05_campamento.md` | ✅ |
@@ -67,7 +67,7 @@ flowchart TD
 
 ### Canal 1: Batch Portable (AutoLISP)
 * **Archivos generados:**
-  * `salidas/lisp/PA14_dibujos.lsp`: Planos generales del túnel (`PA14_TODO`, `PA14_UBICACION`, `PA14_SECCION`, `PA14_MALLA`, `PA14_GEOLOGIA`).
+  * `salidas/lisp/PA14_dibujos.lsp`: Planos generales del túnel (`PA14_TODO`, `PA14_UBICACION`, `PA14_SECCION`, `PA14_MALLA`, `PA14_GEOLOGIA`, `PA14_CORTES_ACCESOS`).
   * `salidas/lisp/PA14_campamento_1.lsp`: Todo el **Campamento 1 Principal (Portal Entrada - 248 pax)** en un solo archivo (`PA14_CAMPAMENTO_1` dibuja el Master Plan + sus 23 plantas detalladas en grilla; o `PA14_MASTER_CAMP1` y `PA14_EDIF_XX` por separado).
   * `salidas/lisp/PA14_campamento_2.lsp`: Todo el **Campamento 2 Satélite (Portal Salida - 98 pax)** en un solo archivo (`PA14_CAMPAMENTO_2` dibuja el Master Plan + sus 15 plantas detalladas en grilla; o `PA14_MASTER_CAMP2` y `PA14_EDIF_XX` por separado).
 * **Propósito:** Entregables formales y autónomos del proyecto. No requieren tener AutoCAD abierto durante la ejecución de Python.
@@ -113,6 +113,7 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 | **Monitor Reactivo (Arnés en Vivo)** | `.\scripts\watch_harness.ps1` | Vigila `src/`, `datos/` y `civil3d/`; ejecuta el arnés ante cada guardado |
 | **Generar Entregables** | `.\scripts\run.ps1` | Ejecuta el pipeline completo de ingeniería |
 | **Compilar Plugins CAD** | `.\scripts\build_plugins.ps1` | Compila `AutoCAD_AI_Gateway` y `AutoCAD_MCP_Server` en Release |
+| **Extraer Datos Drive (U2)** | `uv run python scripts/utils/extraer_drive_unidad2.py` | Descarga y exportación en solo lectura de Google Drive (Unidad 2) |
 
 ---
 
