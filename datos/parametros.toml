@@ -78,7 +78,7 @@ nombre = "SALIDA DEL TUNEL"
 zona = "18 L"
 este = 209031.05
 norte = 8942758.864
-cota = 3785.0
+cota = 3786.0 # Fuente: COORDENADAS UTM TUNEL.xlsx (Drive Unidad 2)
 
 # Distancias calculadas entre componentes del proyecto
 # Retiros de seguridad y distancias ambientales normativas (MTC EG-2013 / DS 024-2016-EM / DL 1278)
@@ -2360,6 +2360,31 @@ tiempo_fijo_min = 8.0           # carga + descarga + maniobras
 distancia_portal_botadero_m = 500.0 # Distancia geométrica media de acarreo a DME Portal Tinco/Huaraz
 potencia_hp = 460
 
+# Ciclo detallado de Carguío (CAT 966H) y Acarreo (Volvo FMX 8x4) en Accesos y Portales
+# Fuente: calculo_carguio_acarreo_tunel.xlsx (Google Drive Unidad 2)
+[maquinaria.ciclo_carguio_acarreo]
+capacidad_cucharon_cat966h_m3 = 5.06   # Unidad: m3 | Capacidad colmado cucharon roquero CAT 966H
+capacidad_banco_cat966h_m3 = 4.00      # Unidad: m3 | Capacidad in-situ por pase
+factor_llenado_cat966h = 0.95          # Unidad: - | Factor de llenado en roca dinamitada
+tiempo_ciclo_elemental_s = 31.56       # Unidad: s | Ciclo elemental de excavacion y carga en V
+tiempo_ciclo_elemental_min = 0.526     # Unidad: min | 31.56 s / 60
+pasadas_llenado_volquete = 4           # Unidad: pasadas | 4 pases para completar tolva util 16 m3
+tiempo_total_carguio_min = 2.104       # Unidad: min | 4 pasadas * 0.526 min
+capacidad_tolva_util_volvo_m3 = 16.0   # Unidad: m3 | Capacidad util en material suelto Volvo FMX 8x4
+carga_nominal_volvo_t = 32.0           # Unidad: t | Carga util maxima por volquete rigido
+velocidad_cargado_kmh = 25.0           # Unidad: km/h | Velocidad media en rampa cargado
+velocidad_vacio_kmh = 35.0             # Unidad: km/h | Velocidad media de retorno en vacio
+tiempo_descarga_min = 0.70             # Unidad: min | Basculamiento y descarga en botadero
+tiempo_maniobras_min = 0.40            # Unidad: min | Maniobras de cuadre y espera
+tiempo_fijo_volvo_min = 1.10           # Unidad: min | Descarga (0.7) + Maniobras (0.4)
+volumen_banco_total_m3 = 2455.25       # Unidad: m3 | Volumen total en banco removido en accesos
+volumen_suelto_total_m3 = 3191.83      # Unidad: m3 | Volumen suelto esponjado (30%)
+masa_transportada_t = 6506.41          # Unidad: t | Masa total a transportar (diorita 2.65 t/m3)
+numero_viajes_total = 210              # Unidad: viajes | Total de viajes requeridos en accesos
+horas_acarreo_totales = 5.47           # Unidad: h | Tiempo neto de acarreo de flota
+rendimiento_horario_m3_banco_h = 448.73 # Unidad: m3/h | Rendimiento promedio horario de produccion
+match_factor_promedio = 1.35          # Unidad: - | Factor de acoplamiento optimo cargador/camion
+
 [maquinaria.botadero]
 altura_m = 10.0                 # Altura máxima de terraza de conformación según MTC EG-2013 Sec. 210
 factor_taludes = 1.30           # Área adicional por talud 1V:1.5H y bermas de seguridad (MTC EG-2013)
@@ -2377,8 +2402,13 @@ potencia_hp_excavadora = 314       # Caterpillar 336 (314 HP)
 potencia_hp_volquete = 500         # Volvo FMX 8x4 Rígido (500 HP)
 
 [maquinaria.accesos]
-longitud_km = 2.5 # Longitud total de accesos industriales a portales y botaderos (Trazado vial)
-rendimiento_tractor_d8_m3_h = 150.0 # Rendimiento en corte y desbroce masivo (Manual CAT D8T)
+longitud_km = 0.38 # Longitud total de accesos industriales a portal (380 m, Fuente: diseno_accesos_banquetas_mov_tierra.xlsx)
+ancho_calzada_m = 5.00 # Ancho uniforme de calzada de accesos (5.0 m)
+talud_corte = 1.00 # Relación de talud 1H:1V en accesos
+espesor_afirmado_m = 0.20 # Espesor de afirmado compactado
+volumen_corte_total_m3 = 2455.25 # Volumen total de corte en banco en accesos
+volumen_afirmado_total_m3 = 380.00 # Volumen total de afirmado
+rendimiento_tractor_d8_m3_h = 126.0 # Rendimiento en corte y desbroce masivo (CAT D8T a 10.5 h/guardia)
 rendimiento_tractor_d6_m_h = 50.0   # Rendimiento en conformación y perfilado de subrasante (Manual CAT D6T)
 rendimiento_motoniveladora_km_dia = 1.5 # Rendimiento de nivelación y bombeo en afirmado (Manual MTC EG-2013 Sec. 301)
 potencia_hp_d8 = 354                # Caterpillar D8T (354 HP)
@@ -2386,7 +2416,35 @@ potencia_hp_d6 = 215                # Caterpillar D6 (215 HP)
 potencia_hp_excavadora = 314        # Caterpillar 336 (314 HP)
 potencia_hp_volquete = 500          # Volvo FMX 8x4 Rígido (500 HP)
 potencia_hp_motoniveladora = 150    # Caterpillar 140G (150 HP)
-volquetes_asignados_und = 2         # Unidades asignadas a accesos viales
+volquetes_asignados_und = 4         # Flota balanceada de 4 volquetes asignados a accesos (Match Factor 1.06 a 1.35)
+
+[[maquinaria.accesos.tramos]]
+nombre = "Acceso 1"
+longitud_m = 155.0
+volumen_corte_m3 = 1018.125
+volumen_afirmado_m3 = 155.0
+horas_desbroce_d8 = 8.08
+
+[[maquinaria.accesos.tramos]]
+nombre = "Acceso 2"
+longitud_m = 112.0
+volumen_corte_m3 = 725.000
+volumen_afirmado_m3 = 112.0
+horas_desbroce_d8 = 5.75
+
+[[maquinaria.accesos.tramos]]
+nombre = "Acceso 3"
+longitud_m = 53.0
+volumen_corte_m3 = 332.125
+volumen_afirmado_m3 = 53.0
+horas_desbroce_d8 = 2.64
+
+[[maquinaria.accesos.tramos]]
+nombre = "Acceso a Base/Portal"
+longitud_m = 60.0
+volumen_corte_m3 = 380.000
+volumen_afirmado_m3 = 60.0
+horas_desbroce_d8 = 3.02
 
 # Parámetros universales para cálculo de rendimiento teórico y real (Caterpillar & Epiroc)
 [maquinaria.rendimientos]
@@ -2783,7 +2841,7 @@ desfase_dias = 0
 [[cronograma.actividades]]
 id = "D"
 nombre = "Accesos, botadero y emboquillado de portales"
-duracion_dias = 20
+duracion_dias = 15                         # Unidad: días | 18.8 guardias de 10.5 h (76,105 m³ corte en 5 fases secuenciales D1-D4)
 predecesoras = ["B", "C"]
 desfase_dias = 0
 
@@ -2852,6 +2910,18 @@ altura_banco2_m = 10.00         # Unidad: m | Altura vertical de banco 2 (Relaci
 ancho_banqueta3_m = 5.00        # Unidad: m | Ancho de banqueta 3 (croquis)
 angulo_talud_final_deg = 60.0   # Unidad: deg | Angulo de talud final proyectado a terreno natural (croquis)
 
+# Determinación empírica del ángulo de banquetas mediante Q-slope (Bar & Barton, 2015)
+# Fuente: angulo_banquetas_qslope.xlsx (Google Drive Unidad 2)
+[portales.q_slope]
+rqd = 50.0                    # Unidad: % | Indice RQD en taludes de portal (Roca regular/mala en superficie)
+jn = 9.0                      # Unidad: - | 3 familias de diaclasas principales
+jr = 1.5                      # Unidad: - | Juntas rugosas u onduladas, planas
+ja = 3.0                      # Unidad: - | Paredes con alteracion y relleno de limo/arcilla
+jw = 0.75                     # Unidad: - | Presencia de goteo / humedad en ladera
+srfa = 2.5                    # Unidad: - | Factor de reduccion de tension (talud expuesto e intemperismo)
+q_slope = 0.8333              # Unidad: - | Q_slope = (RQD/Jn) * (Jr/Ja) * (Jw/SRFa)
+angulo_estable_deg = 63.42    # Unidad: deg | beta = 20*log10(Q_slope) + 65 deg (sin sostenimiento)
+
 [[portales.banquetas]]
 id = "Banqueta 01 - Tramo I"
 largo_banco_m = 6.9806
@@ -2897,6 +2967,187 @@ lado_mayor_m = 13.2162
 angulo_talud_deg = 70.0
 lado_menor_m = 5.0
 
+# 3 Banquetas Uniformes de Portal y Base (Fuente: diseno_accesos_banquetas_mov_tierra.xlsx - Google Drive Unidad 2)
+[portales.banquetas_diseno_u2]
+altura_total_talud_m = 28.0
+numero_banquetas = 3
+longitud_banqueta_m = 35.0
+ancho_banqueta_m = 4.0
+altura_banco_m = 6.0
+volumen_banco_banqueta_m3 = 420.0
+volumen_suelto_banqueta_m3 = 470.4
+factor_esponjamiento = 1.12
+altura_base_portal_m = 10.0
+ancho_base_portal_m = 40.0
+longitud_base_portal_m = 35.0
+volumen_base_portal_m3 = 7000.0
+volumen_total_portal_m3 = 8260.0
+
+# =============================================================================
+#  CORTES, SECCIONES TRANSVERSALES Y CUBICACIONES CIVIL 3D (GOOGLE DRIVE U2)
+# =============================================================================
+[portales.cortes_civil3d]
+volumen_total_corte_m3 = 76105.14
+volumen_total_relleno_m3 = 27.03
+longitud_total_alineamientos_m = 979.13
+talud_corte_h_v = "0.5:1"
+angulo_talud_corte_deg = 63.43 # Compatible con Q-slope (63.42°)
+ancho_banqueta_resguardo_m = 5.00
+altura_banco_banqueta_m = 6.00
+
+# 1. Acceso Túnel B (Fuente: mov_tierra_acceso_tunel.xlsx)
+[portales.cortes_civil3d.acceso_tunel_b]
+alineamiento = "ACCESO-TUNEL-B"
+sample_line_group = "SL-ACCESO-PORTA-B"
+progresiva_inicio = "0+000.000"
+progresiva_fin = "0+200.000"
+longitud_m = 200.00
+volumen_corte_m3 = 28600.00
+volumen_relleno_m3 = 5.20
+calzada_m = 3.60
+berma_m = 0.90
+cuneta_m = 1.00
+
+# 2. Acceso Botadero B (Fuente: mov_tierra_acceso_botadero.xlsx)
+[portales.cortes_civil3d.acceso_botadero_b]
+alineamiento = "ALINEAMIENTO-BOTADERO-PORTAL-B"
+sample_line_group = "SL-BOTADERO-B"
+progresiva_inicio = "0+000.000"
+progresiva_fin = "0+356.078"
+longitud_m = 356.08
+volumen_corte_m3 = 10500.00
+volumen_relleno_m3 = 13.49
+calzada_m = 3.60
+berma_m = 0.50
+cuneta_m = 0.20
+
+# 3. Acceso Banqueta 1 (Fuente: mov_tierra_acceso_banquetas.xlsx)
+[portales.cortes_civil3d.acceso_banqueta_1]
+alineamiento = "ALINEAMIENTO-ACCESO-BANQUETA-1"
+sample_line_group = "SL-BANQUETA-1"
+progresiva_inicio = "0+000.000"
+progresiva_fin = "0+276.425"
+longitud_m = 276.43
+volumen_corte_m3 = 11000.00
+volumen_relleno_m3 = 6.16
+calzada_m = 3.20
+cuneta_m = 0.20
+
+# 4. Acceso Banqueta 2 (Fuente: mov_tierra_acceso_banquetas.xlsx)
+[portales.cortes_civil3d.acceso_banqueta_2]
+alineamiento = "ALINEAMIENTO-ACCESO-BANQUETA-2"
+sample_line_group = "SL-BANQUETA-2"
+progresiva_inicio = "0+000.000"
+progresiva_fin = "0+106.621"
+longitud_m = 106.62
+volumen_corte_m3 = 1760.00
+volumen_relleno_m3 = 2.18
+calzada_m = 3.20
+cuneta_m = 0.20
+
+# 5. Banquetas Túnel / Emboquille (Fuente: banquetas_portal_b.xlsx)
+[portales.cortes_civil3d.banquetas_emboquille]
+alineamiento = "BANQUETAS-TUNEL"
+sample_line_group = "SL-BANQUETAS-TUNEL"
+progresiva_inicio = "0+000.000"
+progresiva_fin = "0+039.954"
+longitud_m = 40.00
+volumen_corte_m3 = 24245.14
+volumen_relleno_m3 = 0.00
+area_corte_000_m2 = 614.97
+area_corte_020_m2 = 602.22
+area_corte_040_m2 = 607.91
+
+# Criterios y Parámetros Geométricos de Diseño Vial DG-2018 para Cortes y Accesos
+[portales.dg2018_geometria]
+clasificacion_via = "Trocha de Acceso / Camino de Obra Subterránea (DG-2018 MTC)"
+velocidad_diseno_kph = 30.0               # Unidad: km/h | Velocidad directriz de acceso en orografía accidentada Tipo 4
+radio_minimo_curvatura_m = 15.00          # Unidad: m | Radio interior mínimo excepcional en curvas de retorno
+bombeo_calzada_pct = -2.00                # Unidad: % | Pendiente transversal de bombeo para drenaje pluvial
+vehiculo_diseno = "Camión Volquete C3 / C4 (Volvo FMX 8x4)"
+distancia_ejes_vehiculo_m = 5.10          # Unidad: m | Distancia entre eje delantero y eje posterior tándem (L)
+numero_carriles = 1                       # Unidad: - | Número de vías/carriles de circulación
+sobreancho_calculado_m = 1.67             # Unidad: m | Fórmula MTC DG-2018: S = n*(R - sqrt(R^2 - L^2)) + V/(10*sqrt(R))
+ancho_calzada_ampliada_curva_m = 5.27     # Unidad: m | Calzada base (3.60 m) + sobreancho S (1.67 m)
+talud_corte_h_v = "0.5:1"                 # Unidad: H:V | Talud de desmonte en roca media/buena (63.43°)
+angulo_talud_corte_deg = 63.43            # Unidad: ° | Compatible con ángulo máximo admisible de Q-slope (63.42°)
+ancho_banqueta_resguardo_m = 5.00         # Unidad: m | Ancho de berma/banqueta intermedia de retención
+altura_max_banco_m = 6.00                 # Unidad: m | Desnivel vertical máximo por banco de corte
+pendiente_banqueta_pct = 2.00             # Unidad: % | Contrapendiente hacia pie de banco para control de escorrentía
+diametro_giro_cargador_cat966h_m = 14.73  # Unidad: m | Espacio libre de maniobra y giro completo para CAT 966H
+ancho_plataforma_emboquille_m = 28.53     # Unidad: m | Ancho total de explanada frontal requerida en emboquille
+
+# Parámetros Hidrológicos e Hidráulicos de Cunetas de Drenaje (Manual MTC Hidrología e Hidráulica)
+[portales.drenaje_cunetas]
+periodo_retorno_anos = 25                 # Unidad: años | Criterio MTC para obras de drenaje superficial y cunetas
+intensidad_precipitacion_mm_h = 65.0      # Unidad: mm/h | Isoyetas de máxima intensidad horaria cuenca Casmas-Huaraz
+coeficiente_escorrentia = 0.85            # Unidad: - | Pavimento afirmado compactado y taludes de roca sana (C)
+rugosidad_manning_concreto = 0.015        # Unidad: - | Concreto simple f'c=175 kg/cm2 frotachado (Manual MTC)
+rugosidad_manning_roca = 0.025            # Unidad: - | Excavación en roca sin revestir
+velocidad_minima_flujo_m_s = 0.60         # Unidad: m/s | Límite mínimo para evitar sedimentación de arenas
+velocidad_maxima_flujo_m_s = 4.50         # Unidad: m/s | Límite máximo en cuneta de concreto para evitar cavitación
+borde_libre_minimo_m = 0.10               # Unidad: m | Revancha de seguridad mínima contra rebose
+
+# Cuneta Tipo 1: Pie de Talud de Calzada Principal (Acceso Túnel B)
+[portales.drenaje_cunetas.cuneta_acceso_tunel]
+nombre = "Cuneta Triangular Pie de Talud - Acceso Túnel B"
+ancho_superior_m = 1.00                   # Unidad: m | Ancho superficial (T)
+profundidad_total_m = 0.35                # Unidad: m | Profundidad de sección (H)
+talud_lado_calzada_z1 = 1.43              # Unidad: H:V | Talud interior (bombeo / rampa)
+talud_lado_corte_z2 = 1.43                # Unidad: H:V | Talud exterior hacia desmonte
+pendiente_longitudinal_pct = 2.50         # Unidad: % | Pendiente longitudinal de la rasante vial
+longitud_tramo_m = 200.00                 # Unidad: m | Longitud del tramo aportante
+ancho_tributario_m = 16.00                # Unidad: m | Ancho medio de captación (calzada + berma + talud)
+espesor_revestimiento_m = 0.075           # Unidad: m | Revestimiento de concreto simple f'c=175 kg/cm2 (3 pulgadas)
+
+# Cuneta Tipo 2: Banquetas de Resguardo de Desmonte (Banquetas 1 y 2)
+[portales.drenaje_cunetas.cuneta_banquetas]
+nombre = "Cuneta Triangular / Berma - Banquetas de Portal"
+ancho_superior_m = 0.50                   # Unidad: m | Ancho superficial (T)
+profundidad_total_m = 0.25                # Unidad: m | Profundidad de sección (H)
+talud_lado_calzada_z1 = 1.00              # Unidad: H:V | Talud interior
+talud_lado_corte_z2 = 1.00                # Unidad: H:V | Talud exterior
+pendiente_longitudinal_pct = 2.00         # Unidad: % | Pendiente hacia bajante lateral
+longitud_tramo_m = 383.05                 # Unidad: m | Longitud acumulada de banquetas de corte
+ancho_tributario_m = 8.00                 # Unidad: m | Franja de talud y banqueta de retención
+espesor_revestimiento_m = 0.075           # Unidad: m | Concreto simple f'c=175 kg/cm2
+
+# Cuneta Tipo 3: Zanja de Coronación de Desmonte
+[portales.drenaje_cunetas.cuneta_coronacion]
+nombre = "Zanja de Coronación de Ladera Superior"
+ancho_superior_m = 0.60                   # Unidad: m | Ancho superficial (T)
+profundidad_total_m = 0.40                # Unidad: m | Profundidad de sección (H)
+talud_lado_calzada_z1 = 0.75              # Unidad: H:V | Talud de zanja
+talud_lado_corte_z2 = 0.75                # Unidad: H:V | Talud de zanja
+pendiente_longitudinal_pct = 3.00         # Unidad: % | Pendiente natural de ladera hacia quebrada
+longitud_tramo_m = 120.00                 # Unidad: m | Longitud de cresta de corte
+ancho_tributario_m = 10.00                # Unidad: m | Cuenca vertiente natural superior
+espesor_revestimiento_m = 0.050           # Unidad: m | Mampostería / mortero lanzado
+
+# Control de Tiempos de Ejecución Tramo a Tramo por Progresiva y Tren de Maquinaria
+[portales.control_tiempos_progresivas]
+cargador_modelo = "Caterpillar CAT 966H"
+cargador_capacidad_banco_m3 = 4.00        # Unidad: m³ banco | Capacidad nominal de cuchara
+cargador_tiempo_ciclo_camion_min = 2.104  # Unidad: min | 4 pasadas de 31.56 s cada una
+volquete_modelo = "Volvo FMX 8x4 Rígido"
+volquete_capacidad_suelta_m3 = 16.00      # Unidad: m³ suelto | Tolva roquera
+volquete_carga_util_t = 32.0              # Unidad: t | Carga útil nominal
+volquetes_en_flota = 4                    # Unidad: unidades | Camiones asignados
+volquete_vel_cargado_kmh = 25.0           # Unidad: km/h | En subida/bajada de trocha
+volquete_vel_vacio_kmh = 35.0             # Unidad: km/h | Retorno vacío
+volquete_tiempo_fijo_min = 1.10           # Unidad: min | Descarga (0.7 min) + Maniobra (0.4 min)
+perforadora_modelo = "Epiroc PowerROC T25"
+perforadora_rendimiento_m_h = 35.0        # Unidad: m/h | Perforación en banco de roca de 6 m
+cuneta_equipo_limpieza = "Excavadora CAT 336D + Motoniveladora CAT 140K"
+cuneta_rendimiento_limpieza_m_h = 40.0    # Unidad: m/h | Perfilado, zanjeo y limpieza de cuneta triangular
+horas_efectivas_por_guardia = 10.5        # Unidad: h/guardia | Jornada minera típica
+guardias_por_dia = 2                      # Unidad: guardias/día | 2 turnos (Día y Noche)
+horas_operativas_dia = 21.0               # Unidad: h/día | 2 × 10.5 h
+distancia_portal_botadero_m = 600.0       # Unidad: m | Distancia base entre emboquille y terraza del Botadero B
+
+
+
+
 # =============================================================================
 #  12 - VOLADURA SUBTERRÁNEA DEL TÚNEL (JUMBO 3 BRAZOS SANDVIK DT1131 + CATÁLOGOS)
 # =============================================================================
@@ -2906,17 +3157,31 @@ equipo_perforacion_tunel = "Jumbo Frontal Computarizado 3 brazos Sandvik DT1131 
 brazos_jumbo = 3                      # Unidad: brazos | Fuente: Ficha Técnica Sandvik DT1131 (3 brazos automatizados iDATA)
 potencia_jumbo_hp = 300               # Unidad: HP | Fuente: Ficha Técnica Sandvik DT1131 (225 kW / 300 HP)
 velocidad_penetracion_m_min = 1.50    # Unidad: m/min | Fuente: Martillo hidráulico de alta frecuencia en roca andesítica/diorítica
-diametro_alivio_mm = 102.0            # Unidad: mm | Fuente: Broca escariadora de 4" (102 mm) para taladros vacíos de alivio en cuele
-diametro_explosivo_mm = 45.0          # Unidad: mm | Fuente: Broca de producción de 45 mm (1 3/4") en Jumbo Sandvik DT1131
-diametro_contorno_mm = 45.0           # Unidad: mm | Fuente: Taladros perimetrales con carga desacoplada (Exsacorte / Enaline)
-# Distribución de los 231 taladros cargados del frente por zonas (Manual EXSA 5ta Ed. - Cuele quemado cilíndrico)
-taladros_alivio_vacios = 4            # Unidad: und | Fuente: 4 taladros de alivio vacíos de Ø 102 mm en arranque (no cargados)
-taladros_cuele_und = 16               # Unidad: und | Fuente: Cuele quemado cilíndrico de 4 secciones (4x4 = 16 taladros)
-taladros_ayudas_und = 20              # Unidad: und | Fuente: Ayudas de arranque alrededor del cuele
-taladros_destroza_und = 105           # Unidad: und | Fuente: Taladros de producción / destroza en núcleo del frente
-taladros_cuadradores_und = 22         # Unidad: und | Fuente: Taladros de contorno lateral en hastiales (E = 0.60 m)
-taladros_corona_und = 42              # Unidad: und | Fuente: Taladros de recorte perimetral en bóveda (Smooth Blasting E = 0.60 m)
-taladros_arrastres_und = 26           # Unidad: und | Fuente: Zapateras / arrastres de piso en solera
+diametro_alivio_mm = 102.0            # Unidad: mm | Fuente: Broca escariadora de 4" (102 mm) para taladro de alivio en cuele
+diametro_explosivo_mm = 51.0         # Unidad: mm | Fuente: Broca de producción de 51 mm (2") en cuele, ayudas y arrastres
+diametro_contorno_mm = 48.0          # Unidad: mm | Fuente: Broca de contorno de 48 mm (1 7/8") en hastiales y corona
+# Distribución de la malla de perforación del frente (Fuente: malla_1_disparo.xlsx - Google Drive Unidad 2)
+# Malla 1: 141 taladros totales (1 de alivio vacío Ø 102 mm + 140 taladros cargados)
+taladros_alivio_vacios = 1           # Unidad: und | 1 taladro de alivio central vacío de Ø 102 mm
+taladros_cuele_und = 16              # Unidad: und | 4 cuadrantes de arranque de 4 taladros cada uno (16 taladros Ø 51 mm)
+taladros_ayudas_und = 72             # Unidad: und | Taladros de ayudas y destroza del núcleo (Ø 51 mm, E = 1.22 m, B = 1.11 m)
+taladros_destroza_und = 0            # Unidad: und | Integrada en las 72 ayudas de cuadrantes (malla 1 disparo)
+taladros_cuadradores_und = 14        # Unidad: und | Taladros de hastiales laterales (Ø 48 mm, E = 0.80 m, B = 0.80 m)
+taladros_corona_und = 24             # Unidad: und | Taladros de recorte perimetral en bóveda (Ø 48 mm, E = 0.72 m, B = 0.60 m)
+taladros_arrastres_und = 14          # Unidad: und | Zapateras / arrastres de piso en solera (Ø 51 mm, E = 1.00 m, B = 1.20 m)
+carga_explosiva_total_kg = 362.28    # Unidad: kg/disparo | Consumo total de explosivo calculado en Malla 1
+cartuchos_totales_und = 1199.6       # Unidad: cartuchos | Total de cartuchos por disparo calculado en Malla 1
+
+# Malla alternativa con 2 alivios (Fuente: malla_2_alivio.xlsx - Google Drive Unidad 2)
+[voladura.malla_2_alivios]
+taladros_totales = 142
+taladros_cargados = 140
+taladros_alivio_vacios = 2
+diametro_alivio_mm = 102.0
+diametro_produccion_mm = 51.0
+diametro_contorno_mm = 48.0
+carga_explosiva_total_kg = 511.22
+cartuchos_totales_und = 1687.3
 # Parámetros del modelo matemático de C.J. Konya aplicado a taladros de destroza del túnel
 densidad_explosivo_g_cm3 = 1.20       # Unidad: g/cm³ | Fuente: Emulsión encartuchada Semexsa / Exagel-E (Exsa)
 densidad_roca_g_cm3 = 2.50            # Unidad: g/cm³ | Fuente: Reemplazado dinámicamente por geología ponderada (2.60 t/m³)
@@ -3645,168 +3910,6 @@ srf = 7.5
 descripcion = "Material no rocoso (suelos, rellenos), inestable, alta deformabilidad, puede colapsar. UCS < 5 MPa."
 
 # =============================================================================
-#  MATRIZ NORMATIVA Y REGULATORIA PERUANA (MARCO LEGAL VINCULANTE)
-#  Documento de respaldo: docs/MARCO_REGULATORIO_Y_TECNICO.md
-# =============================================================================
-
-[normativa_mtc]
-norma = "MTC RD 036-2016-MTC/14, DG-2018 y EG-2013"
-clasificacion_tunel = "Clase I (Longitud > 3000 m)" # Unidad: texto | Norma: MTC RD 036-2016-MTC/14
-tipo_carretera = "Primera Clase"                   # Unidad: texto | Norma: MTC DG-2018 Secc. 101 (IMDA 2001-4000 veh/día)
-velocidad_diseno_km_h = 60.0                       # Unidad: km/h | Norma: MTC DG-2018 Tabla 204.01
-ancho_carril_min_m = 3.60                          # Unidad: m | Norma: MTC DG-2018 Tabla 304.01
-berma_min_m = 1.20                                 # Unidad: m | Norma: MTC DG-2018 Tabla 304.02 (mínimo absoluto túnel)
-berma_diseno_m = 1.80                              # Unidad: m | Norma: Plano CAD (supera mínimo normativo de 1.20 m)
-galibo_vertical_min_m = 5.50                       # Unidad: m | Norma: MTC RD 036-2016-MTC/14 y DG-2018 Sec. 304.08
-vereda_min_m = 0.75                                # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (mantenimiento y evacuación)
-vereda_altura_libre_min_m = 2.40                   # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (borde hastial)
-borde_vereda_alto_m = 0.20                         # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (resguardo físico peatonal)
-pendiente_longitudinal_max_pct = 3.0               # Unidad: % | Norma: MTC RD 036-2016-MTC/14 para L > 1000 m
-pendiente_longitudinal_min_pct = 0.5               # Unidad: % | Norma: MTC RD 036-2016-MTC/14 (autolimpieza cunetas)
-bombeo_transversal_pct = 2.0                       # Unidad: % | Norma: MTC RD 036-2016-MTC/14 (desagüe rápido plataforma)
-distancia_visibilidad_parada_m = 87.10             # Unidad: m | Norma: MTC DG-2018 para Vd = 60 km/h y pendiente 1.81%
-espaciamiento_apartaderos_m = 750.0                # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (cada 750-1000 m en Clase I)
-apartadero_largo_util_m = 40.0                     # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (longitud útil parada)
-apartadero_ancho_m = 3.00                          # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (ancho de parada adicional)
-espaciamiento_nichos_sos_m = 150.0                 # Unidad: m | Norma: MTC RD 036-2016-MTC/14 para Clase I
-espaciamiento_hidrantes_m = 150.0                  # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (red presurizada contra incendios)
-espaciamiento_galerias_evacuacion_m = 400.0        # Unidad: m | Norma: MTC RD 036-2016-MTC/14 (galería escape cada 250-400 m)
-potencia_fuego_diseno_mw = 30.0                    # Unidad: MW | Norma: MTC RD 036-2016-MTC/14 (incendio vehículo comercial)
-velocidad_critica_aire_incendio_m_s = 2.50         # Unidad: m/s | Norma: MTC RD 036-2016-MTC/14 (prevención de backlayering)
-shotcrete_fc_28d_kg_cm2 = 280.0                    # Unidad: kg/cm² | Norma: MTC EG-2013 (28 MPa vía húmeda)
-shotcrete_efnarc_joules = 500.0                    # Unidad: Joules | Norma: MTC EG-2013 (absorción energía deflexión 25 mm)
-pernos_pull_out_test_pct = 1.0                     # Unidad: % | Norma: MTC EG-2013 (ensayo de arrancamiento 1% pernos)
-
-[normativa_sucamec]
-norma = "Ley N° 30299 y D.S. N° 010-2017-IN"
-polvorines_separados = true                        # Unidad: boolean | Norma: SUCAMEC D.S. 010-2017-IN (independencia física obligatoria)
-distancia_seguridad_formula = "D = K * Q^(1/3)"    # Unidad: fórmula | Norma: Hopkinson / SUCAMEC D.S. 010-2017-IN
-factor_k_campamento = 6.0                          # Unidad: adimensional | Norma: SUCAMEC (con parapeto a campamento)
-factor_k_carretera = 4.0                           # Unidad: adimensional | Norma: SUCAMEC (con parapeto a vía pública)
-factor_k_entre_polvorines = 2.0                    # Unidad: adimensional | Norma: SUCAMEC (con parapeto entre polvorines)
-distancia_min_campamento_m = 100.0                 # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (distancia física mínima)
-distancia_min_portales_m = 100.0                   # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (distancia mínima a bocamina)
-altura_max_ruma_m = 1.50                           # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (máx. 10 cajas)
-altura_libre_techo_m = 1.00                        # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (espacio libre a techo)
-separacion_ruma_pared_m = 0.30                     # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (separación a muro perimetral)
-separacion_entre_rumas_m = 0.10                    # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (separación entre rumas)
-pasillo_circulacion_min_m = 1.00                   # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (accesorios)
-pasillo_circulacion_exp_m = 1.20                   # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN Art. 186 (explosivos)
-resistencia_puesta_tierra_max_ohm = 10.0           # Unidad: ohm | Norma: SUCAMEC D.S. 010-2017-IN Art. 185 / CNE
-espesor_puerta_acero_pulg = 0.25                   # Unidad: pulg | Norma: SUCAMEC D.S. 010-2017-IN (blindaje forrado madera)
-espesor_muro_min_m = 0.30                          # Unidad: m | Norma: SUCAMEC D.S. 010-2017-IN (concreto o mampostería)
-
-[normativa_seguridad_subterranea]
-norma = "D.S. 024-2016-EM y D.S. 023-2017-EM"
-altitud_operacion_msnm = 3850.0                    # Unidad: msnm | Norma: Altitud media de labores PA14
-caudal_aire_persona_m3_min = 5.0                   # Unidad: m³/min/persona | Norma: D.S. 024-2016-EM Art. 247.a (3000-4000 msnm)
-caudal_aire_diesel_hp_m3_min = 3.0                 # Unidad: m³/min/HP | Norma: D.S. 024-2016-EM Art. 247.b (maquinaria diésel)
-velocidad_aire_min_m_min = 20.0                    # Unidad: m/min | Norma: D.S. 024-2016-EM Art. 248 (0.33 m/s en galería)
-velocidad_aire_min_anfo_m_min = 25.0               # Unidad: m/min | Norma: D.S. 024-2016-EM Art. 248 (0.42 m/s con ANFO)
-velocidad_aire_max_m_min = 250.0                   # Unidad: m/min | Norma: D.S. 024-2016-EM Art. 248 (4.17 m/s máximo)
-tiempo_reingreso_voladura_min = 30.0               # Unidad: min | Norma: D.S. 024-2016-EM Art. 257 (espera post-disparo)
-oxigeno_min_pct = 19.5                             # Unidad: % | Norma: D.S. 024-2016-EM Art. 109 (mínimo en volumen)
-monoxido_carbono_max_ppm = 25.0                    # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
-monoxido_carbono_techo_ppm = 100.0                 # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-STEL techo)
-dioxido_nitrogeno_max_ppm = 3.0                    # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
-dioxido_nitrogeno_stel_ppm = 5.0                   # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-STEL 15 min)
-dioxido_carbono_max_ppm = 5000.0                   # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (0.5% en volumen)
-sulfuro_hidrogeno_max_ppm = 10.0                   # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
-dioxido_azufre_max_ppm = 2.0                       # Unidad: ppm | Norma: D.S. 024-2016-EM Anexo 15 (TLV-TWA 8h)
-principio_geomecanico = "Labor parada, labor sostenida" # Norma: D.S. 024-2016-EM Art. 224
-desatado_rocas_mecanizado = true                   # Unidad: boolean | Norma: D.S. 024-2016-EM Art. 226 (scaler para H=9.58 m)
-
-[normativa_hidrocarburos]
-norma = "D.S. 052-93-EM, D.S. 043-2007-EM y NFPA 30"
-tipo_combustible = "Diésel B5-S50"
-clase_combustible = "Clase II (Flash point >= 37.8 °C y < 60 °C)"
-factor_cubeto_min = 1.10                           # Unidad: ratio | Norma: D.S. 052-93-EM Art. 21 (>= 110 % tanque mayor)
-volumen_cubeto_camp1_m3 = 41.64                    # Unidad: m³ | Norma: D.S. 052-93-EM (110 % de 10,000 gal en CAMP1)
-volumen_cubeto_camp2_m3 = 41.64                    # Unidad: m³ | Norma: D.S. 052-93-EM (110 % de 10,000 gal en CAMP2)
-altura_dique_min_m = 0.90                          # Unidad: m | Norma: D.S. 052-93-EM Art. 22 (altura mín. muro cubeto)
-altura_dique_max_m = 1.80                          # Unidad: m | Norma: D.S. 052-93-EM Art. 22 (altura máx. muro cubeto)
-distancia_entre_tanques_m = 1.00                   # Unidad: m | Norma: D.S. 052-93-EM Art. 19 (separación conchas)
-distancia_campamento_m = 15.00                     # Unidad: m | Norma: D.S. 052-93-EM Tabla 2 (retiro a dormitorios/oficinas)
-distancia_vias_internas_m = 5.00                   # Unidad: m | Norma: D.S. 052-93-EM Art. 19 (retiro a vías de obra)
-distancia_surtidor_m = 3.00                        # Unidad: m | Norma: D.S. 052-93-EM (separación tanque a isla de despacho)
-distancia_fuentes_calor_m = 15.00                  # Unidad: m | Norma: D.S. 052-93-EM (retiro a talleres y generadores)
-altura_venteo_min_m = 3.60                         # Unidad: m | Norma: D.S. 052-93-EM Art. 23 (descarga con arrestallamas)
-resistencia_puesta_tierra_max_ohm = 10.0           # Unidad: ohm | Norma: D.S. 052-93-EM Art. 38 / CNE
-extintor_rodante_pqs_kg = 50.0                     # Unidad: kg | Norma: D.S. 052-93-EM Art. 45 (1 PQS sobre ruedas >= 80-B:C)
-extintores_portatiles_pqs_kg = 9.0                 # Unidad: kg | Norma: D.S. 052-93-EM Art. 45 (2 PQS en isla rating >= 20-B:C)
-distancia_max_recorrido_extintor_m = 10.0          # Unidad: m | Norma: NTP 350.043-1 / D.S. 052-93-EM
-
-[normativa_recursos_hidricos]
-norma = "Ley N° 29338 y D.S. N° 001-2010-AG (ANA)"
-regimen_derecho = "Autorización de Uso de Agua para Obras Civiles (Ley 29338 Art. 62 / DS 001-2010-AG Art. 87)"
-autoridad_competente = "ALA Huaraz / AAA Huarmey-Chicama"
-macromedicion_obligatoria = true                   # Unidad: boolean | Norma: R.J. 007-2015-ANA Art. 24 (totalizador en pozo POZ)
-reuso_prioritario = true                           # Unidad: boolean | Norma: Ley 29338 Art. 82 / DS 001-2010-AG Art. 143
-faja_marginal_min_m = 5.00                         # Unidad: m | Norma: Ley 29338 Art. 74 / R.J. 332-2016-ANA (quebradas)
-faja_marginal_rio_m = 15.00                        # Unidad: m | Norma: Ley 29338 Art. 74 / R.J. 332-2016-ANA (ríos)
-periodo_retorno_faja_anios = 50                    # Unidad: años | Norma: R.J. 332-2016-ANA (creciente extraordinaria)
-drenaje_tunel_sst_max_mg_l = 50.0                  # Unidad: mg/L | Norma: D.S. 004-2017-MINAM Cat. 3 / D.S. 010-2010-MINAM
-drenaje_tunel_aceites_grasas_max_mg_l = 5.0        # Unidad: mg/L | Norma: D.S. 004-2017-MINAM Cat. 3 (separador coalescente)
-drenaje_tunel_ph_min = 6.5                         # Unidad: pH | Norma: Ley 29338 / D.S. 004-2017-MINAM (neutralización CO2)
-drenaje_tunel_ph_max = 8.5                         # Unidad: pH | Norma: Ley 29338 / D.S. 004-2017-MINAM (neutralización CO2)
-
-[normativa_residuos_dme]
-norma = "D.L. 1278, D.S. 014-2017-MINAM y MTC EG-2013 Sec. 210"
-codigo_colores = "NTP 900.058:2019 (Azul, Blanco, Amarillo, Marrón, Plomo, Negro, Rojo)"
-cat_area_m2 = 496.0                                # Unidad: m² | Norma: D.S. 014-2017-MINAM Art. 52 (EDIF-18 techado)
-cat_losa_impermeable = true                        # Unidad: boolean | Norma: D.S. 014-2017-MINAM Art. 53 (concreto estanco)
-cat_contencion_secundaria_pct = 1.10               # Unidad: ratio | Norma: D.S. 014-2017-MINAM Art. 54 (>= 110 % tambores)
-tiempo_max_acopio_peligrosos_meses = 12            # Unidad: meses | Norma: D.L. 1278 Art. 55
-volumen_esponjado_total_m3 = 900940.0              # Unidad: m³ | Norma: 600,626 m³ banco x 1.50 esponjamiento
-dme_altura_max_banco_m = 10.0                      # Unidad: m | Norma: MTC EG-2013 Sec. 210 (altura máxima por terraza)
-dme_ancho_min_berma_m = 4.0                        # Unidad: m | Norma: MTC EG-2013 Sec. 210 (berma intermedia con cuneta)
-dme_talud_reposo_v_h = "1V:1.5H"                   # Unidad: talud | Norma: MTC EG-2013 Sec. 210 (roca desquinada)
-dme_factor_seguridad_estatico_min = 1.50           # Unidad: FS | Norma: MTC EG-2013 Sec. 210 (estabilidad estática)
-dme_factor_seguridad_pseudoestatico_min = 1.25     # Unidad: FS | Norma: MTC EG-2013 Sec. 210 (sismo de diseño amax = 0.40g)
-dme_drenaje_basal_enrocado = true                  # Unidad: boolean | Norma: MTC EG-2013 Sec. 210 (pedraplén y geotextil)
-dme_canal_coronacion_perimetral = true             # Unidad: boolean | Norma: MTC EG-2013 Sec. 210 (desvío de escorrentías)
-dme_espesor_topsoil_cierre_m = 0.25                # Unidad: m | Norma: MTC EG-2013 Sec. 210 (tapa orgánica para revegetación)
-
-[normativa_efluentes_ptar]
-norma = "D.S. N° 003-2010-MINAM (Límites Máximos Permisibles para Efluentes de PTAR Domésticas)"
-ph_min = 6.5                                       # Unidad: pH | Norma: D.S. 003-2010-MINAM (potencial de hidrógeno mín.)
-ph_max = 8.5                                       # Unidad: pH | Norma: D.S. 003-2010-MINAM (potencial de hidrógeno máx.)
-dbo5_max_mg_l = 100.0                              # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (demanda bioquímica de oxígeno)
-dqo_max_mg_l = 200.0                               # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (demanda química de oxígeno)
-sst_max_mg_l = 100.0                               # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (sólidos suspendidos totales)
-aceites_grasas_max_mg_l = 20.0                     # Unidad: mg/L | Norma: D.S. 003-2010-MINAM (aceites y grasas)
-coliformes_termo_max_nmp_100ml = 10000.0           # Unidad: NMP/100 mL | Norma: D.S. 003-2010-MINAM (coliformes termotolerantes)
-temperatura_max_c = 35.0                           # Unidad: °C | Norma: D.S. 003-2010-MINAM (temperatura máxima efluente)
-punto_monitoreo = "Salida cámara de cloración PTAR antes de vertimiento o reúso"
-frecuencia_monitoreo = "Mensual / Trimestral con laboratorio acreditado ante INACAL"
-
-[normativa_saneamiento_rne]
-norma = "RNE Normas Técnicas OS.090, OS.020, OS.100, IS.010 e IS.020"
-poblacion_diseno_hab = 346                         # Unidad: habitantes | Norma: Organización oficial PA14 (248 C1 + 98 C2)
-dotacion_l_hab_dia = 150.0                         # Unidad: L/hab/día | Norma: RNE IS.010 Art. 2.2 y D.S. 024-2016-EM Art. 202
-coeficiente_retorno = 0.80                         # Unidad: ratio | Norma: RNE IS.020 Art. 4.1 y OS.090
-caudal_medio_residual_m3_dia = 41.52               # Unidad: m³/día | Norma: Q = P * D * Cr / 1000 (0.481 L/s)
-coeficiente_variacion_horaria_k2 = 2.0             # Unidad: adimensional | Norma: RNE OS.100 Num. 1.2
-caudal_maximo_horario_l_s = 0.961                  # Unidad: L/s | Norma: Qmh = k2 * Qm (3.46 m³/h)
-rejas_espaciamiento_libre_mm = 20.0                # Unidad: mm | Norma: RNE OS.090 Num. 5.1 (desbaste barras)
-rejas_velocidad_paso_max_m_s = 1.00                # Unidad: m/s | Norma: RNE OS.090 Num. 5.1 (velocidad de paso a Qmh)
-trampa_grasa_retencion_min_min = 2.5               # Unidad: min | Norma: RNE OS.090 / IS.010 (retención hidráulica)
-trampa_grasa_litros_por_comensal = 20.0            # Unidad: L/comensal | Norma: RNE IS.010 (EDIF-17 trampa de grasas)
-tanque_septico_volumen_util_m3 = 35.30             # Unidad: m³ | Norma: RNE IS.020 / OS.090 (Vs=10.38 + Vl=24.22 + Vn=0.70)
-tasa_lodos_sierra_l_hab_anio = 70.0                # Unidad: L/hab/año | Norma: RNE IS.020 Tabla 1 (clima frío < 15 °C)
-intervalo_limpieza_tanque_anios = 1.0              # Unidad: años | Norma: RNE IS.020 (frecuencia de purga de lodos)
-biorreactor_mbbr_remocion_dbo5_pct = 85.0          # Unidad: % | Norma: RNE OS.090 (tecnología biológica de biopelícula)
-camara_contacto_cloro_tiempo_min = 15.0            # Unidad: min | Norma: RNE OS.090 Num. 5.7 (tiempo retención a Qmh)
-cloro_residual_libre_min_mg_l = 0.5                # Unidad: mg/L | Norma: RNE OS.090 Num. 5.7 (desinfección efluente)
-cloro_residual_libre_max_mg_l = 1.5                # Unidad: mg/L | Norma: RNE OS.090 Num. 5.7 (desinfección efluente)
-lecho_secado_area_especifica_m2_hab = 0.12         # Unidad: m²/hab | Norma: RNE OS.090 Num. 5.8 (clima frío sierra)
-lecho_secado_area_minima_m2 = 41.5                 # Unidad: m² | Norma: RNE OS.090 Num. 5.8 (superficie para 346 hab)
-lecho_secado_espesor_arena_m = 0.20                # Unidad: m | Norma: RNE OS.090 Num. 5.8 (manto filtrante de arena)
-lecho_secado_espesor_grava_m = 0.25                # Unidad: m | Norma: RNE OS.090 Num. 5.8 (soporte drenante de grava)
-
-
-
-# =============================================================================
 #  13 · SOSTENIMIENTO SUBTERRÁNEO DEL TÚNEL
 # =============================================================================
 [sostenimiento]
@@ -3863,21 +3966,23 @@ cerchas = "Pesadas @ 0.75m"
 #  14 · AFRONTONAMIENTO Y SELLADO DE PORTAL DEL TÚNEL
 # =============================================================================
 [afrontonamiento]
-# 1. Valoración Geomecánica RMR de Bieniawski (1989) en el Portal / Frontón
-ucs_roca_intacta_mpa = 75.0         # Unidad: MPa | Fuente: Ensayo de carga puntual / compresión simple en portal
-pts_ucs = 7                         # Unidad: puntos | Fuente: Bieniawski (1989) para rango 50 - 100 MPa
-rqd_portal_pct = 62.0               # Unidad: % | Fuente: RQD medio en talud de emboquille (50 - 75%)
-pts_rqd = 13                        # Unidad: puntos | Fuente: Bieniawski (1989) para RQD 50 - 75%
-espaciamiento_juntas_m = 0.25       # Unidad: m | Fuente: Espaciamiento moderado de discontinuidades (0.2 - 0.6 m)
-pts_espaciamiento = 10              # Unidad: puntos | Fuente: Bieniawski (1989) para 0.2 - 0.6 m
-condicion_juntas = "Ligeramente rugosas, sep. < 1 mm, paredes ligeramente alteradas"
+# 1. Valoración Geomecánica RMR de Bieniawski (1989) en el Portal / Frontón (Fuente: geomecanica_portal.xlsx)
+ucs_roca_intacta_mpa = 80.0         # Unidad: MPa | Fuente: Ensayo de compresión uniaxial (50 - 100 MPa)
+pts_ucs = 7                         # Unidad: puntos | Fuente: Bieniawski (1989)
+rqd_portal_pct = 70.0               # Unidad: % | Fuente: RQD en talud de emboquille (50 - 75%)
+pts_rqd = 13                        # Unidad: puntos | Fuente: Bieniawski (1989)
+espaciamiento_juntas_m = 0.30       # Unidad: m | Fuente: Espaciamiento de discontinuidades (0.20 - 0.60 m)
+pts_espaciamiento = 10              # Unidad: puntos | Fuente: Bieniawski (1989)
+condicion_juntas = "Superficies ligeramente rugosas, paredes ligeramente alteradas"
 pts_condicion_juntas = 20           # Unidad: puntos | Fuente: Bieniawski (1989)
-condicion_agua = "Húmedo (filtración ligera / goteo ocasional)"
-pts_agua = 7                        # Unidad: puntos | Fuente: Bieniawski (1989) para caudal < 10 L/min
-orientacion_discontinuidades = "Regular (Favorable a Media en talud de portal)"
-ajuste_orientacion = -5             # Unidad: puntos | Fuente: Ajuste por orientación de juntas en portal (Bieniawski 1989)
-clase_macizo = "III"                # Unidad: clase | Fuente: RMR 41 - 60 (Roca Regular)
-calidad_macizo = "Roca Regular (Media)"
+condicion_agua = "Completamente seco"
+pts_agua = 15                       # Unidad: puntos | Fuente: geomecanica_portal.xlsx (Seco = 15 pts)
+rmr_basico = 65                     # Unidad: puntos | RMR básico = 7 + 13 + 10 + 20 + 15 = 65 (Clase II)
+orientacion_discontinuidades = "Desfavorable en talud de portal"
+ajuste_orientacion = -5             # Unidad: puntos | Fuente: Ajuste por orientación de juntas en portal
+rmr_ajustado = 60                   # Unidad: puntos | RMR ajustado = 65 - 5 = 60 (Límite Clase II / III)
+clase_macizo = "II / III"           # Unidad: clase | Fuente: RMR 60 (Buena a Regular)
+calidad_macizo = "Roca Buena a Regular"
 
 # 2. Teoría de Cargas de Roca de Terzaghi (1946) para el Frontón
 condicion_terzaghi_id = 4           # Unidad: N° | Fuente: Condición 4 Terzaghi ("Medianamente fracturada en bloques algo abiertos")
@@ -3890,43 +3995,50 @@ equipo_maniobra = "Cargador Frontal sobre Ruedas Caterpillar 966H"
 link_ficha_cat966h = "https://drive.google.com/file/d/1MmeCiUDpEDKpKdOn1hrj8rbDK1uqPrcL/view"
 link_lectura_specs = "https://www.lectura-specs.es/es/modelo/maquinaria-para-la-construccion-y-obras-publicas/cargadoras-de-ruedas-caterpillar/966h-1030906"
 longitud_total_equipo_m = 8.84      # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Longitud con cuchara en suelo)
-ancho_sobre_neumaticos_m = 2.98     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+ancho_sobre_neumaticos_m = 2.96     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+ancho_cucharon_m = 3.22             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
 altura_cabina_m = 3.58              # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+altura_pasador_m = 4.24             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
 radio_giro_ext_m = 7.26             # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H (Radio de giro exterior neumáticos)
-altura_descarga_max_m = 3.10        # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+diametro_circulo_giro_m = 14.73     # Unidad: m | Fuente: Ficha Técnica Caterpillar 966H
+tiempo_ciclo_hidraulico_s = 12.7    # Unidad: s | Levantamiento 6.5s, Descarga 2.7s, Bajada 3.5s
 distancia_seguridad_op_m = 1.00     # Unidad: m | Fuente: Resguardo operacional lateral (D.S. 024-2016-EM)
 
-# 4. Malla Electrosoldada en el Frontón
-largo_pano_malla_m = 6.00           # Unidad: m | Fuente: Paño estándar de malla electrosoldada Q-188 / 100x100x5 mm
-ancho_pano_malla_m = 2.40           # Unidad: m | Fuente: Ancho comercial de paño de malla electrosoldada
-traslape_malla_m = 0.30             # Unidad: m | Fuente: Traslape mínimo normativo en ambos sentidos (3 cuadros = 0.30 m)
-tiempo_instalacion_pano_min = 15.0  # Unidad: min/paño | Fuente: Rendimiento de cuadrilla con plataforma elevadora
+# 4. Malla Electrosoldada en el Frontón (Fuente: diseno_sostenimiento_fronton.xlsx)
+largo_pano_malla_m = 25.00          # Unidad: m | Fuente: Rollo minero Aceros Arequipa Q-139 (25.0 m)
+ancho_pano_malla_m = 2.42           # Unidad: m | Fuente: Ancho comercial de rollo minero Q-139 (2.42 m)
+traslape_malla_m = 0.30             # Unidad: m | Fuente: Traslape normativo por borde (0.30 m)
+diametro_alambre_mm = 3.4           # Unidad: mm | Fuente: Alambre grafilado alta resistencia Ø 3.4 mm
+cocada = "10x10 cm"                 # Unidad: cm | Cuadrícula de 100 x 100 mm
+area_util_pano_m2 = 52.364          # Unidad: m² | Área neta útil por panel: (25.0 - 0.30) * (2.42 - 0.30)
+area_sostener_m2 = 591.566          # Unidad: m² | Área neta del frontón a sostener
+paneles_requeridos = 12             # Unidad: und | Paneles requeridos en obra = ceil(591.566 / 52.364)
+rendimiento_colocacion_h_panel = 0.30 # Unidad: h/panel | Rendimiento de cuadrilla con plataforma
 
-# 5. Pernos de Anclaje RockBolt + Cartuchos de Resina + Ciclo del Bolter
-longitud_perno_fronton_m = 3.00     # Unidad: m | Fuente: Perno helicoidal ASTM A615 G60 en portal (L = 3.0 m)
+# 5. Pernos de Anclaje RockBolt de Emboquille (Fuente: diseno_sostenimiento_fronton.xlsx)
+longitud_perno_fronton_m = 9.00     # Unidad: m | Fuente: Perno helicoidal largo de cosido de emboquille (L = 9.0 m)
 diametro_perno_fronton_mm = 22.0    # Unidad: mm | Fuente: Barra helicoidal de 22 mm (7/8")
-diametro_taladro_perno_mm = 32.0    # Unidad: mm | Fuente: Broca de empernado de 32 mm (1 1/4")
-espaciamiento_pernos_fronton_m = 1.50 # Unidad: m | Fuente: Malla cuadrada sistemática de 1.50 x 1.50 m
+diametro_taladro_perno_mm = 32.0    # Unidad: mm | Fuente: Broca de empernado de 32 mm
+espaciamiento_pernos_fronton_m = 4.50 # Unidad: m | Fuente: Malla cuadrada sistemática de 4.50 x 4.50 m
 diametro_cartucho_resina_mm = 28.0  # Unidad: mm | Fuente: Cartucho de resina poliéster de 28 mm
 longitud_cartucho_resina_mm = 305.0 # Unidad: mm | Fuente: Cartucho estándar de 305 mm (1 pie)
 peso_cartucho_resina_g = 320.0      # Unidad: g | Fuente: Peso unitario cartucho de resina (320 g/und)
 cartuchos_por_caja = 50             # Unidad: und/caja | Fuente: Presentación comercial en cajas de 50 cartuchos
-velocidad_perf_bolter_m_min = 1.50  # Unidad: m/min | Fuente: Velocidad neta de perforación del Bolter Robótico
-tiempo_maniobra_bolter_min = 1.00   # Unidad: min/perno | Fuente: Tiempo de posicionamiento de viga del Bolter
-tiempo_inyeccion_empernado_min = 2.50 # Unidad: min/perno | Fuente: Inserción de resina, batido y ajuste de placa
+rendimiento_perf_bolter_m_min = 0.20 # Unidad: m/min | Fuente: Rendimiento neto perforación Bolter Epiroc
+rendimiento_empernado_bolter_m_min = 0.40 # Unidad: m/min | Fuente: Rendimiento neto inserción y batido Bolter
 
-# 6. Shotcrete Robotizado Vía Húmeda en el Frontón
-espesor_shotcrete_fronton_m = 0.12  # Unidad: m | Fuente: Espesor de diseño e = 12 cm (0.12 m) en Clase III portal
-rebote_shotcrete_pct = 0.10         # Unidad: ratio | Fuente: Rebote controlado del 10% en lanzado robotizado vía húmeda
-cemento_dosificacion_kg_m3 = 425.0  # Unidad: kg/m³ | Fuente: Dosificación Cemento Portland Tipo I (10 bolsas/m³)
+# 6. Shotcrete Robotizado Vía Húmeda en el Frontón (Fuente: diseno_sostenimiento_fronton.xlsx)
+espesor_shotcrete_fronton_m = 0.10  # Unidad: m | Fuente: Espesor de diseño e = 10 cm (0.10 m) en frontón portal
+rebote_shotcrete_pct = 0.15         # Unidad: ratio | Fuente: Factor de rebote del 15% en talud vertical
+cemento_dosificacion_kg_m3 = 425.0  # Unidad: kg/m³ | Fuente: Dosificación Cemento Extraforte Tipo I (10 bolsas/m³)
 peso_bolsa_cemento_kg = 42.5        # Unidad: kg/bolsa | Fuente: Bolsa comercial de cemento en Perú (42.5 kg)
 relacion_agua_cemento = 0.58        # Unidad: A/C | Fuente: Relación agua/cemento de diseño en mezcla base
-arena_dosificacion_kg_m3 = 1700.0   # Unidad: kg/m³ | Fuente: Agregado graduado huso EFNARC (1,700 kg/m³)
-acelerante_sikacem_pct = 0.04       # Unidad: ratio | Fuente: Aditivo acelerante libre de álcalis SikaCem Gunite PE (4% peso cemento)
-nanosilice_pct = 0.01               # Unidad: ratio | Fuente: Adición de nanosílice / microsílice (1% peso cemento)
+arena_dosificacion_kg_m3 = 1700.0   # Unidad: kg/m³ | Fuente: Agregado graduado arena lavada (1,700 kg/m³)
+acelerante_sikacem_kg_m3 = 17.0     # Unidad: kg/m³ | Fuente: Aditivo acelerante SikaCem Gunite PE (4% cemento)
+nanosilice_kg_m3 = 4.25             # Unidad: kg/m³ | Fuente: Nanosílice en emulsión (1% cemento)
 fibra_sintetica_kg_m3 = 4.0         # Unidad: kg/m³ | Fuente: Macrofibra estructural SikaFiber Force-60 (4.0 kg/m³)
-rendimiento_robot_shotcrete_m3_h = 24.0 # Unidad: m³/h | Fuente: Rendimiento efectivo Robot Putzmeister Wetkret 4 / Normet
-tiempo_fraguado_inicial_h = 3.0     # Unidad: h | Fuente: Tiempo de espera de fraguado y ganancia de resistencia inicial
+rendimiento_robot_shotcrete_m3_h = 24.0 # Unidad: m³/h | Fuente: Caudal efectivo Robot Lanzador (GHP25C-IV)
+tiempo_fraguado_inicial_h = 3.0     # Unidad: h | Fuente: Tiempo de fraguado y resistencia inicial
 
 [[afrontonamiento.terzaghi_clases]]
 id = 1
