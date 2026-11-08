@@ -1,10 +1,9 @@
 # Guía de uso: criterios DG-2018 (MTC Perú) en Civil 3D
 
-Todo vive en esta carpeta del proyecto (`civil3d/`). **No se modificó ninguna carpeta global de Civil 3D.**
-Para la documentación detallada de arquitectura, consulta [`civil3d/README.md`](./README.md).
+Todo vive en esta carpeta del proyecto (`diseno_vial/`). **No se modificó ninguna carpeta global de Civil 3D.**
+Para la documentación detallada de arquitectura, consulta [`diseno_vial/README.md`](./README.md).
 
 - **Versión en Markdown (MarkItDown):** [`docs/entradas/manual_de_carreteras_dg_2018.md`](../docs/entradas/manual_de_carreteras_dg_2018.md)
-- **Copia local del PDF:** [`docs/entradas/manual_de_carreteras_dg_2018.pdf`](../docs/entradas/manual_de_carreteras_dg_2018.pdf)
 - **Fuente PDF en Google Drive (DG-2018 Carreteras):** [Manual de Carreteras: Diseño Geométrico DG-2018](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)
 - **Fuente PDF en Google Drive (MC-03-16 Túneles):** [Manual de Carreteras: Túneles, Muros y Obras Complementarias](https://drive.google.com/file/d/1IIdtiAq3M-wXH4l8uuyQueE2mOMJV9Xr/view?usp=drive_link)
 
@@ -14,14 +13,14 @@ Para la documentación detallada de arquitectura, consulta [`civil3d/README.md`]
 | `generar_dg2018.py` | Genera el XML; verifica $R = V^2/(127(p+f))$ contra la Tabla 302.02 y precalcula las tablas automáticas de sobreancho por vehículo |
 | `PA14_DG2018_MTC_Roadway_Design_Standards.xml` | Archivo de criterios para Civil 3D |
 
-Regenerar: `uv run python civil3d/generar_dg2018.py`
+Regenerar: `uv run python diseno_vial/generar_dg2018.py`
 
 ---
 
 ## 1. Cargar en Civil 3D (Alineamiento Principal y Perfil)
 1. *Create Alignment - Layout* (o *Alignment Properties*) → pestaña **Design Criteria**.
 2. Marcar **Use criteria-based design** y **Use design criteria file**.
-3. Botón `...` → examinar y elegir el XML **de esta carpeta** (`civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml`).
+3. Botón `...` → examinar y elegir el XML **de esta carpeta** (`diseno_vial/PA14_DG2018_MTC_Roadway_Design_Standards.xml`).
 4. En *Minimum Radius Table* elegir según ubicación de la vía:
    - `DG-2018 MTC eMax 4% - Area urbana`
    - `DG-2018 MTC eMax 6% - Rural con peligro de hielo`

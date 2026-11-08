@@ -1,9 +1,9 @@
 """Genera el archivo de criterios de diseño de Civil 3D según el DG-2018 (MTC Perú).
 
-Lee `civil3d/dg2018_datos.toml` y escribe el XML en esta misma carpeta del proyecto.
+Lee `diseno_vial/dg2018_datos.toml` y escribe el XML en esta misma carpeta del proyecto.
 No toca ninguna carpeta global de Autodesk Civil 3D.
 
-Uso:  uv run python civil3d/generar_dg2018.py
+Uso:  uv run python diseno_vial/generar_dg2018.py
 """
 
 from __future__ import annotations

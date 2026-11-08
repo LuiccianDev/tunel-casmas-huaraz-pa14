@@ -85,12 +85,12 @@ try {
     Record-Check "AutoCAD" "Gateway HTTP (5055)" "OFFLINE" "No responde en localhost:5055. Carga la DLL con NETLOAD en AutoCAD."
 }
 
-$xmlStandards = Join-Path $ProjectRoot "civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml"
+$xmlStandards = Join-Path $ProjectRoot "diseno_vial/PA14_DG2018_MTC_Roadway_Design_Standards.xml"
 if (Test-Path $xmlStandards) {
     $xmlDate = (Get-Item $xmlStandards).LastWriteTime.ToString("yyyy-MM-dd HH:mm")
     Record-Check "AutoCAD" "Estandar DG-2018 XML" "OK" "Sincronizado ($xmlDate)"
 } else {
-    Record-Check "AutoCAD" "Estandar DG-2018 XML" "WARN" "Falta generar XML. Ejecuta 'uv run python civil3d/generar_dg2018.py'"
+    Record-Check "AutoCAD" "Estandar DG-2018 XML" "WARN" "Falta generar XML. Ejecuta 'uv run python diseno_vial/generar_dg2018.py'"
 }
 
 # -----------------------------------------------------------------------------
@@ -156,9 +156,9 @@ if (Test-Path $graphReport) {
 Write-Host "[6/6] Verificando Integridad de Codigo (Pytest)..." -ForegroundColor Yellow
 
 try {
-    $pytestFast = uv run pytest tests/test_civil3d_dg2018.py tests/test_documentacion.py tests/test_arnes_fuente_excel.py -q 2>&1
+    $pytestFast = uv run pytest tests/test_diseno_vial_dg2018.py tests/test_documentacion.py tests/test_arnes_fuente_excel.py -q 2>&1
     if ($LASTEXITCODE -eq 0) {
-        Record-Check "Suite" "Pytest Basico" "OK" "Arnes documental y de civil3d pasando al 100%"
+        Record-Check "Suite" "Pytest Basico" "OK" "Arnes documental y de diseno_vial pasando al 100%"
     } else {
         Record-Check "Suite" "Pytest Basico" "WARN" "Pruebas con advertencias o fallos menores"
     }

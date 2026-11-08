@@ -1,11 +1,10 @@
 # Criterios de Diseño Vial DG-2018 (MTC Perú) para Autodesk Civil 3D
 
-Esta carpeta (`civil3d/`) contiene la parametrización normativa y el generador automatizado en Python del archivo de criterios de diseño geométrico vial **DG-2018 (MTC Perú)** para **Autodesk Civil 3D**, aislado dentro del proyecto sin modificar ninguna carpeta global de instalación de Autodesk.
+Esta carpeta (`diseno_vial/`) contiene la parametrización normativa y el generador automatizado en Python del archivo de criterios de diseño geométrico vial **DG-2018 (MTC Perú)** para **Autodesk Civil 3D**, aislado dentro del proyecto sin modificar ninguna carpeta global de instalación de Autodesk.
 
 > **Fuente documental oficial:** Todos los parámetros y fórmulas del generador han sido verificados directamente contra el **Manual de Carreteras: Diseño Geométrico DG-2018 (MTC Perú)**:
 > - ⚡ **Índice Rápido de Líneas (Consulta instantánea sin gastar tokens):** [`docs/entradas/indice_dg2018.md`](../docs/entradas/indice_dg2018.md)
 > - 📄 **Versión en Markdown (convertida con MarkItDown para lectura directa):** [`docs/entradas/manual_de_carreteras_dg_2018.md`](../docs/entradas/manual_de_carreteras_dg_2018.md)
-> - 📁 **Copia local en PDF:** [`docs/entradas/manual_de_carreteras_dg_2018.pdf`](../docs/entradas/manual_de_carreteras_dg_2018.pdf)
 > - 🌐 **Enlace en Google Drive (DG-2018 Carreteras):** [Manual de Carreteras: Diseño Geométrico DG-2018 (PDF)](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)
 > - 🚇 **Enlace complementario en Google Drive (MC-03-16 Túneles):** [Manual de Carreteras: Túneles, Muros y Obras Complementarias (PDF)](https://drive.google.com/file/d/1IIdtiAq3M-wXH4l8uuyQueE2mOMJV9Xr/view?usp=drive_link)
 
@@ -15,9 +14,9 @@ Esta carpeta (`civil3d/`) contiene la parametrización normativa y el generador 
 
 ```mermaid
 flowchart LR
-    A["PDF Oficial DG-2018 MTC\n(docs/entradas/manual_de_carreteras_dg_2018.pdf)"] --> B["civil3d/dg2018_datos.toml\n(Única Fuente de Datos)"]
-    B --> C["civil3d/generar_dg2018.py\n(Valida R = V² / (127(p+f)))"]
-    C --> D["civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml\n(Esquema Civil 3D v2.0)"]
+    A["Manual DG-2018 MTC\n(docs/entradas/manual_de_carreteras_dg_2018.md)"] --> B["diseno_vial/dg2018_datos.toml\n(Única Fuente de Datos)"]
+    B --> C["diseno_vial/generar_dg2018.py\n(Valida R = V² / (127(p+f)))"]
+    C --> D["diseno_vial/PA14_DG2018_MTC_Roadway_Design_Standards.xml\n(Esquema Civil 3D v2.0)"]
     D -->|Design Criteria| E["Autodesk Civil 3D 2027\n(Alineamientos y Perfiles)"]
 ```
 
@@ -35,13 +34,13 @@ flowchart LR
 Para regenerar el archivo `PA14_DG2018_MTC_Roadway_Design_Standards.xml` tras cualquier ajuste en `dg2018_datos.toml`, ejecuta desde la raíz del proyecto:
 
 ```powershell
-uv run python civil3d/generar_dg2018.py
+uv run python diseno_vial/generar_dg2018.py
 ```
 
 Para ejecutar las pruebas unitarias que validan la fórmula de radios mínimos, los parámetros $K$ de curvas verticales, la estructura del esquema XML y la vinculación entre tablas de radio y peralte:
 
 ```powershell
-uv run pytest tests/test_civil3d_dg2018.py -q
+uv run pytest tests/test_diseno_vial_dg2018.py -q
 ```
 
 ---
@@ -52,7 +51,7 @@ uv run pytest tests/test_civil3d_dg2018.py -q
 2. Activa las casillas **Use criteria-based design** y **Use design criteria file**.
 3. Haz clic en el botón `...` y selecciona el archivo local de este repositorio:
    ```text
-   civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml
+   diseno_vial/PA14_DG2018_MTC_Roadway_Design_Standards.xml
    ```
 4. En **Minimum Radius Table**, elige la tabla correspondiente a la ubicación y orografía de la vía:
    - `DG-2018 MTC eMax 4% - Area urbana`

@@ -28,22 +28,22 @@ en **Markdown** y doble canal de planos para **AutoCAD** (generación batch en *
 | # | Excel | Hojas / Contenido | Memoria | Estado |
 |---|-------|-------------------|---------|--------|
 | **01** | `01_Ubicacion.xlsx` | Coordenadas · Eje del túnel · Distancias | — | ✅ |
-| **02** | `02_Geologia.xlsx` | Perfil litológico · RMR · Calidad de roca | — | ⏳ datos estructurados |
-| **11** | `11_Portales.xlsx` | Banquetas_Portales · Q_Slope_Taludes (Bar & Barton, 2015) · Cortes_Civil3D_Accesos (Cubicaciones y Assemblies) · Cunetas_Drenaje_Pluvial (Manning) · Control_Tiempos_Progresivas | `16_extraccion_datos_unidad2.md` · `18_revision_cortes_movimiento_tierras.md` · `19_dimensiones_geometricas_accesos_dg2018.md` · `20_dimensionamiento_hidraulico_cunetas.md` · `21_control_tiempos_progresivas_maquinaria.md` | ✅ |
+| **02** | `02_Geologia.xlsx` | Perfil litológico · RMR · Calidad de roca (9 tramos, 5,556 m) | — | ✅ |
+| **11** | `11_Portales.xlsx` | Banquetas_Portales · Q_Slope_Taludes (Bar & Barton, 2015) · Cortes_Civil3D_Accesos (Cubicaciones y Assemblies) · Cunetas_Drenaje_Pluvial (Manning) · Control_Tiempos_Progresivas | `18_revision_cortes_movimiento_tierras.md` · `19_dimensiones_geometricas_accesos_dg2018.md` · `20_dimensionamiento_hidraulico_cunetas.md` · `21_control_tiempos_progresivas_maquinaria.md` | ✅ |
 | **15** | `15_Voladura_Banquetas.xlsx` | Voladura de banquetas en superficie (Epiroc PowerROC T25 — Modelo Konya): Calculadora_Konya_T25 · Voladura_Por_Banqueta · Ficha_PowerROC_T25 · BD_Explosivos · BD_Rocas · BD_Brocas_Equipos · Criterios_y_Fuentes | `15_voladura_banquetas.md` | ✅ |
-| **03** | `03_Seccion.xlsx` | Geometría · Perforación y avance · Volúmenes | `03_seccion.md` | ✅ |
-| **14** | `14_Afrontonamiento.xlsx` | Afrontonamiento y sellado del portal: RMR_Geomecanica · Teoria_Cargas_Terzaghi · Afrontonamiento_Portal · Malla_Electrosoldada · Pernos_RockBolt · Shotcrete_Robotizado | `14_afrontonamiento.md` · `17_auditoria_discrepancias_drive.md` | ✅ |
+| **03** | `03_Seccion.xlsx` | Geometria · Galibo · Justificacion MTC | `03_seccion.md` | ✅ |
+| **14** | `14_Afrontonamiento.xlsx` | Afrontonamiento y sellado del portal: RMR_Geomecanica · Teoria_Cargas_Terzaghi · Afrontonamiento_Portal · Malla_Electrosoldada · Pernos_RockBolt · Shotcrete_Robotizado | `14_afrontonamiento.md` | ✅ |
 | **12** | `12_Voladura.xlsx` | Voladura subterránea del túnel (Jumbo 3 brazos Sandvik DT1131): Malla_y_Avance_Tunel · Voladura_Konya_Tunel · Ficha_Jumbo_DT1131 · BD_Explosivos · Catalogo_Detonacion · BD_Rocas · BD_Brocas_Equipos | `12_voladura.md` | ✅ |
 | **04** | `04_Personal.xlsx` | Relación de personal · Turnos · Resumen | `04_personal.md` | ✅ |
-| **05** | `05_Campamento.xlsx` | Edificaciones · Áreas requeridas · Resumen | `05_campamento.md` | ✅ |
-| **06** | `06_Maquinaria.xlsx` | Frente · Botadero · Campamento · 26 Fichas técnicas individuales · Resumen_Flota | `06_maquinaria.md` | ✅ |
+| **05** | `05_Campamento.xlsx` | Todas_Edificaciones · Campamento_1_Principal · Campamento_2_Satelite · Resumen_Grupos | `05_campamento.md` | ✅ |
+| **06** | `06_Maquinaria.xlsx` | Frente · Accesos · Banquetas · Botadero · Campamento · 26 Fichas técnicas individuales · Resumen_Flota | `06_maquinaria.md` | ✅ |
 | **07** | `07_Polvorin.xlsx` | Consumo explosivos · Distancias de seguridad · Dimensionamiento | — | ✅ |
 | **08** | `08_Agua.xlsx` | Consumo industrial/humano · PETAP · PETAR · Pozos | — | ✅ |
 | **09** | `09_Electricidad.xlsx` | Ventilación · Subestaciones y cargas · Grupo electrógeno · Resumen | — | ✅ |
 | **10** | `10_Cronograma.xlsx` | Actividades constructivas · Duraciones · Carta Gantt | — | ✅ |
 | **13** | `13_Sostenimiento.xlsx` | Sostenimiento subterráneo interior del túnel (Bieniawski/Barton: pernos, shotcrete y cerchas por tramo) | `13_sostenimiento.md` | ✅ |
 | **—** | `PA14_dibujos.lsp` / `PA14_campamento_1.lsp` / `PA14_campamento_2.lsp` | Planos AutoLISP: Ubicación UTM, sección, malla, geología, y los 2 archivos consolidados de Campamento 1 y Campamento 2 con sus 38 edificaciones (`EDIF-01` a `EDIF-38`) | — | ✅ |
-| **—** | `PA14_DG2018_MTC_Roadway_Design_Standards.xml` | Criterios de diseño geométrico vial DG-2018 (MTC Perú) para Autodesk Civil 3D | [`civil3d/README.md`](civil3d/README.md) | ✅ |
+| **—** | `PA14_DG2018_MTC_Roadway_Design_Standards.xml` | Criterios de diseño geométrico vial DG-2018 (MTC Perú) para Autodesk Civil 3D | [`diseno_vial/README.md`](diseno_vial/README.md) | ✅ |
 
 Cada hoja utiliza el formato estándar: **Descripción | Símbolo | Valor | Unidad | Fórmula / Fuente**.  
 Los cálculos se formulan de manera dinámica en Excel (`={Simbolo1}*{Simbolo2}`), garantizando recálculo inmediato sin valores estáticos hardcodeados.
@@ -80,9 +80,9 @@ flowchart TD
 * **Arquitectura:** Servidor Model Context Protocol (MCP) y Gateway nativo .NET 10 (`NETLOAD`) desacoplados y mantenidos de forma independiente en su propio repositorio.
 
 ### Criterios de Diseño Vial Civil 3D (DG-2018 MTC Perú)
-* **Carpeta dedicada:** [`civil3d/`](civil3d/README.md).
-* **Fuente de datos:** [`civil3d/dg2018_datos.toml`](civil3d/dg2018_datos.toml), verificada contra [`docs/entradas/manual_de_carreteras_dg_2018.pdf`](docs/entradas/manual_de_carreteras_dg_2018.pdf) ([PDF DG-2018 MTC en Google Drive](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)).
-* **Archivo generado:** `civil3d/PA14_DG2018_MTC_Roadway_Design_Standards.xml` mediante `uv run python civil3d/generar_dg2018.py`.
+* **Carpeta dedicada:** [`diseno_vial/`](diseno_vial/README.md).
+* **Fuente de datos:** [`diseno_vial/dg2018_datos.toml`](diseno_vial/dg2018_datos.toml), verificada contra [`docs/entradas/manual_de_carreteras_dg_2018.md`](docs/entradas/manual_de_carreteras_dg_2018.md) ([PDF DG-2018 MTC en Google Drive](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)).
+* **Archivo generado:** `diseno_vial/PA14_DG2018_MTC_Roadway_Design_Standards.xml` mediante `uv run python diseno_vial/generar_dg2018.py`.
 
 ---
 
@@ -99,7 +99,7 @@ flowchart TD
 ### Configuración inicial del entorno Python:
 ```powershell
 uv sync                 # Crea .venv e instala dependencias
-uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
+uv run pa14             # Ejecuta los 15 módulos y genera Excel + LISP
 ```
 
 ### Scripts de automatización en `scripts/`:
@@ -108,9 +108,9 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 |---|---|---|
 | **Verificación Total** | `.\scripts\check.ps1` | Ruff format + Ruff check + XML Civil 3D + Pytest + Generación PA14 |
 | **Verificación Rápida** | `.\scripts\check.ps1 -Fast` | Linting + XML Civil 3D + Arnés de código fuente en memoria (~1.5 s) |
-| **Monitor Reactivo (Arnés en Vivo)** | `.\scripts\watch_harness.ps1` | Vigila `src/`, `datos/` y `civil3d/`; ejecuta el arnés ante cada guardado |
+| **Monitor Reactivo (Arnés en Vivo)** | `.\scripts\watch_harness.ps1` | Vigila `src/`, `datos/` y `diseno_vial/`; ejecuta el arnés ante cada guardado |
 | **Generar Entregables** | `.\scripts\run.ps1` | Ejecuta el pipeline completo de ingeniería |
-| **Extraer Datos Drive (U2)** | `uv run python scripts/utils/extraer_drive_unidad2.py` | Descarga y exportación en solo lectura de Google Drive (Unidad 2) |
+| **Diagnóstico de Entorno** | `.\scripts\doctor.ps1` | Verifica puertos MCP, tokens, XML DG-2018 y dependencias de Python |
 
 ---
 
@@ -120,7 +120,7 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 |---|---|
 | Actualizar dependencias | `uv sync` |
 | Ejecutar pipeline de ingeniería | `uv run pa14` |
-| Generar criterios viales Civil 3D (DG-2018 `.xml`) | `uv run python civil3d/generar_dg2018.py` |
+| Generar criterios viales Civil 3D (DG-2018 `.xml`) | `uv run python diseno_vial/generar_dg2018.py` |
 | Formatear código Python | `uv run ruff format .` |
 | Linting y correcciones automáticas | `uv run ruff check --fix .` |
 | Ejecutar suite de pruebas (incluye guardián documental) | `uv run pytest -q` |
@@ -133,19 +133,19 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 ```
 ├── datos/
 │   └── parametros.toml          # ÚNICA fuente de datos de entrada del proyecto
-├── civil3d/
+├── diseno_vial/
 │   ├── README.md                # Documentación y guía de criterios DG-2018 en Civil 3D
 │   ├── dg2018_datos.toml        # Parámetros normativos DG-2018 MTC (Tabla 302.02, Fig. 304.07)
 │   ├── generar_dg2018.py        # Generador y validador del XML de criterios para Civil 3D
 │   └── PA14_DG2018_MTC_Roadway_Design_Standards.xml # Estándares viales para Civil 3D
 ├── src/casmas_pa14/
-│   ├── main.py                  # Orquestador del pipeline (MODULOS 01-13)
+│   ├── main.py                  # Orquestador del pipeline (MODULOS 01-15)
 │   ├── config.py                # Rutas y carga del archivo TOML
 │   ├── modelo.py                # Estructuras Libro, Hoja, Tabla
 │   ├── excel.py                 # Motor de generación dinámica de Excel
 │   ├── lisp.py                  # Generador de planos AutoLISP (.lsp)
 │   ├── memoria.py               # Generador de memorias técnicas (.md)
-│   └── modulos/                 # 13 módulos de ingeniería (m01 a m13)
+│   └── modulos/                 # 15 módulos de ingeniería (m01 a m15) + subpaquetes de dominio
 ├── tests/                       # Suite de pruebas unitarias y guardián documental
 ├── docs/
 │   ├── memoria/                 # Memorias técnicas de cálculo en Markdown
@@ -167,6 +167,6 @@ uv run pa14             # Ejecuta los 13 módulos y genera Excel + LISP
 * **DS 024-2016-EM**: Reglamento de Seguridad y Salud Ocupacional en Minería (ventilación, refugios, polvorines, distancias).
 * **Reglamento Nacional de Edificaciones (RNE)**: Normas OS.100, IS.010, IS.020 (saneamiento, agua potable y alcantarillado).
 * **Reglamento SUCAMEC**: Normativa técnica para almacenamiento de explosivos y polvorines auxiliares.
-* **Manual de Carreteras: Diseño Geométrico DG-2018 (MTC Perú)**: Criterios de visibilidad (Tablas 205.01 y 205.03), radios mínimos (Tabla 302.02), transición de peralte (Art. 302.08), sobreancho (Art. 302.09.03), curvas verticales (Art. 303.04) y banquetas (Figura 304.07) — [`docs/entradas/manual_de_carreteras_dg_2018.pdf`](docs/entradas/manual_de_carreteras_dg_2018.pdf) ([PDF en Google Drive](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)).
+* **Manual de Carreteras: Diseño Geométrico DG-2018 (MTC Perú)**: Criterios de visibilidad (Tablas 205.01 y 205.03), radios mínimos (Tabla 302.02), transición de peralte (Art. 302.08), sobreancho (Art. 302.09.03), curvas verticales (Art. 303.04) y banquetas (Figura 304.07) — [`docs/entradas/manual_de_carreteras_dg_2018.md`](docs/entradas/manual_de_carreteras_dg_2018.md) ([PDF en Google Drive](https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing)).
 * **Manual de Carreteras: Túneles, Muros y Obras Complementarias MC-03-16 (MTC Perú)**: Criterios de diseño de túneles viales y obras conexas ([PDF en Google Drive](https://drive.google.com/file/d/1IIdtiAq3M-wXH4l8uuyQueE2mOMJV9Xr/view?usp=drive_link)).
 * **Geomecánica de Túneles**: Criterios de Hoek-Brown, Bieniawski (RMR) y Barton (Q) para sostenimiento; formulación de C. Konya para voladura.

@@ -25,12 +25,12 @@ try {
 
     Write-Host ""
     Write-Host "=== [3/5] Sincronizando XML de criterios Civil 3D (DG-2018) ===" -ForegroundColor Cyan
-    uv run python civil3d/generar_dg2018.py
+    uv run python diseno_vial/generar_dg2018.py
 
     Write-Host ""
     Write-Host "=== [4/5] Ejecutando pruebas unitarias y arnés de código fuente (Pytest) ===" -ForegroundColor Cyan
     if ($Fast) {
-        uv run pytest tests/test_civil3d_dg2018.py tests/test_documentacion.py tests/test_arnes_fuente_excel.py tests/test_arnes_fuente_lisp.py -q
+        uv run pytest tests/test_diseno_vial_dg2018.py tests/test_documentacion.py tests/test_arnes_fuente_excel.py tests/test_arnes_fuente_lisp.py -q
     } else {
         uv run pytest -q
     }

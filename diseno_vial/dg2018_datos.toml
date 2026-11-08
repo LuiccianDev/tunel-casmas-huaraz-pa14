@@ -1,5 +1,5 @@
 # Datos normativos DG-2018 (MTC Perú) para el archivo de criterios de Civil 3D.
-# Fuente única del generador `civil3d/generar_dg2018.py`.
+# Fuente única del generador `diseno_vial/generar_dg2018.py`.
 # Fuente: Manual de Carreteras: Diseño Geométrico DG-2018, MTC Perú
 #         - Archivo local: `docs/entradas/manual_de_carreteras_dg_2018.pdf`
 #         - Enlace Google Drive: https://drive.google.com/file/d/1kdXJQ1sfLHBTbPC3mbCcYBWaTW8UOO0C/view?usp=sharing

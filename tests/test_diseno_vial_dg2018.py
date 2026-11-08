@@ -1,10 +1,10 @@
-"""Pruebas del generador de criterios Civil 3D DG-2018 (carpeta civil3d/)."""
+"""Pruebas del generador de criterios de diseño vial DG-2018 (carpeta diseno_vial/)."""
 
 import importlib.util
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[1] / "civil3d"
+RAIZ = Path(__file__).resolve().parents[1] / "diseno_vial"
 NS = "{urn:Civil3DRoadwayDesignStandards-schema}"
 
 
