@@ -232,10 +232,13 @@ def test_arquitectura_modular_lisp_cumple_srp():
     assert lineas_fachada < 120, (
         f"lisp.py debe ser una fachada ligera (<120 líneas), tiene {lineas_fachada}."
     )
-    assert lisp_cad_dir.is_dir(), "Debe existir el subpaquete src/casmas_pa14/lisp_cad/."
+    assert lisp_cad_dir.is_dir(), (
+        "Debe existir el subpaquete src/casmas_pa14/lisp_cad/."
+    )
     archivos_cad = list(lisp_cad_dir.glob("*.py"))
-    assert len(archivos_cad) >= 3, "lisp_cad debe contener al menos nucleo y módulos de planos."
+    assert len(archivos_cad) >= 3, (
+        "lisp_cad debe contener al menos nucleo y módulos de planos."
+    )
     for arch in archivos_cad:
         n_lin = len(arch.read_text(encoding="utf-8").splitlines())
         assert n_lin <= 500, f"{arch.name} supera las 500 líneas ({n_lin})."
-

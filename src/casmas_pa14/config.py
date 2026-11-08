@@ -12,9 +12,7 @@ SALIDAS = RAIZ / "salidas"
 MEMORIAS = RAIZ / "docs" / "memoria"  # memorias Markdown generadas (sí se versionan)
 
 
-def cargar_parametros(
-    ruta: Path = PARAMETROS, validar: bool = True
-) -> dict[str, Any]:
+def cargar_parametros(ruta: Path = PARAMETROS, validar: bool = True) -> dict[str, Any]:
     """Lee y valida el archivo TOML de parámetros (única fuente de datos de entrada)."""
     with ruta.open("rb") as archivo:
         datos = tomllib.load(archivo)

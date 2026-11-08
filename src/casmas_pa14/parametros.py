@@ -44,7 +44,9 @@ def validar_invariantes_fisicos(p: dict[str, Any]) -> None:
     densidad = float(sec.get("densidad_roca_t_m3", 0.0))
 
     if ancho <= 0:
-        raise ValueError(f"Invariante violado: seccion.ancho_m debe ser > 0 (recibido: {ancho})")
+        raise ValueError(
+            f"Invariante violado: seccion.ancho_m debe ser > 0 (recibido: {ancho})"
+        )
     if altura <= ancho / 2.0:
         raise ValueError(
             f"Invariante violado: seccion.altura_m ({altura}) debe superar el radio de bóveda B/2 ({ancho / 2.0})"

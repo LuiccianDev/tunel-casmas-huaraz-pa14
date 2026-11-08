@@ -92,4 +92,3 @@ def test_validar_invariantes_fisicos_detecta_valores_invalidos():
     p_esponj["seccion"]["factor_esponjamiento"] = 0.85
     with pytest.raises(ValueError, match="factor_esponjamiento"):
         validar_invariantes_fisicos(p_esponj)
-

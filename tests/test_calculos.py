@@ -302,7 +302,9 @@ def test_m12_voladura_modular_srp():
     assert len(m12.read_text(encoding="utf-8").splitlines()) < 150
     assert vol_pkg.is_dir()
     for f in vol_pkg.glob("*.py"):
-        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
+        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, (
+            f"{f.name} > 500 líneas"
+        )
 
 
 def test_m14_afrontonamiento_modular_srp():
@@ -316,7 +318,9 @@ def test_m14_afrontonamiento_modular_srp():
     assert len(m14.read_text(encoding="utf-8").splitlines()) < 150
     assert afr_pkg.is_dir()
     for f in afr_pkg.glob("*.py"):
-        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
+        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, (
+            f"{f.name} > 500 líneas"
+        )
 
 
 def test_m15_banquetas_modular_srp():
@@ -330,7 +334,9 @@ def test_m15_banquetas_modular_srp():
     assert len(m15.read_text(encoding="utf-8").splitlines()) < 150
     assert banq_pkg.is_dir()
     for f in banq_pkg.glob("*.py"):
-        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
+        assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, (
+            f"{f.name} > 500 líneas"
+        )
 
 
 def test_ningun_modulo_principal_supera_500_lineas():
@@ -344,7 +350,3 @@ def test_ningun_modulo_principal_supera_500_lineas():
         if n > 500:
             excesos.append((archivo.name, n))
     assert not excesos, f"Módulos que superan 500 líneas (SRP): {excesos}"
-
-
-
-
