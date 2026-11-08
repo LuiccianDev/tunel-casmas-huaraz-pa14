@@ -12,6 +12,12 @@ def obtener_claves_toml(d: dict, prefijo: str = "") -> list[tuple[str, str]]:
         ruta = f"{prefijo}.{k}" if prefijo else k
         if isinstance(v, dict):
             claves.extend(obtener_claves_toml(v, ruta))
+        elif isinstance(v, list):
+            for i, elem in enumerate(v):
+                if isinstance(elem, dict):
+                    claves.extend(obtener_claves_toml(elem, f"{ruta}[{i}]"))
+                else:
+                    claves.append((ruta, k))
         else:
             claves.append((ruta, k))
     return claves

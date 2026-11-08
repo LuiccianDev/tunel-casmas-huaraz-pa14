@@ -2826,7 +2826,6 @@ altura_banco_m = 2.5
 angulo_perfil_deg = 22.0
 lado_mayor_m = 7.2266
 angulo_talud_deg = 65.0
-lado_menor_m = 5.0
 
 [[portales.banquetas]]
 id = "Banqueta 01 - Tramo II"
@@ -2835,7 +2834,6 @@ altura_banco_m = 5.0
 angulo_perfil_deg = 22.0
 lado_mayor_m = 6.2115
 angulo_talud_deg = 70.0
-lado_menor_m = 2.5
 
 [[portales.banquetas]]
 id = "Banqueta 02 - Tramo I"
@@ -2844,7 +2842,6 @@ altura_banco_m = 5.0
 angulo_perfil_deg = 27.0
 lado_mayor_m = 13.9212
 angulo_talud_deg = 70.0
-lado_menor_m = 2.749
 
 [[portales.banquetas]]
 id = "Banqueta 02 - Tramo II"
@@ -2853,7 +2850,6 @@ altura_banco_m = 5.0
 angulo_perfil_deg = 27.0
 lado_mayor_m = 13.9109
 angulo_talud_deg = 70.0
-lado_menor_m = 5.0
 
 [[portales.banquetas]]
 id = "Banqueta 02 - Portal Tramo III"
@@ -2862,7 +2858,6 @@ altura_banco_m = 5.0
 angulo_perfil_deg = 27.0
 lado_mayor_m = 13.2162
 angulo_talud_deg = 70.0
-lado_menor_m = 5.0
 
 # =============================================================================
 #  CORTES, SECCIONES TRANSVERSALES Y CUBICACIONES CIVIL 3D (GOOGLE DRIVE U2)
@@ -3527,7 +3522,6 @@ diametro_mm = 76.0
 diametro_pulg = "3.0\""
 tecnologia = "Tophammer"
 tipo_cortador = "Broca de botones (faldón retráctil)"
-sistema_roca = "T45"
 sistema_rosca = "T45"
 rango_roca = "Roca dura y fracturada (150 - 250 MPa)"
 modelos_referencia = "Epiroc T45-76mm Retrac"
