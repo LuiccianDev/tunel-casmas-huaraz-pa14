@@ -1,0 +1,191 @@
+[
+  {
+    "id": "1lzhXHQvGIcmt5F7GhP8Sr_0J3VTQxLny",
+    "nombre": "coordenadas_utm_tunel.xlsx",
+    "tipo": "download",
+    "dominio": "Ubicacion y Geodesia",
+    "status": "EXISTENTE",
+    "bytes": 9072,
+    "path": "docs\\entradas\\drive_unidad2\\coordenadas_utm_tunel.xlsx"
+  },
+  {
+    "id": "1LKo5grbDMbr5QdpeSUCYH5g2oa9HjnHJ",
+    "nombre": "geomecanica_portal.xlsx",
+    "tipo": "download",
+    "dominio": "Geomecanica Portal",
+    "status": "DESCARGADO",
+    "bytes": 35385,
+    "path": "docs\\entradas\\drive_unidad2\\geomecanica_portal.xlsx"
+  },
+  {
+    "id": "1TwFMUmf6x_XEYKtXGJbfIlz7sBn6HOBs",
+    "nombre": "angulo_banquetas_qslope.xlsx",
+    "tipo": "download",
+    "dominio": "Estabilidad Taludes Q-slope",
+    "status": "DESCARGADO",
+    "bytes": 307927,
+    "path": "docs\\entradas\\drive_unidad2\\angulo_banquetas_qslope.xlsx"
+  },
+  {
+    "id": "1GKwDcfNkIKsXb19kBsTx7bcTjsK70ba2",
+    "nombre": "malla_1_disparo.xlsx",
+    "tipo": "download",
+    "dominio": "Perforacion y Voladura",
+    "status": "DESCARGADO",
+    "bytes": 537642,
+    "path": "docs\\entradas\\drive_unidad2\\malla_1_disparo.xlsx"
+  },
+  {
+    "id": "1fmvD9j6vt7ck2Ehe9FDhQ0I8WW1r2kQ_",
+    "nombre": "malla_2_alivio.xlsx",
+    "tipo": "download",
+    "dominio": "Perforacion y Voladura",
+    "status": "DESCARGADO",
+    "bytes": 537934,
+    "path": "docs\\entradas\\drive_unidad2\\malla_2_alivio.xlsx"
+  },
+  {
+    "id": "1g1p8uX4qho_d6sqxNQorLwpstGRbSnJM",
+    "nombre": "progresivas_unidades_geologicas.xlsx",
+    "tipo": "download",
+    "dominio": "Geologia y Trazado",
+    "status": "DESCARGADO",
+    "bytes": 263378,
+    "path": "docs\\entradas\\drive_unidad2\\progresivas_unidades_geologicas.xlsx"
+  },
+  {
+    "id": "1NVqWEkHN2DZvVoEFiwsoUurbljQP087h",
+    "nombre": "rendimientos_equipos.xlsx",
+    "tipo": "download",
+    "dominio": "Rendimientos de Flota",
+    "status": "DESCARGADO",
+    "bytes": 2830974,
+    "path": "docs\\entradas\\drive_unidad2\\rendimientos_equipos.xlsx"
+  },
+  {
+    "id": "1Piyj7nNlarAFUhqjRtpEpq59M6uF1DjL",
+    "nombre": "ciclo_carguio_acarreo.xlsx",
+    "tipo": "download",
+    "dominio": "Carguio y Acarreo",
+    "status": "DESCARGADO",
+    "bytes": 220164,
+    "path": "docs\\entradas\\drive_unidad2\\ciclo_carguio_acarreo.xlsx"
+  },
+  {
+    "id": "1iGFpU3zw8QzjCQTFq-TZpJFMg9fEQPi9",
+    "nombre": "tiempos_vias_acceso.xlsx",
+    "tipo": "download",
+    "dominio": "Tiempos y Accesos",
+    "status": "DESCARGADO",
+    "bytes": 671594,
+    "path": "docs\\entradas\\drive_unidad2\\tiempos_vias_acceso.xlsx"
+  },
+  {
+    "id": "1pJ3qQnuhieGWgvnHXgyiWn-f5ViYLTjiePYm2dVGb3M",
+    "nombre": "diseno_voladura_modelo_matematico_konya.xlsx",
+    "tipo": "export",
+    "dominio": "Voladura Konya",
+    "status": "EXISTENTE",
+    "bytes": 31330,
+    "path": "docs\\entradas\\drive_unidad2\\diseno_voladura_modelo_matematico_konya.xlsx"
+  },
+  {
+    "id": "1zOyNlzrxZZRYssSwzLJIHF21G55R_9whUUW45qSPHl4",
+    "nombre": "catalogo_tecnico_explosivos.xlsx",
+    "tipo": "export",
+    "dominio": "Explosivos y Detonacion",
+    "status": "DESCARGADO",
+    "bytes": 2727578,
+    "path": "docs\\entradas\\drive_unidad2\\catalogo_tecnico_explosivos.xlsx"
+  },
+  {
+    "id": "1arW5QsWjCDrVcqNq1inpaS-034rFII0oOb1bWf5oPug",
+    "nombre": "diseno_sostenimiento_fronton.xlsx",
+    "tipo": "export",
+    "dominio": "Sostenimiento Fronton",
+    "status": "DESCARGADO",
+    "bytes": 154778,
+    "path": "docs\\entradas\\drive_unidad2\\diseno_sostenimiento_fronton.xlsx"
+  },
+  {
+    "id": "1MdplFahB9IX9JxW7eoGDXBh-_8y8sUBVZ2zHAhRcwg0",
+    "nombre": "voladura_afrontonamiento.xlsx",
+    "tipo": "export",
+    "dominio": "Voladura Afrontonamiento",
+    "status": "DESCARGADO",
+    "bytes": 1013440,
+    "path": "docs\\entradas\\drive_unidad2\\voladura_afrontonamiento.xlsx"
+  },
+  {
+    "id": "1arR4Q02xLxwMEgh_1Y2b5tzdX2gYUr82ckDVcqs_KuI",
+    "nombre": "calculo_carguio_acarreo_tunel.xlsx",
+    "tipo": "export",
+    "dominio": "Carguio y Acarreo",
+    "status": "DESCARGADO",
+    "bytes": 306085,
+    "path": "docs\\entradas\\drive_unidad2\\calculo_carguio_acarreo_tunel.xlsx"
+  },
+  {
+    "id": "1pKBR5RnocvIv4GTqPsC3_H-7og30oqiMSh2DFVAzC3U",
+    "nombre": "diseno_accesos_banquetas_mov_tierra.xlsx",
+    "tipo": "export",
+    "dominio": "Movimiento de Tierras",
+    "status": "DESCARGADO",
+    "bytes": 394988,
+    "path": "docs\\entradas\\drive_unidad2\\diseno_accesos_banquetas_mov_tierra.xlsx"
+  },
+  {
+    "id": "17aCWjuscQhD6EeDudXmKORD7VwV0fsbSjIgqmAvOrng",
+    "nombre": "maquinaria_rendimiento_equipos.xlsx",
+    "tipo": "export",
+    "dominio": "Maquinaria y Rendimiento",
+    "status": "DESCARGADO",
+    "bytes": 10363344,
+    "path": "docs\\entradas\\drive_unidad2\\maquinaria_rendimiento_equipos.xlsx"
+  },
+  {
+    "id": "1Qdyk_2IgjNaHaa__BIS9Z2WUQQD_DzNAOt4SXtv8YKc",
+    "nombre": "dimensiones_assembly_accesos.xlsx",
+    "tipo": "export",
+    "dominio": "Assemblies y Secciones Accesos",
+    "status": "DESCARGADO",
+    "bytes": 108047,
+    "path": "docs\\entradas\\drive_unidad2\\dimensiones_assembly_accesos.xlsx"
+  },
+  {
+    "id": "1TDm5EWEHaFlmOybf2TBsBH6KGz1kGJ3U324AoG8Igu4",
+    "nombre": "mov_tierra_acceso_banquetas.xlsx",
+    "tipo": "export",
+    "dominio": "Accesos a Banquetas",
+    "status": "DESCARGADO",
+    "bytes": 8866,
+    "path": "docs\\entradas\\drive_unidad2\\mov_tierra_acceso_banquetas.xlsx"
+  },
+  {
+    "id": "1HbAXZ_-4mMmvdKSxhIqXX6U_k045FMOUk229Smeq10o",
+    "nombre": "mov_tierra_acceso_botadero.xlsx",
+    "tipo": "export",
+    "dominio": "Acceso a Botadero",
+    "status": "DESCARGADO",
+    "bytes": 7094,
+    "path": "docs\\entradas\\drive_unidad2\\mov_tierra_acceso_botadero.xlsx"
+  },
+  {
+    "id": "1nctJgdtyWoxnLuso5WhJVgukGvhqAUFP3V8rrmeZhyM",
+    "nombre": "mov_tierra_acceso_tunel.xlsx",
+    "tipo": "export",
+    "dominio": "Acceso al Tunel",
+    "status": "DESCARGADO",
+    "bytes": 7539,
+    "path": "docs\\entradas\\drive_unidad2\\mov_tierra_acceso_tunel.xlsx"
+  },
+  {
+    "id": "10fUz5_YLZAZigvxO4yOw__AbbD2zvrc-RbSml9Bn-Xc",
+    "nombre": "banquetas_portal_b.xlsx",
+    "tipo": "export",
+    "dominio": "Banquetas Portal B",
+    "status": "DESCARGADO",
+    "bytes": 271897,
+    "path": "docs\\entradas\\drive_unidad2\\banquetas_portal_b.xlsx"
+  }
+]
