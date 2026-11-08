@@ -333,4 +333,18 @@ def test_m15_banquetas_modular_srp():
         assert len(f.read_text(encoding="utf-8").splitlines()) <= 500, f"{f.name} > 500 líneas"
 
 
+def test_ningun_modulo_principal_supera_500_lineas():
+    """Garantiza que ningún archivo mNN_*.py en src/casmas_pa14/modulos/ supere las 500 líneas (SRP)."""
+    from pathlib import Path
+
+    mod_dir = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14" / "modulos"
+    excesos = []
+    for archivo in sorted(mod_dir.glob("m*.py")):
+        n = len(archivo.read_text(encoding="utf-8").splitlines())
+        if n > 500:
+            excesos.append((archivo.name, n))
+    assert not excesos, f"Módulos que superan 500 líneas (SRP): {excesos}"
+
+
+
 
