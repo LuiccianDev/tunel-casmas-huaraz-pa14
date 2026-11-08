@@ -137,6 +137,9 @@ def test_arnes_generar_lisp_aislado(tmp_path: Path):
     assert "(defun c:PA14_TODO" in contenido, (
         "Falta la definición del comando maestro c:PA14_TODO."
     )
+    assert "(defun c:PA14_CORTES_ACCESOS" in contenido, (
+        "Falta la definición del comando c:PA14_CORTES_ACCESOS (Civil 3D y banquetas)."
+    )
     assert "PA14: dibujo terminado." in contenido, (
         "Falta el mensaje de finalización segura."
     )

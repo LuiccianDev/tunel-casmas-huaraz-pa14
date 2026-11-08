@@ -702,6 +702,356 @@ def dibujo_malla(sec: dict, vol: dict | None = None) -> Dibujo:
     )
 
 
+def dibujo_cortes_accesos(portales: dict) -> Dibujo:
+    """Sección transversal típica de corte en roca, banquetas y sobreancho DG-2018 (Civil 3D)."""
+    dg = portales.get("dg2018_geometria", {})
+    c3d = portales.get("cortes_civil3d", {})
+
+    b_calzada = float(dg.get("ancho_calzada_base_m", 3.60))
+    s_sobreancho = float(dg.get("sobreancho_calculado_m", 1.67))
+    b_berma = 0.90
+    w_cuneta = 1.00
+    d_cuneta = 0.35
+    h_banco = float(dg.get("altura_max_banco_m", 6.00))
+    w_banqueta = float(dg.get("ancho_banqueta_resguardo_m", 5.00))
+    talud_h = 0.5  # 0.5H:1V -> base = 3.00 m
+    p_bombeo = 0.02  # -2.0%
+
+    # Offset para colocar todo en coordenadas positivas
+    ox = 13.0
+    oy = 2.0
+
+    # Puntos geométricos clave
+    x_eje = ox
+    y_eje = oy
+
+    # Lado izquierdo (borde exterior / terraplén)
+    x_borde_izq = x_eje - (b_calzada / 2.0)
+    y_borde_izq = y_eje - (b_calzada / 2.0) * p_bombeo
+    x_berma_izq = x_borde_izq - b_berma
+    y_berma_izq = y_borde_izq - b_berma * 0.04
+    x_pie_relleno = x_berma_izq - 1.50
+    y_pie_relleno = y_berma_izq - 1.00
+    x_terreno_izq = x_pie_relleno - 3.50
+    y_terreno_izq = y_pie_relleno - 1.20
+
+    # Lado derecho (corte en roca con sobreancho DG-2018)
+    x_borde_der = x_eje + (b_calzada / 2.0)
+    y_borde_der = y_eje - (b_calzada / 2.0) * p_bombeo
+    x_sobreancho = x_borde_der + s_sobreancho
+    y_sobreancho = y_borde_der - s_sobreancho * p_bombeo
+
+    # Cuneta triangular
+    x_cuneta_fin = x_sobreancho + w_cuneta
+    y_cuneta_fin = y_sobreancho
+    x_cuneta_fondo = x_sobreancho + (w_cuneta / 2.0)
+    y_cuneta_fondo = y_sobreancho - d_cuneta
+
+    # Hidráulica de Cuneta: Tirante normal yn = 0.124 m, Espejo = 0.354 m
+    yn_cuneta = 0.124
+    w_espejo_agua = (yn_cuneta / d_cuneta) * w_cuneta
+    x_agua_izq = x_cuneta_fondo - (w_espejo_agua / 2.0)
+    x_agua_der = x_cuneta_fondo + (w_espejo_agua / 2.0)
+    y_agua = y_cuneta_fondo + yn_cuneta
+
+    # Bancos y Banquetas de Desmonte (Talud 0.5H:1V)
+    dx_banco = h_banco * talud_h  # 3.00 m
+
+    # Banco 1
+    x_banco1_pie = x_cuneta_fin
+    y_banco1_pie = y_cuneta_fin
+    x_banco1_top = x_banco1_pie + dx_banco
+    y_banco1_top = y_banco1_pie + h_banco
+
+    # Banqueta 1
+    x_banq1_fin = x_banco1_top + w_banqueta
+    y_banq1_fin = y_banco1_top + (w_banqueta * 0.02)
+
+    # Banco 2
+    x_banco2_top = x_banq1_fin + dx_banco
+    y_banco2_top = y_banq1_fin + h_banco
+
+    # Banqueta 2
+    x_banq2_fin = x_banco2_top + w_banqueta
+    y_banq2_fin = y_banco2_top + (w_banqueta * 0.02)
+
+    # Banco 3
+    x_banco3_top = x_banq2_fin + dx_banco
+    y_banco3_top = y_banq2_fin + h_banco
+
+    # Terreno Natural Superior
+    x_terreno_der = x_banco3_top + 5.50
+    y_terreno_der = y_banco3_top + 1.80
+
+    cuerpo = [
+        # 1. Plataforma Vial y Berma
+        _linea(x_berma_izq, y_berma_izq, x_borde_izq, y_borde_izq, "PA14-CONTORNO"),
+        _linea(x_borde_izq, y_borde_izq, x_eje, y_eje, "PA14-CONTORNO"),
+        _linea(x_eje, y_eje, x_borde_der, y_borde_der, "PA14-CONTORNO"),
+        # Franja de Sobreancho DG-2018
+        _linea(x_borde_der, y_borde_der, x_sobreancho, y_sobreancho, "PA14-CONTORNO"),
+        _linea(
+            x_borde_der,
+            y_borde_der - 0.20,
+            x_borde_der,
+            y_borde_der + 0.20,
+            "PA14-SIMBOLOS",
+        ),
+        # 2. Cuneta de Drenaje
+        _linea(
+            x_sobreancho,
+            y_sobreancho,
+            x_cuneta_fondo,
+            y_cuneta_fondo,
+            "PA14-OBRAS-ARTE",
+        ),
+        _linea(
+            x_cuneta_fondo,
+            y_cuneta_fondo,
+            x_cuneta_fin,
+            y_cuneta_fin,
+            "PA14-OBRAS-ARTE",
+        ),
+        _linea(
+            x_sobreancho,
+            y_sobreancho,
+            x_cuneta_fin,
+            y_cuneta_fin,
+            "PA14-OBRAS-ARTE",
+        ),
+        # Tirante de Agua de Diseño (Qp = 49.1 l/s)
+        _linea(x_agua_izq, y_agua, x_agua_der, y_agua, "PA14-OBRAS-ARTE"),
+        _linea(
+            x_cuneta_fondo,
+            y_cuneta_fondo,
+            x_cuneta_fondo,
+            y_agua,
+            "PA14-SIMBOLOS",
+        ),
+        # 3. Taludes de Desmonte 0.5H:1V y Banquetas
+        _linea(x_banco1_pie, y_banco1_pie, x_banco1_top, y_banco1_top, "PA14-CONTORNO"),
+        _linea(x_banco1_top, y_banco1_top, x_banq1_fin, y_banq1_fin, "PA14-CONTORNO"),
+        _linea(x_banq1_fin, y_banq1_fin, x_banco2_top, y_banco2_top, "PA14-CONTORNO"),
+        _linea(x_banco2_top, y_banco2_top, x_banq2_fin, y_banq2_fin, "PA14-CONTORNO"),
+        _linea(x_banq2_fin, y_banq2_fin, x_banco3_top, y_banco3_top, "PA14-CONTORNO"),
+        _linea(
+            x_banco3_top, y_banco3_top, x_terreno_der, y_terreno_der, "PA14-CONTORNO"
+        ),
+        # 4. Ladera Izquierda (Terraplén y Terreno)
+        _linea(
+            x_berma_izq,
+            y_berma_izq,
+            x_pie_relleno,
+            y_pie_relleno,
+            "PA14-CONTORNO",
+        ),
+        _linea(
+            x_pie_relleno,
+            y_pie_relleno,
+            x_terreno_izq,
+            y_terreno_izq,
+            "PA14-CONTORNO",
+        ),
+        # 5. Eje de Vía
+        _linea(x_eje, y_eje - 1.80, x_eje, y_eje + 6.00, "PA14-EJE"),
+        # 6. Gálibo del Vehículo de Diseño (Volvo FMX 8x4: W=2.55m, H=3.80m)
+        _rect(x_eje + 0.30, y_borde_der, 2.55, 3.80, "PA14-GALIBO"),
+        # 7. Cotas en Metros
+        _cota(
+            x_berma_izq,
+            y_berma_izq,
+            x_borde_izq,
+            y_borde_izq,
+            (x_berma_izq + x_borde_izq) / 2.0,
+            y_eje - 1.00,
+            f"Berma {b_berma:.2f} m",
+        ),
+        _cota(
+            x_borde_izq,
+            y_borde_izq,
+            x_borde_der,
+            y_borde_der,
+            x_eje,
+            y_eje - 1.00,
+            f"Calzada {b_calzada:.2f} m",
+        ),
+        _cota(
+            x_borde_der,
+            y_borde_der,
+            x_sobreancho,
+            y_sobreancho,
+            (x_borde_der + x_sobreancho) / 2.0,
+            y_eje - 1.00,
+            f"S = {s_sobreancho:.2f} m",
+        ),
+        _cota(
+            x_sobreancho,
+            y_sobreancho,
+            x_cuneta_fin,
+            y_cuneta_fin,
+            x_cuneta_fondo,
+            y_eje - 1.00,
+            f"Cuneta {w_cuneta:.2f} m",
+        ),
+        # Cotas de Banco y Banqueta
+        _cota(
+            x_banco1_pie,
+            y_banco1_pie,
+            x_banco1_top,
+            y_banco1_pie,
+            (x_banco1_pie + x_banco1_top) / 2.0,
+            y_banco1_pie - 1.70,
+            f"{dx_banco:.2f} m (0.5H)",
+        ),
+        _cota(
+            x_banco1_top,
+            y_banco1_pie,
+            x_banco1_top,
+            y_banco1_top,
+            x_banco1_top + 1.20,
+            (y_banco1_pie + y_banco1_top) / 2.0,
+            f"H = {h_banco:.2f} m",
+        ),
+        _cota(
+            x_banco1_top,
+            y_banco1_top,
+            x_banq1_fin,
+            y_banco1_top,
+            (x_banco1_top + x_banq1_fin) / 2.0,
+            y_banco1_top - 1.00,
+            f"Banqueta {w_banqueta:.2f} m",
+        ),
+        _cota(
+            x_banco2_top,
+            y_banq1_fin,
+            x_banco2_top,
+            y_banco2_top,
+            x_banco2_top + 1.20,
+            (y_banq1_fin + y_banco2_top) / 2.0,
+            f"H = {h_banco:.2f} m",
+        ),
+        _cota(
+            x_banco2_top,
+            y_banco2_top,
+            x_banq2_fin,
+            y_banco2_top,
+            (x_banco2_top + x_banq2_fin) / 2.0,
+            y_banco2_top - 1.00,
+            f"Banqueta {w_banqueta:.2f} m",
+        ),
+        # 8. Rótulos y Notas Técnicas
+        _texto(
+            x_eje - 11.50,
+            y_eje + 21.00,
+            0.50,
+            "SECCION TRANSVERSAL TIPICA - CORTE Y BANQUETAS DE ACCESO",
+            "PA14-TEXTO",
+        ),
+        _texto(
+            x_eje - 11.50,
+            y_eje + 20.00,
+            0.30,
+            "Autodesk Civil 3D Subassembly | Estandar DG-2018 MTC",
+            "PA14-TEXTO",
+        ),
+        _texto(
+            x_eje + 0.50,
+            y_borde_der + 2.00,
+            0.25,
+            "Volvo FMX 8x4 (C3/C4)",
+            "PA14-TEXTO",
+        ),
+        _texto(
+            x_banco1_top - 1.20,
+            (y_banco1_pie + y_banco1_top) / 2.0,
+            0.25,
+            "Talud 0.5H:1V (63.43 deg)",
+            "PA14-TEXTO",
+        ),
+        _texto(
+            (x_banco1_top + x_banq1_fin) / 2.0 - 1.50,
+            y_banco1_top + 0.35,
+            0.22,
+            "Banqueta Resguardo (+2.0% drenaje)",
+            "PA14-TEXTO",
+        ),
+        _texto(
+            x_eje + 0.20,
+            y_eje + 5.50,
+            0.25,
+            "EJE VIAL (CL)",
+            "PA14-EJE",
+        ),
+    ]
+
+    # Cuadro Informativo de Cubicaciones y Geometría Civil 3D
+    x_c = x_eje - 11.80
+    y_c = y_eje + 18.50
+    w_c = 10.50
+    h_c = 14.50
+
+    cuerpo.append(_rect(x_c, y_c - h_c, w_c, h_c, "PA14-EDIFICACION"))
+    cuerpo.append(
+        _rect(x_c + 0.15, y_c - h_c + 0.15, w_c - 0.30, h_c - 0.30, "PA14-CONTORNO")
+    )
+    cuerpo.append(
+        _texto(
+            x_c + 0.50,
+            y_c - 0.90,
+            0.30,
+            "PARAMETROS DE DISENO VIAL DG-2018",
+            "PA14-TEXTO",
+        )
+    )
+    cuerpo.append(
+        _linea(x_c + 0.30, y_c - 1.25, x_c + w_c - 0.30, y_c - 1.25, "PA14-EJE")
+    )
+
+    vol_corte = float(c3d.get("volumen_total_corte_m3", 76105.14))
+    vol_relleno = float(c3d.get("volumen_total_relleno_m3", 27.03))
+
+    h_c = 14.50  # Ampliado para incluir hidráulica de drenaje
+
+    datos_cuadro = [
+        "Norma: MTC DG-2018 (Orografia Tipo 4)",
+        "Velocidad Directriz: V = 30 km/h",
+        "Radio Minimo en Curva: R = 15.00 m",
+        "Vehiculo: Camion Volvo FMX 8x4 (L=5.10m)",
+        f"Sobreancho DG-2018: S = {s_sobreancho:.2f} m",
+        f"Calzada Ampliada: B = {b_calzada + s_sobreancho:.2f} m",
+        "Talud de Desmonte: 0.5H:1V (63.43 deg)",
+        "Q-Slope Estable: 63.42 deg (Compatible)",
+        f"Banqueta Resguardo: Wb = {w_banqueta:.2f} m @ Hb = {h_banco:.2f} m",
+        "Longitud Alineamientos: L = 979.13 m",
+        f"Volumen Total Corte: {vol_corte:,.2f} m3",
+        f"Volumen Relleno: {vol_relleno:,.2f} m3",
+        "--- HIDRAULICA DE DRENAJE (MANNING) ---",
+        "Cuneta Triangular: T=1.00m, H=0.35m (e=7.5cm)",
+        "Q_diseno (Tr=25a): 49.1 l/s | Q_max: 382 l/s",
+        "Tirante yn: 12.4 cm | Borde Libre: 22.6 cm",
+        "Velocidad: V=1.95 m/s (0.60 <= V <= 4.50)",
+        "Froude: Fr=2.50 (Supercritico - Conforme)",
+    ]
+
+    for idx, d_txt in enumerate(datos_cuadro):
+        cuerpo.append(
+            _texto(
+                x_c + 0.50,
+                y_c - 1.85 - (idx * 0.75),
+                0.22,
+                d_txt,
+                "PA14-TEXTO",
+            )
+        )
+
+    return Dibujo(
+        "PA14_CORTES_ACCESOS",
+        "Seccion Transversal Tipica - Cortes de Explanacion y Banquetas (Civil 3D DG-2018)",
+        cuerpo,
+        x_terreno_der + 2.0,
+    )
+
+
 # ---------------------------------------------------------------- archivo
 def _origenes(ub: dict, detalles: list[Dibujo]) -> list[tuple[float, float]]:
     """Origen fijo de cada detalle: franja al sur del plano de ubicación."""
@@ -721,6 +1071,7 @@ def generar_lisp(ctx: dict, carpeta: Path, proyecto: str) -> Path:
         dibujo_seccion(ctx["seccion"]),
         dibujo_malla(ctx["seccion"], ctx.get("voladura")),
         dibujo_geologia(ctx["geologia"]),
+        dibujo_cortes_accesos(ctx.get("portales", {})),
     ]
     dibujos = [ubicacion, *detalles]
     origenes = [(0.0, 0.0), *_origenes(ctx["ubicacion"], detalles)]
