@@ -220,3 +220,22 @@ def test_arnes_38_edificaciones_y_2_campamentos_lisp(tmp_path: Path):
             assert cmd in txt_c1, f"Falta {cmd} en PA14_campamento_1.lsp"
         else:
             assert cmd in txt_c2, f"Falta {cmd} en PA14_campamento_2.lsp"
+
+
+def test_arquitectura_modular_lisp_cumple_srp():
+    """Valida que lisp.py sea una fachada limpia (<120 líneas) y lisp_cad/* cumpla SRP (<500 líneas)."""
+    raiz_pkg = Path(__file__).resolve().parent.parent / "src" / "casmas_pa14"
+    lisp_fachada = raiz_pkg / "lisp.py"
+    lisp_cad_dir = raiz_pkg / "lisp_cad"
+
+    lineas_fachada = len(lisp_fachada.read_text(encoding="utf-8").splitlines())
+    assert lineas_fachada < 120, (
+        f"lisp.py debe ser una fachada ligera (<120 líneas), tiene {lineas_fachada}."
+    )
+    assert lisp_cad_dir.is_dir(), "Debe existir el subpaquete src/casmas_pa14/lisp_cad/."
+    archivos_cad = list(lisp_cad_dir.glob("*.py"))
+    assert len(archivos_cad) >= 3, "lisp_cad debe contener al menos nucleo y módulos de planos."
+    for arch in archivos_cad:
+        n_lin = len(arch.read_text(encoding="utf-8").splitlines())
+        assert n_lin <= 500, f"{arch.name} supera las 500 líneas ({n_lin})."
+
